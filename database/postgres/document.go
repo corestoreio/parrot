@@ -55,6 +55,7 @@ func (db *PostgresDB) UpdateDoc(doc *model.Document) error {
 	return db.QueryRow("UPDATE documents SET pairs = pairs || $1 WHERE id = $2 RETURNING id", values, doc.ID).Scan(&doc.ID)
 }
 
-func (db *PostgresDB) DeleteDoc(id int) error {
-	return db.QueryRow("DELETE FROM documents WHERE id = $1 RETURNING id", id).Scan()
+func (db *PostgresDB) DeleteDoc(id int) (int, error) {
+	err := db.QueryRow("DELETE FROM documents WHERE id = $1 RETURNING id", id).Scan(&id)
+	return id, err
 }

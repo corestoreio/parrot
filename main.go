@@ -7,10 +7,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/anthonynsimon/parrot/app"
 	"github.com/anthonynsimon/parrot/config"
 	"github.com/anthonynsimon/parrot/database"
 	"github.com/anthonynsimon/parrot/database/postgres"
-	"github.com/anthonynsimon/parrot/router"
 	"github.com/joho/godotenv"
 )
 
@@ -21,7 +21,7 @@ func main() {
 	}
 	defer env.DB.Close()
 
-	router := router.New(env)
+	router := app.New(env)
 
 	s := &http.Server{
 		Addr:           ":8080",

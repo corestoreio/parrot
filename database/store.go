@@ -16,5 +16,5 @@ type Store interface {
 	GetDoc(id int) (*model.Document, error)
 	CreateDoc(doc *model.Document) error
 	UpdateDoc(doc *model.Document) error
-	DeleteDoc(id int) error
+	DeleteDoc(id int) (int, error)
 }
