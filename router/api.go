@@ -1,14 +1,14 @@
-package app
+package router
 
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/controllers"
+	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/gin-gonic/gin"
 )
 
-func New(ds datastore.Store) http.Handler {
+func API(ds datastore.Store) http.Handler {
 	router := gin.Default()
 	registerRoutes(router, ds)
 	return router
@@ -23,22 +23,22 @@ func registerRoutes(r *gin.Engine, ds datastore.Store) {
 		{
 			path:    "/documents",
 			method:  r.POST,
-			handler: controllers.CreateDocument,
+			handler: api.CreateDocument,
 		},
 		{
 			path:    "/documents/:id",
 			method:  r.GET,
-			handler: controllers.ShowDocument,
+			handler: api.ShowDocument,
 		},
 		{
 			path:    "/documents/:id",
 			method:  r.PUT,
-			handler: controllers.UpdateDocument,
+			handler: api.UpdateDocument,
 		},
 		{
 			path:    "/documents/:id",
 			method:  r.DELETE,
-			handler: controllers.DeleteDocument,
+			handler: api.DeleteDocument,
 		},
 	}
 

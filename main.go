@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/anthonynsimon/parrot/app"
 	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/router"
 	"github.com/joho/godotenv"
 )
 
@@ -23,12 +23,12 @@ func main() {
 	}
 
 	// init app routes
-	router := app.New(ds)
+	r := router.API(ds)
 
 	// init server
 	s := &http.Server{
 		Addr:           ":8080",
-		Handler:        router,
+		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
