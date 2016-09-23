@@ -8,6 +8,12 @@ import (
 	"github.com/anthonynsimon/parrot/model"
 )
 
+type Store interface {
+	model.DocStorer
+	Ping() error
+	Close() error
+}
+
 var (
 	ErrNoDB           = errors.New("couldn't get DB")
 	ErrNotImplemented = errors.New("database not implemented")
@@ -15,12 +21,6 @@ var (
 
 type Datastore struct {
 	Store
-}
-
-type Store interface {
-	model.DocStorer
-	Ping() error
-	Close() error
 }
 
 func NewDatastore(name string, url string) (*Datastore, error) {
