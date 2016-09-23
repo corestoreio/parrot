@@ -3,22 +3,22 @@ package app
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/config"
 	"github.com/anthonynsimon/parrot/controllers"
+	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/gin-gonic/gin"
 )
 
-func New(env *config.Env) http.Handler {
+func New(ds datastore.Store) http.Handler {
 	router := gin.Default()
-	registerRoutes(router, env)
+	registerRoutes(router, ds)
 	return router
 }
 
-func registerRoutes(r *gin.Engine, env *config.Env) {
+func registerRoutes(r *gin.Engine, ds datastore.Store) {
 	routes := []struct {
 		path    string
 		method  func(string, ...gin.HandlerFunc) gin.IRoutes
-		handler func(*config.Env, *gin.Context)
+		handler func(datastore.Store, *gin.Context)
 	}{
 		{
 			path:    "/documents",
@@ -43,12 +43,12 @@ func registerRoutes(r *gin.Engine, env *config.Env) {
 	}
 
 	for _, route := range routes {
-		route.method(route.path, injectEnv(route.handler, env))
+		route.method(route.path, injectEnv(route.handler, ds))
 	}
 }
 
-func injectEnv(next func(*config.Env, *gin.Context), env *config.Env) gin.HandlerFunc {
+func injectEnv(next func(datastore.Store, *gin.Context), ds datastore.Store) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		next(env, c)
+		next(ds, c)
 	}
 }

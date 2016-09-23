@@ -1,28 +1,31 @@
 package main
 
 import (
-	"errors"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/anthonynsimon/parrot/app"
-	"github.com/anthonynsimon/parrot/config"
-	"github.com/anthonynsimon/parrot/database"
-	"github.com/anthonynsimon/parrot/database/postgres"
+	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	env, err := configEnv()
+	// init and ping datastore
+	ds, err := initDatastore()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer env.DB.Close()
+	defer ds.Close()
+	if err = ds.Ping(); err != nil {
+		log.Fatal(err)
+	}
 
-	router := app.New(env)
+	// init app routes
+	router := app.New(ds)
 
+	// init server
 	s := &http.Server{
 		Addr:           ":8080",
 		Handler:        router,
@@ -34,22 +37,19 @@ func main() {
 	log.Fatal(s.ListenAndServe())
 }
 
-func configEnv() (*config.Env, error) {
+func initDatastore() (*datastore.Datastore, error) {
 	err := godotenv.Load()
 	if err != nil {
 		return nil, err
 	}
 
-	var db database.Store
-	switch os.Getenv("DB") {
-	case "postgres":
-		db, err = postgres.New(os.Getenv("DB_URL"))
-	default:
-		err = errors.New("database not implemented")
-	}
+	name := os.Getenv("DB")
+	url := os.Getenv("DB_URL")
+
+	ds, err := datastore.NewDatastore(name, url)
 	if err != nil {
 		return nil, err
 	}
 
-	return &config.Env{DB: db}, nil
+	return ds, nil
 }

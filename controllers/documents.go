@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/anthonynsimon/parrot/config"
+	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/gin-gonic/gin"
 )
 
-func CreateDocument(e *config.Env, c *gin.Context) {
+func CreateDocument(ds datastore.Store, c *gin.Context) {
 	doc := &model.Document{}
 	doc.Pairs = make(map[string]string)
 	if err := c.Request.ParseForm(); err != nil {
@@ -21,7 +21,7 @@ func CreateDocument(e *config.Env, c *gin.Context) {
 		doc.Pairs[k] = v[0]
 	}
 
-	err := e.DB.CreateDoc(doc)
+	err := ds.CreateDoc(doc)
 	if err != nil {
 		handleModelErr(c, err)
 		return
@@ -30,14 +30,14 @@ func CreateDocument(e *config.Env, c *gin.Context) {
 	render(c, http.StatusCreated, doc)
 }
 
-func ShowDocument(e *config.Env, c *gin.Context) {
+func ShowDocument(ds datastore.Store, c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 
-	doc, err := e.DB.GetDoc(id)
+	doc, err := ds.GetDoc(id)
 	if err != nil {
 		handleModelErr(c, err)
 		return
@@ -46,7 +46,7 @@ func ShowDocument(e *config.Env, c *gin.Context) {
 	render(c, 200, doc)
 }
 
-func UpdateDocument(env *config.Env, c *gin.Context) {
+func UpdateDocument(ds datastore.Store, c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
@@ -60,7 +60,7 @@ func UpdateDocument(env *config.Env, c *gin.Context) {
 	}
 	doc.ID = id
 
-	err = env.DB.UpdateDoc(doc)
+	err = ds.UpdateDoc(doc)
 	if err != nil {
 		handleModelErr(c, err)
 		return
@@ -69,14 +69,14 @@ func UpdateDocument(env *config.Env, c *gin.Context) {
 	render(c, http.StatusCreated, doc)
 }
 
-func DeleteDocument(env *config.Env, c *gin.Context) {
+func DeleteDocument(ds datastore.Store, c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 
-	resultID, err := env.DB.DeleteDoc(id)
+	resultID, err := ds.DeleteDoc(id)
 	if err != nil {
 		handleModelErr(c, err)
 		return
