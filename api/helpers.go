@@ -1,33 +1,38 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
-func render(c *gin.Context, status int, data interface{}) {
-	switch c.Request.Header.Get("Accept") {
-	default:
-		json.NewEncoder(c.Writer).Encode(map[string]interface{}{
-			"status": status, "payload": data,
+type apiHandler func(http.ResponseWriter, *http.Request) (int, error)
+
+func (h apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	status, err := h(w, r)
+	if err != nil {
+		w.WriteHeader(status)
+		w.Header().Set("content-type", "application/json; charset=utf-8")
+		data, _ := json.Marshal(map[string]interface{}{
+			"status": status,
+			"error":  http.StatusText(status),
 		})
+		_, err = w.Write(data)
+		log.Println(err)
 	}
 }
 
-func respondJSONMessage(c *gin.Context, status int, msg string, args ...interface{}) {
-	json.NewEncoder(c.Writer).Encode(map[string]interface{}{
-		"status": status, "message": fmt.Sprintf(msg, args...),
-	})
-}
-
-func handleModelErr(c *gin.Context, err error) {
-	if err == sql.ErrNoRows {
-		respondJSONMessage(c, http.StatusNotFound, http.StatusText(http.StatusNotFound))
-		return
+func writeJSON(w http.ResponseWriter, s int, v interface{}) (int, error) {
+	data, err := json.Marshal(v)
+	if err != nil {
+		return http.StatusInternalServerError, err
 	}
-	respondJSONMessage(c, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+
+	w.Header().Set("content-type", "application/json; charset=utf-8")
+	_, err = w.Write(data)
+	if err != nil {
+		return http.StatusInternalServerError, err
+	}
+
+	return s, nil
 }

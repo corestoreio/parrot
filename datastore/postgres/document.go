@@ -52,7 +52,19 @@ func (db *PostgresDB) UpdateDoc(doc *model.Document) error {
 		return err
 	}
 
-	return db.QueryRow("UPDATE documents SET pairs = pairs || $1 WHERE id = $2 RETURNING id", values, doc.ID).Scan(&doc.ID)
+	row := db.QueryRow("UPDATE documents SET pairs = pairs || $1 WHERE id = $2 RETURNING id, pairs", values, doc.ID)
+	err = row.Scan(&doc.ID, &h)
+	if err != nil {
+		return err
+	}
+
+	doc.Pairs = make(map[string]string)
+	for k, v := range h.Map {
+		if v.Valid {
+			doc.Pairs[k] = v.String
+		}
+	}
+	return nil
 }
 
 func (db *PostgresDB) DeleteDoc(id int) (int, error) {

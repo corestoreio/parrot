@@ -1,86 +1,85 @@
 package api
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/model"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/mux"
 )
 
-func CreateDocument(ds datastore.Store, c *gin.Context) {
+func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	doc := &model.Document{}
-	doc.Pairs = make(map[string]string)
-	if err := c.Request.ParseForm(); err != nil {
-		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
+		return http.StatusBadRequest, err
 	}
 
-	for k, v := range c.Request.PostForm {
-		doc.Pairs[k] = v[0]
-	}
-
-	err := ds.CreateDoc(doc)
+	err := store.CreateDoc(doc)
 	if err != nil {
-		handleModelErr(c, err)
-		return
+		return http.StatusInternalServerError, err
 	}
 
-	render(c, http.StatusCreated, doc)
+	return writeJSON(w, http.StatusOK, doc)
 }
 
-func ShowDocument(ds datastore.Store, c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
-		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		return
+		return http.StatusBadRequest, err
 	}
 
-	doc, err := ds.GetDoc(id)
+	doc, err := store.GetDoc(id)
 	if err != nil {
-		handleModelErr(c, err)
-		return
+		if err == sql.ErrNoRows {
+			return http.StatusNotFound, err
+		}
+		return http.StatusInternalServerError, err
 	}
 
-	render(c, 200, doc)
+	return writeJSON(w, http.StatusOK, doc)
 }
 
-func UpdateDocument(ds datastore.Store, c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
-		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		return
+		return http.StatusBadRequest, err
 	}
 
 	var doc *model.Document
-	if err := c.BindJSON(&doc); err != nil {
-		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		return
+	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
+		return http.StatusBadRequest, err
 	}
 	doc.ID = id
 
-	err = ds.UpdateDoc(doc)
+	err = store.UpdateDoc(doc)
 	if err != nil {
-		handleModelErr(c, err)
-		return
+		if err == sql.ErrNoRows {
+			return http.StatusNotFound, err
+		}
+		return http.StatusInternalServerError, err
 	}
 
-	render(c, http.StatusCreated, doc)
+	return writeJSON(w, http.StatusOK, doc)
 }
 
-func DeleteDocument(ds datastore.Store, c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+func DeleteDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
-		respondJSONMessage(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		return
+		return http.StatusBadRequest, err
 	}
 
-	resultID, err := ds.DeleteDoc(id)
+	resultID, err := store.DeleteDoc(id)
 	if err != nil {
-		handleModelErr(c, err)
-		return
+		if err == sql.ErrNoRows {
+			return http.StatusNotFound, err
+		}
+		return http.StatusInternalServerError, err
 	}
 
-	render(c, http.StatusOK, fmt.Sprintf("document with id = %d deleted", resultID))
+	return writeJSON(w, http.StatusOK, map[string]interface{}{
+		"message": fmt.Sprintf("deleted document with id %d", resultID),
+	})
 }
