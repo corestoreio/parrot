@@ -11,7 +11,7 @@ func (db *PostgresDB) GetDoc(id int) (*model.Document, error) {
 	doc := model.Document{}
 	row := db.QueryRow("SELECT * FROM documents WHERE id = $1", id)
 	pairs := hstore.Hstore{}
-	err := row.Scan(&doc.ID, &doc.Language, &pairs)
+	err := row.Scan(&doc.ID, &doc.Language, &pairs, &doc.ProjectID)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,8 @@ func (db *PostgresDB) CreateDoc(doc *model.Document) error {
 		return err
 	}
 
-	return db.QueryRow("INSERT INTO documents (language, pairs) VALUES($1,$2) RETURNING id", doc.Language, values).Scan(&doc.ID)
+	return db.QueryRow("INSERT INTO documents (language, pairs, project_id) VALUES($1, $2, $3) RETURNING id",
+		doc.Language, values, doc.ProjectID).Scan(&doc.ID)
 }
 
 func (db *PostgresDB) UpdateDoc(doc *model.Document) error {

@@ -12,12 +12,19 @@ import (
 )
 
 func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+	projectId, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+
 	doc := &model.Document{}
 	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
 		return http.StatusBadRequest, err
 	}
 
-	err := store.CreateDoc(doc)
+	doc.ProjectID = projectId
+
+	err = store.CreateDoc(doc)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}

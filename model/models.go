@@ -19,9 +19,10 @@ func NewDocument(id int, lang string, pairs map[string]string) *Document {
 }
 
 type Document struct {
-	ID       int               `db:"id" json:"id"`
-	Language string            `db:"language" json:"language"`
-	Pairs    map[string]string `db:"pairs" json:"pairs"`
+	ID        int               `db:"id" json:"id"`
+	Language  string            `db:"language" json:"language"`
+	Pairs     map[string]string `db:"pairs" json:"pairs"`
+	ProjectID int               `db:"project_id" json:"project_id"`
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.

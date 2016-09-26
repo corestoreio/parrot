@@ -33,22 +33,22 @@ func registerRoutes(r *mux.Router) {
 			handler: ShowProject,
 		},
 		{
-			path:    "/documents",
+			path:    "/projects/{projectID:[0-9]+}/documents",
 			method:  "POST",
 			handler: CreateDocument,
 		},
 		{
-			path:    "/documents/{id:[0-9]+}",
+			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "GET",
 			handler: ShowDocument,
 		},
 		{
-			path:    "/documents/{id:[0-9]+}",
+			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "PUT",
 			handler: UpdateDocument,
 		},
 		{
-			path:    "/documents/{id:[0-9]+}",
+			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "DELETE",
 			handler: DeleteDocument,
 		},
