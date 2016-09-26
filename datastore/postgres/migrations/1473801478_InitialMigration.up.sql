@@ -1,5 +1,6 @@
 CREATE TABLE documents (
     id serial PRIMARY KEY,
+    language varchar(128),
     pairs hstore
 );
 

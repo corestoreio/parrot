@@ -1,7 +1,5 @@
 package model
 
-import "fmt"
-
 type DocStorer interface {
 	GetDoc(id int) (*Document, error)
 	CreateDoc(doc *Document) error
@@ -16,13 +14,14 @@ type ProjectStorer interface {
 	// DeleteProject(id int) (int, error)
 }
 
-func NewDocument(id int) *Document {
-	return &Document{ID: id, Pairs: make(map[string]string)}
+func NewDocument(id int, lang string, pairs map[string]string) *Document {
+	return &Document{ID: id, Language: lang, Pairs: pairs}
 }
 
 type Document struct {
-	ID    int               `db:"id" json:"id"`
-	Pairs map[string]string `db:"pairs" json:"pairs"`
+	ID       int               `db:"id" json:"id"`
+	Language string            `db:"language" json:"language"`
+	Pairs    map[string]string `db:"pairs" json:"pairs"`
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.
@@ -41,15 +40,6 @@ func (d *Document) SyncKeys(t []string, additive bool) {
 }
 
 type Project struct {
-	ID    int            `db:"id" json:"id"`
-	Keys  []string       `db:"keys" json:"keys"`
-	Langs map[string]int `db:"langs" json:"langs"`
-}
-
-func (p *Project) DocKey(lang string) (int, error) {
-	v, ok := p.Langs[lang]
-	if !ok {
-		return 0, fmt.Errorf("no doc for lang key '%s'", lang)
-	}
-	return v, nil
+	ID   int      `db:"id" json:"id"`
+	Keys []string `db:"keys" json:"keys"`
 }
