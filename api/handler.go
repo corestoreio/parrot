@@ -23,6 +23,16 @@ func registerRoutes(r *mux.Router) {
 		handler apiHandler
 	}{
 		{
+			path:    "/projects",
+			method:  "POST",
+			handler: CreateProject,
+		},
+		{
+			path:    "/projects/{id:[0-9]+}",
+			method:  "GET",
+			handler: ShowProject,
+		},
+		{
 			path:    "/documents",
 			method:  "POST",
 			handler: CreateDocument,
