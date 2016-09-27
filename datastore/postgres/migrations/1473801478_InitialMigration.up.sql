@@ -7,5 +7,6 @@ CREATE TABLE documents (
     id serial PRIMARY KEY,
     locale varchar(128) NOT NULL CHECK (locale <> ''),
     pairs hstore,
-    project_id integer REFERENCES projects (id) ON DELETE CASCADE
+    project_id integer REFERENCES projects (id) ON DELETE CASCADE,
+    UNIQUE (locale, project_id)
 );
