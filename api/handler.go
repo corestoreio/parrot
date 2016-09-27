@@ -43,6 +43,11 @@ func registerRoutes(r *mux.Router) {
 			handler: CreateDocument,
 		},
 		{
+			path:    "/projects/{projectID:[0-9]+}/documents",
+			method:  "GET",
+			handler: FindDocuments,
+		},
+		{
 			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "GET",
 			handler: ShowDocument,

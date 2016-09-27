@@ -63,6 +63,24 @@ func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, doc)
 }
 
+func FindDocuments(w http.ResponseWriter, r *http.Request) (int, error) {
+	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	locales := r.URL.Query()["locale"]
+
+	docs, err := store.FindProjectDocs(projID, locales...)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			return http.StatusNotFound, err
+		}
+		return http.StatusInternalServerError, err
+	}
+
+	return writeJSON(w, http.StatusOK, docs)
+}
+
 func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {

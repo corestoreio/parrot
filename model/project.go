@@ -9,6 +9,7 @@ type ProjectStorer interface {
 
 type ProjectDocStorer interface {
 	GetProjectDoc(projID, docID int) (*Document, error)
+	FindProjectDocs(projID int, locales ...string) ([]Document, error)
 }
 
 type Project struct {
