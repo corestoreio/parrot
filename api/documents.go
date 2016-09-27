@@ -26,6 +26,9 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	proj, err := store.GetProject(projID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return http.StatusNotFound, err
+		}
 		return http.StatusInternalServerError, err
 	}
 
