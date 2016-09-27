@@ -42,17 +42,22 @@ func Info(message string) {
 	fmt.Fprintf(output, "[ INFO ] %v %s\n", time.Now().Format(dateFmt), message)
 }
 
+func Warning(message string) {
+	fmt.Fprintf(output, "[%s WARNING %s] %v %s\n", magenta, none, time.Now().Format(dateFmt), message)
+}
+
 func Debug(message string) {
 	fmt.Fprintf(output, "[%s DEBUG %s] %v %s\n", yellow, none, time.Now().Format(dateFmt), message)
 }
 
-func Request(date time.Time, status int, latency time.Duration, ip, path string) {
+func Request(date time.Time, status int, latency time.Duration, ip, method, path string) {
 	statusColor := colorForStatus(status)
-	fmt.Fprintf(output, "[ INFO ] %v |%s %3d %s| %14v | %s | %s\n",
+	fmt.Fprintf(output, "[ INFO ] %v |%s %3d %s| %14v | %s | %s %s\n",
 		date.Format(dateFmt),
 		statusColor, status, none,
 		latency,
-		ip, path)
+		ip,
+		method, path)
 }
 
 func colorForStatus(code int) string {
