@@ -56,3 +56,8 @@ func (db *PostgresDB) CreateProject(project *model.Project) error {
 
 	return db.QueryRow("INSERT INTO projects (keys) VALUES($1) RETURNING id", values).Scan(&project.ID)
 }
+
+func (db *PostgresDB) DeleteProject(id int) (int, error) {
+	err := db.QueryRow("DELETE FROM projects WHERE id = $1 RETURNING id", id).Scan(&id)
+	return id, err
+}

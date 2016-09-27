@@ -33,6 +33,11 @@ func registerRoutes(r *mux.Router) {
 			handler: ShowProject,
 		},
 		{
+			path:    "/projects/{id:[0-9]+}",
+			method:  "DELETE",
+			handler: DeleteProject,
+		},
+		{
 			path:    "/projects/{projectID:[0-9]+}/documents",
 			method:  "POST",
 			handler: CreateDocument,

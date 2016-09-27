@@ -11,7 +11,7 @@ type ProjectStorer interface {
 	GetProject(id int) (*Project, error)
 	CreateProject(doc *Project) error
 	// UpdateProject(doc *Project) error
-	// DeleteProject(id int) (int, error)
+	DeleteProject(id int) (int, error)
 }
 
 type ProjectDocStorer interface {

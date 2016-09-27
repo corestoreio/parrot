@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -41,21 +42,21 @@ func ShowProject(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, project)
 }
 
-// func DeleteProject(w http.ResponseWriter, r *http.Request) (int, error) {
-// 	id, err := strconv.Atoi(mux.Vars(r)["id"])
-// 	if err != nil {
-// 		return http.StatusBadRequest, err
-// 	}
+func DeleteProject(w http.ResponseWriter, r *http.Request) (int, error) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
 
-// 	resultID, err := store.DeleteProject(id)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			return http.StatusNotFound, err
-// 		}
-// 		return http.StatusInternalServerError, err
-// 	}
+	resultID, err := store.DeleteProject(id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return http.StatusNotFound, err
+		}
+		return http.StatusInternalServerError, err
+	}
 
-// 	return writeJSON(w, http.StatusOK, map[string]interface{}{
-// 		"message": fmt.Sprintf("deleted project with id %d and all related documents", resultID),
-// 	})
-// }
+	return writeJSON(w, http.StatusOK, map[string]interface{}{
+		"message": fmt.Sprintf("deleted project with id %d and all related documents", resultID),
+	})
+}
