@@ -12,7 +12,7 @@ import (
 )
 
 func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
-	projectId, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
@@ -22,7 +22,14 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 		return http.StatusBadRequest, err
 	}
 
-	doc.ProjectID = projectId
+	doc.ProjectID = projID
+
+	proj, err := store.GetProject(projID)
+	if err != nil {
+		return http.StatusInternalServerError, err
+	}
+
+	doc.SyncKeys(proj.Keys, true)
 
 	err = store.CreateDoc(doc)
 	if err != nil {
@@ -55,8 +62,8 @@ func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 		return http.StatusBadRequest, err
 	}
 
-	var doc *model.Document
-	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
+	doc := &model.Document{}
+	if err := json.NewDecoder(r.Body).Decode(&doc.Pairs); err != nil {
 		return http.StatusBadRequest, err
 	}
 	doc.ID = id

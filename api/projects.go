@@ -3,7 +3,6 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,7 +18,6 @@ func CreateProject(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	err := store.CreateProject(project)
 	if err != nil {
-		fmt.Println(err)
 		return http.StatusInternalServerError, err
 	}
 
