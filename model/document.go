@@ -7,17 +7,6 @@ type DocStorer interface {
 	DeleteDoc(id int) (int, error)
 }
 
-type ProjectStorer interface {
-	GetProject(id int) (*Project, error)
-	CreateProject(doc *Project) error
-	// UpdateProject(doc *Project) error
-	DeleteProject(id int) (int, error)
-}
-
-type ProjectDocStorer interface {
-	GetProjectDoc(projID, docID int) (*Document, error)
-}
-
 func NewDocument(id int, lang string, pairs map[string]string) *Document {
 	return &Document{ID: id, Language: lang, Pairs: pairs}
 }
@@ -42,9 +31,4 @@ func (d *Document) SyncKeys(t []string, additive bool) {
 	for _, v := range t {
 		d.Pairs[v] = d.Pairs[v]
 	}
-}
-
-type Project struct {
-	ID   int      `db:"id" json:"id"`
-	Keys []string `db:"keys" json:"keys"`
 }
