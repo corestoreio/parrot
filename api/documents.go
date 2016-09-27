@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+func createDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
 	if err != nil {
 		return http.StatusBadRequest, err
@@ -42,7 +42,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, doc)
 }
 
-func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+func showDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
 	if err != nil {
 		return http.StatusBadRequest, err
@@ -63,7 +63,7 @@ func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, doc)
 }
 
-func FindDocuments(w http.ResponseWriter, r *http.Request) (int, error) {
+func findDocuments(w http.ResponseWriter, r *http.Request) (int, error) {
 	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
 	if err != nil {
 		return http.StatusBadRequest, err
@@ -81,7 +81,7 @@ func FindDocuments(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, docs)
 }
 
-func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+func updateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		return http.StatusBadRequest, err
@@ -104,7 +104,7 @@ func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, doc)
 }
 
-func DeleteDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+func deleteDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		return http.StatusBadRequest, err

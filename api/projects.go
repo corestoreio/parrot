@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func CreateProject(w http.ResponseWriter, r *http.Request) (int, error) {
+func createProject(w http.ResponseWriter, r *http.Request) (int, error) {
 	project := &model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		return http.StatusBadRequest, err
@@ -25,7 +25,7 @@ func CreateProject(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, project)
 }
 
-func ShowProject(w http.ResponseWriter, r *http.Request) (int, error) {
+func showProject(w http.ResponseWriter, r *http.Request) (int, error) {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		return http.StatusBadRequest, err
@@ -42,7 +42,7 @@ func ShowProject(w http.ResponseWriter, r *http.Request) (int, error) {
 	return writeJSON(w, http.StatusOK, project)
 }
 
-func DeleteProject(w http.ResponseWriter, r *http.Request) (int, error) {
+func deleteProject(w http.ResponseWriter, r *http.Request) (int, error) {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		return http.StatusBadRequest, err

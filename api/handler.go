@@ -25,42 +25,42 @@ func registerRoutes(r *mux.Router) {
 		{
 			path:    "/projects",
 			method:  "POST",
-			handler: CreateProject,
+			handler: createProject,
 		},
 		{
 			path:    "/projects/{id:[0-9]+}",
 			method:  "GET",
-			handler: ShowProject,
+			handler: showProject,
 		},
 		{
 			path:    "/projects/{id:[0-9]+}",
 			method:  "DELETE",
-			handler: DeleteProject,
+			handler: deleteProject,
 		},
 		{
 			path:    "/projects/{projectID:[0-9]+}/documents",
 			method:  "POST",
-			handler: CreateDocument,
+			handler: createDocument,
 		},
 		{
 			path:    "/projects/{projectID:[0-9]+}/documents",
 			method:  "GET",
-			handler: FindDocuments,
+			handler: findDocuments,
 		},
 		{
 			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "GET",
-			handler: ShowDocument,
+			handler: showDocument,
 		},
 		{
 			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "PUT",
-			handler: UpdateDocument,
+			handler: updateDocument,
 		},
 		{
 			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
 			method:  "DELETE",
-			handler: DeleteDocument,
+			handler: deleteDocument,
 		},
 	}
 
