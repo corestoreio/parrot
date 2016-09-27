@@ -28,7 +28,7 @@ func (db *PostgresDB) GetProjectDoc(projID, docID int) (*model.Document, error) 
 	row := db.QueryRow("SELECT * FROM documents WHERE project_id = $1 AND id = $2", projID, docID)
 	doc := model.Document{}
 	pairs := hstore.Hstore{}
-	err := row.Scan(&doc.ID, &doc.Language, &pairs, &doc.ProjectID)
+	err := row.Scan(&doc.ID, &doc.Locale, &pairs, &doc.ProjectID)
 	if err != nil {
 		return nil, err
 	}

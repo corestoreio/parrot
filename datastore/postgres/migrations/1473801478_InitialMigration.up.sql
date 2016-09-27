@@ -5,7 +5,7 @@ CREATE TABLE projects (
 
 CREATE TABLE documents (
     id serial PRIMARY KEY,
-    language varchar(128),
+    locale varchar(128),
     pairs hstore,
     project_id integer REFERENCES projects (id) ON DELETE CASCADE
 );

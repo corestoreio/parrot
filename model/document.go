@@ -7,13 +7,13 @@ type DocStorer interface {
 	DeleteDoc(id int) (int, error)
 }
 
-func NewDocument(id int, lang string, pairs map[string]string) *Document {
-	return &Document{ID: id, Language: lang, Pairs: pairs}
+func NewDocument(id int, locale string, pairs map[string]string) *Document {
+	return &Document{ID: id, Locale: locale, Pairs: pairs}
 }
 
 type Document struct {
 	ID        int               `db:"id" json:"id"`
-	Language  string            `db:"language" json:"language"`
+	Locale    string            `db:"locale" json:"locale"`
 	Pairs     map[string]string `db:"pairs" json:"pairs"`
 	ProjectID int               `db:"project_id" json:"project_id"`
 }
