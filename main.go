@@ -1,13 +1,14 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/log"
 	"github.com/joho/godotenv"
 )
 
@@ -25,14 +26,19 @@ func main() {
 	// init app routes
 	a := api.Handler(ds)
 
+	// config
+	addr := "localhost:8080"
+
 	// init server
 	s := &http.Server{
-		Addr:           ":8080",
+		Addr:           addr,
 		Handler:        a,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+
+	log.Info(fmt.Sprintf("Listening on %s", addr))
 
 	log.Fatal(s.ListenAndServe())
 }
