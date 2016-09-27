@@ -16,10 +16,13 @@ type apiHandler func(http.ResponseWriter, *http.Request) (int, error)
 
 func (h apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonContentType)
+
 	start := time.Now()
 	status, err := h(w, r)
 	end := time.Now()
+
 	log.Request(end, status, end.Sub(start), r.RemoteAddr, r.Method, r.URL.String())
+
 	if err != nil {
 		w.WriteHeader(status)
 		data, err := json.Marshal(map[string]interface{}{
