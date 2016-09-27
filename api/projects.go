@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/gorilla/mux"
 )
@@ -32,6 +33,9 @@ func ShowProject(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	project, err := store.GetProject(id)
 	if err != nil {
+		if err == errors.ErrNotFound {
+			return http.StatusNotFound, err
+		}
 		return http.StatusInternalServerError, err
 	}
 
@@ -46,6 +50,9 @@ func DeleteProject(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	resultID, err := store.DeleteProject(id)
 	if err != nil {
+		if err == errors.ErrNotFound {
+			return http.StatusNotFound, err
+		}
 		return http.StatusInternalServerError, err
 	}
 

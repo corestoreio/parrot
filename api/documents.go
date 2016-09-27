@@ -1,12 +1,12 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/gorilla/mux"
 )
@@ -26,7 +26,7 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	proj, err := store.GetProject(projID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == errors.ErrNotFound {
 			return http.StatusNotFound, err
 		}
 		return http.StatusInternalServerError, err
@@ -54,6 +54,9 @@ func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	doc, err := store.GetProjectDoc(projID, id)
 	if err != nil {
+		if err == errors.ErrNotFound {
+			return http.StatusNotFound, err
+		}
 		return http.StatusInternalServerError, err
 	}
 
@@ -74,6 +77,9 @@ func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	err = store.UpdateDoc(doc)
 	if err != nil {
+		if err == errors.ErrNotFound {
+			return http.StatusNotFound, err
+		}
 		return http.StatusInternalServerError, err
 	}
 
@@ -88,6 +94,9 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	resultID, err := store.DeleteDoc(id)
 	if err != nil {
+		if err == errors.ErrNotFound {
+			return http.StatusNotFound, err
+		}
 		return http.StatusInternalServerError, err
 	}
 

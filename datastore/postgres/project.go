@@ -1,6 +1,9 @@
 package postgres
 
 import (
+	"database/sql"
+
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/lib/pq"
 	"github.com/lib/pq/hstore"
@@ -13,6 +16,9 @@ func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
 	keys := pq.StringArray{}
 	err := row.Scan(&p.ID, &keys)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
 		return nil, err
 	}
 
@@ -30,6 +36,9 @@ func (db *PostgresDB) GetProjectDoc(projID, docID int) (*model.Document, error) 
 	pairs := hstore.Hstore{}
 	err := row.Scan(&doc.ID, &doc.Locale, &pairs, &doc.ProjectID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
 		return nil, err
 	}
 
@@ -59,5 +68,8 @@ func (db *PostgresDB) CreateProject(project *model.Project) error {
 
 func (db *PostgresDB) DeleteProject(id int) (int, error) {
 	err := db.QueryRow("DELETE FROM projects WHERE id = $1 RETURNING id", id).Scan(&id)
+	if err == sql.ErrNoRows {
+		return -1, errors.ErrNotFound
+	}
 	return id, err
 }

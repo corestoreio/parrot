@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/lib/pq/hstore"
 )
@@ -13,6 +14,9 @@ func (db *PostgresDB) GetDoc(id int) (*model.Document, error) {
 	pairs := hstore.Hstore{}
 	err := row.Scan(&doc.ID, &doc.Locale, &pairs, &doc.ProjectID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
 		return nil, err
 	}
 
@@ -56,6 +60,9 @@ func (db *PostgresDB) UpdateDoc(doc *model.Document) error {
 	row := db.QueryRow("UPDATE documents SET pairs = pairs || $1 WHERE id = $2 RETURNING *", values, doc.ID)
 	err = row.Scan(&doc.ID, &doc.Locale, &h, &doc.ProjectID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.ErrNotFound
+		}
 		return err
 	}
 
@@ -70,5 +77,8 @@ func (db *PostgresDB) UpdateDoc(doc *model.Document) error {
 
 func (db *PostgresDB) DeleteDoc(id int) (int, error) {
 	err := db.QueryRow("DELETE FROM documents WHERE id = $1 RETURNING id", id).Scan(&id)
+	if err == sql.ErrNoRows {
+		return -1, errors.ErrNotFound
+	}
 	return id, err
 }
