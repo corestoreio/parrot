@@ -40,12 +40,16 @@ func CreateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 }
 
 func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
+	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
 
-	doc, err := store.GetDoc(id)
+	doc, err := store.GetProjectDoc(projID, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return http.StatusNotFound, err

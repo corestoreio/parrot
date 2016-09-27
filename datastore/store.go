@@ -11,6 +11,7 @@ import (
 type Store interface {
 	model.DocStorer
 	model.ProjectStorer
+	model.ProjectDocStorer
 	Ping() error
 	Close() error
 }

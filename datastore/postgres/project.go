@@ -3,6 +3,7 @@ package postgres
 import (
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/lib/pq"
+	"github.com/lib/pq/hstore"
 )
 
 func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
@@ -21,6 +22,25 @@ func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
 	}
 
 	return &p, nil
+}
+
+func (db *PostgresDB) GetProjectDoc(projID, docID int) (*model.Document, error) {
+	row := db.QueryRow("SELECT * FROM documents WHERE project_id = $1 AND id = $2", projID, docID)
+	doc := model.Document{}
+	pairs := hstore.Hstore{}
+	err := row.Scan(&doc.ID, &doc.Language, &pairs, &doc.ProjectID)
+	if err != nil {
+		return nil, err
+	}
+
+	doc.Pairs = make(map[string]string)
+	for k, v := range pairs.Map {
+		if v.Valid {
+			doc.Pairs[k] = v.String
+		}
+	}
+
+	return &doc, nil
 }
 
 func (db *PostgresDB) CreateProject(project *model.Project) error {

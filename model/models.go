@@ -14,6 +14,10 @@ type ProjectStorer interface {
 	// DeleteProject(id int) (int, error)
 }
 
+type ProjectDocStorer interface {
+	GetProjectDoc(projID, docID int) (*Document, error)
+}
+
 func NewDocument(id int, lang string, pairs map[string]string) *Document {
 	return &Document{ID: id, Language: lang, Pairs: pairs}
 }
