@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -33,9 +32,6 @@ func ShowProject(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	project, err := store.GetProject(id)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return http.StatusNotFound, err
-		}
 		return http.StatusInternalServerError, err
 	}
 
@@ -50,9 +46,6 @@ func DeleteProject(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	resultID, err := store.DeleteProject(id)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return http.StatusNotFound, err
-		}
 		return http.StatusInternalServerError, err
 	}
 

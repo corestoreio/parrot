@@ -54,9 +54,6 @@ func ShowDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	doc, err := store.GetProjectDoc(projID, id)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return http.StatusNotFound, err
-		}
 		return http.StatusInternalServerError, err
 	}
 
@@ -77,9 +74,6 @@ func UpdateDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	err = store.UpdateDoc(doc)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return http.StatusNotFound, err
-		}
 		return http.StatusInternalServerError, err
 	}
 
@@ -94,9 +88,6 @@ func DeleteDocument(w http.ResponseWriter, r *http.Request) (int, error) {
 
 	resultID, err := store.DeleteDoc(id)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return http.StatusNotFound, err
-		}
 		return http.StatusInternalServerError, err
 	}
 
