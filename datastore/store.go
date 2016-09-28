@@ -35,6 +35,9 @@ func NewDatastore(name string, url string) (*Datastore, error) {
 			return nil, err
 		}
 		p := &postgres.PostgresDB{DB: conn}
+		// TODO(anthonynsimon): debug refused connections when db connections > 1
+		p.SetMaxIdleConns(1)
+		p.SetMaxOpenConns(1)
 		ds = &Datastore{p}
 	default:
 		return nil, ErrNotImplemented
