@@ -22,7 +22,7 @@ var (
 
 func init() {
 	output = os.Stderr
-	dateFmt = "2006/01/02 - 15:04:05"
+	dateFmt = time.RFC3339 // Profile of ISO 8601
 }
 
 func SetOutput(w io.Writer) {
