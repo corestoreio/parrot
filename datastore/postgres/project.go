@@ -76,13 +76,14 @@ func (db *PostgresDB) GetProjectDoc(projID, docID int) (*model.Document, error) 
 
 func (db *PostgresDB) FindProjectDocs(projID int, locales ...string) ([]model.Document, error) {
 	rows, err := db.Query("SELECT * FROM documents WHERE project_id = $1", projID)
-	defer rows.Close()
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
 		}
 		return nil, err
 	}
+	defer rows.Close()
+
 	docs := make([]model.Document, 0)
 	for rows.Next() {
 		doc := model.Document{}
