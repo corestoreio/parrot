@@ -8,10 +8,16 @@ import (
 
 	"log"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/joho/godotenv"
 )
+
+func init() {
+	// Config log
+	logrus.SetFormatter(&logrus.TextFormatter{})
+}
 
 func main() {
 	// init and ping datastore
