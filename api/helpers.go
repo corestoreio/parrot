@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/anthonynsimon/parrot/log"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (
@@ -19,9 +19,14 @@ func (h apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	start := time.Now()
 	status, err := h(w, r)
-	end := time.Now()
 
-	log.Request(end, status, end.Sub(start), r.RemoteAddr, r.Method, r.URL.String())
+	log.WithFields(map[string]interface{}{
+		"status":  status,
+		"latency": time.Since(start),
+		"ip":      r.RemoteAddr,
+		"method":  r.Method,
+		"url":     r.URL.String(),
+	}).Info()
 
 	if err != nil {
 		w.WriteHeader(status)
@@ -32,7 +37,7 @@ func (h apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		_, err = w.Write(data)
 		if err != nil {
-			log.Warning(err.Error())
+			log.Error(err)
 		}
 	}
 }

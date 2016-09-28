@@ -6,9 +6,10 @@ import (
 	"os"
 	"time"
 
+	"log"
+
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/anthonynsimon/parrot/log"
 	"github.com/joho/godotenv"
 )
 
@@ -16,11 +17,13 @@ func main() {
 	// init and ping datastore
 	ds, err := initDatastore()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	defer ds.Close()
 	if err = ds.Ping(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	// init app routes
@@ -38,7 +41,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	log.Info(fmt.Sprintf("Listening on %s", addr))
+	fmt.Println(fmt.Sprintf("Listening on %s", addr))
 
 	log.Fatal(s.ListenAndServe())
 }
