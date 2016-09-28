@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -13,7 +14,7 @@ func Handler(ds datastore.Store) http.Handler {
 	store = ds
 	m := mux.NewRouter()
 	registerRoutes(m)
-	r := loggerMiddleware(m)
+	r := middleware.Log(m)
 	return r
 }
 
