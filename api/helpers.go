@@ -3,9 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"time"
-
-	log "github.com/Sirupsen/logrus"
 )
 
 var (
@@ -16,29 +13,14 @@ type apiHandler func(http.ResponseWriter, *http.Request) (int, error)
 
 func (h apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonContentType)
-
-	start := time.Now()
 	status, err := h(w, r)
-
-	log.WithFields(map[string]interface{}{
-		"status":  status,
-		"latency": time.Since(start),
-		"ip":      r.RemoteAddr,
-		"method":  r.Method,
-		"url":     r.URL.String(),
-	}).Info()
-
 	if err != nil {
 		w.WriteHeader(status)
-		data, err := json.Marshal(map[string]interface{}{
+		data, _ := json.Marshal(map[string]interface{}{
 			"status": status,
 			"error":  http.StatusText(status),
 		})
-
-		_, err = w.Write(data)
-		if err != nil {
-			log.Error(err)
-		}
+		w.Write(data)
 	}
 }
 

@@ -11,8 +11,9 @@ var store datastore.Store
 
 func Handler(ds datastore.Store) http.Handler {
 	store = ds
-	r := mux.NewRouter()
-	registerRoutes(r)
+	m := mux.NewRouter()
+	registerRoutes(m)
+	r := loggerMiddleware(m)
 	return r
 }
 
