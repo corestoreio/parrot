@@ -6,9 +6,7 @@ import (
 	"os"
 	"time"
 
-	"log"
-
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/joho/godotenv"
@@ -16,7 +14,7 @@ import (
 
 func init() {
 	// Config log
-	logrus.SetFormatter(&logrus.TextFormatter{})
+	log.SetFormatter(&log.TextFormatter{})
 }
 
 func main() {
