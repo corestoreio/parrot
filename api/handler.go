@@ -14,7 +14,7 @@ func Handler(ds datastore.Store) http.Handler {
 	store = ds
 	m := mux.NewRouter()
 	registerRoutes(m)
-	r := middleware.Log(middleware.ValidateAuthToken(m))
+	r := middleware.Log(middleware.TokenGate(m))
 	return r
 }
 
