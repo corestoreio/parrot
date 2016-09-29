@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/api/middleware"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/gorilla/mux"
 )
@@ -14,8 +13,8 @@ func Handler(ds datastore.Store) http.Handler {
 	store = ds
 	m := mux.NewRouter()
 	registerRoutes(m)
-	r := middleware.Log(middleware.TokenGate(m))
-	return r
+	// r := middleware.Log(middleware.TokenGate(m))
+	return m
 }
 
 func registerRoutes(r *mux.Router) {
@@ -24,6 +23,11 @@ func registerRoutes(r *mux.Router) {
 		method     string
 		handleFunc http.HandlerFunc
 	}{
+		{
+			path:       "/authenticate",
+			method:     "POST",
+			handleFunc: authenticate,
+		},
 		{
 			path:       "/projects",
 			method:     "POST",

@@ -8,7 +8,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
-	"github.com/anthonynsimon/parrot/api/middleware"
+	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/joho/godotenv"
 )
@@ -35,8 +35,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// config middleware
-	middleware.APISigningKey = []byte(os.Getenv("API_SIGNING_KEY"))
+	// config auth
+	auth.SigningKey = []byte(os.Getenv("API_SIGNING_KEY"))
 
 	// init api
 	apiRouter := api.Handler(ds)

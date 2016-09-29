@@ -4,13 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
+	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 )
-
-var APISigningKey []byte
 
 func TokenGate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +18,7 @@ func TokenGate(next http.Handler) http.Handler {
 			return
 		}
 
-		claims, err := authenticateToken(tokenString)
+		claims, err := auth.ParseToken(tokenString)
 		if err != nil {
 			render.JSONError(w, http.StatusUnauthorized)
 			return
@@ -37,27 +35,6 @@ func getTokenString(r *http.Request) (string, error) {
 		return "", fmt.Errorf("no auth header")
 	}
 	return tokenString, nil
-}
-
-func authenticateToken(ts string) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(ts, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method")
-		}
-		return APISigningKey, nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		return nil, fmt.Errorf("invalid token")
-	}
-	if !claims.VerifyExpiresAt(time.Now().Unix(), true) {
-		return nil, fmt.Errorf("token expired")
-	}
-	return claims, nil
 }
 
 func contextWithClaims(ctx context.Context, claims jwt.MapClaims) context.Context {
