@@ -20,28 +20,32 @@ func init() {
 }
 
 func main() {
+	// init environment variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// init and ping datastore
 	ds, err := initDatastore()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 	defer ds.Close()
 	if err = ds.Ping(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
-	// init app routes
-	a := api.Handler(ds)
+	// init api
+	apiRouter := api.Handler(ds)
 
-	// config
+	// config server
 	addr := "localhost:8080"
 
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        a,
+		Handler:        apiRouter,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
@@ -53,11 +57,6 @@ func main() {
 }
 
 func initDatastore() (*datastore.Datastore, error) {
-	err := godotenv.Load()
-	if err != nil {
-		return nil, err
-	}
-
 	name := os.Getenv("DB")
 	url := os.Getenv("DB_URL")
 
