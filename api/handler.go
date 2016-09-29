@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
+	"github.com/anthonynsimon/parrot/api/middleware"
 	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/anthonynsimon/parrot/middleware"
 	"github.com/gorilla/mux"
 )
 

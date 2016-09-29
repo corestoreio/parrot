@@ -17,12 +17,14 @@ func TokenGate(next http.Handler) http.Handler {
 		if err != nil {
 			fmt.Println(err)
 			return
+			// return http.StatusBadRequest, err
 		}
 
 		claims, err := authenticateToken(tokenString)
 		if err != nil {
 			fmt.Println(err)
 			return
+			// return http.StatusUnauthorized, err
 		}
 
 		ctx := contextWithClaims(r.Context(), claims)

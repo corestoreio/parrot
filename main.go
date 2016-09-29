@@ -8,8 +8,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
+	"github.com/anthonynsimon/parrot/api/middleware"
 	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/anthonynsimon/parrot/middleware"
 	"github.com/joho/godotenv"
 )
 
