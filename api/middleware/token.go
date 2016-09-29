@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -15,16 +16,14 @@ func TokenGate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := getTokenString(r)
 		if err != nil {
-			fmt.Println(err)
+			render.JSONError(w, http.StatusBadRequest)
 			return
-			// return http.StatusBadRequest, err
 		}
 
 		claims, err := authenticateToken(tokenString)
 		if err != nil {
-			fmt.Println(err)
+			render.JSONError(w, http.StatusUnauthorized)
 			return
-			// return http.StatusUnauthorized, err
 		}
 
 		ctx := contextWithClaims(r.Context(), claims)

@@ -20,53 +20,53 @@ func Handler(ds datastore.Store) http.Handler {
 
 func registerRoutes(r *mux.Router) {
 	routes := []struct {
-		path    string
-		method  string
-		handler apiHandler
+		path       string
+		method     string
+		handleFunc http.HandlerFunc
 	}{
 		{
-			path:    "/projects",
-			method:  "POST",
-			handler: createProject,
+			path:       "/projects",
+			method:     "POST",
+			handleFunc: createProject,
 		},
 		{
-			path:    "/projects/{id:[0-9]+}",
-			method:  "GET",
-			handler: showProject,
+			path:       "/projects/{id:[0-9]+}",
+			method:     "GET",
+			handleFunc: showProject,
 		},
 		{
-			path:    "/projects/{id:[0-9]+}",
-			method:  "DELETE",
-			handler: deleteProject,
+			path:       "/projects/{id:[0-9]+}",
+			method:     "DELETE",
+			handleFunc: deleteProject,
 		},
 		{
-			path:    "/projects/{projectID:[0-9]+}/documents",
-			method:  "POST",
-			handler: createDocument,
+			path:       "/projects/{projectID:[0-9]+}/documents",
+			method:     "POST",
+			handleFunc: createDocument,
 		},
 		{
-			path:    "/projects/{projectID:[0-9]+}/documents",
-			method:  "GET",
-			handler: findDocuments,
+			path:       "/projects/{projectID:[0-9]+}/documents",
+			method:     "GET",
+			handleFunc: findDocuments,
 		},
 		{
-			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
-			method:  "GET",
-			handler: showDocument,
+			path:       "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
+			method:     "GET",
+			handleFunc: showDocument,
 		},
 		{
-			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
-			method:  "PUT",
-			handler: updateDocument,
+			path:       "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
+			method:     "PUT",
+			handleFunc: updateDocument,
 		},
 		{
-			path:    "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
-			method:  "DELETE",
-			handler: deleteDocument,
+			path:       "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
+			method:     "DELETE",
+			handleFunc: deleteDocument,
 		},
 	}
 
 	for _, route := range routes {
-		r.Handle(route.path, apiHandler(route.handler)).Methods(route.method)
+		r.Handle(route.path, route.handleFunc).Methods(route.method)
 	}
 }
