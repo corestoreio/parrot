@@ -28,6 +28,34 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, project)
 }
 
+func updateProject(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		render.JSONError(w, http.StatusBadRequest)
+		return
+	}
+
+	project := &model.Project{}
+	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
+		fmt.Println(err)
+		render.JSONError(w, http.StatusBadRequest)
+		return
+	}
+	project.ID = id
+
+	err = store.UpdateProject(project)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			render.JSONError(w, http.StatusNotFound)
+			return
+		}
+		render.JSONError(w, http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(w, http.StatusOK, project)
+}
+
 func showProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {

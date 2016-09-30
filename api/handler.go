@@ -44,6 +44,11 @@ func registerRoutes(r *mux.Router) {
 		},
 		{
 			path:       ProjectsPath + "/{id:[0-9]+}",
+			method:     "PUT",
+			handleFunc: updateProject,
+		},
+		{
+			path:       ProjectsPath + "/{id:[0-9]+}",
 			method:     "GET",
 			handleFunc: showProject,
 		},
