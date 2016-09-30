@@ -8,7 +8,6 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
-	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
 	"github.com/gorilla/mux"
@@ -38,12 +37,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// config auth
-	auth.SigningKey = []byte(os.Getenv("API_SIGNING_KEY"))
-
 	// init routers
 	router := mux.NewRouter()
-	api.Register(router, ds)
+	api.Register(router, ds, []byte(os.Getenv("API_SIGNING_KEY")))
+
 	chain := negroni.New(
 		negroni.HandlerFunc(logger.Request),
 		negroni.Wrap(router),

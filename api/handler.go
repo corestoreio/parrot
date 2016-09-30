@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
@@ -10,8 +11,9 @@ import (
 
 var store datastore.Store
 
-func Register(m *mux.Router, ds datastore.Store) {
+func Register(m *mux.Router, ds datastore.Store, signingKey []byte) {
 	store = ds
+	auth.SigningKey = signingKey
 
 	subRouter := mux.NewRouter().PathPrefix("/api").Subrouter().StrictSlash(true)
 	registerRoutes(subRouter)
