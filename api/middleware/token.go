@@ -14,7 +14,7 @@ func TokenGate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := getTokenString(r)
 		if err != nil {
-			render.JSONError(w, http.StatusBadRequest)
+			render.JSONError(w, http.StatusUnauthorized)
 			return
 		}
 
