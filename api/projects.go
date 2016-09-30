@@ -9,7 +9,7 @@ import (
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
-	"github.com/gorilla/mux"
+	"github.com/pressly/chi"
 )
 
 func createProject(w http.ResponseWriter, r *http.Request) error {
@@ -28,7 +28,7 @@ func createProject(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateProject(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -49,7 +49,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) error {
 }
 
 func showProject(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -64,7 +64,7 @@ func showProject(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteProject(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}

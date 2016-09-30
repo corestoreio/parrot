@@ -10,8 +10,8 @@ import (
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
-	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/pressly/chi"
 	"github.com/urfave/negroni"
 )
 
@@ -38,8 +38,8 @@ func main() {
 	}
 
 	// init routers
-	router := mux.NewRouter()
-	api.Register(router, ds, []byte(os.Getenv("API_SIGNING_KEY")))
+	router := chi.NewRouter()
+	router.Mount("/api", api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY"))))
 
 	chain := negroni.New(
 		negroni.HandlerFunc(logger.Request),

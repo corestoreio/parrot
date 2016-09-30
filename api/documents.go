@@ -9,11 +9,11 @@ import (
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
-	"github.com/gorilla/mux"
+	"github.com/pressly/chi"
 )
 
 func createDocument(w http.ResponseWriter, r *http.Request) error {
-	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	projID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -42,11 +42,11 @@ func createDocument(w http.ResponseWriter, r *http.Request) error {
 }
 
 func showDocument(w http.ResponseWriter, r *http.Request) error {
-	projectID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -68,7 +68,7 @@ func showDocument(w http.ResponseWriter, r *http.Request) error {
 }
 
 func findDocuments(w http.ResponseWriter, r *http.Request) error {
-	projectID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 
@@ -94,11 +94,11 @@ func findDocuments(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateDocument(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
-	projectID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -126,7 +126,7 @@ func updateDocument(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteDocument(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
