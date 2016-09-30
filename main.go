@@ -11,7 +11,9 @@ import (
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/urfave/negroni"
 )
 
 func init() {
@@ -39,9 +41,13 @@ func main() {
 	// config auth
 	auth.SigningKey = []byte(os.Getenv("API_SIGNING_KEY"))
 
-	// init api
-	apiRouter := api.Handler(ds)
-	withLogger := logger.Request(apiRouter)
+	// init routers
+	router := mux.NewRouter()
+	api.Register(router, ds)
+	chain := negroni.New(
+		negroni.HandlerFunc(logger.Request),
+		negroni.Wrap(router),
+	)
 
 	// config server
 	addr := "localhost:8080"
@@ -49,7 +55,7 @@ func main() {
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        withLogger,
+		Handler:        chain,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

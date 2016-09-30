@@ -5,16 +5,23 @@ import (
 
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/gorilla/mux"
+	"github.com/urfave/negroni"
 )
 
 var store datastore.Store
 
-func Handler(ds datastore.Store) http.Handler {
+func Register(m *mux.Router, ds datastore.Store) {
 	store = ds
-	m := mux.NewRouter()
-	registerRoutes(m)
-	// r := middleware.Log(middleware.TokenGate(m))
-	return m
+
+	subRouter := mux.NewRouter().PathPrefix("/api").Subrouter().StrictSlash(true)
+	registerRoutes(subRouter)
+
+	chain := negroni.New(
+		negroni.HandlerFunc(tokenGate),
+		negroni.Wrap(subRouter),
+	)
+
+	m.PathPrefix("/api").Handler(chain)
 }
 
 func registerRoutes(r *mux.Router) {
@@ -24,53 +31,53 @@ func registerRoutes(r *mux.Router) {
 		handleFunc http.HandlerFunc
 	}{
 		{
-			path:       "/authenticate",
+			path:       AuthenticatePath,
 			method:     "POST",
 			handleFunc: authenticate,
 		},
 		{
-			path:       "/projects",
+			path:       ProjectsPath,
 			method:     "POST",
 			handleFunc: createProject,
 		},
 		{
-			path:       "/projects/{id:[0-9]+}",
+			path:       ProjectsPath + "/{id:[0-9]+}",
 			method:     "GET",
 			handleFunc: showProject,
 		},
 		{
-			path:       "/projects/{id:[0-9]+}",
+			path:       ProjectsPath + "/{id:[0-9]+}",
 			method:     "DELETE",
 			handleFunc: deleteProject,
 		},
 		{
-			path:       "/projects/{projectID:[0-9]+}/documents",
+			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath,
 			method:     "POST",
 			handleFunc: createDocument,
 		},
 		{
-			path:       "/projects/{projectID:[0-9]+}/documents",
+			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath,
 			method:     "GET",
 			handleFunc: findDocuments,
 		},
 		{
-			path:       "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
+			path:       ProjectsPath + "/{projectID:[0-9]+}/" + DocumentsPath + "/{id:[0-9]+}",
 			method:     "GET",
 			handleFunc: showDocument,
 		},
 		{
-			path:       "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
+			path:       ProjectsPath + "/{projectID:[0-9]+}/" + DocumentsPath + "/{id:[0-9]+}",
 			method:     "PUT",
 			handleFunc: updateDocument,
 		},
 		{
-			path:       "/projects/{projectID:[0-9]+}/documents/{id:[0-9]+}",
+			path:       ProjectsPath + "/{projectID:[0-9]+}/" + DocumentsPath + "/{id:[0-9]+}",
 			method:     "DELETE",
 			handleFunc: deleteDocument,
 		},
 	}
 
 	for _, route := range routes {
-		r.Handle(route.path, route.handleFunc).Methods(route.method)
+		r.Path(route.path).HandlerFunc(route.handleFunc).Methods(route.method)
 	}
 }

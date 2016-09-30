@@ -1,4 +1,4 @@
-package middleware
+package api
 
 import (
 	"context"
@@ -10,23 +10,26 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func TokenGate(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tokenString, err := getTokenString(r)
-		if err != nil {
-			render.JSONError(w, http.StatusUnauthorized)
-			return
-		}
+func tokenGate(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	if r.RequestURI == "/api/authenticate" {
+		next(w, r)
+		return
+	}
 
-		claims, err := auth.ParseToken(tokenString)
-		if err != nil {
-			render.JSONError(w, http.StatusUnauthorized)
-			return
-		}
+	tokenString, err := getTokenString(r)
+	if err != nil {
+		render.JSONError(w, http.StatusUnauthorized)
+		return
+	}
 
-		ctx := contextWithClaims(r.Context(), claims)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+	claims, err := auth.ParseToken(tokenString)
+	if err != nil {
+		render.JSONError(w, http.StatusUnauthorized)
+		return
+	}
+
+	ctx := contextWithClaims(r.Context(), claims)
+	next(w, r.WithContext(ctx))
 }
 
 func getTokenString(r *http.Request) (string, error) {
