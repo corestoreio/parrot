@@ -10,6 +10,7 @@ import (
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/logger"
 	"github.com/joho/godotenv"
 )
 
@@ -40,6 +41,7 @@ func main() {
 
 	// init api
 	apiRouter := api.Handler(ds)
+	withLogger := logger.Request(apiRouter)
 
 	// config server
 	addr := "localhost:8080"
@@ -47,7 +49,7 @@ func main() {
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        apiRouter,
+		Handler:        withLogger,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

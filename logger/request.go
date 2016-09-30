@@ -1,4 +1,4 @@
-package middleware
+package logger
 
 import (
 	"net/http"
@@ -27,7 +27,7 @@ func (rw *responseWriter) WriteHeader(s int) {
 	rw.Writer.WriteHeader(s)
 }
 
-func Log(next http.Handler) http.Handler {
+func Request(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		rw := responseWriter{Status: 200, Writer: w}
