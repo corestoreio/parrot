@@ -19,16 +19,18 @@ type Document struct {
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.
-// If additive is set to false, previous key/value pairs will be destroyed,
-// and if set to true they will be kept.
-func (d *Document) SyncKeys(t []string, additive bool) {
-	if d.Pairs == nil || !additive {
+func (d *Document) SyncKeys(t []string) {
+	if d.Pairs == nil {
 		d.Pairs = make(map[string]string)
 	}
+
+	temp := make(map[string]string)
 
 	// Assign each key, if it's already there it will simply reassign to there
 	// previous value, otherwise an empty string will be set
 	for _, v := range t {
-		d.Pairs[v] = d.Pairs[v]
+		temp[v] = d.Pairs[v]
 	}
+
+	d.Pairs = temp
 }

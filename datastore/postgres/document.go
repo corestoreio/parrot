@@ -57,7 +57,7 @@ func (db *PostgresDB) UpdateDoc(doc *model.Document) error {
 		return err
 	}
 
-	row := db.QueryRow("UPDATE documents SET pairs = pairs || $1 WHERE id = $2 RETURNING *", values, doc.ID)
+	row := db.QueryRow("UPDATE documents SET pairs = $1 WHERE id = $2 RETURNING *", values, doc.ID)
 	err = row.Scan(&doc.ID, &doc.Locale, &h, &doc.ProjectID)
 	if err != nil {
 		if err == sql.ErrNoRows {

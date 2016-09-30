@@ -6,7 +6,7 @@ func TestDocSyncKeys(t *testing.T) {
 	d := Document{}
 
 	// Add initial key to test
-	d.SyncKeys([]string{"testkey1", "testkey2"}, true)
+	d.SyncKeys([]string{"testkey1", "testkey2"})
 	if _, ok := d.Pairs["testkey1"]; !ok {
 		t.Fatal("expected 'testkey1' to be present")
 	}
@@ -15,30 +15,8 @@ func TestDocSyncKeys(t *testing.T) {
 	}
 
 	// Test sync keys non-additive
-	d.SyncKeys([]string{"testkey1"}, false)
+	d.SyncKeys([]string{"testkey1"})
 	if _, ok := d.Pairs["testkey2"]; ok {
 		t.Fatal("expected 'testkey2' to not be present")
-	}
-}
-
-func TestDocSyncKeysAdditive(t *testing.T) {
-	d := Document{}
-
-	// Add initial key to test
-	d.SyncKeys([]string{"testkey1"}, true)
-	if _, ok := d.Pairs["testkey1"]; !ok {
-		t.Fatal("expected 'testkey1' to be present")
-	}
-
-	// Set intial key value
-	d.Pairs["testkey1"] = "testvalue1"
-
-	// Test sync keys additive
-	d.SyncKeys([]string{"testkey1", "testkey2"}, true)
-	if v, _ := d.Pairs["testkey1"]; v != "testvalue1" {
-		t.Fatalf("expected 'testkey1' value to be 'testvalue1', got: '%s'", v)
-	}
-	if _, ok := d.Pairs["testkey2"]; !ok {
-		t.Fatal("expected 'testkey2' to be present")
 	}
 }

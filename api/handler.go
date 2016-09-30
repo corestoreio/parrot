@@ -68,17 +68,17 @@ func registerRoutes(r *mux.Router) {
 			handleFunc: findDocuments,
 		},
 		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}/" + DocumentsPath + "/{id:[0-9]+}",
+			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath + "/{id:[0-9]+}",
 			method:     "GET",
 			handleFunc: showDocument,
 		},
 		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}/" + DocumentsPath + "/{id:[0-9]+}",
+			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath + "/{id:[0-9]+}",
 			method:     "PUT",
 			handleFunc: updateDocument,
 		},
 		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}/" + DocumentsPath + "/{id:[0-9]+}",
+			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath + "/{id:[0-9]+}",
 			method:     "DELETE",
 			handleFunc: deleteDocument,
 		},

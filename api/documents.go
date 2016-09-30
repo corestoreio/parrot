@@ -37,7 +37,7 @@ func createDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	doc.SyncKeys(proj.Keys, true)
+	doc.SyncKeys(proj.Keys)
 
 	err = store.CreateDoc(doc)
 	if err != nil {
@@ -49,7 +49,7 @@ func createDocument(w http.ResponseWriter, r *http.Request) {
 }
 
 func showDocument(w http.ResponseWriter, r *http.Request) {
-	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	projectID, err := strconv.Atoi(mux.Vars(r)["projectID"])
 	if err != nil {
 		render.JSONError(w, http.StatusBadRequest)
 		return
@@ -60,7 +60,7 @@ func showDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	doc, err := store.GetProjectDoc(projID, id)
+	doc, err := store.GetProjectDoc(projectID, id)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			render.JSONError(w, http.StatusNotFound)
@@ -100,13 +100,30 @@ func updateDocument(w http.ResponseWriter, r *http.Request) {
 		render.JSONError(w, http.StatusBadRequest)
 		return
 	}
+	projectID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	if err != nil {
+		render.JSONError(w, http.StatusBadRequest)
+		return
+	}
 
 	doc := &model.Document{}
-	if err := json.NewDecoder(r.Body).Decode(&doc.Pairs); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
 		render.JSONError(w, http.StatusBadRequest)
 		return
 	}
 	doc.ID = id
+
+	project, err := store.GetProject(projectID)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			render.JSONError(w, http.StatusNotFound)
+			return
+		}
+		render.JSONError(w, http.StatusInternalServerError)
+		return
+	}
+
+	doc.SyncKeys(project.Keys)
 
 	err = store.UpdateDoc(doc)
 	if err != nil {
