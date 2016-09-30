@@ -28,7 +28,7 @@ func createProject(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateProject(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -49,7 +49,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) error {
 }
 
 func showProject(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -64,7 +64,7 @@ func showProject(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteProject(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}

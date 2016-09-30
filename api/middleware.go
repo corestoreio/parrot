@@ -7,30 +7,25 @@ import (
 
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
-	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func tokenGate(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	if r.RequestURI == "/api"+AuthenticatePath {
-		next(w, r)
-		return
-	}
+func tokenGate(next http.Handler) http.Handler {
+	return apiHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
+		tokenString, err := getTokenString(r)
+		if err != nil {
+			return errors.ErrUnauthorized
+		}
 
-	tokenString, err := getTokenString(r)
-	if err != nil {
-		render.JSONError(w, errors.ErrUnauthorized)
-		return
-	}
+		claims, err := auth.ParseToken(tokenString)
+		if err != nil {
+			return errors.ErrUnauthorized
+		}
 
-	claims, err := auth.ParseToken(tokenString)
-	if err != nil {
-		render.JSONError(w, errors.ErrUnauthorized)
-		return
-	}
-
-	ctx := contextWithClaims(r.Context(), claims)
-	next(w, r.WithContext(ctx))
+		ctx := contextWithClaims(r.Context(), claims)
+		next.ServeHTTP(w, r.WithContext(ctx))
+		return nil
+	})
 }
 
 func getTokenString(r *http.Request) (string, error) {

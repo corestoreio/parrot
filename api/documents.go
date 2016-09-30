@@ -46,7 +46,7 @@ func showDocument(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return errors.ErrBadRequest
 	}
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "documentID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -94,7 +94,7 @@ func findDocuments(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateDocument(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "documentID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -126,7 +126,7 @@ func updateDocument(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteDocument(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "documentID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}

@@ -9,10 +9,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/anthonynsimon/parrot/logger"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
-	"github.com/urfave/negroni"
 )
 
 func init() {
@@ -38,13 +36,10 @@ func main() {
 	}
 
 	// init routers
-	router := chi.NewRouter()
-	router.Mount("/api", api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY"))))
-
-	chain := negroni.New(
-		negroni.HandlerFunc(logger.Request),
-		negroni.Wrap(router),
-	)
+	mainRouter := chi.NewRouter()
+	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
+	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
+	mainRouter.Mount("/api", apiRouter)
 
 	// config server
 	addr := "localhost:8080"
@@ -52,7 +47,7 @@ func main() {
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        chain,
+		Handler:        mainRouter,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
