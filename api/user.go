@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/anthonynsimon/parrot/api/auth"
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
@@ -17,11 +18,10 @@ type tokenClaims struct {
 	jwt.StandardClaims
 }
 
-func authenticate(w http.ResponseWriter, r *http.Request) {
+func authenticate(w http.ResponseWriter, r *http.Request) error {
 	user := model.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		render.JSONError(w, http.StatusBadRequest)
-		return
+		return errors.ErrBadRequest
 	}
 
 	// TODO validate user credentials and get id and role
@@ -39,11 +39,12 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 	tokenString, err := auth.CreateToken(claims)
 	if err != nil {
-		render.JSONError(w, http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	render.JSON(w, http.StatusOK, map[string]string{
 		"token": tokenString,
 	})
+
+	return nil
 }

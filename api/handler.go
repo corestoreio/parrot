@@ -3,88 +3,19 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/api/auth"
-	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/gorilla/mux"
-	"github.com/urfave/negroni"
+	"github.com/anthonynsimon/parrot/errors"
+	"github.com/anthonynsimon/parrot/render"
 )
 
-var store datastore.Store
+type apiHandlerFunc func(http.ResponseWriter, *http.Request) error
 
-func Register(m *mux.Router, ds datastore.Store, signingKey []byte) {
-	store = ds
-	auth.SigningKey = signingKey
-
-	subRouter := mux.NewRouter().PathPrefix("/api").Subrouter().StrictSlash(true)
-	registerRoutes(subRouter)
-
-	chain := negroni.New(
-		negroni.HandlerFunc(tokenGate),
-		negroni.Wrap(subRouter),
-	)
-
-	m.PathPrefix("/api").Handler(chain)
-}
-
-func registerRoutes(r *mux.Router) {
-	routes := []struct {
-		path       string
-		method     string
-		handleFunc http.HandlerFunc
-	}{
-		{
-			path:       AuthenticatePath,
-			method:     "POST",
-			handleFunc: authenticate,
-		},
-		{
-			path:       ProjectsPath,
-			method:     "POST",
-			handleFunc: createProject,
-		},
-		{
-			path:       ProjectsPath + "/{id:[0-9]+}",
-			method:     "PUT",
-			handleFunc: updateProject,
-		},
-		{
-			path:       ProjectsPath + "/{id:[0-9]+}",
-			method:     "GET",
-			handleFunc: showProject,
-		},
-		{
-			path:       ProjectsPath + "/{id:[0-9]+}",
-			method:     "DELETE",
-			handleFunc: deleteProject,
-		},
-		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath,
-			method:     "POST",
-			handleFunc: createDocument,
-		},
-		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath,
-			method:     "GET",
-			handleFunc: findDocuments,
-		},
-		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath + "/{id:[0-9]+}",
-			method:     "GET",
-			handleFunc: showDocument,
-		},
-		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath + "/{id:[0-9]+}",
-			method:     "PUT",
-			handleFunc: updateDocument,
-		},
-		{
-			path:       ProjectsPath + "/{projectID:[0-9]+}" + DocumentsPath + "/{id:[0-9]+}",
-			method:     "DELETE",
-			handleFunc: deleteDocument,
-		},
-	}
-
-	for _, route := range routes {
-		r.Path(route.path).HandlerFunc(route.handleFunc).Methods(route.method)
+func (fn apiHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	err := fn(w, r)
+	if err != nil {
+		if err, ok := err.(*errors.Error); ok {
+			render.JSONError(w, err)
+			return
+		}
+		render.JSONError(w, errors.ErrInternal)
 	}
 }

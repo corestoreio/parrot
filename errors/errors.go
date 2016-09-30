@@ -1,9 +1,15 @@
 package errors
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 var (
-	ErrNotFound = New(404, "not found")
+	ErrInternal     = New(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	ErrUnauthorized = New(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+	ErrNotFound     = New(http.StatusNotFound, http.StatusText(http.StatusNotFound))
+	ErrBadRequest   = New(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 )
 
 type Error struct {
@@ -12,7 +18,7 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("error: %d %s", e.Code, e.Message)
+	return fmt.Sprintf("error: %d %s", e.Code, e.Error)
 }
 
 func New(c int, m string) *Error {

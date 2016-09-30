@@ -12,88 +12,70 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func createProject(w http.ResponseWriter, r *http.Request) {
+func createProject(w http.ResponseWriter, r *http.Request) error {
 	project := &model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		render.JSONError(w, http.StatusBadRequest)
-		return
+		return errors.ErrBadRequest
 	}
 
 	err := store.CreateProject(project)
 	if err != nil {
-		render.JSONError(w, http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	render.JSON(w, http.StatusCreated, project)
+	return nil
 }
 
-func updateProject(w http.ResponseWriter, r *http.Request) {
+func updateProject(w http.ResponseWriter, r *http.Request) error {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
-		render.JSONError(w, http.StatusBadRequest)
-		return
+		return errors.ErrBadRequest
 	}
 
 	project := &model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		fmt.Println(err)
-		render.JSONError(w, http.StatusBadRequest)
-		return
+		return errors.ErrBadRequest
 	}
 	project.ID = id
 
 	err = store.UpdateProject(project)
 	if err != nil {
-		if err == errors.ErrNotFound {
-			render.JSONError(w, http.StatusNotFound)
-			return
-		}
-		render.JSONError(w, http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	render.JSON(w, http.StatusOK, project)
+	return nil
 }
 
-func showProject(w http.ResponseWriter, r *http.Request) {
+func showProject(w http.ResponseWriter, r *http.Request) error {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
-		render.JSONError(w, http.StatusBadRequest)
-		return
+		return errors.ErrBadRequest
 	}
 
 	project, err := store.GetProject(id)
 	if err != nil {
-		if err == errors.ErrNotFound {
-			render.JSONError(w, http.StatusNotFound)
-			return
-		}
-		render.JSONError(w, http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	render.JSON(w, http.StatusOK, project)
+	return nil
 }
 
-func deleteProject(w http.ResponseWriter, r *http.Request) {
+func deleteProject(w http.ResponseWriter, r *http.Request) error {
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
-		render.JSONError(w, http.StatusBadRequest)
-		return
+		return errors.ErrBadRequest
 	}
 
 	resultID, err := store.DeleteProject(id)
 	if err != nil {
-		if err == errors.ErrNotFound {
-			render.JSONError(w, http.StatusNotFound)
-			return
-		}
-		render.JSONError(w, http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("deleted project with id %d and all related documents", resultID),
 	})
+	return nil
 }

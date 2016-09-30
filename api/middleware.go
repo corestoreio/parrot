@@ -6,25 +6,26 @@ import (
 	"net/http"
 
 	"github.com/anthonynsimon/parrot/api/auth"
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
 func tokenGate(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	if r.RequestURI == "/api/authenticate" {
+	if r.RequestURI == "/api"+AuthenticatePath {
 		next(w, r)
 		return
 	}
 
 	tokenString, err := getTokenString(r)
 	if err != nil {
-		render.JSONError(w, http.StatusUnauthorized)
+		render.JSONError(w, errors.ErrUnauthorized)
 		return
 	}
 
 	claims, err := auth.ParseToken(tokenString)
 	if err != nil {
-		render.JSONError(w, http.StatusUnauthorized)
+		render.JSONError(w, errors.ErrUnauthorized)
 		return
 	}
 
