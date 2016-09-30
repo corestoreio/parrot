@@ -70,18 +70,7 @@ func showDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.JSON(w, http.StatusOK, doc)
-}
-
-func findDocuments(w http.ResponseWriter, r *http.Request) {
-	projID, err := strconv.Atoi(mux.Vars(r)["projectID"])
-	if err != nil {
-		render.JSONError(w, http.StatusBadRequest)
-		return
-	}
-	locales := r.URL.Query()["locale"]
-
-	docs, err := store.FindProjectDocs(projID, locales...)
+	proj, err := store.GetProject(projectID)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			render.JSONError(w, http.StatusNotFound)
@@ -89,6 +78,43 @@ func findDocuments(w http.ResponseWriter, r *http.Request) {
 		}
 		render.JSONError(w, http.StatusInternalServerError)
 		return
+	}
+
+	doc.SyncKeys(proj.Keys)
+
+	render.JSON(w, http.StatusOK, doc)
+}
+
+func findDocuments(w http.ResponseWriter, r *http.Request) {
+	projectID, err := strconv.Atoi(mux.Vars(r)["projectID"])
+	if err != nil {
+		render.JSONError(w, http.StatusBadRequest)
+		return
+	}
+	locales := r.URL.Query()["locale"]
+
+	docs, err := store.FindProjectDocs(projectID, locales...)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			render.JSONError(w, http.StatusNotFound)
+			return
+		}
+		render.JSONError(w, http.StatusInternalServerError)
+		return
+	}
+
+	project, err := store.GetProject(projectID)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			render.JSONError(w, http.StatusNotFound)
+			return
+		}
+		render.JSONError(w, http.StatusInternalServerError)
+		return
+	}
+
+	for i := range docs {
+		docs[i].SyncKeys(project.Keys)
 	}
 
 	render.JSON(w, http.StatusOK, docs)
