@@ -44,6 +44,35 @@ func (db *PostgresDB) CreateProject(project *model.Project) error {
 	return db.QueryRow("INSERT INTO projects (keys) VALUES($1) RETURNING id", values).Scan(&project.ID)
 }
 
+func (db *PostgresDB) UpdateProject(project *model.Project) error {
+	keys := make(pq.StringArray, len(project.Keys))
+	for i, v := range project.Keys {
+		keys[i] = v
+	}
+
+	values, err := keys.Value()
+	if err != nil {
+		return err
+	}
+
+	row := db.QueryRow("UPDATE projects SET keys = keys || $1 WHERE id = $2 RETURNING *", values, project.ID)
+	keys = pq.StringArray{}
+	err = row.Scan(&project.ID, &keys)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.ErrNotFound
+		}
+		return err
+	}
+
+	project.Keys = make([]string, len(keys))
+	for i, v := range keys {
+		project.Keys[i] = v
+	}
+
+	return nil
+}
+
 func (db *PostgresDB) DeleteProject(id int) (int, error) {
 	err := db.QueryRow("DELETE FROM projects WHERE id = $1 RETURNING id", id).Scan(&id)
 	if err == sql.ErrNoRows {
