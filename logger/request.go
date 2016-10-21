@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 )
 
 // responseWriter implements the http.ResponseWriter interface and
@@ -27,15 +27,19 @@ func (rw *responseWriter) WriteHeader(s int) {
 	rw.Writer.WriteHeader(s)
 }
 
-func Request(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	start := time.Now()
-	rw := responseWriter{Status: 200, Writer: w}
-	next(&rw, r)
-	log.WithFields(map[string]interface{}{
-		"status":  rw.Status,
-		"latency": time.Since(start),
-		"ip":      r.RemoteAddr,
-		"method":  r.Method,
-		"url":     r.URL.String(),
-	}).Info()
+func Request(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		rw := responseWriter{Status: 200, Writer: w}
+		defer func() {
+			logrus.WithFields(map[string]interface{}{
+				"status":  rw.Status,
+				"latency": time.Since(start),
+				"ip":      r.RemoteAddr,
+				"method":  r.Method,
+				"url":     r.URL.String(),
+			}).Info()
+		}()
+		next.ServeHTTP(&rw, r)
+	})
 }

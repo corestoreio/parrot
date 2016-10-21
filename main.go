@@ -9,6 +9,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/logger"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
 )
@@ -37,6 +38,8 @@ func main() {
 
 	// init routers
 	mainRouter := chi.NewRouter()
+	mainRouter.Use(logger.Request)
+
 	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
 	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
 	mainRouter.Mount("/api", apiRouter)
