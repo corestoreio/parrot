@@ -12,6 +12,7 @@ type Store interface {
 	model.DocStorer
 	model.ProjectStorer
 	model.ProjectDocStorer
+	model.UserStorer
 	Ping() error
 	Close() error
 }

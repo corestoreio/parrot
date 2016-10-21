@@ -10,3 +10,11 @@ CREATE TABLE documents (
     project_id integer REFERENCES projects (id) ON DELETE CASCADE,
     UNIQUE (locale, project_id)
 );
+
+CREATE TABLE users (
+    id serial PRIMARY KEY,
+    email varchar(256) NOT NULL,
+    password varchar(256) NOT NULL,
+    role varchar(16) NOT NULL,
+    UNIQUE (email)
+);

@@ -21,9 +21,15 @@ func NewRouter(ds datastore.Store, signingKey []byte) http.Handler {
 }
 
 func registerRoutes(router *chi.Mux) {
-	// router.Use(tokenGate)
-
+	router.Post(RegisterPath, apiHandlerFunc(createUser).ServeHTTP)
 	router.Post(AuthenticatePath, apiHandlerFunc(authenticate).ServeHTTP)
+
+	// router.Route(UsersPath, func(pr chi.Router) {
+	// 	pr.Use(tokenGate)
+	// 	pr.Get("/:userID", apiHandlerFunc(showUser).ServeHTTP)
+	// 	pr.Put("/:userID", apiHandlerFunc(updateUser).ServeHTTP)
+	// 	pr.Delete("/:userID", apiHandlerFunc(deleteUser).ServeHTTP)
+	// })
 
 	router.Route(ProjectsPath, func(pr chi.Router) {
 		pr.Use(tokenGate)
