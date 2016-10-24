@@ -28,18 +28,12 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	claimedUser, err := store.GetUserByEmail(user.Email)
-	fmt.Println(err)
 	if err != nil {
-		return err
-	}
-
-	// TODO(anthonynsimon): return proper errors
-	if user.Email != claimedUser.Email {
 		return errors.ErrNotFound
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(user.Password)); err != nil {
-		return err
+		return errors.ErrUnauthorized
 	}
 
 	// Create the Claims
