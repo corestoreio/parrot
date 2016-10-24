@@ -6,6 +6,8 @@ import (
 )
 
 var (
+	ErrConflict       = New(http.StatusConflict, http.StatusText(http.StatusConflict))
+	ErrDuplicateEntry = New(http.StatusConflict, "duplicate entry")
 	ErrNotImplemented = New(http.StatusNotImplemented, http.StatusText(http.StatusNotImplemented))
 	ErrInternal       = New(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 	ErrUnauthorized   = New(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
