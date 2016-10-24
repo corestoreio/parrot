@@ -1,7 +1,19 @@
 {{define "documents/new"}}
 {{template "common/header"}}
     
-NEW DOCUMENT
+Project Name / New Document
+
+<form method="POST" action="/projects/:projectID/documents">
+  <div class="form-group">
+    <label for="inputLocaleSelect">Select locale</label>
+    <select class="form-control" id="inputLocaleSelect">
+      {{range $key, $locale := .locales}}
+            <option>{{printf "%s - %s (%s)" $locale.Language $locale.Country $key}}</option>
+      {{end}}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 {{template "common/footer"}}
 {{end}}
