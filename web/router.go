@@ -15,6 +15,8 @@ func Register(router *chi.Mux, ds datastore.Store) {
 
 func registerRoutes(router *chi.Mux) {
 	router.Get(paths.PingPath, webHandlerFunc(ping).ServeHTTP)
+	router.Get(paths.LoginPath, webHandlerFunc(loginForm).ServeHTTP)
+	router.Post(paths.LoginPath, webHandlerFunc(login).ServeHTTP)
 	router.Get(paths.RegisterPath, webHandlerFunc(newUser).ServeHTTP)
 	router.Post(paths.RegisterPath, webHandlerFunc(createUser).ServeHTTP)
 

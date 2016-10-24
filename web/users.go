@@ -20,3 +20,13 @@ func showUser(w http.ResponseWriter, r *http.Request) error {
 	render.Template(w, "users/show", nil)
 	return nil
 }
+
+func loginForm(w http.ResponseWriter, r *http.Request) error {
+	render.Template(w, "users/login", nil)
+	return nil
+}
+
+func login(w http.ResponseWriter, r *http.Request) error {
+	w.Header().Set("Authorization", "123")
+	return nil
+}

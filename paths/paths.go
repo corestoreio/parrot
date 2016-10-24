@@ -8,4 +8,5 @@ const (
 	DocumentsPath    = "/documents"
 	UsersPath        = "/users"
 	RegisterPath     = "/register"
+	LoginPath        = "/login"
 )
