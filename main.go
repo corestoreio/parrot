@@ -66,7 +66,8 @@ func main() {
 
 	web.Register(mainRouter, backend)
 
-	render.Templates = parseTemplates("./views/**/*.html")
+	// parse view templates
+	render.Templates = template.Must(template.ParseGlob("./views/**/*.html"))
 
 	// config server
 	addr := "localhost:8080"
@@ -95,8 +96,4 @@ func initDatastore() (*datastore.Datastore, error) {
 	}
 
 	return ds, nil
-}
-
-func parseTemplates(dirPath string) *template.Template {
-	return template.Must(template.ParseGlob(dirPath))
 }
