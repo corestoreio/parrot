@@ -58,6 +58,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) error {
+	// TODO(anthonynsimon): handle user already exists
 	user := &model.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		return errors.ErrBadRequest
