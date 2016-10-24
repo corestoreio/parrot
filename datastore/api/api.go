@@ -3,7 +3,9 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/paths"
@@ -18,12 +20,12 @@ func New(url string) *APIStore {
 }
 
 func (a *APIStore) Ping() error {
-	var res map[string]interface{}
-	err := a.request("GET", paths.PingPath, nil, &res)
+	js, err := a.request("GET", paths.PingPath, nil)
 	if err != nil {
 		return err
 	}
-	if status, ok := res["status"]; !ok || status != "200" {
+
+	if status, ok := js["status"]; !ok || status != "200" {
 		return errors.ErrInternal
 	}
 	return nil
@@ -33,24 +35,39 @@ func (a *APIStore) Close() error {
 	return nil
 }
 
-func (a *APIStore) request(method string, uri string, data []byte, out interface{}) error {
-	req, err := http.NewRequest(method, a.URL+uri, bytes.NewBuffer(data))
+func (a *APIStore) request(method, uri string, data interface{}) (map[string]interface{}, error) {
+	encoded, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return nil, err
+	}
+
+	req, err := http.NewRequest(method, a.URL+uri, bytes.NewBuffer(encoded))
+	if err != nil {
+		return nil, err
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
+
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+
 	res, err := client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer res.Body.Close()
 
-	err = json.NewDecoder(res.Body).Decode(out)
+	var out map[string]interface{}
+	err = json.NewDecoder(res.Body).Decode(&out)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	if v, ok := out["error"]; ok {
+		fmt.Println(v)
+		return nil, errors.New(res.StatusCode, v.(string))
+	}
+
+	return out, nil
 }
