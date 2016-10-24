@@ -3,11 +3,15 @@ package web
 import (
 	"net/http"
 
+	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 )
 
 func newDocument(w http.ResponseWriter, r *http.Request) error {
-	render.Template(w, "documents/new", nil)
+	payload := map[string]interface{}{
+		"locales": model.Locales,
+	}
+	render.Template(w, "documents/new", payload)
 	return nil
 }
 
