@@ -12,10 +12,10 @@ type apiHandlerFunc func(http.ResponseWriter, *http.Request) error
 func (fn apiHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	err := fn(w, r)
 	if err != nil {
-		if err, ok := err.(*errors.Error); ok {
-			render.JSONError(w, err)
-			return
+		respErr := errors.ErrInternal
+		if castedErr, ok := err.(*errors.Error); ok {
+			respErr = castedErr
 		}
-		render.JSONError(w, errors.ErrInternal)
+		render.JSONError(w, respErr)
 	}
 }
