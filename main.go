@@ -54,8 +54,8 @@ func main() {
 	mainRouter.Mount("/api", apiRouter)
 
 	// init and ping api backend
-	apiUrl := os.Getenv("API_URL")
-	backend, err := datastore.NewDatastore("apiClient", apiUrl)
+	apiURL := os.Getenv("API_URL")
+	backend, err := datastore.NewDatastore("apiClient", apiURL)
 	if err != nil {
 		log.Fatal(err)
 	}
