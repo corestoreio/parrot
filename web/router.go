@@ -15,7 +15,8 @@ func Register(router *chi.Mux, ds datastore.Store) {
 
 func registerRoutes(router *chi.Mux) {
 	router.Get(paths.PingPath, webHandlerFunc(ping).ServeHTTP)
-	router.Post(paths.RegisterPath, webHandlerFunc(newUser).ServeHTTP)
+	router.Get(paths.RegisterPath, webHandlerFunc(newUser).ServeHTTP)
+	router.Post(paths.RegisterPath, webHandlerFunc(createUser).ServeHTTP)
 
 	router.Route(paths.ProjectsPath, func(r chi.Router) {
 		r.Get("/:projectID", webHandlerFunc(showProject).ServeHTTP)
