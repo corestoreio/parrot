@@ -43,7 +43,7 @@ func (db *PostgresDB) CreateUser(u *model.User) error {
 }
 
 func (db *PostgresDB) UpdateUser(u *model.User) error {
-	return errors.ErrInternal
+	return errors.ErrNotImplemented
 }
 
 func (db *PostgresDB) DeleteUser(id int) (int, error) {
