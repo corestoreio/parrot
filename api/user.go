@@ -67,7 +67,10 @@ func createUser(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+
 	user.Password = string(hashed)
+	user.Role = "admin"
+
 	err = store.CreateUser(user)
 	if err != nil {
 		return err
