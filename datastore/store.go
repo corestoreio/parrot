@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/anthonynsimon/parrot/datastore/api"
 	"github.com/anthonynsimon/parrot/datastore/postgres"
 	"github.com/anthonynsimon/parrot/model"
 )
@@ -40,6 +41,9 @@ func NewDatastore(name string, url string) (*Datastore, error) {
 		p.SetMaxIdleConns(1)
 		p.SetMaxOpenConns(1)
 		ds = &Datastore{p}
+	case "apiClient":
+		apiBackend := api.New(url)
+		ds = &Datastore{apiBackend}
 	default:
 		return nil, ErrNotImplemented
 	}

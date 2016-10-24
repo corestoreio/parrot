@@ -6,10 +6,11 @@ import (
 )
 
 var (
-	ErrInternal     = New(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-	ErrUnauthorized = New(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
-	ErrNotFound     = New(http.StatusNotFound, http.StatusText(http.StatusNotFound))
-	ErrBadRequest   = New(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+	ErrNotImplemented = New(http.StatusNotImplemented, http.StatusText(http.StatusNotImplemented))
+	ErrInternal       = New(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	ErrUnauthorized   = New(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+	ErrNotFound       = New(http.StatusNotFound, http.StatusText(http.StatusNotFound))
+	ErrBadRequest     = New(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 )
 
 type Error struct {

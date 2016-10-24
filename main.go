@@ -10,6 +10,8 @@ import (
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
+	"github.com/anthonynsimon/parrot/paths"
+	"github.com/anthonynsimon/parrot/web"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
 )
@@ -27,10 +29,14 @@ func main() {
 	}
 
 	// init and ping datastore
-	ds, err := initDatastore()
+	dbName := os.Getenv("DB")
+	dbUrl := os.Getenv("DB_URL")
+
+	ds, err := datastore.NewDatastore(dbName, dbUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer ds.Close()
 	if err = ds.Ping(); err != nil {
 		log.Fatal(err)
@@ -43,6 +49,19 @@ func main() {
 	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
 	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
 	mainRouter.Mount("/api", apiRouter)
+
+	// init and ping api backend
+	hostName := os.Getenv("HOSTNAME")
+	backend, err := datastore.NewDatastore("apiClient", hostName+paths.APIRootPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer ds.Close()
+	if err = ds.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
+	web.Register(mainRouter, backend)
 
 	// config server
 	addr := "localhost:8080"

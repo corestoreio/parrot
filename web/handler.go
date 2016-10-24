@@ -1,4 +1,4 @@
-package api
+package web
 
 import (
 	"net/http"
@@ -7,9 +7,9 @@ import (
 	"github.com/anthonynsimon/parrot/render"
 )
 
-type apiHandlerFunc func(http.ResponseWriter, *http.Request) error
+type webHandlerFunc func(http.ResponseWriter, *http.Request) error
 
-func (fn apiHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (fn webHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	err := fn(w, r)
 	if err != nil {
 		respErr := errors.ErrInternal
@@ -21,6 +21,6 @@ func (fn apiHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func ping(w http.ResponseWriter, r *http.Request) error {
-	render.JSON(w, http.StatusOK, "Backend says hello.")
-	return nil
+	_, err := w.Write([]byte("Frontend says hello."))
+	return err
 }
