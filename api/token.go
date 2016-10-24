@@ -38,3 +38,13 @@ func getTokenString(r *http.Request) (string, error) {
 	}
 	return tokenString, nil
 }
+
+func onlyAdmin(next http.Handler) http.Handler {
+	return apiHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
+		ctx := r.Context()
+		if ctx.Value("role") != "admin" {
+			return errors.ErrUnauthorized
+		}
+		return nil
+	})
+}
