@@ -85,15 +85,3 @@ func main() {
 
 	log.Fatal(s.ListenAndServe())
 }
-
-func initDatastore() (*datastore.Datastore, error) {
-	name := os.Getenv("DB")
-	url := os.Getenv("DB_URL")
-
-	ds, err := datastore.NewDatastore(name, url)
-	if err != nil {
-		return nil, err
-	}
-
-	return ds, nil
-}
