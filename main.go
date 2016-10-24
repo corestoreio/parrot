@@ -32,9 +32,9 @@ func main() {
 
 	// init and ping datastore
 	dbName := os.Getenv("DB")
-	dbUrl := os.Getenv("DB_URL")
+	dbURL := os.Getenv("DB_URL")
 
-	ds, err := datastore.NewDatastore(dbName, dbUrl)
+	ds, err := datastore.NewDatastore(dbName, dbURL)
 	if err != nil {
 		log.Fatal(err)
 	}
