@@ -21,6 +21,10 @@ func (fn webHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func ping(w http.ResponseWriter, r *http.Request) error {
-	_, err := w.Write([]byte("Frontend says hello."))
+	err := store.Ping()
+	if err != nil {
+		return err
+	}
+	_, err = w.Write([]byte("Frontend says hello. API backend replied."))
 	return err
 }

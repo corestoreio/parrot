@@ -3,10 +3,16 @@ package api
 import (
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
+	"github.com/anthonynsimon/parrot/paths"
 )
 
 func (db *APIStore) GetDoc(id int) (*model.Document, error) {
-	return nil, errors.ErrNotImplemented
+	var doc model.Document
+	err := db.request("GET", paths.DocumentsPath+"/"+string(id), nil, &doc)
+	if err != nil {
+		return nil, err
+	}
+	return &doc, errors.ErrNotImplemented
 }
 
 func (db *APIStore) CreateDoc(doc *model.Document) error {

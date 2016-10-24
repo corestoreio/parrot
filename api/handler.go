@@ -21,6 +21,9 @@ func (fn apiHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func ping(w http.ResponseWriter, r *http.Request) error {
-	render.JSON(w, http.StatusOK, "Backend says hello.")
+	render.JSON(w, http.StatusOK, map[string]interface{}{
+		"status":  "200",
+		"message": "Backend says hello.",
+	})
 	return nil
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
-	"github.com/anthonynsimon/parrot/paths"
 	"github.com/anthonynsimon/parrot/web"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
@@ -51,8 +50,8 @@ func main() {
 	mainRouter.Mount("/api", apiRouter)
 
 	// init and ping api backend
-	hostName := os.Getenv("HOSTNAME")
-	backend, err := datastore.NewDatastore("apiClient", hostName+paths.APIRootPath)
+	apiUrl := os.Getenv("API_URL")
+	backend, err := datastore.NewDatastore("apiClient", apiUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
