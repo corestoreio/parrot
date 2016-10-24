@@ -7,14 +7,12 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-var SigningKey []byte
-
-func ParseToken(tokenString string) (jwt.MapClaims, error) {
+func ParseToken(tokenString string, signingKey []byte) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method")
 		}
-		return SigningKey, nil
+		return signingKey, nil
 	})
 	if err != nil {
 		return nil, err
@@ -30,7 +28,7 @@ func ParseToken(tokenString string) (jwt.MapClaims, error) {
 	return claims, nil
 }
 
-func CreateToken(claims jwt.Claims) (string, error) {
+func CreateToken(claims jwt.Claims, signingKey []byte) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(SigningKey)
+	return token.SignedString(signingKey)
 }

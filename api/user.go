@@ -45,7 +45,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 		},
 	}
 
-	tokenString, err := auth.CreateToken(claims)
+	tokenString, err := auth.CreateToken(claims, signingKey)
 	if err != nil {
 		return err
 	}

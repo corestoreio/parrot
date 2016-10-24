@@ -7,7 +7,6 @@ import (
 
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
-	jwt "github.com/dgrijalva/jwt-go"
 )
 
 func tokenGate(next http.Handler) http.Handler {
@@ -17,13 +16,17 @@ func tokenGate(next http.Handler) http.Handler {
 			return errors.ErrUnauthorized
 		}
 
-		claims, err := auth.ParseToken(tokenString)
+		claims, err := auth.ParseToken(tokenString, signingKey)
 		if err != nil {
 			return errors.ErrUnauthorized
 		}
 
-		ctx := contextWithClaims(r.Context(), claims)
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, "userID", claims["sub"])
+		ctx = context.WithValue(ctx, "role", claims["role"])
+
 		next.ServeHTTP(w, r.WithContext(ctx))
+
 		return nil
 	})
 }
@@ -34,10 +37,4 @@ func getTokenString(r *http.Request) (string, error) {
 		return "", fmt.Errorf("no auth header")
 	}
 	return tokenString, nil
-}
-
-func contextWithClaims(ctx context.Context, claims jwt.MapClaims) context.Context {
-	c := context.WithValue(ctx, "userID", claims["sub"])
-	c = context.WithValue(c, "role", claims["role"])
-	return c
 }

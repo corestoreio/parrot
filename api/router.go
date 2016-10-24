@@ -3,16 +3,16 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/pressly/chi"
 )
 
 var store datastore.Store
+var signingKey []byte
 
-func NewRouter(ds datastore.Store, signingKey []byte) http.Handler {
+func NewRouter(ds datastore.Store, sk []byte) http.Handler {
 	store = ds
-	auth.SigningKey = signingKey
+	signingKey = sk
 
 	router := chi.NewRouter()
 	registerRoutes(router)
@@ -32,6 +32,7 @@ func registerRoutes(router *chi.Mux) {
 	// })
 
 	router.Route(ProjectsPath, func(pr chi.Router) {
+		// Past this point, all routes require a valid token
 		pr.Use(tokenGate)
 		pr.Post("/", apiHandlerFunc(createProject).ServeHTTP)
 		pr.Get("/:projectID", apiHandlerFunc(showProject).ServeHTTP)
