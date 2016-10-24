@@ -16,7 +16,7 @@ func (fn webHandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if castedErr, ok := err.(*errors.Error); ok {
 			respErr = castedErr
 		}
-		render.JSONError(w, respErr)
+		render.Template(w, "error.html", respErr)
 	}
 }
 

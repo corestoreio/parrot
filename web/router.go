@@ -15,22 +15,20 @@ func Register(router *chi.Mux, ds datastore.Store) {
 
 func registerRoutes(router *chi.Mux) {
 	router.Get(paths.PingPath, webHandlerFunc(ping).ServeHTTP)
-	router.Post(paths.RegisterPath, webHandlerFunc(createUser).ServeHTTP)
+	router.Post(paths.RegisterPath, webHandlerFunc(newUser).ServeHTTP)
 
-	// router.Route(api.ProjectsPath, func(pr chi.Router) {
-	// 	// Past this point, all routes require a valid token
-	// 	pr.Use(tokenGate)
-	// 	pr.Post("/", webHandlerFunc(createProject).ServeHTTP)
-	// 	pr.Get("/:projectID", webHandlerFunc(showProject).ServeHTTP)
-	// 	pr.Put("/:projectID", webHandlerFunc(updateProject).ServeHTTP)
-	// 	pr.Delete("/:projectID", webHandlerFunc(deleteProject).ServeHTTP)
+	router.Route(paths.ProjectsPath, func(r chi.Router) {
+		r.Get("/:projectID", webHandlerFunc(showProject).ServeHTTP)
+		r.Get("/new", webHandlerFunc(newProject).ServeHTTP)
 
-	// 	pr.Route("/:projectID"+DocumentsPath, func(dr chi.Router) {
-	// 		dr.Post("/", webHandlerFunc(createDocument).ServeHTTP)
-	// 		dr.Get("/", webHandlerFunc(findDocuments).ServeHTTP)
-	// 		dr.Get("/:documentID", webHandlerFunc(showDocument).ServeHTTP)
-	// 		dr.Put("/:documentID", webHandlerFunc(updateDocument).ServeHTTP)
-	// 		dr.Delete("/:documentID", webHandlerFunc(deleteDocument).ServeHTTP)
-	// 	})
-	// })
+		r.Route("/:projectID"+paths.DocumentsPath, func(r chi.Router) {
+			r.Get("/", webHandlerFunc(findDocuments).ServeHTTP)
+			r.Get("/:documentID", webHandlerFunc(showDocument).ServeHTTP)
+			r.Get("/new", webHandlerFunc(newDocument).ServeHTTP)
+		})
+	})
+
+	router.Route(paths.UsersPath, func(r chi.Router) {
+		r.Get("/:userID", webHandlerFunc(showUser).ServeHTTP)
+	})
 }

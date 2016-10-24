@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
+	"github.com/anthonynsimon/parrot/paths"
 )
 
 func (db *APIStore) GetUser(id int) (*model.User, error) {
@@ -14,7 +15,11 @@ func (db *APIStore) GetUserByEmail(email string) (*model.User, error) {
 }
 
 func (db *APIStore) CreateUser(u *model.User) error {
-	return errors.ErrNotImplemented
+	_, err := db.request("POST", paths.RegisterPath, u)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (db *APIStore) UpdateUser(u *model.User) error {

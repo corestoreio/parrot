@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
 	"time"
@@ -10,9 +11,11 @@ import (
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
+	"github.com/anthonynsimon/parrot/render"
 	"github.com/anthonynsimon/parrot/web"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
+	"github.com/pressly/chi/middleware"
 )
 
 func init() {
@@ -44,6 +47,7 @@ func main() {
 	// init routers
 	mainRouter := chi.NewRouter()
 	mainRouter.Use(logger.Request)
+	mainRouter.Use(middleware.StripSlashes)
 
 	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
 	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
@@ -61,6 +65,8 @@ func main() {
 	}
 
 	web.Register(mainRouter, backend)
+
+	render.Templates = parseTemplates("./views/**/*.html")
 
 	// config server
 	addr := "localhost:8080"
@@ -89,4 +95,8 @@ func initDatastore() (*datastore.Datastore, error) {
 	}
 
 	return ds, nil
+}
+
+func parseTemplates(dirPath string) *template.Template {
+	return template.Must(template.ParseGlob(dirPath))
 }
