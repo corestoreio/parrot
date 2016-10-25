@@ -3,7 +3,6 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -65,7 +64,6 @@ func (a *APIStore) request(method, uri string, data interface{}) (map[string]int
 	}
 
 	if v, ok := out["error"]; ok {
-		fmt.Println(v)
 		return nil, errors.New(res.StatusCode, v.(string))
 	}
 
