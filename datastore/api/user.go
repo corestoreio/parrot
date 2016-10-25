@@ -15,7 +15,7 @@ func (db *APIStore) GetUserByEmail(email string) (*model.User, error) {
 }
 
 func (db *APIStore) CreateUser(u *model.User) error {
-	_, err := db.request("POST", paths.RegisterPath, u)
+	_, err := db.request("POST", paths.UsersPath, u)
 	if err != nil {
 		return err
 	}

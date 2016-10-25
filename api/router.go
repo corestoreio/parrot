@@ -23,8 +23,8 @@ func NewRouter(ds datastore.Store, sk []byte) http.Handler {
 
 func registerRoutes(router *chi.Mux) {
 	router.Get(paths.PingPath, apiHandlerFunc(ping).ServeHTTP)
-	router.Post(paths.RegisterPath, apiHandlerFunc(createUser).ServeHTTP)
 	router.Post(paths.AuthenticatePath, apiHandlerFunc(authenticate).ServeHTTP)
+	router.Post(paths.UsersPath, apiHandlerFunc(createUser).ServeHTTP)
 
 	// router.Route(paths.UsersPath, func(pr chi.Router) {
 	// 	pr.Use(tokenGate)
