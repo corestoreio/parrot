@@ -41,7 +41,7 @@ func main() {
 
 	defer ds.Close()
 	if err = ds.Ping(); err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
 	}
 
 	// init routers
