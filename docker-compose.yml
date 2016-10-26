@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+    nginx:
+        image: "parrot-nginx"
+        ports:
+            - "80:80"
