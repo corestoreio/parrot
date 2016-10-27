@@ -16,6 +16,7 @@ func NewRouter(ds datastore.Store, sk []byte) http.Handler {
 	signingKey = sk
 
 	router := chi.NewRouter()
+	router.Use(cors)
 	registerRoutes(router)
 
 	return router
