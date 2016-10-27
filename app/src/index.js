@@ -5,15 +5,16 @@ import AppRouter from './router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import reduxPromise from 'redux-promise-middleware';
 import reducer from './reducers/combined';
 import { authRequest } from './actions/auth';
 
-const store = createStore(
-	reducer,
-	applyMiddleware(
-		thunk,
-	)
-);
+const middleware = applyMiddleware(
+	reduxPromise(),
+	thunk
+)
+
+const store = createStore(reducer, middleware);
 
 ReactDOM.render(
 	<Provider store={store}>
