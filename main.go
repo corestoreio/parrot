@@ -41,9 +41,10 @@ func main() {
 		log.Fatal(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
 	}
 
-	// init routers
+	// init routers and middleware
 	mainRouter := chi.NewRouter()
 	mainRouter.Use(logger.Request)
+	mainRouter.Use(cors)
 	mainRouter.Use(middleware.StripSlashes)
 
 	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
@@ -65,4 +66,16 @@ func main() {
 	fmt.Println(fmt.Sprintf("Listening on %s", addr))
 
 	log.Fatal(s.ListenAndServe())
+}
+
+func cors(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin",
+			"*")
+		w.Header().Set("Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers",
+			"Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		next.ServeHTTP(w, r)
+	})
 }
