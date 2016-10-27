@@ -31,4 +31,10 @@ lingo.*
 
 # JS
 node_modules
-bundle.js
+npm-debug.log
+
+# testing
+coverage
+
+# production
+build
