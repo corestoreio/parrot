@@ -1,8 +1,8 @@
 import React from 'react'
-import './app.css'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import './css/app.css'
 
 // Needed for onTouchTap
 injectTapEventPlugin();
@@ -13,7 +13,7 @@ class App extends React.Component {
             <MuiThemeProvider>
                 <div>
                     <AppBar
-                        title="Title"
+                        title="0xFF"
                         onLeftIconButtonTouchTap={()=>alert("touched!")}
                     />
                     {this.props.children}
