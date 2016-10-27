@@ -1,11 +1,19 @@
-import React from 'react';
+import React from 'react'
+import './app.css'
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+// Needed for onTouchTap
+injectTapEventPlugin();
 
 class App extends React.Component {
     render() {
         return (
-            <div>
-                {this.props.children}
-            </div>
+            <MuiThemeProvider>
+                <div>
+                    {this.props.children}
+                </div>
+            </MuiThemeProvider>
         )
     }
 }
