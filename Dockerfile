@@ -2,7 +2,7 @@ FROM nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY ./static /data/www/static
+COPY ./static /www/static
 
 EXPOSE 80
 
