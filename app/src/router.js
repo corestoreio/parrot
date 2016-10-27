@@ -1,11 +1,11 @@
 import React from 'react';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router'
 import App from './app';
-import Home from './home';
-import NotFound from './404';
-import { Login, Register } from './login';
-import { Projects, ProjectNew, ProjectShow, ProjectEdit } from './projects';
-import { Documents, DocumentNew, DocumentShow, DocumentEdit } from './documents';
+import Home from './components/home';
+import NotFound from './components/404';
+import { Login, Register } from './components/login';
+import { Projects, ProjectNew, ProjectShow, ProjectEdit } from './components/projects';
+import { Documents, DocumentNew, DocumentShow, DocumentEdit } from './components/documents';
 
 export default class AppRouter extends React.Component {
     render() {

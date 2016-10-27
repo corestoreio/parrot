@@ -15,7 +15,7 @@ class Register extends React.Component {
                     floatingLabelText="Password"
                     type="password"
                 /><br />
-                <RaisedButton label="Register" primary={true} style={{margin:12}} />
+                <RaisedButton label="Register" primary={true} />
             </div>
         )
     }
@@ -34,7 +34,7 @@ class Login extends React.Component {
                     floatingLabelText="Password"
                     type="password"
                 /><br />
-                <RaisedButton label="Login" primary={true} style={{margin:12}} />
+                <RaisedButton label="Login" primary={true} />
             </div>
         )
     }
