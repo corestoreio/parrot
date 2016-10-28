@@ -4,7 +4,7 @@ import App from './app';
 import Home from './components/home';
 import NotFound from './components/404';
 import Login from './containers/Login';
-import Register from './components/register';
+import Register from './containers/Register';
 import { Projects, ProjectNew, ProjectShow, ProjectEdit } from './components/projects';
 import { Documents, DocumentNew, DocumentShow, DocumentEdit } from './components/documents';
 
