@@ -1,24 +1,15 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {List, ListItem} from 'material-ui/List';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-const projectList = [
-    {
-        name: "heros"
-    },
-    {
-        name: "marshal"
-    }
-]
-
-class Projects extends React.Component {
+export class ProjectList extends React.Component {
     render() {
         return (
             <div>
                 <List>
-                    {projectList.map(function(project, index) {
-                        return <ListItem primaryText={project.name} />
+                    {this.props.projects.map(function(project, index) {
+                        return <ListItem key={index.toString()} primaryText={'Project ' + index + ' ' + project.name} />
                     })}
                 </List>
                 <RaisedButton label="Create new project" primary={true}/>
@@ -26,6 +17,10 @@ class Projects extends React.Component {
         );
     }
 }
+
+ProjectList.propTypes = {
+    projects: PropTypes.array.isRequired
+};
 
 class ProjectNew extends React.Component {
     render() {
@@ -60,7 +55,10 @@ class ProjectShow extends React.Component {
             <div>
                 <List>
                     {projectLocales.map(function(entry, index) {
-                        return <ListItem primaryText={entry.locale + " " + entry.country + " " + entry.language} />
+                        return <ListItem
+                            key={index.toString()}
+                            primaryText={entry.locale + " " + entry.country + " " + entry.language}
+                        />
                     })}
                 </List>
                 <RaisedButton label="Add locale" primary={true}/>
@@ -75,4 +73,4 @@ class ProjectEdit extends React.Component {
     }
 }
 
-export { Projects, ProjectNew, ProjectShow, ProjectEdit };
+export { ProjectNew, ProjectShow, ProjectEdit };

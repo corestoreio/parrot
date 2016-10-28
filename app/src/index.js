@@ -10,8 +10,10 @@ import Home from './components/home';
 import NotFound from './components/404';
 import Login from './containers/Login';
 import Register from './containers/Register';
-import { Projects, ProjectNew, ProjectShow, ProjectEdit } from './components/projects';
+import Projects from './containers/Projects';
+import { ProjectNew, ProjectShow, ProjectEdit } from './components/ProjectList';
 import { Documents, DocumentNew, DocumentShow, DocumentEdit } from './components/documents';
+import { fetchProjects } from './actions/projects';
 
 const history = syncHistoryWithStore(browserHistory, store)
 
@@ -52,3 +54,5 @@ ReactDOM.render(
 store.subscribe(() => {
 	console.log(store.getState());
 })
+
+store.dispatch(fetchProjects())
