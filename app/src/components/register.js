@@ -2,11 +2,7 @@ import React, { PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
+class Register extends React.Component {
     render() {
         return (
             <div>
@@ -19,14 +15,10 @@ class Login extends React.Component {
                     floatingLabelText="Password"
                     type="password"
                 /><br />
-                <RaisedButton
-                    label="Login"
-                    primary={true}
-                    onClick={this.props.onSubmit}
-                />
+                <RaisedButton label="Register" primary={true} />
             </div>
         );
     }
 }
 
-export default Login;
+export default Register;
