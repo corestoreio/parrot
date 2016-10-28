@@ -27,6 +27,10 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 		return errors.ErrBadRequest
 	}
 
+	if user.Email == "" || user.Password == "" {
+		return errors.ErrBadRequest
+	}
+
 	claimedUser, err := store.GetUserByEmail(user.Email)
 	if err != nil {
 		return errors.ErrNotFound

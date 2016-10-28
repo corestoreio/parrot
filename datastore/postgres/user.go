@@ -23,6 +23,9 @@ func (db *PostgresDB) GetUser(id int) (*model.User, error) {
 }
 
 func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
+	if email == "" {
+		return nil, errors.ErrBadRequest
+	}
 	u := model.User{}
 	row := db.QueryRow("SELECT * FROM users WHERE email = $1", email)
 
