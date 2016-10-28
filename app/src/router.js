@@ -3,7 +3,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import App from './app';
 import Home from './components/home';
 import NotFound from './components/404';
-import Login from './components/login';
+import Login from './containers/Login';
 import Register from './components/register';
 import { Projects, ProjectNew, ProjectShow, ProjectEdit } from './components/projects';
 import { Documents, DocumentNew, DocumentShow, DocumentEdit } from './components/documents';

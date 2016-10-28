@@ -14,18 +14,9 @@ export default function authReducer(state = INITIAL_STATE, action) {
                 pending: true
             };
         case AUTH_FULFILLED:
-            const response = action.payload
-            const token = response.token
-            if (response.status !== 200 || token === null) {
-                return {
-                    ...state,
-                    pending: false,
-                    authenticated: false
-                }
-            };
             return {
                 ...state,
-                token: token,
+                token: action.payload,
                 pending: false,
                 authenticated: true
             };
