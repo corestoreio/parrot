@@ -4,4 +4,4 @@ const Paths = {
     register: '/users'
 }
 
-export default Paths
+export default Paths;

@@ -4,7 +4,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 class Documents extends React.Component {
     render() {
         return (<h1>Documents</h1>)
-    }
+    };
 }
 
 class DocumentNew extends React.Component {
@@ -22,7 +22,7 @@ const tableData = [
         key: "MY_OTHER_KEY",
         value: "my other value"
     }
-]
+];
 
 class DocumentShow extends React.Component {
     render() {
@@ -55,14 +55,14 @@ class DocumentShow extends React.Component {
                     ))}
                 </TableBody>
             </Table>
-        )
+        );
     }
 }
 
 class DocumentEdit extends React.Component {
     render() {
         return (<h1>DocumentEdit</h1>)
-    }
+    };
 }
 
-export { Documents, DocumentNew, DocumentShow, DocumentEdit }
+export { Documents, DocumentNew, DocumentShow, DocumentEdit };

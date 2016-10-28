@@ -17,7 +17,7 @@ class Register extends React.Component {
                 /><br />
                 <RaisedButton label="Register" primary={true} />
             </div>
-        )
+        );
     }
 }
 
@@ -36,8 +36,8 @@ class Login extends React.Component {
                 /><br />
                 <RaisedButton label="Login" primary={true} />
             </div>
-        )
+        );
     }
 }
 
-export { Register, Login }
+export { Register, Login };

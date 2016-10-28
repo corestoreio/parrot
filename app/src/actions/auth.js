@@ -6,7 +6,7 @@ export const AUTH_PENDING = 'AUTH_PENDING'
 export const AUTH_REJECTED = 'AUTH_REJECTED'
 export const AUTH_FULFILLED = 'AUTH_FULFILLED'
 
-export function authRequest(credentials) {
+export function authenticate(credentials) {
     return {
         type: AUTH,
         payload: fetch(Paths.apiRoot + Paths.authenticate, {

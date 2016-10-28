@@ -23,7 +23,7 @@ class Projects extends React.Component {
                 </List>
                 <RaisedButton label="Create new project" primary={true}/>
             </div>
-        )
+        );
     }
 }
 
@@ -37,7 +37,7 @@ class ProjectNew extends React.Component {
                 /><br />
                 <RaisedButton label="Create" primary={true} />
             </div>
-        )
+        );
     }
 }
 
@@ -65,14 +65,14 @@ class ProjectShow extends React.Component {
                 </List>
                 <RaisedButton label="Add locale" primary={true}/>
             </div>
-        )
+        );
     }
 }
 
 class ProjectEdit extends React.Component {
     render() {
-        return (<h1>ProjectEdit</h1>)
+        return (<h1>ProjectEdit</h1>);
     }
 }
 
-export { Projects, ProjectNew, ProjectShow, ProjectEdit }
+export { Projects, ProjectNew, ProjectShow, ProjectEdit };

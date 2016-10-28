@@ -34,6 +34,6 @@ export default class AppRouter extends React.Component {
                     <Route path="*" component={NotFound}/>
                 </Route>
             </Router>
-        )
+        );
     }
 }
