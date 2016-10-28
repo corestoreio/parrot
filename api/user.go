@@ -42,10 +42,10 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 
 	// Create the Claims
 	claims := tokenClaims{
-		user.Role,
+		claimedUser.Role,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-			Subject:   fmt.Sprintf("%d", user.ID),
+			Subject:   fmt.Sprintf("%d", claimedUser.ID),
 		},
 	}
 
