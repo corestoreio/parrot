@@ -3,13 +3,9 @@ import { authenticate } from './../actions/auth';
 import { connect } from 'react-redux';
 import LoginForm from './../components/LoginForm';
 
-class Login extends React.Component {
-    render() {
-        return (
-            <LoginForm onSubmit={this.props.onSubmit} />
-        );
-    }
-};
+const Login = ({onSubmit}) => (
+    <LoginForm onSubmit={onSubmit} />
+);
 
 Login.propTypes = {
     onSubmit: PropTypes.func.isRequired
