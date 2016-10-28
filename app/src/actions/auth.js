@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import Paths from './../paths'
 import { extractJson } from './../helpers/fetch'
 import { storeToken } from './../helpers/token'
+import { browserHistory } from 'react-router'
 
 export const AUTH = 'AUTH'
 export const AUTH_PENDING = 'AUTH_PENDING'
@@ -22,6 +23,7 @@ export function authenticate(credentials) {
                     throw new Error('no token in response');
                 }
                 storeToken(token);
+                browserHistory.push('/');
                 return dispatch({type: AUTH_FULFILLED, payload: token})
             })
             .catch(err => {
