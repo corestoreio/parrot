@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import Remotes from './../../remotes'
+import Remotes from './../remotes'
 import { extractJson } from './../helpers/fetch'
 import { storeToken } from './../helpers/token'
 import { browserHistory } from 'react-router'

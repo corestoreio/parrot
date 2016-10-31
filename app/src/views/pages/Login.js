@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { authenticate } from './../../core/actions/auth';
+import { authActions } from './../../core/auth';
 import { connect } from 'react-redux';
 import LoginForm from './../components/LoginForm';
 
@@ -28,7 +28,7 @@ class LoginPage extends React.Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         onSubmit: (credentials) => {
-            dispatch(authenticate(credentials))
+            dispatch(authActions.authenticate(credentials))
         }
     };
 };

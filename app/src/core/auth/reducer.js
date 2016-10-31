@@ -1,4 +1,4 @@
-import { AUTH_PENDING, AUTH_FULFILLED, AUTH_REJECTED } from './../actions/auth';
+import { authActions } from './actions';
 
 const INITIAL_STATE = {
     token: '',
@@ -6,21 +6,21 @@ const INITIAL_STATE = {
     authenticated: false
 };
 
-export default function authReducer(state = INITIAL_STATE, action) {
+export function authReducer(state = INITIAL_STATE, action) {
     switch(action.type) {
-        case AUTH_PENDING:
+        case authActions.AUTH_PENDING:
             return {
                 ...state,
                 pending: true
             };
-        case AUTH_FULFILLED:
+        case authActions.AUTH_FULFILLED:
             return {
                 ...state,
                 token: action.payload,
                 pending: false,
                 authenticated: true
             };
-        case AUTH_REJECTED:
+        case authActions.AUTH_REJECTED:
             return {
                 ...state,
                 pending: false,

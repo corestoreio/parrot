@@ -13,6 +13,10 @@ class LoginForm extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired
+    };
+
     handleChange(e) {
         e.preventDefault();
         this.credentials[e.target.id] = e.target.value;
@@ -47,10 +51,6 @@ class LoginForm extends React.Component {
             </form>
         );
     }
-};
-
-LoginForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired
 };
 
 export default LoginForm;
