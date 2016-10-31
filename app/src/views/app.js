@@ -13,8 +13,8 @@ class App extends React.Component {
             <MuiThemeProvider>
                 <div>
                     <AppBar
-                        title="0xFF"
-                        onLeftIconButtonTouchTap={()=>alert("touched!")}
+                        title="Title"
+                        onLeftIconButtonTouchTap={()=>alert("touched")}
                     />
                     {this.props.children}
                 </div>
