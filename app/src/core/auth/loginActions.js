@@ -2,7 +2,6 @@ import fetch from 'isomorphic-fetch'
 import Remotes from './../util/remotes'
 import { extractJson } from './../util/fetch'
 import { storeToken } from './../util/token'
-import { browserHistory } from 'react-router'
 
 export const loginActions = {
     LOGIN: 'LOGIN',
@@ -31,4 +30,4 @@ export const loginActions = {
                 });
         };
     }
-}
+};

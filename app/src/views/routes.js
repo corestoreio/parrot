@@ -2,7 +2,8 @@ import App from './app';
 import HomePage from './pages/Home';
 import NotFound from './pages/NotFound';
 import LoginPage from './pages/Login';
-// import Register from './pages/Register';
+import RegisterPage from './pages/Register';
+import ProjectsPage from './pages/Projects';
 
 const routes = {
     path: '/',
@@ -14,8 +15,50 @@ const routes = {
             }
         },
         {
-            path: '/login',
+            path: 'login',
             component: LoginPage
+        },
+        {
+            path: 'register',
+            component: RegisterPage
+        },
+        {
+            path: 'projects',
+            childRoutes: [
+                {
+                    indexRoute: {
+                        component: ProjectsPage
+                    }
+                },
+                {
+                    path: ':id',
+                    childRoutes: [
+                        {
+                            indexRoute: {
+                                component: HomePage
+                            }
+                        },
+                        {
+                            path: 'documents',
+                            childRoutes: [
+                            {
+                                indexRoute: {
+                                    component: HomePage
+                                }
+                            },
+                            {
+                                path: ':id',
+                                component: HomePage
+                            },
+                            {
+                                path: 'new',
+                                component: HomePage
+                            },
+                        ]
+                        },
+                    ]
+                },
+            ]
         },
         {
             path: '*',

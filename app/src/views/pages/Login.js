@@ -17,14 +17,6 @@ class LoginPage extends React.Component {
     }
 }
 
-// const Login = ({onSubmit}) => (
-//     <LoginForm onSubmit={onSubmit} />
-// );
-
-// Login.propTypes = {
-//     onSubmit: PropTypes.func.isRequired
-// };
-
 const mapDispatchToProps = (dispatch) => {
     return {
         onSubmit: (credentials) => {

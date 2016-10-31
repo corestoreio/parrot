@@ -2,11 +2,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ProjectList } from './../components/ProjectList';
 
-const Projects = ({projects}) => {
+const ProjectsPage = ({projects}) => {
     return (<ProjectList projects={projects} />);
 };
 
-Projects.propTypes = {
+ProjectsPage.propTypes = {
     projects: PropTypes.array.isRequired
 };
 
@@ -17,4 +17,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(Projects);
+export default connect(mapStateToProps)(ProjectsPage);

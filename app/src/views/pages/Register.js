@@ -1,22 +1,22 @@
 import React, { PropTypes } from 'react';
-import { register } from './../actions/register';
+import { registerActions } from './../../core/auth';
 import { connect } from 'react-redux';
 import RegisterForm from './../components/RegisterForm';
 
-const Register = ({onSubmit}) => (
+const RegisterPage = ({onSubmit}) => (
     <RegisterForm onSubmit={onSubmit} />
 );
 
-Register.propTypes = {
+RegisterPage.propTypes = {
     onSubmit: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onSubmit: (user) => {
-            dispatch(register(user))
+            dispatch(registerActions.register(user))
         }
     };
 };
 
-export default connect(null, mapDispatchToProps)(Register);
+export default connect(null, mapDispatchToProps)(RegisterPage);
