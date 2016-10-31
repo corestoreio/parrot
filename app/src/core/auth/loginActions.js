@@ -4,15 +4,15 @@ import { extractJson } from './../util/fetch'
 import { storeToken } from './../util/token'
 import { browserHistory } from 'react-router'
 
-export const authActions = {
-    AUTH: 'AUTH',
-    AUTH_PENDING: 'AUTH_PENDING',
-    AUTH_REJECTED: 'AUTH_REJECTED',
-    AUTH_FULFILLED: 'AUTH_FULFILLED',
+export const loginActions = {
+    LOGIN: 'LOGIN',
+    LOGIN_PENDING: 'LOGIN_PENDING',
+    LOGIN_REJECTED: 'LOGIN_REJECTED',
+    LOGIN_FULFILLED: 'LOGIN_FULFILLED',
 
-    authenticate: (credentials) => {
+    login: (credentials) => {
         return (dispatch) => {
-            dispatch({type: authActions.AUTH_PENDING})
+            dispatch({type: loginActions.LOGIN_PENDING})
             return fetch(Remotes.authPath(), {
                     method: 'POST',
                     body: JSON.stringify(credentials)
@@ -24,11 +24,10 @@ export const authActions = {
                         throw new Error('no token in response');
                     }
                     storeToken(token);
-                    browserHistory.push('/');
-                    return dispatch({type: authActions.AUTH_FULFILLED, payload: token})
+                    return dispatch({type: loginActions.LOGIN_FULFILLED, payload: token})
                 })
                 .catch(err => {
-                    return dispatch({type: authActions.AUTH_REJECTED, payload: err})
+                    return dispatch({type: loginActions.LOGIN_REJECTED, payload: err})
                 });
         };
     }
