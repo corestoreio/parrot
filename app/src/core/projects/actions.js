@@ -4,6 +4,11 @@ import { extractJson } from './../util/fetch'
 import { getToken } from './../util/token'
 
 export const projectActions = {
+    CREATE_PROJECT: 'CREATE_PROJECT',
+    CREATE_PROJECT_PENDING: 'CREATE_PROJECT_PENDING',
+    CREATE_PROJECT_REJECTED: 'CREATE_PROJECT_REJECTED',
+    CREATE_PROJECT_FULFILLED: 'CREATE_PROJECT_FULFILLED',
+    
     FETCH_PROJECTS: 'FETCH_PROJECTS',
     FETCH_PROJECTS_PENDING: 'FETCH_PROJECTS_PENDING',
     FETCH_PROJECTS_REJECTED: 'FETCH_PROJECTS_REJECTED',
@@ -25,6 +30,32 @@ export const projectActions = {
                 })
                 .catch(err => {
                     return dispatch({type: projectActions.FETCH_PROJECTS_REJECTED, payload: err})
+                });
+        };
+    },
+
+    createProject: (project) => {
+        return (dispatch) => {
+            dispatch({type: projectActions.CREATE_PROJECT_PENDING})
+            return fetch(Remotes.projectsPath(), {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Authorization": getToken()
+                },
+                body: JSON.stringify(project)
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('request failed');
+                    }
+                    return extractJson(res);
+                })
+                .then(json => {
+                    return dispatch({type: projectActions.CREATE_PROJECT_FULFILLED, payload: [json]})
+                })
+                .catch(err => {
+                    return dispatch({type: projectActions.CREATE_PROJECT_REJECTED, payload: err})
                 });
         };
     }

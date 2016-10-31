@@ -4,6 +4,7 @@ import NotFound from './pages/NotFound';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import ProjectsPage from './pages/Projects';
+import NewProjectPage from './pages/NewProject';
 
 const routes = {
     path: '/',
@@ -28,7 +29,11 @@ const routes = {
                 {
                     indexRoute: {
                         component: ProjectsPage
-                    }
+                    },
+                },
+                {
+                    path: 'new',
+                    component: NewProjectPage
                 },
                 {
                     path: ':id',
