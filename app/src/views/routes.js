@@ -6,6 +6,7 @@ import RegisterPage from './pages/Register';
 import ProjectsPage from './pages/Projects';
 import ProjectPage from './pages/Project';
 import NewProjectPage from './pages/NewProject';
+import NewLocalePage from './pages/NewLocale';
 
 const routes = {
     path: '/',
@@ -30,7 +31,7 @@ const routes = {
                 {
                     indexRoute: {
                         component: ProjectsPage
-                    },
+                    }
                 },
                 {
                     path: 'new',
@@ -45,22 +46,22 @@ const routes = {
                             }
                         },
                         {
-                            path: 'documents',
+                            path: 'locales',
                             childRoutes: [
-                            {
-                                indexRoute: {
+                                {
+                                    indexRoute: {
+                                        component: HomePage
+                                    },
+                                },
+                                {
+                                    path: 'new',
+                                    component: NewLocalePage
+                                },
+                                {
+                                    path: ':localeId',
                                     component: HomePage
-                                }
-                            },
-                            {
-                                path: ':documentId',
-                                component: HomePage
-                            },
-                            {
-                                path: 'new',
-                                component: HomePage
-                            },
-                        ]
+                                },
+                            ]
                         },
                     ]
                 },

@@ -21,8 +21,8 @@ ProjectPage.propTypes = {
 const mockProject = {
     id: 1,
     locales: [
-        {locale: "en_US", language: "English", country: "USA"},
-        {locale: "de_DE", language: "German", country: "Germany"}
+        {ident: "en_US", language: "English", country: "USA"},
+        {ident: "de_DE", language: "German", country: "Germany"}
     ]
 };
 
@@ -35,7 +35,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         editProjectLink: () => {
-            dispatch(push(`/projects/${ownProps.params.projectId}/edit`))
+            dispatch(push(`/projects/${ownProps.params.projectId}/locales/new`))
         }
     };
 };

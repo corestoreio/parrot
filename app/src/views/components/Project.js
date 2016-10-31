@@ -10,10 +10,10 @@ export default class Project extends React.Component {
         return (
             <div>
                 <List>
-                    {this.props.project.locales.map(function(entry, index) {
+                    {this.props.project.locales.map(function(locale, index) {
                         return <ListItem
                             key={index.toString()}
-                            primaryText={entry.locale + "  " + entry.country + "  " + entry.language}
+                            primaryText={locale.ident + "  " + locale.country + "  " + locale.language}
                         />
                     })}
                 </List>
