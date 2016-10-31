@@ -1,15 +1,16 @@
 import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class NewProjectButton extends React.Component {
+export default class Button extends React.Component {
     static propTypes = {
-        onClick: PropTypes.func.isRequired
+        onClick: PropTypes.func.isRequired,
+        label: PropTypes.string.isRequired
     }
 
     render() {
         return (
             <RaisedButton
-                label="Create new project"
+                label={this.props.label}
                 primary={true}
                 onClick={this.props.onClick}
             />

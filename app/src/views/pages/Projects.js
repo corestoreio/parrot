@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { ProjectList } from './../components/ProjectList';
-import NewProjectButton from './../components/NewProjectButton';
+import Button from './../components/Button';
 
 const ProjectsPage = ({projects, createProjectLink}) => {
     return (
         <div>
             <ProjectList projects={projects} />
-            <NewProjectButton onClick={createProjectLink} />
+            <Button onClick={createProjectLink} label="Create new project" />
         </div>
     );
 };
