@@ -12,7 +12,6 @@ export class ProjectList extends React.Component {
                         return <ListItem key={index.toString()} primaryText={'Project ' + index + ' ' + project.name} />
                     })}
                 </List>
-                <RaisedButton label="Create new project" primary={true}/>
             </div>
         );
     }
