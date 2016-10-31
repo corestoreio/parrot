@@ -41,7 +41,7 @@ func (db *PostgresDB) CreateProject(project *model.Project) error {
 		return err
 	}
 
-	return db.QueryRow("INSERT INTO projects (keys) VALUES($1) RETURNING id", values).Scan(&project.ID)
+	return db.QueryRow("INSERT INTO projects (name, keys) VALUES($1, $2) RETURNING id", project.Name, values).Scan(&project.ID)
 }
 
 func (db *PostgresDB) UpdateProject(project *model.Project) error {

@@ -14,5 +14,6 @@ type ProjectDocStorer interface {
 
 type Project struct {
 	ID   int      `db:"id" json:"id"`
+	Name string   `db:"name" json:"name"`
 	Keys []string `db:"keys" json:"keys"`
 }
