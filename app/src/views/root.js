@@ -1,8 +1,16 @@
 import React from 'react';
+import { Router } from 'react-router'
+import { Provider } from 'react-redux';
+import routes from './routes';
 
 function Root({history, store}) {
     return (
-        <h1>Root</h1>
+        <Provider store={store}>
+            <Router
+                history={history}
+                routes={routes}
+            />
+        </Provider>
     );
 }
 
