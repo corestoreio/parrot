@@ -1,20 +1,8 @@
-import React from 'react'
-// import { Route, IndexRoute } from 'react-router'
 import App from './app';
-import Home from './pages/Home';
+import HomePage from './pages/Home';
 import NotFound from './pages/NotFound';
 import LoginPage from './pages/Login';
 // import Register from './pages/Register';
-
-// export default function routes() {
-//     return (
-//         <Route path="/" component={App}>
-//             <IndexRoute component={Home}/>
-//             <Route path="login" component={LoginPage}/>
-//             <Route path="*" component={NotFound}/>
-//         </Route>
-//     );
-// }
 
 const routes = {
     path: '/',
@@ -22,7 +10,7 @@ const routes = {
     childRoutes: [
         {
             indexRoute: {
-                component: Home
+                component: HomePage
             }
         },
         {

@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import Paths from './../paths'
+import Remotes from './../../remotes'
 import { extractJson } from './../helpers/fetch'
 import { storeToken } from './../helpers/token'
 import { browserHistory } from 'react-router'
@@ -12,7 +12,7 @@ export const AUTH_FULFILLED = 'AUTH_FULFILLED'
 export function authenticate(credentials) {
     return (dispatch) => {
         dispatch({type: AUTH_PENDING})
-        return fetch(Paths.apiRoot + Paths.authenticate, {
+        return fetch(Remotes.authPath(), {
                 method: 'POST',
                 body: JSON.stringify(credentials)
             })

@@ -7,6 +7,10 @@ import configureStore from './core/store';
 
 const store = configureStore();
 
+store.subscribe(() => {
+	console.log(store.getState());
+});
+
 function render(Root) {
     ReactDOM.render(
         <Root

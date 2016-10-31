@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-// import { authenticate } from './../actions/auth';
-// import { connect } from 'react-redux';
+import { authenticate } from './../../core/actions/auth';
+import { connect } from 'react-redux';
 import LoginForm from './../components/LoginForm';
 
-export default class LoginPage extends React.Component {
+class LoginPage extends React.Component {
     static propTypes = {
         onSubmit: PropTypes.func.isRequired
     };
@@ -25,12 +25,12 @@ export default class LoginPage extends React.Component {
 //     onSubmit: PropTypes.func.isRequired
 // };
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         onSubmit: (credentials) => {
-//             dispatch(authenticate(credentials))
-//         }
-//     };
-// };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSubmit: (credentials) => {
+            dispatch(authenticate(credentials))
+        }
+    };
+};
 
-// export default connect(null, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(LoginPage);

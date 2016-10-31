@@ -1,8 +1,9 @@
-import { applyMiddleware, compose, createStore } from 'redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
+import middleware from './middleware';
 
 function configureStore() {
-    let middleware = applyMiddleware();
-    const store = createStore(()=>{}, middleware);
+    const store = createStore(reducers, middleware);
     return store;
 }
 
