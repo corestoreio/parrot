@@ -1,6 +1,8 @@
 CREATE TABLE projects (
     id serial PRIMARY KEY,
-    keys text[]
+    name varchar(256) NOT NULL CHECK (name <> ''),
+    keys text[],
+    UNIQUE (name)
 );
 
 CREATE TABLE documents (
