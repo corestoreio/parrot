@@ -2,13 +2,10 @@ import React, { PropTypes } from 'react';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import LocalePairsEditable from './../components/LocalePairsEditable'
-import Button from './../components/Button'
 
 const EditLocalePage = ({pairs, onSubmit}) => {
     return (
-        <div>
-            <LocalePairsEditable pairs={pairs} onSubmit={onSubmit}/>
-        </div>
+        <LocalePairsEditable pairs={pairs} onSubmit={onSubmit}/>
     );
 };
 
