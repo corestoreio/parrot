@@ -27,6 +27,10 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 		return errors.ErrBadRequest
 	}
 
+	if user.Email == "" || user.Password == "" {
+		return errors.ErrBadRequest
+	}
+
 	claimedUser, err := store.GetUserByEmail(user.Email)
 	if err != nil {
 		return errors.ErrNotFound
@@ -38,10 +42,10 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 
 	// Create the Claims
 	claims := tokenClaims{
-		user.Role,
+		claimedUser.Role,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-			Subject:   fmt.Sprintf("%d", user.ID),
+			Subject:   fmt.Sprintf("%d", claimedUser.ID),
 		},
 	}
 
