@@ -1,12 +1,25 @@
 import { projectActions } from './actions';
 
-export function projectReducer(state = [], action) {
+export function fetchProjectsReducer(state = [], action) {
     switch(action.type) {
         case projectActions.FETCH_PROJECTS_PENDING:
             return state;
         case projectActions.FETCH_PROJECTS_FULFILLED:
             return action.payload;
         case projectActions.FETCH_PROJECTS_REJECTED:
+            return state;
+        default:
+            return state;
+    }
+}
+
+export function fetchProjectReducer(state = {}, action) {
+    switch(action.type) {
+        case projectActions.FETCH_PROJECT_PENDING:
+            return state;
+        case projectActions.FETCH_PROJECT_FULFILLED:
+            return action.payload;
+        case projectActions.FETCH_PROJECT_REJECTED:
             return state;
         default:
             return state;
