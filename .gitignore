@@ -28,3 +28,13 @@ gin-bin.*
 *.bin
 lingo.*
 .vscode
+
+# JS
+node_modules
+npm-debug.log
+
+# testing
+coverage
+
+# production
+build
