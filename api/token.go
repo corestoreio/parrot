@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
@@ -32,11 +33,16 @@ func tokenGate(next http.Handler) http.Handler {
 }
 
 func getTokenString(r *http.Request) (string, error) {
-	tokenString := r.Header.Get("Authorization")
-	if tokenString == "" {
+	token := r.Header.Get("Authorization")
+	if token == "" {
 		return "", fmt.Errorf("no auth header")
 	}
-	return tokenString, nil
+
+	if len(token) > 6 && strings.ToUpper(token[0:7]) == "BEARER " {
+		token = token[7:]
+	}
+
+	return token, nil
 }
 
 func onlyAdmin(next http.Handler) http.Handler {
