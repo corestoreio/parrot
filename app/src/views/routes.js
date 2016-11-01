@@ -7,6 +7,8 @@ import ProjectsPage from './pages/Projects';
 import ProjectPage from './pages/Project';
 import NewProjectPage from './pages/NewProject';
 import NewLocalePage from './pages/NewLocale';
+import LocalePage from './pages/Locale';
+import EditLocalePage from './pages/EditLocale';
 
 const routes = {
     path: '/',
@@ -59,7 +61,17 @@ const routes = {
                                 },
                                 {
                                     path: ':localeId',
-                                    component: HomePage
+                                    childRoutes: [
+                                        {
+                                            indexRoute: {
+                                                component: LocalePage
+                                            }
+                                        },
+                                        {
+                                            path: 'edit',
+                                            component: EditLocalePage
+                                        }
+                                    ]
                                 },
                             ]
                         },

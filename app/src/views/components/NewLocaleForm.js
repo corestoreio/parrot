@@ -28,10 +28,8 @@ export default class NewLocaleForm extends React.Component {
         return (
             <form onSubmit={this.onSubmit}>
                 <LocaleSelectField
-                    id="ident"
                     availableLocales={this.props.availableLocales}
                     label="Which locale?"
-                    hintText="Dude"
                     onChange={this.handleSelection}
                 /><br />
                 <RaisedButton
