@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { browserHistory } from 'react-router';
 import Root from './views/root';
 import configureStore from './core/store';
+import { getToken } from './core/util/token'
 
 const store = configureStore();
 
@@ -22,3 +23,7 @@ function render(Root) {
 }
 
 render(Root);
+
+if (getToken() == '') {
+    browserHistory.push('/login');
+}
