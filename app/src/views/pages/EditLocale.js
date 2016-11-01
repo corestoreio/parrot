@@ -26,7 +26,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSubmit: (pairs) => {
-            console.log(pairs)
+            console.log(pairs);
+            dispatch(push(`/projects/${ownProps.params.projectId}/locales/${ownProps.params.localeId}`));
         }
     };
 };
