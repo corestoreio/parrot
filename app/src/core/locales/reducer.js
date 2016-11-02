@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 
 export function localesReducer(state = INITIAL_STATE, action) {
     switch(action.type) {
-        // Fetch projects
+        // Fetch locales
         case localeActions.FETCH_LOCALES_PENDING:
             return {
                 ...state,
@@ -18,7 +18,7 @@ export function localesReducer(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 pending: false,
-                projects: action.payload
+                activeLocales: action.payload
             };
         case localeActions.FETCH_LOCALES_REJECTED:
             return {
@@ -26,7 +26,7 @@ export function localesReducer(state = INITIAL_STATE, action) {
                 pending: false
             };
 
-        // Fetch project
+        // Fetch locale
         case localeActions.FETCH_LOCALE_PENDING:
             return {
                 ...state,
@@ -45,7 +45,7 @@ export function localesReducer(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 pending: false,
-                projects: result
+                activeLocales: result
             };
         }
         case localeActions.FETCH_LOCALE_REJECTED:
@@ -54,7 +54,7 @@ export function localesReducer(state = INITIAL_STATE, action) {
                 pending: false
             };
 
-        // Create project
+        // Create locale
         case localeActions.CREATE_LOCALE_PENDING:
             return {
                 ...state,

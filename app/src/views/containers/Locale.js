@@ -3,31 +3,77 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import LocalePairs from './../components/LocalePairs'
 import Button from './../components/Button'
+import { localeActions } from './../../core/locales'
+import CircularProgress from 'material-ui/CircularProgress';
 
-const LocalePage = ({pairs, editLocaleLink}) => {
-    return (
-        <div>
-            <LocalePairs pairs={pairs} />
-            <Button onClick={editLocaleLink} label="Edit" />
-        </div>
-    );
-};
+class LocalePage extends React.Component {
+    static propTypes = {
+        editLocaleLink: PropTypes.func.isRequired,
+        locale: PropTypes.object.isRequired,
+        fetchLocale: PropTypes.func.isRequired,
+        pending: PropTypes.bool.isRequired
+    };
 
-LocalePage.propTypes = {
-    pairs: PropTypes.object.isRequired,
-    editLocaleLink: PropTypes.func.isRequired
-};
+    componentDidMount() {
+        this.props.fetchLocales();
+        // TODO: fetch locales if needed?
+        // const locale = this.props.locale;
+        // this.props.fetchLocale(locale.id);
+    }
 
-const mapStateToProps = (state) => {
+    
+    renderLocalePage() {
+        const locale = this.props.locale;
+        if (!locale) {
+            return (
+                <p>
+                    No locale found
+                </p>
+            );
+        }
+
+        return (
+            <div>
+                <LocalePairs pairs={locale.pairs} />
+                <Button onClick={this.props.editLocaleLink} label="Edit" />
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div>
+                {(this.props.pending
+                    ? <CircularProgress size={60} thickness={7} />
+                    : this.renderLocalePage()
+                )}
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (state, ownProps) => {
+    const ident = ownProps.params.localeIdent;
+    const result = state.locales.activeLocales.find((element) => {
+            return element.ident === ident;
+    });
     return {
-        pairs: {'my key': 'my pair'}
+        locale: result,
+        pending: state.locales.pending
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+    const projectId = ownProps.params.projectId;
     return {
         editLocaleLink: () => {
-            dispatch(push(`/projects/${ownProps.params.projectId}/locales/${ownProps.params.localeId}/edit`))
+            dispatch(push(`/projects/${projectId}/locales/${ownProps.params.localeId}/edit`))
+        },
+        fetchLocales: () => {
+            dispatch(localeActions.fetchLocales(projectId));
+        },
+        fetchLocale: (localeId) => {
+            dispatch(localeActions.fetchLocale(projectId, localeId));
         }
     };
 };

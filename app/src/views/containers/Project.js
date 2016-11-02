@@ -9,14 +9,17 @@ import CircularProgress from 'material-ui/CircularProgress';
 
 class ProjectPage extends React.Component {
     componentDidMount() {
-        this.props.fetchProject();
+        this.props.fetchProjects();
+        this.props.fetchLocales();
     }
 
     static propTypes = {
         project: PropTypes.object.isRequired,
         onLocaleAdd: PropTypes.func.isRequired,
-        fetchProject: PropTypes.func.isRequired,
+        fetchProjects: PropTypes.func.isRequired,
+        fetchLocales: PropTypes.func.isRequired,
         pending: PropTypes.bool.isRequired,
+        locales: PropTypes.array.isRequired,
         availableLocales: PropTypes.array.isRequired
     };
 
@@ -32,7 +35,7 @@ class ProjectPage extends React.Component {
 
         return (
             <div>
-                <Project project={project} />
+                <Project project={project} locales={this.props.locales}/>
                 <LocaleSelectField
                     availableLocales={this.props.availableLocales}
                     label="Add locale"
@@ -65,7 +68,8 @@ const mapStateToProps = (state, ownProps) => {
         availableLocales: [
             {ident: "en_US", language: "English", country: "USA"},
             {ident: "de_DE", language: "German", country: "Germany"}
-        ]
+        ],
+        locales: state.locales.activeLocales
     };
 };
 
@@ -76,8 +80,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(localeActions.createLocale(id, locale))
             dispatch(push(`/projects/${id}/locales/${locale.ident}`))
         },
-        fetchProject: () => {
-            dispatch(projectActions.fetchProject(id));
+        fetchLocales: () => {
+            dispatch(localeActions.fetchLocales(id));
+        },
+        fetchProjects: () => {
+            dispatch(projectActions.fetchProjects());
         }
     };
 };

@@ -19,10 +19,10 @@ export const localeActions = {
     FETCH_LOCALES_REJECTED: 'FETCH_LOCALES_REJECTED',
     FETCH_LOCALES_FULFILLED: 'FETCH_LOCALES_FULFILLED',
 
-    fetchLocales: (project) => {
+    fetchLocales: (projectId) => {
         return (dispatch) => {
-            dispatch({type: localeActions.FETCH_PROJECTS_PENDING})
-            return fetch(Remotes.localesPath(project.id), {
+            dispatch({type: localeActions.FETCH_LOCALES_PENDING})
+            return fetch(Remotes.localesPath(projectId), {
                 method: 'GET',
                 headers: {
                     "Accept": 'application/json',
@@ -39,10 +39,10 @@ export const localeActions = {
         };
     },
 
-    fetchLocale: (project, locale) => {
+    fetchLocale: (projectId, localeId) => {
         return (dispatch) => {
             dispatch({type: localeActions.FETCH_LOCALE_PENDING})
-            return fetch(Remotes.localePath(project.id, locale.ident), {
+            return fetch(Remotes.localePath(projectId, localeId), {
                 method: 'GET',
                 headers: {
                     "Accept": 'application/json',

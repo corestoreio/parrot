@@ -4,6 +4,7 @@ import { List, ListItem } from 'material-ui/List';
 export default class Project extends React.Component {
     static propTypes = {
         project: PropTypes.object.isRequired,
+        locales: PropTypes.array.isRequired
     }
 
     render() {
@@ -13,10 +14,10 @@ export default class Project extends React.Component {
                     <div>
                         <h1>{this.props.project.name}</h1>
                         <List>
-                            {this.props.project.keys.map(function(locale, index) {
+                            {this.props.locales.map(function(locale, index) {
                                 return <ListItem
-                                    key={index.toString()}
-                                    primaryText={locale.ident + "  " + locale.country + "  " + locale.language}
+                                    key={locale.id.toString()}
+                                    primaryText={locale.locale}
                                 />
                             })}
                         </List>
