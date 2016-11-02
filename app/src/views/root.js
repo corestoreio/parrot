@@ -17,20 +17,20 @@ function Root({history, store}) {
     return (
         <Provider store={store}>
             <Router history={history}>
-                <Route path="/" component={App}>
+                <Route path="/" component={App} name="Home">
                     <IndexRoute component={HomePage} />
-                    <Route path="login" component={LoginPage}/>
-                    <Route path="register" component={RegisterPage}/>
-                    <Route path="projects">
-                        <IndexRoute component={ProjectsPage}/>
-                        <Route path="new" component={NewProjectPage}/>
-                        <Route path=":projectId">
+                    <Route path="login" component={LoginPage} name="Login" />
+                    <Route path="register" component={RegisterPage} name="Register" />
+                    <Route path="projects" name="Projects" >
+                        <IndexRoute component={ProjectsPage} />
+                        <Route path="new" component={NewProjectPage} name="New Project" />
+                        <Route path=":projectId" >
                             <IndexRoute component={ProjectPage} />
-                            <Route path="locales">
-                                <Route path="new" component={NewLocalePage}/>
+                            <Route path="locales" name="Locales" >
+                                <Route path="new" component={NewLocalePage} name="New Locale" />
                                 <Route path=":localeId">
-                                    <IndexRoute component={LocalePage}/>
-                                    <Route path="edit" component={EditLocalePage}/>
+                                    <IndexRoute component={LocalePage} />
+                                    <Route path="edit" component={EditLocalePage} name="Edit" />
                                 </Route>
                             </Route>
                         </Route>
