@@ -3,25 +3,56 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { ProjectList } from './../components/ProjectList';
 import Button from './../components/Button';
+import { projectActions } from './../../core/projects'
+import CircularProgress from 'material-ui/CircularProgress';
 
-const ProjectsPage = ({projects, createProjectLink}) => {
-    return (
-        <div>
-            <ProjectList projects={projects} />
-            <Button onClick={createProjectLink} label="Create new project" />
-        </div>
-    );
-};
+class ProjectsPage extends React.Component {
+    static propTypes = {
+        projects: PropTypes.array.isRequired,
+        createProjectLink: PropTypes.func.isRequired,
+        fetchProjects: PropTypes.func.isRequired,
+        pending: PropTypes.bool.isRequired
+    };
 
-ProjectsPage.propTypes = {
-    projects: PropTypes.array.isRequired,
-    createProjectLink: PropTypes.func.isRequired
-};
+    componentDidMount() {
+        this.props.fetchProjects();
+    }
 
+    renderProjects() {
+        const projects = this.props.projects;
+        if (!projects) {
+            return (
+                <p>
+                    No projects found
+                </p>
+            );
+        }
+
+        return (
+            <div>
+                <ProjectList projects={this.props.projects} />
+                <Button onClick={this.props.createProjectLink} label="Create new project" />
+            </div>
+        );
+    }
+    
+    render() {
+        return (
+            <div>
+                {(this.props.pending
+                    ? <CircularProgress size={60} thickness={7} />
+                    : this.renderProjects()
+                )}
+            </div>
+        );
+    }
+}
 
 const mapStateToProps = (state) => {
     return {
-        projects: state.projects.projects
+        projects: state.projects.projects,
+        pending: state.projects.pending
+
     };
 };
 
@@ -29,6 +60,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         createProjectLink: () => {
             dispatch(push('/projects/new'))
+        },
+        fetchProjects: () => {
+            dispatch(projectActions.fetchProjects());
         }
     };
 };

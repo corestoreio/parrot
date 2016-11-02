@@ -1,6 +1,7 @@
 package model
 
 type ProjectStorer interface {
+	GetProjects() ([]Project, error)
 	GetProject(id int) (*Project, error)
 	CreateProject(doc *Project) error
 	UpdateProject(doc *Project) error
