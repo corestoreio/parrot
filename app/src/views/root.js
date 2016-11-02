@@ -9,7 +9,6 @@ import RegisterPage from './containers/Register';
 import ProjectsPage from './containers/Projects';
 import ProjectPage from './containers/Project';
 import NewProjectPage from './containers/NewProject';
-import NewLocalePage from './containers/NewLocale';
 import LocalePage from './containers/Locale';
 import EditLocalePage from './containers/EditLocale';
 
@@ -27,7 +26,6 @@ function Root({history, store}) {
                         <Route path=":projectId" >
                             <IndexRoute component={ProjectPage} />
                             <Route path="locales" name="Locales" >
-                                <Route path="new" component={NewLocalePage} name="New Locale" />
                                 <Route path=":localeId">
                                     <IndexRoute component={LocalePage} />
                                     <Route path="edit" component={EditLocalePage} name="Edit" />

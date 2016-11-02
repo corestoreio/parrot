@@ -3,7 +3,7 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { projectActions } from './../../core/projects'
 import Project from './../components/Project'
-import Button from './../components/Button';
+import LocaleSelectField from './../components/LocaleSelectField'
 import CircularProgress from 'material-ui/CircularProgress';
 
 class ProjectPage extends React.Component {
@@ -13,12 +13,13 @@ class ProjectPage extends React.Component {
 
     static propTypes = {
         project: PropTypes.object.isRequired,
-        editProjectLink: PropTypes.func.isRequired,
+        onLocaleAdd: PropTypes.func.isRequired,
         fetchProject: PropTypes.func.isRequired,
         pending: PropTypes.bool.isRequired,
+        availableLocales: PropTypes.array.isRequired
     };
 
-    renderProject() {
+    renderProjectPage() {
         const project = this.props.project;
         if (!project) {
             return (
@@ -31,7 +32,11 @@ class ProjectPage extends React.Component {
         return (
             <div>
                 <Project project={project} />
-                <Button onClick={this.props.editProjectLink} label="Add locale" />
+                <LocaleSelectField
+                    availableLocales={this.props.availableLocales}
+                    label="Add locale"
+                    onSubmit={this.props.onLocaleAdd}
+                />
             </div>
         );
     }
@@ -41,7 +46,7 @@ class ProjectPage extends React.Component {
             <div>
                 {(this.props.pending
                     ? <CircularProgress size={60} thickness={7} />
-                    : this.renderProject()
+                    : this.renderProjectPage()
                 )}
             </div>
         );
@@ -55,15 +60,21 @@ const mapStateToProps = (state, ownProps) => {
     });
     return {
         project: result,
-        pending: state.projects.pending
+        pending: state.projects.pending,
+        availableLocales: [
+            {ident: "en_US", language: "English", country: "USA"},
+            {ident: "de_DE", language: "German", country: "Germany"}
+        ]
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     const id = ownProps.params.projectId;
     return {
-        editProjectLink: () => {
-            dispatch(push(`/projects/${id}/locales/new`))
+        onLocaleAdd: (v) => {
+            // TODO
+            console.log(v);
+            dispatch(push(`/projects/${id}/locales/${v.ident}`))
         },
         fetchProject: () => {
             dispatch(projectActions.fetchProject(id));

@@ -1,45 +1,89 @@
 import React, { PropTypes } from 'react';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
-/**
- * With the `maxHeight` property set, the Select Field will be scrollable
- * if the number of items causes the height to exceed this limit.
- */
 export default class LocaleSelectField extends React.Component {
     static propTypes = {
         availableLocales: PropTypes.array.isRequired,
         label: PropTypes.string.isRequired,
-        onChange: PropTypes.func.isRequired
+        onSubmit: PropTypes.func.isRequired
     }
 
     state = {
-        value: 1,
+        open: false,
+        value: {}
     };
 
-    handleChange = (event, index, value) => {
-        event.preventDefault();
-        this.setState({value});
-        this.props.onChange(value);
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
+
+
+    handleChange = (e, value) => {
+        e.preventDefault();
+        this.setState({
+            value: value
+        });
+    };
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.handleClose();
+        this.props.onSubmit(this.state.value);
     };
 
     render() {
+        const actions = [
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={this.handleClose}
+            />,
+            <FlatButton
+                label="Submit"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={this.handleSubmit}
+            />,
+        ];
+
+        const availableLocales = this.props.availableLocales;
+        const selectables = [];
+        for (let i = 0; i < availableLocales.length; i++) {
+            selectables.push(
+                <RadioButton
+                    key={i}
+                    value={availableLocales[i]}
+                    label={availableLocales[i].ident}
+                />
+            );
+        }
+
         return (
-            <SelectField
-                floatingLabelText={this.props.label}
-                value={this.state.value}
-                onChange={this.handleChange}
-                maxHeight={200}
+            <div>
+            <RaisedButton label={this.props.label} onTouchTap={this.handleOpen} />
+            <Dialog
+                title="Select locale"
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+                autoScrollBodyContent={true}
+                actions={actions}
             >
-                {this.props.availableLocales.map(function(locale, index) {
-                        return <MenuItem
-                                    value={locale.ident}
-                                    key={index}
-                                    primaryText={`${locale.ident}`}
-                                />
-                    })
-                }
-            </SelectField>
+                <RadioButtonGroup
+                    name="locales"
+                    onChange={this.handleChange}
+                >
+                    {selectables}
+                </RadioButtonGroup>
+            </Dialog>
+            </div>
         );
     }
 }
