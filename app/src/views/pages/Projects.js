@@ -21,7 +21,7 @@ ProjectsPage.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        projects: state.projects.projectList
+        projects: state.projects.projects
     };
 };
 
