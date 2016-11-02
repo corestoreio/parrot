@@ -7,21 +7,31 @@ import { localeActions } from './../../core/locales'
 import CircularProgress from 'material-ui/CircularProgress';
 
 class LocalePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            editing: false
+        };
+        this.handleCommitPairs = this.handleCommitPairs.bind(this);
+    }
+
     static propTypes = {
-        editLocaleLink: PropTypes.func.isRequired,
         locale: PropTypes.object.isRequired,
-        fetchLocale: PropTypes.func.isRequired,
+        fetchLocales: PropTypes.func.isRequired,
+        commitLocalePairs: PropTypes.func.isRequired,
         pending: PropTypes.bool.isRequired
     };
 
     componentDidMount() {
         this.props.fetchLocales();
-        // TODO: fetch locales if needed?
-        // const locale = this.props.locale;
-        // this.props.fetchLocale(locale.id);
     }
 
-    
+    handleCommitPairs(pairs) {
+        const { locale } = this.props;
+        locale.pairs = pairs;
+        this.props.commitLocalePairs(locale);
+    }
+
     renderLocalePage() {
         const locale = this.props.locale;
         if (!locale) {
@@ -34,8 +44,9 @@ class LocalePage extends React.Component {
 
         return (
             <div>
-                <LocalePairs pairs={locale.pairs} />
-                <Button onClick={this.props.editLocaleLink} label="Edit" />
+                <LocalePairs pairs={locale.pairs}
+                    onCommit={this.handleCommitPairs}
+                />
             </div>
         );
     }
@@ -54,26 +65,32 @@ class LocalePage extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const ident = ownProps.params.localeIdent;
-    const result = state.locales.activeLocales.find((element) => {
-            return element.ident === ident;
-    });
+    let locale = null;
+    let activeLocales = state.locales.activeLocales;
+    if (activeLocales) {
+        for (let i = 0; i < activeLocales.length; i++) {
+            if (activeLocales[i].ident === ident) {
+                locale = Object.assign({}, activeLocales[i]);
+                break;
+            }
+        }
+    }
+        
     return {
-        locale: result,
+        locale: locale,
         pending: state.locales.pending
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     const projectId = ownProps.params.projectId;
+
     return {
-        editLocaleLink: () => {
-            dispatch(push(`/projects/${projectId}/locales/${ownProps.params.localeId}/edit`))
-        },
         fetchLocales: () => {
             dispatch(localeActions.fetchLocales(projectId));
         },
-        fetchLocale: (localeId) => {
-            dispatch(localeActions.fetchLocale(projectId, localeId));
+        commitLocalePairs: (locale) => {
+            dispatch(localeActions.updateLocale(projectId, locale));
         }
     };
 };

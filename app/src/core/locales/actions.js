@@ -19,6 +19,11 @@ export const localeActions = {
     FETCH_LOCALES_REJECTED: 'FETCH_LOCALES_REJECTED',
     FETCH_LOCALES_FULFILLED: 'FETCH_LOCALES_FULFILLED',
 
+    UPDATE_LOCALE: 'UPDATE_LOCALE',
+    UPDATE_LOCALE_PENDING: 'UPDATE_LOCALE_PENDING',
+    UPDATE_LOCALE_REJECTED: 'UPDATE_LOCALE_REJECTED',
+    UPDATE_LOCALE_FULFILLED: 'UPDATE_LOCALE_FULFILLED',
+
     fetchLocales: (projectId) => {
         return (dispatch) => {
             dispatch({type: localeActions.FETCH_LOCALES_PENDING})
@@ -55,6 +60,27 @@ export const localeActions = {
                 })
                 .catch(err => {
                     return dispatch({type: localeActions.FETCH_LOCALE_REJECTED, payload: err})
+                });
+        };
+    },
+
+    updateLocale: (projectId, locale) => {
+        return (dispatch) => {
+            dispatch({type: localeActions.UPDATE_LOCALE_PENDING})
+            return fetch(Remotes.localePath(projectId, locale.id), {
+                method: 'PUT',
+                headers: {
+                    "Accept": 'application/json',
+                    "Authorization": getToken()
+                },
+                body: JSON.stringify(locale)
+            })
+                .then(res => extractJson(res))
+                .then(json => {
+                    return dispatch({type: localeActions.UPDATE_LOCALE_FULFILLED, payload: json})
+                })
+                .catch(err => {
+                    return dispatch({type: localeActions.UPDATE_LOCALE_REJECTED, payload: err})
                 });
         };
     },

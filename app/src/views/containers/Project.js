@@ -7,6 +7,7 @@ import { getAvailableLocales } from './../../core/util/locale';
 import Project from './../components/Project';
 import LocaleSelectField from './../components/LocaleSelectField';
 import CircularProgress from 'material-ui/CircularProgress';
+import Button from './../components/Button';
 
 class ProjectPage extends React.Component {
     componentDidMount() {
@@ -41,6 +42,10 @@ class ProjectPage extends React.Component {
                     availableLocales={this.props.availableLocales}
                     label="Add locale"
                     onSubmit={this.props.onLocaleAdd}
+                /><br />
+                <Button
+                    label="Project Keys"
+                    onClick={this.props.linkToEditKeys}
                 />
             </div>
         );
@@ -66,6 +71,7 @@ const mapStateToProps = (state, ownProps) => {
     const existingLocales = state.locales.activeLocales.map((elem)=>{
         return {ident: elem.locale};
     });
+
     return {
         project: result,
         pending: state.projects.pending,
@@ -86,6 +92,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         fetchProjects: () => {
             dispatch(projectActions.fetchProjects());
+        },
+        linkToEditKeys: () => {
+            dispatch(push(`/projects/${id}/keys`))
         }
     };
 };

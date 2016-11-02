@@ -10,7 +10,7 @@ import ProjectsPage from './containers/Projects';
 import ProjectPage from './containers/Project';
 import NewProjectPage from './containers/NewProject';
 import LocalePage from './containers/Locale';
-import EditLocalePage from './containers/EditLocale';
+import ProjectKeysPage from './containers/ProjectKeys';
 
 function Root({history, store}) {
     return (
@@ -25,10 +25,10 @@ function Root({history, store}) {
                         <Route path="new" component={NewProjectPage} name="New Project" />
                         <Route path=":projectId" >
                             <IndexRoute component={ProjectPage} />
+                            <Route path="keys" component={ProjectKeysPage} name="Locales" />
                             <Route path="locales" name="Locales" >
                                 <Route path=":localeId">
                                     <IndexRoute component={LocalePage} />
-                                    <Route path="edit" component={EditLocalePage} name="Edit" />
                                 </Route>
                             </Route>
                         </Route>

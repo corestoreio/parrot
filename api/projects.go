@@ -39,6 +39,16 @@ func updateProject(w http.ResponseWriter, r *http.Request) error {
 	}
 	project.ID = id
 
+	var sanitizedKeys []string
+	for _, key := range project.Keys {
+		if key == "" {
+			continue
+		}
+		sanitizedKeys = append(sanitizedKeys, key)
+	}
+
+	project.Keys = sanitizedKeys
+
 	err = store.UpdateProject(project)
 	if err != nil {
 		return err

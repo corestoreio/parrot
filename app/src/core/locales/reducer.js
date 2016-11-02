@@ -77,6 +77,35 @@ export function localesReducer(state = INITIAL_STATE, action) {
                 pending: false
             };
 
+        // Update locale
+        case localeActions.UPDATE_LOCALE_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
+        case localeActions.UPDATE_LOCALE_FULFILLED: {
+            const updatedLocale = action.payload;
+            const activeLocales = state.activeLocales.filter((loc) => {
+                if (loc.id === updatedLocale.id) {
+                    return false;
+                }
+                return true;
+            });
+            activeLocales.push(updatedLocale);
+
+            return {
+                ...state,
+                pending: false,
+                created: true,
+                activeLocales: activeLocales
+            };
+        }
+        case localeActions.UPDATE_LOCALE_REJECTED:
+            return {
+                ...state,
+                pending: false
+            };
+
 
         default:
             return state;

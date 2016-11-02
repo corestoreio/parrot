@@ -19,6 +19,11 @@ export const projectActions = {
     FETCH_PROJECTS_REJECTED: 'FETCH_PROJECTS_REJECTED',
     FETCH_PROJECTS_FULFILLED: 'FETCH_PROJECTS_FULFILLED',
 
+    UPDATE_PROJECT: 'UPDATE_PROJECT',
+    UPDATE_PROJECT_PENDING: 'UPDATE_PROJECT_PENDING',
+    UPDATE_PROJECT_REJECTED: 'UPDATE_PROJECT_REJECTED',
+    UPDATE_PROJECT_FULFILLED: 'UPDATE_PROJECT_FULFILLED',
+
     fetchProjects: (user) => {
         return (dispatch) => {
             dispatch({type: projectActions.FETCH_PROJECTS_PENDING})
@@ -81,6 +86,32 @@ export const projectActions = {
                 })
                 .catch(err => {
                     return dispatch({type: projectActions.CREATE_PROJECT_REJECTED, payload: err})
+                });
+        };
+    },
+
+    updateProject: (project) => {
+        return (dispatch) => {
+            dispatch({type: projectActions.UPDATE_PROJECT_PENDING})
+            return fetch(Remotes.projectPath(project.id), {
+                method: 'PUT',
+                headers: {
+                    "Accept": 'application/json',
+                    "Authorization": getToken()
+                },
+                body: JSON.stringify(project)
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('request failed');
+                    }
+                    return extractJson(res);
+                })
+                .then(json => {
+                    return dispatch({type: projectActions.UPDATE_PROJECT_FULFILLED, payload: json})
+                })
+                .catch(err => {
+                    return dispatch({type: projectActions.UPDATE_PROJECT_REJECTED, payload: err})
                 });
         };
     }
