@@ -56,11 +56,12 @@ export default class LocaleSelectField extends React.Component {
         const availableLocales = this.props.availableLocales;
         const selectables = [];
         for (let i = 0; i < availableLocales.length; i++) {
+            const locale = availableLocales[i];
             selectables.push(
                 <RadioButton
                     key={i}
-                    value={availableLocales[i]}
-                    label={availableLocales[i].ident}
+                    value={locale}
+                    label={`${locale.language} - ${locale.country} (${locale.ident})`}
                 />
             );
         }

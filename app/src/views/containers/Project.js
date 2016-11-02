@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import { projectActions } from './../../core/projects'
-import { localeActions } from './../../core/locales'
-import Project from './../components/Project'
-import LocaleSelectField from './../components/LocaleSelectField'
+import { projectActions } from './../../core/projects';
+import { localeActions } from './../../core/locales';
+import { getAvailableLocales } from './../../core/util/locale';
+import Project from './../components/Project';
+import LocaleSelectField from './../components/LocaleSelectField';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class ProjectPage extends React.Component {
@@ -62,13 +63,13 @@ const mapStateToProps = (state, ownProps) => {
     const result = state.projects.projects.find((element) => {
             return element.id === id;
     });
+    const existingLocales = state.locales.activeLocales.map((elem)=>{
+        return {ident: elem.locale};
+    });
     return {
         project: result,
         pending: state.projects.pending,
-        availableLocales: [
-            {ident: "en_US", language: "English", country: "USA"},
-            {ident: "de_DE", language: "German", country: "Germany"}
-        ],
+        availableLocales: getAvailableLocales(existingLocales),
         locales: state.locales.activeLocales
     };
 };

@@ -1,7 +1,7 @@
-import fetch from 'isomorphic-fetch'
-import Remotes from './../util/remotes'
-import { extractJson } from './../util/fetch'
-import { getToken } from './../util/token'
+import fetch from 'isomorphic-fetch';
+import Remotes from './../util/remotes';
+import { extractJson } from './../util/fetch';
+import { getToken } from './../util/token';
 
 export const localeActions = {
     CREATE_LOCALE: 'CREATE_LOCALE',

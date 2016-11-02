@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { List, ListItem } from 'material-ui/List';
+import { Link } from 'react-router';
 
 export class ProjectList extends React.Component {
     render() {
@@ -7,7 +8,16 @@ export class ProjectList extends React.Component {
             <div>
                 <List>
                     {this.props.projects.map(function(project, index) {
-                        return <ListItem key={index.toString()} primaryText={'Project ' + index + ' ' + project.name} />
+                        return (
+                            <Link
+                                key={project.id}
+                                to={`/projects/${project.id}`}
+                            >
+                                <ListItem
+                                    primaryText={'Project ' + index + ' ' + project.name}
+                                />
+                            </Link>
+                        );
                     })}
                 </List>
             </div>
