@@ -59,16 +59,19 @@ export const localeActions = {
         };
     },
 
-    createLocale: (project, locale) => {
+    createLocale: (projectId, locale) => {
         return (dispatch) => {
             dispatch({type: localeActions.CREATE_LOCALE_PENDING})
-            return fetch(Remotes.localesPath(project.id), {
+            const data = {
+                locale: locale.ident
+            }
+            return fetch(Remotes.localesPath(projectId), {
                 method: 'POST',
                 headers: {
                     "Accept": 'application/json',
                     "Authorization": getToken()
                 },
-                body: JSON.stringify(locale)
+                body: JSON.stringify(data)
             })
                 .then(res => {
                     if (!res.ok) {

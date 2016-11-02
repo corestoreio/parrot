@@ -4,8 +4,9 @@ const Remotes = {
     authPath: () => apiRoot + '/authenticate',
     registerPath: () => apiRoot + '/users',
     projectsPath: () => apiRoot + '/projects',
-    localesPath: (projectId) => apiRoot + '/projects/' + projectId + '/locales',
-    localePath: (projectId, localeIdent) => Remotes.localesPath(projectId) + `/${localeIdent}`
+    projectPath: (id) => `${Remotes.projectsPath()}/${id}`,
+    localesPath: (projectId) => `${Remotes.projectPath(projectId)}/documents`,
+    localePath: (projectId, localeId) => `${Remotes.localesPath(projectId)}/${localeId}`
 }
 
 export default Remotes;
