@@ -35,7 +35,7 @@ export function projectsReducer(state = INITIAL_STATE, action) {
         case projectActions.FETCH_PROJECT_FULFILLED: {
             const activeProject = action.payload;
             const result = state.projects.filter((proj) => {
-                if (proj.id == activeProject.id) {
+                if (proj.id === activeProject.id) {
                     return false;
                 }
                 return true;
