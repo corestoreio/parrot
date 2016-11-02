@@ -34,13 +34,13 @@ export function projectsReducer(state = INITIAL_STATE, action) {
             };
         case projectActions.FETCH_PROJECT_FULFILLED: {
             const activeProject = action.payload;
-            const projects = state.projects.map((proj) => {
-                if (proj.id === activeProject.id) {
-                    return activeProject;
+            let projects = state.projects.map((proj) => {
+                if (proj.id == activeProject.id) {
+                    return;
                 }
                 return proj;
             });
-            projects.push(action.payload);
+            projects.push(activeProject);
 
             return {
                 ...state,

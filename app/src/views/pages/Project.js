@@ -6,43 +6,50 @@ import Project from './../components/Project'
 import Button from './../components/Button';
 
 class ProjectPage extends React.Component {
+
     componentDidMount() {
         this.props.fetchProject();
     }
 
     static propTypes = {
         project: PropTypes.object.isRequired,
-        editProjectLink: PropTypes.func.isRequired
+        editProjectLink: PropTypes.func.isRequired,
+        fetchProject: PropTypes.func.isRequired
     };
 
     render () {
-        if (!this.props.project) {
-            return (<h1>Empty</h1>);
-        }
+        const project = this.props.project;
         return (
             <div>
-                <Project project={this.props.project} />
-                <Button onClick={this.props.editProjectLink} label="Add locale" />
+                {project && 
+                    <div>
+                        <Project project={project} />
+                        <Button onClick={this.props.editProjectLink} label="Add locale" />
+                    </div>
+                }
             </div>
         );
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
+    const id = ownProps.params.projectId;
+    const result = state.projects.projects.find((element) => {
+            return element.id == id;
+    });
     return {
-        project: state.projects.projects.find((element) => {
-            return element.id === ownProps.params.projectId;
-        })
+        project: result
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+    const id = ownProps.params.projectId;
     return {
         editProjectLink: () => {
-            dispatch(push(`/projects/${ownProps.params.projectId}/locales/new`))
+            dispatch(push(`/projects/${id}/locales/new`))
         },
         fetchProject: () => {
-            dispatch(projectActions.fetchProject(ownProps.params.projectId));
+            dispatch(projectActions.fetchProject(id));
         }
     };
 };

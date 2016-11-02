@@ -31,7 +31,7 @@ export const projectActions = {
             })
                 .then(res => extractJson(res))
                 .then(json => {
-                    return dispatch({type: projectActions.FETCH_PROJECTS_FULFILLED, payload: [json]})
+                    return dispatch({type: projectActions.FETCH_PROJECTS_FULFILLED, payload: json})
                 })
                 .catch(err => {
                     return dispatch({type: projectActions.FETCH_PROJECTS_REJECTED, payload: err})
@@ -51,7 +51,7 @@ export const projectActions = {
             })
                 .then(res => extractJson(res))
                 .then(json => {
-                    return dispatch({type: projectActions.FETCH_PROJECT_FULFILLED, payload: [json]})
+                    return dispatch({type: projectActions.FETCH_PROJECT_FULFILLED, payload: json})
                 })
                 .catch(err => {
                     return dispatch({type: projectActions.FETCH_PROJECT_REJECTED, payload: err})
@@ -77,7 +77,8 @@ export const projectActions = {
                     return extractJson(res);
                 })
                 .then(json => {
-                    return dispatch({type: projectActions.CREATE_PROJECT_FULFILLED, payload: [json]})
+                    console.log(json)
+                    return dispatch({type: projectActions.CREATE_PROJECT_FULFILLED, payload: json})
                 })
                 .catch(err => {
                     return dispatch({type: projectActions.CREATE_PROJECT_REJECTED, payload: err})

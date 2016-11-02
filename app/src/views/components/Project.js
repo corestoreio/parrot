@@ -9,14 +9,19 @@ export default class Project extends React.Component {
     render() {
         return (
             <div>
-                <List>
-                    {this.props.project.locales.map(function(locale, index) {
-                        return <ListItem
-                            key={index.toString()}
-                            primaryText={locale.ident + "  " + locale.country + "  " + locale.language}
-                        />
-                    })}
-                </List>
+                {this.props.project && 
+                    <div>
+                        <h1>{this.props.project.name}</h1>
+                        <List>
+                            {this.props.project.keys.map(function(locale, index) {
+                                return <ListItem
+                                    key={index.toString()}
+                                    primaryText={locale.ident + "  " + locale.country + "  " + locale.language}
+                                />
+                            })}
+                        </List>
+                    </div>
+                }
             </div>
         );
     }
