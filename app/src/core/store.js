@@ -1,10 +1,17 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
-import middleware from './middleware';
+import { routerMiddleware } from 'react-router-redux'
+import thunk from 'redux-thunk';
+import { browserHistory } from 'react-router';
 
 function configureStore() {
-    const store = createStore(reducers, middleware);
-    return store;
+    return createStore(
+        reducers,
+        applyMiddleware(
+            thunk,
+            routerMiddleware(browserHistory)
+        )
+    );
 }
 
 export default configureStore;
