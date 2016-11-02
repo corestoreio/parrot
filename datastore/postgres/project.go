@@ -14,7 +14,7 @@ func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
 	row := db.QueryRow("SELECT * FROM projects WHERE id = $1", id)
 
 	keys := pq.StringArray{}
-	err := row.Scan(&p.ID, &keys)
+	err := row.Scan(&p.ID, &p.Name, &keys)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
