@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { projectActions } from './../../core/projects'
+import { localeActions } from './../../core/locales'
 import Project from './../components/Project'
 import LocaleSelectField from './../components/LocaleSelectField'
 import CircularProgress from 'material-ui/CircularProgress';
@@ -71,10 +72,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     const id = ownProps.params.projectId;
     return {
-        onLocaleAdd: (v) => {
-            // TODO
-            console.log(v);
-            dispatch(push(`/projects/${id}/locales/${v.ident}`))
+        onLocaleAdd: (locale) => {
+            dispatch(localeActions.createLocale(id, locale))
+            dispatch(push(`/projects/${id}/locales/${locale.ident}`))
         },
         fetchProject: () => {
             dispatch(projectActions.fetchProject(id));
