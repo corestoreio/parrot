@@ -26,7 +26,7 @@ function render(Root) {
 render(Root);
 
 const token = getToken();
-if (token == '') {
+if (token === '') {
     browserHistory.push('/login');
 } else {
     store.dispatch({
