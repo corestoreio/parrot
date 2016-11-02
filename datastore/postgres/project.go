@@ -92,7 +92,7 @@ func (db *PostgresDB) UpdateProject(project *model.Project) error {
 
 	row := db.QueryRow("UPDATE projects SET keys = $1 WHERE id = $2 RETURNING *", values, project.ID)
 	keys = pq.StringArray{}
-	err = row.Scan(&project.ID, &keys)
+	err = row.Scan(&project.ID, &project.Name, &keys)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return errors.ErrNotFound
