@@ -34,18 +34,18 @@ export function projectsReducer(state = INITIAL_STATE, action) {
             };
         case projectActions.FETCH_PROJECT_FULFILLED: {
             const activeProject = action.payload;
-            let projects = state.projects.map((proj) => {
+            const result = state.projects.filter((proj) => {
                 if (proj.id == activeProject.id) {
-                    return;
+                    return false;
                 }
-                return proj;
+                return true;
             });
-            projects.push(activeProject);
+            result.push(activeProject);
 
             return {
                 ...state,
                 pending: false,
-                projects: projects
+                projects: result
             };
         }
         case projectActions.FETCH_PROJECT_REJECTED:
