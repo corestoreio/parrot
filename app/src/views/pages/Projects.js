@@ -20,7 +20,7 @@ class ProjectsPage extends React.Component {
 
     renderProjects() {
         const projects = this.props.projects;
-        if (!projects) {
+        if (!projects || projects.length <= 0) {
             return (
                 <p>
                     No projects found
@@ -29,10 +29,7 @@ class ProjectsPage extends React.Component {
         }
 
         return (
-            <div>
-                <ProjectList projects={this.props.projects} />
-                <Button onClick={this.props.createProjectLink} label="Create new project" />
-            </div>
+            <ProjectList projects={this.props.projects} />
         );
     }
     
@@ -42,7 +39,8 @@ class ProjectsPage extends React.Component {
                 {(this.props.pending
                     ? <CircularProgress size={60} thickness={7} />
                     : this.renderProjects()
-                )}
+                )}<br />
+                <Button onClick={this.props.createProjectLink} label="Create new project" />
             </div>
         );
     }
