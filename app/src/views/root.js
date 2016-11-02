@@ -2,16 +2,16 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router'
 import App from './app';
-import HomePage from './pages/Home';
-import NotFound from './pages/NotFound';
-import LoginPage from './pages/Login';
-import RegisterPage from './pages/Register';
-import ProjectsPage from './pages/Projects';
-import ProjectPage from './pages/Project';
-import NewProjectPage from './pages/NewProject';
-import NewLocalePage from './pages/NewLocale';
-import LocalePage from './pages/Locale';
-import EditLocalePage from './pages/EditLocale';
+import HomePage from './containers/Home';
+import NotFound from './containers/NotFound';
+import LoginPage from './containers/Login';
+import RegisterPage from './containers/Register';
+import ProjectsPage from './containers/Projects';
+import ProjectPage from './containers/Project';
+import NewProjectPage from './containers/NewProject';
+import NewLocalePage from './containers/NewLocale';
+import LocalePage from './containers/Locale';
+import EditLocalePage from './containers/EditLocale';
 
 function Root({history, store}) {
     return (
