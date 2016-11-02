@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { List, ListItem } from 'material-ui/List';
+import { Link } from 'react-router';
 
 export default class Project extends React.Component {
     static propTypes = {
@@ -8,17 +9,25 @@ export default class Project extends React.Component {
     }
 
     render() {
+        const project = this.props.project;
+        const locales = this.props.locales;
         return (
             <div>
-                {this.props.project && 
+                {project && 
                     <div>
-                        <h1>{this.props.project.name}</h1>
+                        <h1>{project.name}</h1>
                         <List>
-                            {this.props.locales.map(function(locale, index) {
-                                return <ListItem
-                                    key={locale.id.toString()}
-                                    primaryText={locale.locale}
-                                />
+                            {locales.map(function(locale, index) {
+                                return (
+                                     <Link
+                                        key={locale.locale}
+                                        to={`/projects/${project.id}/locales/${locale.locale}`}
+                                     >
+                                        <ListItem
+                                            primaryText={locale.locale}
+                                        />
+                                    </Link>
+                                );
                             })}
                         </List>
                     </div>
