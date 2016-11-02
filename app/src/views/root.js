@@ -25,7 +25,7 @@ function Root({history, store}) {
                         <IndexRoute component={ProjectsPage}/>
                         <Route path="new" component={NewProjectPage}/>
                         <Route path=":projectId">
-                            <IndexRoute component={ProjectPage}/>
+                            <IndexRoute component={ProjectPage} />
                             <Route path="locales">
                                 <Route path="new" component={NewLocalePage}/>
                                 <Route path=":localeId">
