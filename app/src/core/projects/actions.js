@@ -77,7 +77,6 @@ export const projectActions = {
                     return extractJson(res);
                 })
                 .then(json => {
-                    console.log(json)
                     return dispatch({type: projectActions.CREATE_PROJECT_FULFILLED, payload: json})
                 })
                 .catch(err => {
