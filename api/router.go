@@ -37,6 +37,7 @@ func registerRoutes(router *chi.Mux) {
 	router.Route(paths.ProjectsPath, func(pr chi.Router) {
 		// Past this point, all routes require a valid token
 		pr.Use(tokenGate)
+		pr.Get("/", apiHandlerFunc(showProjects).ServeHTTP)
 		pr.Post("/", apiHandlerFunc(createProject).ServeHTTP)
 		pr.Get("/:projectID", apiHandlerFunc(showProject).ServeHTTP)
 		pr.Put("/:projectID", apiHandlerFunc(updateProject).ServeHTTP)

@@ -9,12 +9,47 @@ import (
 	"github.com/lib/pq/hstore"
 )
 
+func (db *PostgresDB) GetProjects() ([]model.Project, error) {
+	rows, err := db.Query("SELECT * FROM projects")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
+		return nil, err
+	}
+	defer rows.Close()
+
+	projects := make([]model.Project, 0)
+	for rows.Next() {
+		p := model.Project{}
+		keys := pq.StringArray{}
+
+		err := rows.Scan(&p.ID, &p.Name, &keys)
+		if err != nil {
+			return nil, err
+		}
+
+		p.Keys = make([]string, len(keys))
+		for i, v := range keys {
+			p.Keys[i] = v
+		}
+
+		projects = append(projects, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return projects, nil
+}
+
 func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
 	p := model.Project{}
 	row := db.QueryRow("SELECT * FROM projects WHERE id = $1", id)
 
 	keys := pq.StringArray{}
-	err := row.Scan(&p.ID, &keys)
+	err := row.Scan(&p.ID, &p.Name, &keys)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
@@ -57,7 +92,7 @@ func (db *PostgresDB) UpdateProject(project *model.Project) error {
 
 	row := db.QueryRow("UPDATE projects SET keys = $1 WHERE id = $2 RETURNING *", values, project.ID)
 	keys = pq.StringArray{}
-	err = row.Scan(&project.ID, &keys)
+	err = row.Scan(&project.ID, &project.Name, &keys)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return errors.ErrNotFound

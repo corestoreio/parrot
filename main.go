@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"os"
 	"time"
@@ -11,8 +10,6 @@ import (
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
-	"github.com/anthonynsimon/parrot/render"
-	"github.com/anthonynsimon/parrot/web"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
@@ -44,7 +41,7 @@ func main() {
 		log.Fatal(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
 	}
 
-	// init routers
+	// init routers and middleware
 	mainRouter := chi.NewRouter()
 	mainRouter.Use(logger.Request)
 	mainRouter.Use(middleware.StripSlashes)
@@ -52,22 +49,6 @@ func main() {
 	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
 	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
 	mainRouter.Mount("/api", apiRouter)
-
-	// init and ping api backend
-	apiURL := os.Getenv("API_URL")
-	backend, err := datastore.NewDatastore("apiClient", apiURL)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer ds.Close()
-	if err = ds.Ping(); err != nil {
-		log.Fatal(err)
-	}
-
-	web.Register(mainRouter, backend)
-
-	// parse view templates
-	render.Templates = template.Must(template.ParseGlob("./views/**/*.html"))
 
 	// config server
 	addr := "localhost:8080"

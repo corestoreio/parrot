@@ -39,6 +39,16 @@ func updateProject(w http.ResponseWriter, r *http.Request) error {
 	}
 	project.ID = id
 
+	var sanitizedKeys []string
+	for _, key := range project.Keys {
+		if key == "" {
+			continue
+		}
+		sanitizedKeys = append(sanitizedKeys, key)
+	}
+
+	project.Keys = sanitizedKeys
+
 	err = store.UpdateProject(project)
 	if err != nil {
 		return err
@@ -60,6 +70,17 @@ func showProject(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	render.JSON(w, http.StatusOK, project)
+	return nil
+}
+
+func showProjects(w http.ResponseWriter, r *http.Request) error {
+	// TODO(anthonynsimon): only show projects for which user has permission
+	projects, err := store.GetProjects()
+	if err != nil {
+		return err
+	}
+
+	render.JSON(w, http.StatusOK, projects)
 	return nil
 }
 
