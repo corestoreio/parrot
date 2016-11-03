@@ -8,7 +8,6 @@ import LoginPage from './containers/Login';
 import RegisterPage from './containers/Register';
 import ProjectsPage from './containers/Projects';
 import ProjectPage from './containers/Project';
-import NewProjectPage from './containers/NewProject';
 import LocalePage from './containers/Locale';
 import ProjectKeysPage from './containers/ProjectKeys';
 
@@ -22,7 +21,6 @@ function Root({history, store}) {
                     <Route path="register" component={RegisterPage} name="Register" />
                     <Route path="projects" name="Projects" >
                         <IndexRoute component={ProjectsPage} />
-                        <Route path="new" component={NewProjectPage} name="New Project" />
                         <Route path=":projectId" >
                             <IndexRoute component={ProjectPage} />
                             <Route path="keys" component={ProjectKeysPage} name="Keys" />
