@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
-import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import { projectActions } from './../../core/projects';
+import { fetchProjects, updateProject } from './../../core/projects';
 import EditableKeys from './../components/EditableKeys';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -65,10 +64,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     const id = parseInt(ownProps.params.projectId, 10);
     return {
         fetchProjects: () => {
-            dispatch(projectActions.fetchProjects());
+            dispatch(fetchProjects());
         },
         onKeysCommit: (keys) => {
-            dispatch(projectActions.updateProject({id: id, keys: keys}))
+            dispatch(updateProject({id: id, keys: keys}))
         }
     };
 };

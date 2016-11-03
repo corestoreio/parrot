@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import { projectActions } from './../../core/projects';
-import { localeActions } from './../../core/locales';
+import { fetchProjects } from './../../core/projects';
+import { fetchLocales, createLocale } from './../../core/locales';
 import { getAvailableLocales } from './../../core/util/locale';
-import Project from './../components/Project';
+import LocaleList from './../components/LocaleList';
 import LocaleSelectField from './../components/LocaleSelectField';
 import CircularProgress from 'material-ui/CircularProgress';
 import Button from './../components/Button';
@@ -37,7 +37,8 @@ class ProjectPage extends React.Component {
 
         return (
             <div>
-                <Project project={project} locales={this.props.locales}/>
+                <h1>{project.name}</h1>
+                <LocaleList projectId={project.id} locales={this.props.locales} />
                 <LocaleSelectField
                     availableLocales={this.props.availableLocales}
                     label="Add locale"
@@ -81,20 +82,20 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    const id = ownProps.params.projectId;
+    const projectId = ownProps.params.projectId;
     return {
         onLocaleAdd: (locale) => {
-            dispatch(localeActions.createLocale(id, locale))
-            dispatch(push(`/projects/${id}/locales/${locale.ident}`))
+            dispatch(createLocale(projectId, locale))
+            dispatch(push(`/projects/${projectId}/locales/${locale.ident}`))
         },
         fetchLocales: () => {
-            dispatch(localeActions.fetchLocales(id));
+            dispatch(fetchLocales(projectId));
         },
         fetchProjects: () => {
-            dispatch(projectActions.fetchProjects());
+            dispatch(fetchProjects());
         },
         linkToEditKeys: () => {
-            dispatch(push(`/projects/${id}/keys`))
+            dispatch(push(`/projects/${projectId}/keys`))
         }
     };
 };

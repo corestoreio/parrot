@@ -1,2 +1,2 @@
 export { localesReducer } from './reducer';
-export { localeActions } from './actions';
+export * from './actions';

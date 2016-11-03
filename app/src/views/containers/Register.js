@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { push } from 'react-router-redux';
-import { registerActions } from './../../core/auth';
+import { register } from './../../core/auth';
 import { connect } from 'react-redux';
 import RegisterForm from './../components/RegisterForm';
 import Button from './../components/Button'
@@ -19,7 +19,7 @@ RegisterPage.propTypes = {
 const mapDispatchToProps = (dispatch) => {
     return {
         onSubmit: (user) => {
-            dispatch(registerActions.register(user))
+            dispatch(register(user))
         },
         goToLogin: () => {
             dispatch(push('/login'));

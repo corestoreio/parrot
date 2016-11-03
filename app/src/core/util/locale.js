@@ -1,14 +1,3 @@
-export const getAvailableLocales = (existingLocales) => {
-    return supportedLocales.filter((elem) => {
-        for (let i = 0; i < existingLocales.length; i++) {
-            if (existingLocales[i].ident == elem.ident) {
-                return false;
-            }
-        }
-        return true;
-    });
-};
-
 export const supportedLocales = [
     {
         ident: 'sq_AL',
@@ -561,3 +550,14 @@ export const supportedLocales = [
         country: 'Vietnam'
     }
 ];
+
+export const getAvailableLocales = (existingLocales) => {
+    return supportedLocales.filter((elem) => {
+        for (let i = 0; i < existingLocales.length; i++) {
+            if (existingLocales[i].ident === elem.ident) {
+                return false;
+            }
+        }
+        return true;
+    });
+};

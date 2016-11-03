@@ -26,34 +26,6 @@ export function localesReducer(state = INITIAL_STATE, action) {
                 pending: false
             };
 
-        // Fetch locale
-        case localeActions.FETCH_LOCALE_PENDING:
-            return {
-                ...state,
-                pending: true
-            };
-        case localeActions.FETCH_LOCALE_FULFILLED: {
-            const activeLocale = action.payload;
-            const result = state.activeLocales.filter((loc) => {
-                if (loc.ident === activeLocale.ident) {
-                    return false;
-                }
-                return true;
-            });
-            result.push(activeLocale);
-
-            return {
-                ...state,
-                pending: false,
-                activeLocales: result
-            };
-        }
-        case localeActions.FETCH_LOCALE_REJECTED:
-            return {
-                ...state,
-                pending: false
-            };
-
         // Create locale
         case localeActions.CREATE_LOCALE_PENDING:
             return {

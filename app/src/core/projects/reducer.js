@@ -26,34 +26,6 @@ export function projectsReducer(state = INITIAL_STATE, action) {
                 pending: false
             };
 
-        // Fetch project
-        case projectActions.FETCH_PROJECT_PENDING:
-            return {
-                ...state,
-                pending: true
-            };
-        case projectActions.FETCH_PROJECT_FULFILLED: {
-            const activeProject = action.payload;
-            const result = state.projects.filter((proj) => {
-                if (proj.id === activeProject.id) {
-                    return false;
-                }
-                return true;
-            });
-            result.push(activeProject);
-
-            return {
-                ...state,
-                pending: false,
-                projects: result
-            };
-        }
-        case projectActions.FETCH_PROJECT_REJECTED:
-            return {
-                ...state,
-                pending: false
-            };
-
         // Update project
         case projectActions.UPDATE_PROJECT_PENDING:
             return {
@@ -92,6 +64,8 @@ export function projectsReducer(state = INITIAL_STATE, action) {
         case projectActions.CREATE_PROJECT_FULFILLED: {
             let projects = state.projects.slice();
             projects.push(action.payload);
+
+            console.log(projects)
 
             return {
                 ...state,

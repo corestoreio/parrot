@@ -3,7 +3,7 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { ProjectList } from './../components/ProjectList';
 import Button from './../components/Button';
-import { projectActions } from './../../core/projects'
+import { fetchProjects } from './../../core/projects'
 import CircularProgress from 'material-ui/CircularProgress';
 
 class ProjectsPage extends React.Component {
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(push('/projects/new'))
         },
         fetchProjects: () => {
-            dispatch(projectActions.fetchProjects());
+            dispatch(fetchProjects());
         }
     };
 };

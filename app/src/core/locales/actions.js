@@ -1,7 +1,5 @@
-import fetch from 'isomorphic-fetch';
 import Remotes from './../util/remotes';
-import { extractJson } from './../util/fetch';
-import { getToken } from './../util/token';
+import { apiRequest } from './../util/api';
 
 export const localeActions = {
     CREATE_LOCALE: 'CREATE_LOCALE',
@@ -22,95 +20,43 @@ export const localeActions = {
     UPDATE_LOCALE: 'UPDATE_LOCALE',
     UPDATE_LOCALE_PENDING: 'UPDATE_LOCALE_PENDING',
     UPDATE_LOCALE_REJECTED: 'UPDATE_LOCALE_REJECTED',
-    UPDATE_LOCALE_FULFILLED: 'UPDATE_LOCALE_FULFILLED',
+    UPDATE_LOCALE_FULFILLED: 'UPDATE_LOCALE_FULFILLED'
+}
 
-    fetchLocales: (projectId) => {
-        return (dispatch) => {
-            dispatch({type: localeActions.FETCH_LOCALES_PENDING})
-            return fetch(Remotes.localesPath(projectId), {
-                method: 'GET',
-                headers: {
-                    "Accept": 'application/json',
-                    "Authorization": getToken()
-                }
-            })
-                .then(res => extractJson(res))
-                .then(json => {
-                    return dispatch({type: localeActions.FETCH_LOCALES_FULFILLED, payload: json})
-                })
-                .catch(err => {
-                    return dispatch({type: localeActions.FETCH_LOCALES_REJECTED, payload: err})
-                });
-        };
-    },
+export function fetchLocales(projectId) {
+    return {
+        type: localeActions.FETCH_LOCALES,
+        payload: apiRequest({
+            method: 'GET',
+            path: Remotes.localesPath(projectId),
+            includeAuth: true
+        })
+    };
+}
 
-    fetchLocale: (projectId, localeId) => {
-        return (dispatch) => {
-            dispatch({type: localeActions.FETCH_LOCALE_PENDING})
-            return fetch(Remotes.localePath(projectId, localeId), {
-                method: 'GET',
-                headers: {
-                    "Accept": 'application/json',
-                    "Authorization": getToken()
-                }
-            })
-                .then(res => extractJson(res))
-                .then(json => {
-                    return dispatch({type: localeActions.FETCH_LOCALE_FULFILLED, payload: json})
-                })
-                .catch(err => {
-                    return dispatch({type: localeActions.FETCH_LOCALE_REJECTED, payload: err})
-                });
-        };
-    },
+export function updateLocale(projectId, locale) {
+    return {
+        type: localeActions.UPDATE_LOCALE,
+        payload: apiRequest({
+            method: 'PUT',
+            path: Remotes.localePath(projectId, locale.id),
+            body: JSON.stringify(locale),
+            includeAuth: true
+        })
+    };
+}
 
-    updateLocale: (projectId, locale) => {
-        return (dispatch) => {
-            dispatch({type: localeActions.UPDATE_LOCALE_PENDING})
-            return fetch(Remotes.localePath(projectId, locale.id), {
-                method: 'PUT',
-                headers: {
-                    "Accept": 'application/json',
-                    "Authorization": getToken()
-                },
-                body: JSON.stringify(locale)
-            })
-                .then(res => extractJson(res))
-                .then(json => {
-                    return dispatch({type: localeActions.UPDATE_LOCALE_FULFILLED, payload: json})
-                })
-                .catch(err => {
-                    return dispatch({type: localeActions.UPDATE_LOCALE_REJECTED, payload: err})
-                });
-        };
-    },
-
-    createLocale: (projectId, locale) => {
-        return (dispatch) => {
-            dispatch({type: localeActions.CREATE_LOCALE_PENDING})
-            const data = {
-                locale: locale.ident
-            }
-            return fetch(Remotes.localesPath(projectId), {
-                method: 'POST',
-                headers: {
-                    "Accept": 'application/json',
-                    "Authorization": getToken()
-                },
-                body: JSON.stringify(data)
-            })
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error('request failed');
-                    }
-                    return extractJson(res);
-                })
-                .then(json => {
-                    return dispatch({type: localeActions.CREATE_LOCALE_FULFILLED, payload: json})
-                })
-                .catch(err => {
-                    return dispatch({type: localeActions.CREATE_LOCALE_REJECTED, payload: err})
-                });
-        };
+export function createLocale(projectId, locale) {
+    const data = {
+        locale: locale.ident
     }
-};
+    return {
+        type: localeActions.CREATE_LOCALE,
+        payload: apiRequest({
+            method: 'POST',
+            path: Remotes.localesPath(projectId),
+            body:  JSON.stringify(data),
+            includeAuth: true
+        })
+    };
+}

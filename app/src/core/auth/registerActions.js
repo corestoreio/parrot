@@ -1,30 +1,27 @@
-import fetch from 'isomorphic-fetch'
-import Remotes from './../util/remotes'
-import { loginActions } from './loginActions';
+import { apiRequest } from './../util/api';
+import Remotes from './../util/remotes';
+import { login } from './loginActions';
 
 export const registerActions = {
     REGISTER: 'REGISTER',
     REGISTER_PENDING: 'REGISTER_PENDING',
     REGISTER_REJECTED: 'REGISTER_REJECTED',
-    REGISTER_FULFILLED: 'REGISTER_FULFILLED',
+    REGISTER_FULFILLED: 'REGISTER_FULFILLED'
+}
 
-    register: (user) => {
-        return (dispatch) => {
-            dispatch({type: registerActions.REGISTER_PENDING})
-            return fetch(Remotes.registerPath(), {
-                    method: 'POST',
-                    body: JSON.stringify(user)
+export function register(user) {
+    return (dispatch) => {
+        return {
+            type: registerActions.REGISTER,
+            payload: apiRequest({
+                method: 'POST',
+                path: Remotes.registerPath(),
+                body: JSON.stringify(user),
+                includeAuth: false
+            })
+                .then(json => {
+                    return dispatch(login(user))
                 })
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error('request failed');
-                    }
-                    dispatch({type: registerActions.REGISTER_FULFILLED})
-                    return dispatch(loginActions.login(user))
-                })
-                .catch(err => {
-                    return dispatch({type: registerActions.REGISTER_REJECTED, payload: err})
-                });
         };
-    }
-};
+    };
+}

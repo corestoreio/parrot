@@ -2,7 +2,6 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
 import Root from './views/root';
 import configureStore from './core/store';
 import { getToken } from './core/util/token'
@@ -14,12 +13,10 @@ store.subscribe(() => {
 	console.log(store.getState());
 });
 
-const history = syncHistoryWithStore(browserHistory, store)
-
 function render(Root) {
     ReactDOM.render(
         <Root
-            history={history}
+            history={browserHistory}
             store={store}
         />,
         document.getElementById('root')
@@ -29,7 +26,7 @@ function render(Root) {
 render(Root);
 
 const token = getToken();
-if (token === '') {
+if (!token) {
     browserHistory.push('/login');
 } else {
     store.dispatch({

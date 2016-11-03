@@ -1,2 +1,2 @@
 export { projectsReducer } from './reducer';
-export { projectActions } from './actions';
+export * from './actions';

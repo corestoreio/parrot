@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import NewProjectForm from './../components/NewProjectForm'
-import { projectActions } from './../../core/projects'
+import { createProject } from './../../core/projects'
 
 const NewProjectPage = ({onSubmit}) => {
     return (<NewProjectForm onSubmit={onSubmit} />);
@@ -15,7 +15,7 @@ NewProjectPage.propTypes = {
 const mapDispatchToProps = (dispatch) => {
     return {
         onSubmit: (project) => {
-            dispatch(projectActions.createProject(project));
+            dispatch(createProject(project));
         }
     };
 };

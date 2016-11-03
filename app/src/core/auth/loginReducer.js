@@ -1,9 +1,9 @@
 import { loginActions } from './loginActions.js';
 
 const INITIAL_STATE = {
-    token: '',
     pending: false,
-    authenticated: false
+    authenticated: false,
+    error: null
 };
 
 export function loginReducer(state = INITIAL_STATE, action) {
@@ -16,7 +16,6 @@ export function loginReducer(state = INITIAL_STATE, action) {
         case loginActions.LOGIN_FULFILLED:
             return {
                 ...state,
-                token: action.payload,
                 pending: false,
                 authenticated: true
             };
@@ -24,7 +23,8 @@ export function loginReducer(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 pending: false,
-                authenticated: false
+                authenticated: false,
+                error: action.payload
             };
         default:
             return state;

@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
-import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
-import LocalePairs from './../components/LocalePairs'
-import Button from './../components/Button'
-import { localeActions } from './../../core/locales'
+import LocalePairs from './../components/LocalePairs';
+import { fetchLocales, updateLocale } from './../../core/locales';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class LocalePage extends React.Component {
@@ -64,12 +62,12 @@ class LocalePage extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const ident = ownProps.params.localeIdent;
+    const ident = ownProps.params.localeId;
     let locale = null;
     let activeLocales = state.locales.activeLocales;
-    if (activeLocales) {
+    if (activeLocales && ident) {
         for (let i = 0; i < activeLocales.length; i++) {
-            if (activeLocales[i].ident === ident) {
+            if (activeLocales[i].locale === ident) {
                 locale = Object.assign({}, activeLocales[i]);
                 break;
             }
@@ -87,10 +85,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     return {
         fetchLocales: () => {
-            dispatch(localeActions.fetchLocales(projectId));
+            dispatch(fetchLocales(projectId));
         },
         commitLocalePairs: (locale) => {
-            dispatch(localeActions.updateLocale(projectId, locale));
+            dispatch(updateLocale(projectId, locale));
         }
     };
 };
