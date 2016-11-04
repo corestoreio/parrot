@@ -7,13 +7,11 @@ type LocaleStorer interface {
 	DeleteLocale(id int) (int, error)
 }
 
-func NewLocale(id int, ident string, pairs map[string]string) *Locale {
-	return &Locale{ID: id, Ident: ident, Pairs: pairs}
-}
-
 type Locale struct {
 	ID        int               `db:"id" json:"id"`
 	Ident     string            `db:"ident" json:"ident"`
+	Language  string            `db:"language" json:"language"`
+	Country   string            `db:"country" json:"country"`
 	Pairs     map[string]string `db:"pairs" json:"pairs"`
 	ProjectID int               `db:"project_id" json:"project_id"`
 }

@@ -41,8 +41,8 @@ func (db *PostgresDB) CreateLocale(loc *model.Locale) error {
 		return err
 	}
 
-	return db.QueryRow("INSERT INTO locales (ident, pairs, project_id) VALUES($1, $2, $3) RETURNING id",
-		loc.Ident, values, loc.ProjectID).Scan(&loc.ID)
+	return db.QueryRow("INSERT INTO locales (ident, language, country, pairs, project_id) VALUES($1, $2, $3, $4, $5) RETURNING id",
+		loc.Ident, loc.Language, loc.Country, values, loc.ProjectID).Scan(&loc.ID)
 }
 
 func (db *PostgresDB) UpdateLocale(loc *model.Locale) error {
@@ -58,7 +58,7 @@ func (db *PostgresDB) UpdateLocale(loc *model.Locale) error {
 	}
 
 	row := db.QueryRow("UPDATE locales SET pairs = $1 WHERE id = $2 RETURNING *", values, loc.ID)
-	err = row.Scan(&loc.ID, &loc.Ident, &h, &loc.ProjectID)
+	err = row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &h, &loc.ProjectID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return errors.ErrNotFound

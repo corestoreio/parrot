@@ -9,6 +9,8 @@ CREATE TABLE projects (
 CREATE TABLE locales (
     id SERIAL PRIMARY KEY,
     ident TEXT NOT NULL,
+    language TEXT NOT NULL,
+    country TEXT NOT NULL,
     pairs hstore,
     project_id INTEGER REFERENCES projects (id) ON DELETE CASCADE,
     UNIQUE (ident, project_id)

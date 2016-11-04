@@ -118,9 +118,9 @@ func (db *PostgresDB) DeleteProject(id int) (int, error) {
 
 func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error) {
 	row := db.QueryRow("SELECT * FROM locales WHERE project_id = $1 AND id = $2", projID, docID)
-	doc := model.Locale{}
+	loc := model.Locale{}
 	pairs := hstore.Hstore{}
-	err := row.Scan(&doc.ID, &doc.Ident, &pairs, &doc.ProjectID)
+	err := row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
@@ -128,14 +128,14 @@ func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error)
 		return nil, err
 	}
 
-	doc.Pairs = make(map[string]string)
+	loc.Pairs = make(map[string]string)
 	for k, v := range pairs.Map {
 		if v.Valid {
-			doc.Pairs[k] = v.String
+			loc.Pairs[k] = v.String
 		}
 	}
 
-	return &doc, nil
+	return &loc, nil
 }
 
 func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
@@ -153,7 +153,7 @@ func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]
 		loc := model.Locale{}
 		pairs := hstore.Hstore{}
 
-		err := rows.Scan(&loc.ID, &loc.Ident, &pairs, &loc.ProjectID)
+		err := rows.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
 		if err != nil {
 			return nil, err
 		}
@@ -174,8 +174,8 @@ func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]
 
 	if len(localeIdents) > 0 {
 		locs = filterLocales(locs, func(doc model.Locale) bool {
-			for _, locale := range localeIdents {
-				if doc.Ident == locale {
+			for _, locIdent := range localeIdents {
+				if doc.Ident == locIdent {
 					return true
 				}
 			}
