@@ -65,8 +65,6 @@ export function projectsReducer(state = INITIAL_STATE, action) {
             let projects = state.projects.slice();
             projects.push(action.payload);
 
-            console.log(projects)
-
             return {
                 ...state,
                 pending: false,
