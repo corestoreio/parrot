@@ -3,6 +3,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
 
 export default class NewProjectDialog extends React.Component {
 	constructor(props) {
@@ -23,7 +25,11 @@ export default class NewProjectDialog extends React.Component {
 
     handleChange(e) {
         e.preventDefault();
-        this.state.project[e.target.id] = e.target.value;
+		const project = this.state.project;
+        project[e.target.id] = e.target.value;
+		this.setState({
+			project: project
+		});
     }
 
 	onSubmit(e) {
@@ -57,11 +63,10 @@ export default class NewProjectDialog extends React.Component {
 
 		return (
 			<div>
-				<RaisedButton
-					primary={true}
-					label="New Project"
-					onTouchTap={this.handleOpen}
-				/>
+				<IconButton onTouchTap={this.handleOpen}>
+					<FontIcon className="material-icons" color="white">add</FontIcon>
+				</IconButton>
+
 				<Dialog
 					title="New Project"
 					actions={actions}

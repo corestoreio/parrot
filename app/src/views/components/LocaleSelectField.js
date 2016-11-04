@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import Button from './Button';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 export default class LocaleSelectField extends React.Component {
@@ -68,7 +67,7 @@ export default class LocaleSelectField extends React.Component {
 
         return (
             <div>
-            <Button label={this.props.label} onClick={this.handleOpen} />
+            <FlatButton style={{color: 'white'}} label={this.props.label} onClick={this.handleOpen} />
             <Dialog
                 title="Select locale"
                 modal={false}

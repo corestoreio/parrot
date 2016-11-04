@@ -2,7 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchProjects, updateProject } from './../../core/projects';
 import EditableKeys from './../components/EditableKeys';
-import CircularProgress from 'material-ui/CircularProgress';
+import AppBar from 'material-ui/AppBar';
+import LoadingIndicator from './../components/LoadingIndicator';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { goBack } from 'react-router-redux';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 
 class ProjectKeysPage extends React.Component {
     componentDidMount() {
@@ -16,8 +21,7 @@ class ProjectKeysPage extends React.Component {
         onKeysCommit: PropTypes.func.isRequired
     };
 
-    renderProjectKeys() {
-        const project = this.props.project;
+    renderProjectKeys(project) {
         if (!project) {
             return (
                 <p>
@@ -37,12 +41,38 @@ class ProjectKeysPage extends React.Component {
     }
 
     render () {
+        const project = this.props.project;
+        const backButton = (
+            <IconButton onTouchTap={this.props.goBack}>
+                <FontIcon className="material-icons" color="white">arrow_back</FontIcon>
+            </IconButton>
+        );
+
         return (
             <div>
-                {(this.props.pending
-                    ? <CircularProgress size={60} thickness={7} />
-                    : this.renderProjectKeys()
-                )}
+                <AppBar
+                    style={{position: 'fixed', top: 0}}
+                    title={project ? project.name : ''}
+                    showMenuIconButton={true}
+                    iconElementLeft={backButton}
+                >
+                </AppBar>
+                <div style={{marginTop: 60}}>
+
+                    <Toolbar style={{backgroundColor: '#0087A6'}}>
+                        <ToolbarGroup>
+
+                        </ToolbarGroup>
+                        <ToolbarGroup>
+
+                        </ToolbarGroup>
+                    </Toolbar>
+
+                    {(this.props.pending
+                        ? <LoadingIndicator />
+                        : this.renderProjectKeys(project)
+                    )}
+                </div>
             </div>
         );
     }
@@ -68,6 +98,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         onKeysCommit: (keys) => {
             dispatch(updateProject({id: id, keys: keys}))
+        },
+        goBack: () => {
+            dispatch(goBack())
         }
     };
 };

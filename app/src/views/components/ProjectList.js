@@ -1,26 +1,28 @@
 import React, { PropTypes } from 'react';
 import { List, ListItem } from 'material-ui/List';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
+import FontIcon from 'material-ui/FontIcon';
+import Paper from 'material-ui/Paper';
 
 export class ProjectList extends React.Component {
     render() {
         return (
-            <div>
-                <List>
-                    {this.props.projects.map(function(project, index) {
-                        return (
-                            <Link
-                                key={project.id}
-                                to={`/projects/${project.id}`}
+            <List>
+                {this.props.projects.map(function(project, index) {
+                    return (
+                        <Paper key={project.id} style={{margin: 10}}>
+                            <ListItem
+                                primaryText={'Project ' + index + ' ' + project.name}
+                                rightAvatar={<FontIcon className="material-icons" color="gray">info</FontIcon>}
+                                onClick={() => {
+                                    browserHistory.push(`/projects/${project.id}`);
+                                }}
                             >
-                                <ListItem
-                                    primaryText={'Project ' + index + ' ' + project.name}
-                                />
-                            </Link>
-                        );
-                    })}
-                </List>
-            </div>
+                            </ListItem>
+                        </Paper>
+                    );
+                })}
+            </List>
         );
     }
 }

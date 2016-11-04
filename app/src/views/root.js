@@ -15,8 +15,7 @@ function Root({history, store}) {
     return (
         <Provider store={store}>
             <Router history={history}>
-                <Route path="/" component={App} name="Home">
-                    <IndexRoute component={HomePage} />
+                <Route path="/" component={App} >
                     <Route path="login" component={LoginPage} name="Login" />
                     <Route path="register" component={RegisterPage} name="Register" />
                     <Route path="projects" name="Projects" >

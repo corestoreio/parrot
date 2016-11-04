@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { List, ListItem } from 'material-ui/List';
-import { Link } from 'react-router';
+import Paper from 'material-ui/Paper';
+import { browserHistory } from 'react-router';
+import LinearProgress from 'material-ui/LinearProgress';
 
 export default class LocaleList extends React.Component {
     static propTypes = {
@@ -13,15 +15,18 @@ export default class LocaleList extends React.Component {
         return (
             <List>
                 {locales.map(function(locale, index) {
+                    const mockPercent = Math.floor(Math.random()*100);
                     return (
-                            <Link
-                                key={locale.locale}
-                                to={`/projects/${projectId}/locales/${locale.locale}`}
-                            >
+                        <Paper key={locale.id} style={{margin: 10}}>
                             <ListItem
                                 primaryText={locale.locale}
+                                secondaryText={`${mockPercent}% translated`}
+                                onClick={() => {
+                                    browserHistory.push(`/projects/${projectId}/locales/${locale.locale}`);
+                                }}
                             />
-                        </Link>
+                            <LinearProgress mode="determinate" value={mockPercent} />
+                        </Paper>
                     );
                 })}
             </List>

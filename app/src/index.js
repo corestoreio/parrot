@@ -6,8 +6,10 @@ import Root from './views/root';
 import configureStore from './core/store';
 import { getToken } from './core/util/token'
 import { loginActions } from './core/auth';
+import { syncHistoryWithStore } from 'react-router-redux'
 
 const store = configureStore();
+const history = syncHistoryWithStore(browserHistory, store)
 
 store.subscribe(() => {
 	console.log(store.getState());
@@ -16,7 +18,7 @@ store.subscribe(() => {
 function render(Root) {
     ReactDOM.render(
         <Root
-            history={browserHistory}
+            history={history}
             store={store}
         />,
         document.getElementById('root')

@@ -2,7 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import LocalePairs from './../components/LocalePairs';
 import { fetchLocales, updateLocale } from './../../core/locales';
-import CircularProgress from 'material-ui/CircularProgress';
+import LoadingIndicator from './../components/LoadingIndicator';
+import AppBar from 'material-ui/AppBar';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { goBack } from 'react-router-redux';
 
 class LocalePage extends React.Component {
     constructor(props) {
@@ -17,7 +22,8 @@ class LocalePage extends React.Component {
         locale: PropTypes.object.isRequired,
         fetchLocales: PropTypes.func.isRequired,
         commitLocalePairs: PropTypes.func.isRequired,
-        pending: PropTypes.bool.isRequired
+        pending: PropTypes.bool.isRequired,
+        goBack: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -30,13 +36,10 @@ class LocalePage extends React.Component {
         this.props.commitLocalePairs(locale);
     }
 
-    renderLocalePage() {
-        const locale = this.props.locale;
+    renderLocale(locale) {
         if (!locale) {
             return (
-                <p>
-                    No locale found
-                </p>
+                <p>No locale found</p>
             );
         }
 
@@ -50,12 +53,38 @@ class LocalePage extends React.Component {
     }
 
     render() {
+        const locale = this.props.locale;
+        const backButton = (
+            <IconButton onTouchTap={this.props.goBack}>
+                <FontIcon className="material-icons" color="white">arrow_back</FontIcon>
+            </IconButton>
+        );
+
         return (
             <div>
-                {(this.props.pending
-                    ? <CircularProgress size={60} thickness={7} />
-                    : this.renderLocalePage()
-                )}
+                <AppBar
+                    style={{position: 'fixed', top: 0}}
+                    title={locale ? locale.locale : ''}
+                    showMenuIconButton={true}
+                    iconElementLeft={backButton}
+                >
+                </AppBar>
+                <div style={{marginTop: 60}}>
+
+                    <Toolbar style={{backgroundColor: '#0087A6'}}>
+                        <ToolbarGroup>
+
+                        </ToolbarGroup>
+                        <ToolbarGroup>
+
+                        </ToolbarGroup>
+                    </Toolbar>
+
+                    {(this.props.pending
+                        ? <LoadingIndicator />
+                        : this.renderLocale(locale)
+                    )}
+                </div>
             </div>
         );
     }
@@ -89,6 +118,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         commitLocalePairs: (locale) => {
             dispatch(updateLocale(projectId, locale));
+        },
+        goBack: () => {
+            dispatch(goBack())
         }
     };
 };

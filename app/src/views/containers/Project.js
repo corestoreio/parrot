@@ -1,13 +1,17 @@
 import React, { PropTypes } from 'react';
-import { push } from 'react-router-redux';
+import { push, goBack } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { fetchProjects } from './../../core/projects';
 import { fetchLocales, createLocale } from './../../core/locales';
 import { getAvailableLocales } from './../../core/util/locale';
 import LocaleList from './../components/LocaleList';
 import LocaleSelectField from './../components/LocaleSelectField';
-import CircularProgress from 'material-ui/CircularProgress';
-import Button from './../components/Button';
+import LoadingIndicator from './../components/LoadingIndicator';
+import FlatButton from 'material-ui/FlatButton';
+import AppBar from 'material-ui/AppBar';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
 class ProjectPage extends React.Component {
     componentDidMount() {
@@ -20,45 +24,69 @@ class ProjectPage extends React.Component {
         onLocaleAdd: PropTypes.func.isRequired,
         fetchProjects: PropTypes.func.isRequired,
         fetchLocales: PropTypes.func.isRequired,
+        goBack: PropTypes.func.isRequired,
         pending: PropTypes.bool.isRequired,
         locales: PropTypes.array.isRequired,
         availableLocales: PropTypes.array.isRequired
     };
 
-    renderProjectPage() {
-        const project = this.props.project;
+    renderProject(project) {
         if (!project) {
             return (
-                <p>
-                    No project found
-                </p>
+                <p>No project found</p>
             );
         }
 
         return (
             <div>
-                <h1>{project.name}</h1>
                 <LocaleList projectId={project.id} locales={this.props.locales} />
-                <LocaleSelectField
-                    availableLocales={this.props.availableLocales}
-                    label="Add locale"
-                    onSubmit={this.props.onLocaleAdd}
-                /><br />
-                <Button
-                    label="Project Keys"
-                    onClick={this.props.linkToEditKeys}
-                />
             </div>
         );
     }
 
     render () {
+        const project = this.props.project;
+        const backButton = (
+            <IconButton onTouchTap={this.props.goBack}>
+                <FontIcon className="material-icons" color="white">arrow_back</FontIcon>
+            </IconButton>
+        );
+
         return (
             <div>
-                {(this.props.pending
-                    ? <CircularProgress size={60} thickness={7} />
-                    : this.renderProjectPage()
-                )}
+                <AppBar
+                    style={{position: 'fixed', top: 0}}
+                    title={project ? project.name : ''}
+                    showMenuIconButton={true}
+                    iconElementLeft={backButton}
+                >
+                </AppBar>
+                <div style={{marginTop: 60}}>
+
+                    <Toolbar style={{backgroundColor: '#0087A6'}}>
+                        <ToolbarGroup>
+                            <FlatButton
+                                style={{color: 'white'}}
+                                label="Project Keys"
+                                onClick={this.props.linkToEditKeys}
+                            />
+                        </ToolbarGroup>
+                        <ToolbarGroup>
+                            <div style={{margin: 'auto'}}>
+                                <LocaleSelectField
+                                    availableLocales={this.props.availableLocales}
+                                    label="Add locale"
+                                    onSubmit={this.props.onLocaleAdd}
+                                />
+                            </div>
+                        </ToolbarGroup>
+                    </Toolbar>
+
+                    {(this.props.pending
+                        ? <LoadingIndicator />
+                        : this.renderProject(project)
+                    )}
+                </div>
             </div>
         );
     }
@@ -86,7 +114,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onLocaleAdd: (locale) => {
             dispatch(createLocale(projectId, locale))
-            dispatch(push(`/projects/${projectId}/locales/${locale.ident}`))
         },
         fetchLocales: () => {
             dispatch(fetchLocales(projectId));
@@ -96,6 +123,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         linkToEditKeys: () => {
             dispatch(push(`/projects/${projectId}/keys`))
+        },
+        goBack: () => {
+            dispatch(goBack())
         }
     };
 };
