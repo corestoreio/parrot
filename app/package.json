@@ -7,7 +7,6 @@
     "react-scripts": "0.7.0"
   },
   "dependencies": {
-    "axios": "^0.15.2",
     "isomorphic-fetch": "^2.2.1",
     "jwt-decode": "^2.1.0",
     "material-ui": "^0.16.1",
