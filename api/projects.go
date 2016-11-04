@@ -17,13 +17,21 @@ func createProject(w http.ResponseWriter, r *http.Request) error {
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		return errors.ErrBadRequest
 	}
-
-	err := store.CreateProject(project)
+	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
 		return err
 	}
 
-	render.JSON(w, http.StatusCreated, project)
+	result, err := store.CreateProject(project)
+	if err != nil {
+		return err
+	}
+	err = store.AssignProjectUser(result.ID, userID)
+	if err != nil {
+		return err
+	}
+
+	render.JSON(w, http.StatusCreated, result)
 	return nil
 }
 

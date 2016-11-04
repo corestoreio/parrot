@@ -30,11 +30,16 @@ func registerRoutes(router *chi.Mux) {
 	router.Route(paths.ProjectsPath, func(pr chi.Router) {
 		// Past this point, all routes require a valid token
 		pr.Use(tokenGate)
-		pr.Get("/", apiHandlerFunc(showProjects).ServeHTTP)
+		pr.Get("/", apiHandlerFunc(getUserProjects).ServeHTTP)
 		pr.Post("/", apiHandlerFunc(createProject).ServeHTTP)
 		pr.Get("/:projectID", apiHandlerFunc(showProject).ServeHTTP)
 		pr.Put("/:projectID", apiHandlerFunc(updateProject).ServeHTTP)
 		pr.Delete("/:projectID", apiHandlerFunc(deleteProject).ServeHTTP)
+
+		pr.Route("/:projectID"+paths.UsersPath, func(dr chi.Router) {
+			dr.Get("/", apiHandlerFunc(getProjectUsers).ServeHTTP)
+			dr.Post("/", apiHandlerFunc(assignProjectUser).ServeHTTP)
+		})
 
 		pr.Route("/:projectID"+paths.LocalesPath, func(dr chi.Router) {
 			dr.Post("/", apiHandlerFunc(createLocale).ServeHTTP)

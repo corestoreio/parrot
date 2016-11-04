@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -135,4 +136,12 @@ func deleteUser(w http.ResponseWriter, r *http.Request) error {
 		"message": fmt.Sprintf("deleted user with id %d", resultID),
 	})
 	return nil
+}
+
+func getUserIDFromContext(ctx context.Context) (int, error) {
+	id, err := strconv.Atoi(ctx.Value("userID").(string))
+	if err != nil {
+		return -1, errors.ErrInternal
+	}
+	return id, nil
 }
