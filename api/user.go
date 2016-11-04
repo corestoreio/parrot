@@ -17,7 +17,6 @@ import (
 )
 
 type tokenClaims struct {
-	Role string `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -42,7 +41,6 @@ func authenticate(w http.ResponseWriter, r *http.Request) error {
 
 	// Create the Claims
 	claims := tokenClaims{
-		claimedUser.Role,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 			Subject:   fmt.Sprintf("%d", claimedUser.ID),
@@ -74,7 +72,6 @@ func createUser(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	user.Password = string(hashed)
-	user.Role = "admin"
 
 	err = store.CreateUser(user)
 	if err != nil {

@@ -5,6 +5,6 @@ const (
 	PingPath         = "/ping"
 	AuthenticatePath = "/authenticate"
 	ProjectsPath     = "/projects"
-	DocumentsPath    = "/documents"
+	LocalesPath      = "/locales"
 	UsersPath        = "/users"
 )

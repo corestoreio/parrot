@@ -11,7 +11,7 @@ func (db *PostgresDB) GetUser(id int) (*model.User, error) {
 	u := model.User{}
 	row := db.QueryRow("SELECT * FROM users WHERE id = $1", id)
 
-	err := row.Scan(&u.ID, &u.Email, &u.Password, &u.Role)
+	err := row.Scan(&u.ID, &u.Email, &u.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
@@ -29,7 +29,7 @@ func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 	u := model.User{}
 	row := db.QueryRow("SELECT * FROM users WHERE email = $1", email)
 
-	err := row.Scan(&u.ID, &u.Email, &u.Password, &u.Role)
+	err := row.Scan(&u.ID, &u.Email, &u.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
@@ -41,7 +41,7 @@ func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 }
 
 func (db *PostgresDB) CreateUser(u *model.User) error {
-	row := db.QueryRow("INSERT INTO users (email, password, role) VALUES($1, $2, $3) RETURNING id", u.Email, u.Password, u.Role)
+	row := db.QueryRow("INSERT INTO users (email, password) VALUES($1, $2) RETURNING id", u.Email, u.Password)
 	return row.Scan(&u.ID)
 }
 

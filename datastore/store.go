@@ -9,9 +9,9 @@ import (
 )
 
 type Store interface {
-	model.DocStorer
+	model.LocaleStorer
 	model.ProjectStorer
-	model.ProjectDocStorer
+	model.ProjectLocaleStorer
 	model.UserStorer
 	Ping() error
 	Close() error

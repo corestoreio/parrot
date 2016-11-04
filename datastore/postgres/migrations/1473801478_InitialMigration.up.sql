@@ -6,12 +6,12 @@ CREATE TABLE projects (
     keys text[]
 );
 
-CREATE TABLE documents (
+CREATE TABLE locales (
     id SERIAL PRIMARY KEY,
-    locale TEXT NOT NULL,
+    ident TEXT NOT NULL,
     pairs hstore,
     project_id INTEGER REFERENCES projects (id) ON DELETE CASCADE,
-    UNIQUE (locale, project_id)
+    UNIQUE (ident, project_id)
 );
 
 CREATE TABLE users (

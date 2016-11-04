@@ -47,15 +47,12 @@ export function updateLocale(projectId, locale) {
 }
 
 export function createLocale(projectId, locale) {
-    const data = {
-        locale: locale.ident
-    }
     return {
         type: localeActions.CREATE_LOCALE,
         payload: apiRequest({
             method: 'POST',
             path: Remotes.localesPath(projectId),
-            body:  JSON.stringify(data),
+            body:  JSON.stringify(locale),
             includeAuth: true
         })
     };

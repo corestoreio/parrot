@@ -116,11 +116,11 @@ func (db *PostgresDB) DeleteProject(id int) (int, error) {
 	return id, err
 }
 
-func (db *PostgresDB) GetProjectDoc(projID, docID int) (*model.Document, error) {
-	row := db.QueryRow("SELECT * FROM documents WHERE project_id = $1 AND id = $2", projID, docID)
-	doc := model.Document{}
+func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error) {
+	row := db.QueryRow("SELECT * FROM locales WHERE project_id = $1 AND id = $2", projID, docID)
+	doc := model.Locale{}
 	pairs := hstore.Hstore{}
-	err := row.Scan(&doc.ID, &doc.Locale, &pairs, &doc.ProjectID)
+	err := row.Scan(&doc.ID, &doc.Ident, &pairs, &doc.ProjectID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
@@ -138,8 +138,8 @@ func (db *PostgresDB) GetProjectDoc(projID, docID int) (*model.Document, error) 
 	return &doc, nil
 }
 
-func (db *PostgresDB) FindProjectDocs(projID int, locales ...string) ([]model.Document, error) {
-	rows, err := db.Query("SELECT * FROM documents WHERE project_id = $1", projID)
+func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
+	rows, err := db.Query("SELECT * FROM locales WHERE project_id = $1", projID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrNotFound
@@ -148,34 +148,34 @@ func (db *PostgresDB) FindProjectDocs(projID int, locales ...string) ([]model.Do
 	}
 	defer rows.Close()
 
-	docs := make([]model.Document, 0)
+	var locs []model.Locale
 	for rows.Next() {
-		doc := model.Document{}
+		loc := model.Locale{}
 		pairs := hstore.Hstore{}
 
-		err := rows.Scan(&doc.ID, &doc.Locale, &pairs, &doc.ProjectID)
+		err := rows.Scan(&loc.ID, &loc.Ident, &pairs, &loc.ProjectID)
 		if err != nil {
 			return nil, err
 		}
 
-		doc.Pairs = make(map[string]string)
+		loc.Pairs = make(map[string]string)
 		for k, v := range pairs.Map {
 			if v.Valid {
-				doc.Pairs[k] = v.String
+				loc.Pairs[k] = v.String
 			}
 		}
 
-		docs = append(docs, doc)
+		locs = append(locs, loc)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	if len(locales) > 0 {
-		docs = filterDocs(docs, func(doc model.Document) bool {
-			for _, locale := range locales {
-				if doc.Locale == locale {
+	if len(localeIdents) > 0 {
+		locs = filterLocales(locs, func(doc model.Locale) bool {
+			for _, locale := range localeIdents {
+				if doc.Ident == locale {
 					return true
 				}
 			}
@@ -183,12 +183,12 @@ func (db *PostgresDB) FindProjectDocs(projID int, locales ...string) ([]model.Do
 		})
 	}
 
-	return docs, nil
+	return locs, nil
 }
 
-func filterDocs(docs []model.Document, fn func(model.Document) bool) []model.Document {
-	result := make([]model.Document, 0)
-	for _, v := range docs {
+func filterLocales(locs []model.Locale, fn func(model.Locale) bool) []model.Locale {
+	result := make([]model.Locale, 0)
+	for _, v := range locs {
 		if fn(v) {
 			result = append(result, v)
 		}

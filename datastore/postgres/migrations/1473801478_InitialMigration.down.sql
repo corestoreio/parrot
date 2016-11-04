@@ -1,3 +1,3 @@
-DROP TABLE documents;
-DROP TABLE projects;
-DROP TABLE users;
+DROP TABLE projects CASCADE;
+DROP TABLE locales CASCADE;
+DROP TABLE users CASCADE;

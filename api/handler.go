@@ -27,3 +27,8 @@ func ping(w http.ResponseWriter, r *http.Request) error {
 	})
 	return nil
 }
+
+func options(w http.ResponseWriter, r *http.Request) error {
+	w.WriteHeader(200)
+	return nil
+}

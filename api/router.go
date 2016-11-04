@@ -27,13 +27,6 @@ func registerRoutes(router *chi.Mux) {
 	router.Post(paths.AuthenticatePath, apiHandlerFunc(authenticate).ServeHTTP)
 	router.Post(paths.UsersPath, apiHandlerFunc(createUser).ServeHTTP)
 
-	// router.Route(paths.UsersPath, func(pr chi.Router) {
-	// 	pr.Use(tokenGate)
-	// 	pr.Get("/:userID", apiHandlerFunc(showUser).ServeHTTP)
-	// 	pr.Put("/:userID", apiHandlerFunc(updateUser).ServeHTTP)
-	// 	pr.Delete("/:userID", apiHandlerFunc(deleteUser).ServeHTTP)
-	// })
-
 	router.Route(paths.ProjectsPath, func(pr chi.Router) {
 		// Past this point, all routes require a valid token
 		pr.Use(tokenGate)
@@ -43,12 +36,12 @@ func registerRoutes(router *chi.Mux) {
 		pr.Put("/:projectID", apiHandlerFunc(updateProject).ServeHTTP)
 		pr.Delete("/:projectID", apiHandlerFunc(deleteProject).ServeHTTP)
 
-		pr.Route("/:projectID"+paths.DocumentsPath, func(dr chi.Router) {
-			dr.Post("/", apiHandlerFunc(createDocument).ServeHTTP)
-			dr.Get("/", apiHandlerFunc(findDocuments).ServeHTTP)
-			dr.Get("/:documentID", apiHandlerFunc(showDocument).ServeHTTP)
-			dr.Put("/:documentID", apiHandlerFunc(updateDocument).ServeHTTP)
-			dr.Delete("/:documentID", apiHandlerFunc(deleteDocument).ServeHTTP)
+		pr.Route("/:projectID"+paths.LocalesPath, func(dr chi.Router) {
+			dr.Post("/", apiHandlerFunc(createLocale).ServeHTTP)
+			dr.Get("/", apiHandlerFunc(findLocales).ServeHTTP)
+			dr.Get("/:localeID", apiHandlerFunc(showLocale).ServeHTTP)
+			dr.Put("/:localeID", apiHandlerFunc(updateLocale).ServeHTTP)
+			dr.Delete("/:localeID", apiHandlerFunc(deleteLocale).ServeHTTP)
 		})
 	})
 }

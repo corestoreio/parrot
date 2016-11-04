@@ -5,7 +5,7 @@ const Remotes = {
     registerPath: () => apiRoot + '/users',
     projectsPath: () => apiRoot + '/projects',
     projectPath: (id) => `${Remotes.projectsPath()}/${id}`,
-    localesPath: (projectId) => `${Remotes.projectPath(projectId)}/documents`,
+    localesPath: (projectId) => `${Remotes.projectPath(projectId)}/locales`,
     localePath: (projectId, localeId) => `${Remotes.localesPath(projectId)}/${localeId}`
 }
 

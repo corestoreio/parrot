@@ -24,7 +24,6 @@ func tokenGate(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, "userID", claims["sub"])
-		ctx = context.WithValue(ctx, "role", claims["role"])
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 
@@ -43,14 +42,4 @@ func getTokenString(r *http.Request) (string, error) {
 	}
 
 	return token, nil
-}
-
-func onlyAdmin(next http.Handler) http.Handler {
-	return apiHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
-		ctx := r.Context()
-		if ctx.Value("role") != "admin" {
-			return errors.ErrUnauthorized
-		}
-		return nil
-	})
 }

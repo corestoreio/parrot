@@ -96,7 +96,7 @@ func deleteProject(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
-		"message": fmt.Sprintf("deleted project with id %d and all related documents", resultID),
+		"message": fmt.Sprintf("deleted project with id %d and all related locales", resultID),
 	})
 	return nil
 }

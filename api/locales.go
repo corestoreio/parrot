@@ -12,46 +12,46 @@ import (
 	"github.com/pressly/chi"
 )
 
-func createDocument(w http.ResponseWriter, r *http.Request) error {
+func createLocale(w http.ResponseWriter, r *http.Request) error {
 	projID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
 
-	doc := &model.Document{}
-	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
+	loc := &model.Locale{}
+	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
 		return errors.ErrBadRequest
 	}
 
-	doc.ProjectID = projID
+	loc.ProjectID = projID
 
 	proj, err := store.GetProject(projID)
 	if err != nil {
 		return err
 	}
 
-	doc.SyncKeys(proj.Keys)
+	loc.SyncKeys(proj.Keys)
 
-	err = store.CreateDoc(doc)
+	err = store.CreateLocale(loc)
 	if err != nil {
 		return errors.ErrInternal
 	}
 
-	render.JSON(w, http.StatusCreated, doc)
+	render.JSON(w, http.StatusCreated, loc)
 	return nil
 }
 
-func showDocument(w http.ResponseWriter, r *http.Request) error {
+func showLocale(w http.ResponseWriter, r *http.Request) error {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
-	id, err := strconv.Atoi(chi.URLParam(r, "documentID"))
+	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
 
-	doc, err := store.GetProjectDoc(projectID, id)
+	loc, err := store.GetProjectLocale(projectID, id)
 	if err != nil {
 		return err
 	}
@@ -61,21 +61,21 @@ func showDocument(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	doc.SyncKeys(proj.Keys)
+	loc.SyncKeys(proj.Keys)
 
-	render.JSON(w, http.StatusOK, doc)
+	render.JSON(w, http.StatusOK, loc)
 	return nil
 }
 
-func findDocuments(w http.ResponseWriter, r *http.Request) error {
+func findLocales(w http.ResponseWriter, r *http.Request) error {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		return errors.ErrBadRequest
 
 	}
-	locales := r.URL.Query()["locale"]
+	localeIdents := r.URL.Query()["locale"]
 
-	docs, err := store.FindProjectDocs(projectID, locales...)
+	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
 		return err
 	}
@@ -85,16 +85,16 @@ func findDocuments(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	for i := range docs {
-		docs[i].SyncKeys(project.Keys)
+	for i := range locs {
+		locs[i].SyncKeys(project.Keys)
 	}
 
-	render.JSON(w, http.StatusOK, docs)
+	render.JSON(w, http.StatusOK, locs)
 	return nil
 }
 
-func updateDocument(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "documentID"))
+func updateLocale(w http.ResponseWriter, r *http.Request) error {
+	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
@@ -103,41 +103,41 @@ func updateDocument(w http.ResponseWriter, r *http.Request) error {
 		return errors.ErrBadRequest
 	}
 
-	doc := &model.Document{}
-	if err := json.NewDecoder(r.Body).Decode(&doc); err != nil {
+	loc := &model.Locale{}
+	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
 		return errors.ErrBadRequest
 	}
-	doc.ID = id
+	loc.ID = id
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
 		return err
 	}
 
-	doc.SyncKeys(project.Keys)
+	loc.SyncKeys(project.Keys)
 
-	err = store.UpdateDoc(doc)
+	err = store.UpdateLocale(loc)
 	if err != nil {
 		return err
 	}
 
-	render.JSON(w, http.StatusOK, doc)
+	render.JSON(w, http.StatusOK, loc)
 	return nil
 }
 
-func deleteDocument(w http.ResponseWriter, r *http.Request) error {
-	id, err := strconv.Atoi(chi.URLParam(r, "documentID"))
+func deleteLocale(w http.ResponseWriter, r *http.Request) error {
+	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		return errors.ErrBadRequest
 	}
 
-	resultID, err := store.DeleteDoc(id)
+	resultID, err := store.DeleteLocale(id)
 	if err != nil {
 		return err
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
-		"message": fmt.Sprintf("deleted document with id %d", resultID),
+		"message": fmt.Sprintf("deleted locale with id %d", resultID),
 	})
 	return nil
 }

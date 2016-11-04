@@ -64,7 +64,7 @@ class LocalePage extends React.Component {
             <div>
                 <AppBar
                     style={{position: 'fixed', top: 0}}
-                    title={locale ? locale.locale : ''}
+                    title={locale ? locale.ident : ''}
                     showMenuIconButton={true}
                     iconElementLeft={backButton}
                 >
@@ -96,7 +96,7 @@ const mapStateToProps = (state, ownProps) => {
     let activeLocales = state.locales.activeLocales;
     if (activeLocales && ident) {
         for (let i = 0; i < activeLocales.length; i++) {
-            if (activeLocales[i].locale === ident) {
+            if (activeLocales[i].ident === ident) {
                 locale = Object.assign({}, activeLocales[i]);
                 break;
             }

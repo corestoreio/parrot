@@ -19,10 +19,10 @@ export default class LocaleList extends React.Component {
                     return (
                         <Paper key={locale.id} style={{margin: 10}}>
                             <ListItem
-                                primaryText={locale.locale}
+                                primaryText={locale.ident}
                                 secondaryText={`${mockPercent}% translated`}
                                 onClick={() => {
-                                    browserHistory.push(`/projects/${projectId}/locales/${locale.locale}`);
+                                    browserHistory.push(`/projects/${projectId}/locales/${locale.ident}`);
                                 }}
                             />
                             <LinearProgress mode="determinate" value={mockPercent} />
