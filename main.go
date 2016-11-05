@@ -46,7 +46,6 @@ func main() {
 	mainRouter.Use(logger.Request)
 	mainRouter.Use(middleware.StripSlashes)
 
-	// mainRouter.Use(logger.Request) // TODO convert to http.Handler
 	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
 	mainRouter.Mount("/api", apiRouter)
 
