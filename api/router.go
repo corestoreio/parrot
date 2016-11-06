@@ -11,9 +11,8 @@ import (
 
 var store datastore.Store
 
-func NewRouter(ds datastore.Store, sk []byte) http.Handler {
+func NewRouter(ds datastore.Store, authProvider auth.AuthProvider) http.Handler {
 	store = ds
-	authProvider := auth.AuthProvider{SigningKey: sk}
 	tokenMiddleware := newTokenMiddleware(authProvider)
 
 	router := chi.NewRouter()

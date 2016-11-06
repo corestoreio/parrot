@@ -7,6 +7,7 @@ import (
 )
 
 type AuthProvider struct {
+	Name       string
 	SigningKey []byte
 }
 

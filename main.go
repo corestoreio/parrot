@@ -8,6 +8,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
+	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
 	"github.com/joho/godotenv"
@@ -46,7 +47,11 @@ func main() {
 	mainRouter.Use(logger.Request)
 	mainRouter.Use(middleware.StripSlashes)
 
-	apiRouter := api.NewRouter(ds, []byte(os.Getenv("API_SIGNING_KEY")))
+	ap := auth.AuthProvider{
+		Name:       string([]byte(os.Getenv("DOMAIN"))),
+		SigningKey: []byte(os.Getenv("API_SIGNING_KEY"))}
+
+	apiRouter := api.NewRouter(ds, ap)
 	mainRouter.Mount("/api", apiRouter)
 
 	// config server

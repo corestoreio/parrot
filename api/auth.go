@@ -58,7 +58,7 @@ func newTokenMiddleware(ap auth.AuthProvider) func(http.Handler) http.Handler {
 	}
 }
 
-func authenticate(ap auth.AuthProvider) func(http.ResponseWriter, *http.Request) error {
+func authenticate(authProvider auth.AuthProvider) func(http.ResponseWriter, *http.Request) error {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		user := model.User{}
 		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
@@ -79,14 +79,17 @@ func authenticate(ap auth.AuthProvider) func(http.ResponseWriter, *http.Request)
 		}
 
 		// Create the Claims
+		now := time.Now()
 		claims := tokenClaims{
 			jwt.StandardClaims{
-				ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+				Issuer:    authProvider.Name,
+				IssuedAt:  now.Unix(),
+				ExpiresAt: now.Add(time.Hour * 24).Unix(),
 				Subject:   fmt.Sprintf("%d", claimedUser.ID),
 			},
 		}
 
-		tokenString, err := ap.CreateToken(claims)
+		tokenString, err := authProvider.CreateToken(claims)
 		if err != nil {
 			return err
 		}
