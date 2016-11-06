@@ -33,7 +33,7 @@ func getTokenString(r *http.Request) (string, error) {
 	return token, nil
 }
 
-func newTokenMiddleware(ap auth.AuthProvider) func(http.Handler) http.Handler {
+func newTokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
@@ -58,7 +58,7 @@ func newTokenMiddleware(ap auth.AuthProvider) func(http.Handler) http.Handler {
 	}
 }
 
-func authenticate(authProvider auth.AuthProvider) func(http.ResponseWriter, *http.Request) error {
+func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Request) error {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		user := model.User{}
 		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {

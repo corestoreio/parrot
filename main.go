@@ -47,7 +47,7 @@ func main() {
 	mainRouter.Use(logger.Request)
 	mainRouter.Use(middleware.StripSlashes)
 
-	ap := auth.AuthProvider{
+	ap := auth.Provider{
 		Name:       string([]byte(os.Getenv("DOMAIN"))),
 		SigningKey: []byte(os.Getenv("API_SIGNING_KEY"))}
 

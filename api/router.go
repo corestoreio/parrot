@@ -11,7 +11,7 @@ import (
 
 var store datastore.Store
 
-func NewRouter(ds datastore.Store, authProvider auth.AuthProvider) http.Handler {
+func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 	store = ds
 	tokenMiddleware := newTokenMiddleware(authProvider)
 

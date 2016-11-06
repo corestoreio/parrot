@@ -6,18 +6,18 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-type AuthProvider struct {
+type Provider struct {
 	Name       string
 	SigningKey []byte
 }
 
-func (ap *AuthProvider) CreateToken(claims jwt.Claims) (string, error) {
+func (p *Provider) CreateToken(claims jwt.Claims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(ap.SigningKey)
+	return token.SignedString(p.SigningKey)
 }
 
-func (ap *AuthProvider) ParseAndVerifyToken(tokenString string) (jwt.MapClaims, error) {
-	return parseAndVerify(tokenString, ap.SigningKey)
+func (p *Provider) ParseAndVerifyToken(tokenString string) (jwt.MapClaims, error) {
+	return parseAndVerify(tokenString, p.SigningKey)
 }
 
 func parseAndVerify(tokenString string, signingKey []byte) (jwt.MapClaims, error) {
