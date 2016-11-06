@@ -11,7 +11,6 @@ import (
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
-	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -94,9 +93,25 @@ func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Re
 			return err
 		}
 
-		render.JSON(w, http.StatusOK, map[string]string{
-			"token": tokenString,
-		})
+		// Handle response writing here instead of letting render.JSON do it
+		// No cache headers required
+		h := w.Header()
+		h.Set("Content-Type", "application/json; charset=utf-8")
+		h.Set("Cache-Control", "no-store")
+		h.Set("Pragma", "no-cache")
+		w.WriteHeader(http.StatusOK)
+
+		data := map[string]string{
+			"token":     tokenString,
+			"expiresAt": fmt.Sprintf("%d", claims.ExpiresAt),
+		}
+
+		encoded, err := json.Marshal(data)
+		if err != nil {
+			http.Error(w, errors.ErrInternal.Message, errors.ErrInternal.Code)
+		}
+
+		w.Write(encoded)
 
 		return nil
 	}
