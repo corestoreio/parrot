@@ -94,7 +94,7 @@ func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Re
 		}
 
 		// Handle response writing here instead of letting render.JSON do it
-		// No cache headers required
+		// Set no cache headers
 		h := w.Header()
 		h.Set("Content-Type", "application/json; charset=utf-8")
 		h.Set("Cache-Control", "no-store")
