@@ -17,6 +17,7 @@ type ProjectUserStorer interface {
 	GetProjectUsers(projID int) ([]User, error)
 	GetUserProjects(userID int) ([]Project, error)
 	AssignProjectUser(projID, userID int) error
+	RevokeProjectUser(projID, userID int) error
 }
 
 type Project struct {

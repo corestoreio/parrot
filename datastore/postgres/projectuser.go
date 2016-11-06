@@ -86,3 +86,12 @@ func (db *PostgresDB) AssignProjectUser(projID, userID int) error {
 	}
 	return err
 }
+
+func (db *PostgresDB) RevokeProjectUser(projID, userID int) error {
+	err := db.QueryRow("DELETE FROM projects_users WHERE project_id = $1 AND user_id = $2",
+		projID, userID).Scan()
+	if err == sql.ErrNoRows {
+		return nil
+	}
+	return err
+}

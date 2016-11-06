@@ -55,3 +55,19 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) error {
 	render.JSON(w, http.StatusOK, pu)
 	return nil
 }
+
+func revokeProjectUser(w http.ResponseWriter, r *http.Request) error {
+	var pu model.ProjectUser
+	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
+		return errors.ErrBadRequest
+	}
+	// TODO: handle input validation
+
+	err := store.RevokeProjectUser(pu.ProjectID, pu.UserID)
+	if err != nil {
+		return err
+	}
+
+	render.JSON(w, http.StatusOK, pu)
+	return nil
+}
