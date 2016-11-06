@@ -6,59 +6,13 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
-	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/pressly/chi"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type tokenClaims struct {
-	jwt.StandardClaims
-}
-
-func authenticate(w http.ResponseWriter, r *http.Request) error {
-	user := model.User{}
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		return errors.ErrBadRequest
-	}
-
-	if user.Email == "" || user.Password == "" {
-		return errors.ErrBadRequest
-	}
-
-	claimedUser, err := store.GetUserByEmail(user.Email)
-	if err != nil {
-		return errors.ErrNotFound
-	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(user.Password)); err != nil {
-		return errors.ErrUnauthorized
-	}
-
-	// Create the Claims
-	claims := tokenClaims{
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-			Subject:   fmt.Sprintf("%d", claimedUser.ID),
-		},
-	}
-
-	tokenString, err := auth.CreateToken(claims, signingKey)
-	if err != nil {
-		return err
-	}
-
-	render.JSON(w, http.StatusOK, map[string]string{
-		"token": tokenString,
-	})
-
-	return nil
-}
 
 func createUser(w http.ResponseWriter, r *http.Request) error {
 	// TODO(anthonynsimon): handle user already exists
@@ -139,7 +93,15 @@ func deleteUser(w http.ResponseWriter, r *http.Request) error {
 }
 
 func getUserIDFromContext(ctx context.Context) (int, error) {
-	id, err := strconv.Atoi(ctx.Value("userID").(string))
+	v := ctx.Value("userID")
+	if v == nil {
+		return -1, errors.ErrInternal
+	}
+	str := v.(string)
+	if v == "" {
+		return -1, errors.ErrInternal
+	}
+	id, err := strconv.Atoi(str)
 	if err != nil {
 		return -1, errors.ErrInternal
 	}

@@ -3,28 +3,24 @@ package api
 import (
 	"net/http"
 
+	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/paths"
 	"github.com/pressly/chi"
 )
 
 var store datastore.Store
-var signingKey []byte
 
 func NewRouter(ds datastore.Store, sk []byte) http.Handler {
 	store = ds
-	signingKey = sk
+	authProvider := auth.AuthProvider{SigningKey: sk}
+	tokenMiddleware := newTokenMiddleware(authProvider)
 
 	router := chi.NewRouter()
 	router.Use(cors)
-	registerRoutes(router)
 
-	return router
-}
-
-func registerRoutes(router *chi.Mux) {
 	router.Get(paths.PingPath, apiHandlerFunc(ping).ServeHTTP)
-	router.Post(paths.AuthenticatePath, apiHandlerFunc(authenticate).ServeHTTP)
+	router.Post(paths.AuthenticatePath, apiHandlerFunc(authenticate(authProvider)).ServeHTTP)
 	router.Post(paths.UsersPath, apiHandlerFunc(createUser).ServeHTTP)
 
 	router.Route(paths.UsersPath, func(dr chi.Router) {
@@ -36,7 +32,7 @@ func registerRoutes(router *chi.Mux) {
 
 	router.Route(paths.ProjectsPath, func(pr chi.Router) {
 		// Past this point, all routes require a valid token
-		pr.Use(tokenGate)
+		pr.Use(tokenMiddleware)
 		pr.Get("/", apiHandlerFunc(getUserProjects).ServeHTTP)
 		pr.Post("/", apiHandlerFunc(createProject).ServeHTTP)
 		pr.Get("/:projectID", apiHandlerFunc(showProject).ServeHTTP)
@@ -57,4 +53,6 @@ func registerRoutes(router *chi.Mux) {
 			dr.Delete("/:localeID", apiHandlerFunc(deleteLocale).ServeHTTP)
 		})
 	})
+
+	return router
 }
