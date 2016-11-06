@@ -10,7 +10,6 @@ import (
 
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
-	"github.com/anthonynsimon/parrot/model"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -59,21 +58,24 @@ func newTokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 
 func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Request) error {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		user := model.User{}
-		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		err := r.ParseForm()
+		if err != nil {
 			return errors.ErrBadRequest
 		}
 
-		if user.Email == "" || user.Password == "" {
+		email := r.Form.Get("email")
+		password := r.Form.Get("password")
+
+		if email == "" || password == "" {
 			return errors.ErrBadRequest
 		}
 
-		claimedUser, err := store.GetUserByEmail(user.Email)
+		claimedUser, err := store.GetUserByEmail(email)
 		if err != nil {
 			return errors.ErrNotFound
 		}
 
-		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(user.Password)); err != nil {
+		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(password)); err != nil {
 			return errors.ErrUnauthorized
 		}
 
