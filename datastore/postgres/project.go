@@ -95,6 +95,7 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 	return result, nil
 }
 
+// TODO: handle project name update and non destructive key updating?
 func (db *PostgresDB) UpdateProject(project *model.Project) error {
 	keys := make(pq.StringArray, len(project.Keys))
 	for i, v := range project.Keys {
