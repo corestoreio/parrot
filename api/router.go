@@ -21,9 +21,9 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 
 	router.Get(paths.PingPath, apiHandlerFunc(ping).ServeHTTP)
 	router.Post(paths.AuthenticatePath, apiHandlerFunc(authenticate(authProvider)).ServeHTTP)
-	router.Post(paths.UsersPath, apiHandlerFunc(createUser).ServeHTTP)
 
 	router.Route(paths.UsersPath, func(dr chi.Router) {
+		dr.Post("/", apiHandlerFunc(createUser).ServeHTTP)
 		dr.Route("/self", func(pr chi.Router) {
 
 			pr.Get("/projects", apiHandlerFunc(getUserProjects).ServeHTTP)
