@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -37,12 +36,12 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
 			if err != nil {
-				replyUnauthorized(w)
+				render.Error(w, errors.ErrUnauthorized)
 				return
 			}
 			claims, err := ap.ParseAndVerifyToken(tokenString)
 			if err != nil {
-				replyUnauthorized(w)
+				render.Error(w, errors.ErrUnauthorized)
 				return
 			}
 
@@ -106,31 +105,11 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 			"token_type": "bearer",
 			"expires_in": fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 		}
+		headers := map[string]string{
+			"Cache-Control": "no-store",
+			"Pragma":        "no-cache",
+		}
 
-		authResponse(w, http.StatusOK, data)
+		render.JSONWithHeaders(w, http.StatusOK, headers, data)
 	}
-}
-
-func replyUnauthorized(w http.ResponseWriter) {
-	data := map[string]interface{}{
-		"status": http.StatusUnauthorized,
-		"error":  "unauthorized request",
-	}
-
-	authResponse(w, http.StatusUnauthorized, data)
-}
-
-func authResponse(w http.ResponseWriter, status int, data interface{}) {
-	h := w.Header()
-	h.Set("Content-Type", "application/json; charset=utf-8")
-	h.Set("Cache-Control", "no-store")
-	h.Set("Pragma", "no-cache")
-	w.WriteHeader(status)
-
-	encoded, err := json.Marshal(data)
-	if err != nil {
-		http.Error(w, errors.ErrInternal.Message, errors.ErrInternal.Status)
-	}
-
-	w.Write(encoded)
 }
