@@ -104,8 +104,9 @@ func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Re
 		w.WriteHeader(http.StatusOK)
 
 		data := map[string]string{
-			"token":     tokenString,
-			"expiresAt": fmt.Sprintf("%d", claims.ExpiresAt),
+			"token":      tokenString,
+			"token_type": "bearer",
+			"expires_in": fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 		}
 
 		encoded, err := json.Marshal(data)
