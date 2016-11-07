@@ -165,7 +165,7 @@ func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]
 	}
 	defer rows.Close()
 
-	var locs []model.Locale
+	locs := make([]model.Locale, 0)
 	for rows.Next() {
 		loc := model.Locale{}
 		pairs := hstore.Hstore{}
