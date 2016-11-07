@@ -38,7 +38,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.JSON(w, http.StatusOK, map[string]interface{}{
+	render.JSON(w, http.StatusCreated, map[string]interface{}{
 		"message": fmt.Sprintf("created user with email: %s", user.Email),
 	})
 }
