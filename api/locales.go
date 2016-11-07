@@ -80,7 +80,7 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	localeIdents := r.URL.Query()["locale"]
+	localeIdents := r.URL.Query()["ident"]
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
