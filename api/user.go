@@ -15,21 +15,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func decodeAndValidate(r io.Reader, m model.Validatable) []string {
-	if err := json.NewDecoder(r).Decode(m); err != nil {
-		return []string{errors.ErrBadRequest.Error()}
-	}
-	errs := m.Validate()
-	if errs != nil {
-		var errStrings []string
-		for _, err := range errs {
-			errStrings = append(errStrings, err.Error())
-		}
-		return errStrings
-	}
-	return nil
-}
-
 func createUser(w http.ResponseWriter, r *http.Request) error {
 	// TODO(anthonynsimon): handle user already exists
 	user := model.User{}
@@ -65,13 +50,17 @@ func updateUser(w http.ResponseWriter, r *http.Request) error {
 		return errors.ErrBadRequest
 	}
 
-	user := &model.User{}
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		return errors.ErrBadRequest
+	user := model.User{}
+	errs := decodeAndValidate(r.Body, &user)
+	if errs != nil {
+		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
+			"errors": errs,
+		})
+		return nil
 	}
 	user.ID = id
 
-	err = store.UpdateUser(user)
+	err = store.UpdateUser(&user)
 	if err != nil {
 		return err
 	}
@@ -126,4 +115,19 @@ func getUserIDFromContext(ctx context.Context) (int, error) {
 		return -1, errors.ErrInternal
 	}
 	return id, nil
+}
+
+func decodeAndValidate(r io.Reader, m model.Validatable) []string {
+	if err := json.NewDecoder(r).Decode(m); err != nil {
+		return []string{errors.ErrBadRequest.Error()}
+	}
+	errs := m.Validate()
+	if errs != nil {
+		var errStrings []string
+		for _, err := range errs {
+			errStrings = append(errStrings, err.Error())
+		}
+		return errStrings
+	}
+	return nil
 }
