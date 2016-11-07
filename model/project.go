@@ -47,7 +47,7 @@ func (p *Project) SanitizeKeys() {
 
 func (p *Project) Validate() []error {
 	var errs []error
-	if !ValidateMinLength(p.Name, 1) {
+	if !HasMinLength(p.Name, 1) {
 		errs = append(errs, errors.New("project name cannot be empty"))
 	}
 	return errs

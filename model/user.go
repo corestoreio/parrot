@@ -22,10 +22,10 @@ type Validatable interface {
 
 func (u *User) Validate() []error {
 	var errs []error
-	if !ValidateEmail(u.Email) {
+	if !ValidEmail(u.Email) {
 		errs = append(errs, errors.New("email address is not valid"))
 	}
-	if !ValidateMinLength(u.Password, 8) {
+	if !HasMinLength(u.Password, 8) {
 		errs = append(errs, errors.New("password should be at least 8 characters long"))
 	}
 	return errs
