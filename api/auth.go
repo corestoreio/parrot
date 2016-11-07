@@ -36,12 +36,12 @@ func newTokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
 			if err != nil {
-				w.WriteHeader(http.StatusUnauthorized)
+				replyUnauthorized(w)
 				return
 			}
 			claims, err := ap.ParseAndVerifyToken(tokenString)
 			if err != nil {
-				w.WriteHeader(http.StatusUnauthorized)
+				replyUnauthorized(w)
 				return
 			}
 
@@ -95,27 +95,39 @@ func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Re
 			return err
 		}
 
-		// Handle response writing here instead of letting render.JSON do it
-		// Set no cache headers
-		h := w.Header()
-		h.Set("Content-Type", "application/json; charset=utf-8")
-		h.Set("Cache-Control", "no-store")
-		h.Set("Pragma", "no-cache")
-		w.WriteHeader(http.StatusOK)
-
 		data := map[string]string{
 			"token":      tokenString,
 			"token_type": "bearer",
 			"expires_in": fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 		}
-
-		encoded, err := json.Marshal(data)
-		if err != nil {
-			http.Error(w, errors.ErrInternal.Message, errors.ErrInternal.Code)
-		}
-
-		w.Write(encoded)
+		// Handle response writing here instead of letting render.JSON do it
+		// Set no cache headers
+		authResponse(w, http.StatusOK, data)
 
 		return nil
 	}
+}
+
+func replyUnauthorized(w http.ResponseWriter) {
+	data := map[string]interface{}{
+		"status": http.StatusUnauthorized,
+		"error":  "unauthorized request",
+	}
+
+	authResponse(w, http.StatusUnauthorized, data)
+}
+
+func authResponse(w http.ResponseWriter, status int, data interface{}) {
+	h := w.Header()
+	h.Set("Content-Type", "application/json; charset=utf-8")
+	h.Set("Cache-Control", "no-store")
+	h.Set("Pragma", "no-cache")
+	w.WriteHeader(status)
+
+	encoded, err := json.Marshal(data)
+	if err != nil {
+		http.Error(w, errors.ErrInternal.Message, errors.ErrInternal.Code)
+	}
+
+	w.Write(encoded)
 }
