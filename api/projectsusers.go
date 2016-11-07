@@ -14,13 +14,13 @@ import (
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	id, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
 	projects, err := store.GetUserProjects(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -30,13 +30,13 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	users, err := store.GetProjectUsers(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -46,13 +46,13 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	err := store.AssignProjectUser(pu.ProjectID, pu.UserID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -62,14 +62,14 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 	// TODO: handle input validation
 
 	err := store.RevokeProjectUser(pu.ProjectID, pu.UserID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 

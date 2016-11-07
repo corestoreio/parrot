@@ -15,23 +15,21 @@ import (
 func createLocale(w http.ResponseWriter, r *http.Request) {
 	projID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	loc := model.Locale{}
 	errs := decodeAndValidate(r.Body, &loc)
 	if errs != nil {
-		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errors.ErrorSliceToJSON(errs),
-		})
+		render.ErrorWithStatus(w, http.StatusBadRequest, errs)
 		return
 	}
 	loc.ProjectID = projID
 
 	proj, err := store.GetProject(projID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -39,7 +37,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateLocale(&loc)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -49,24 +47,24 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 func showLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	loc, err := store.GetProjectLocale(projectID, id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
 	proj, err := store.GetProject(projectID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -78,7 +76,7 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 func findLocales(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 
 	}
@@ -86,13 +84,13 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -107,25 +105,25 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 	// TODO: reduce number of db calls
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 	loc.ID = id
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -133,7 +131,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateLocale(loc)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -143,13 +141,13 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	resultID, err := store.DeleteLocale(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 

@@ -61,7 +61,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
-			render.JSONError(w, errors.ErrBadRequest)
+			render.Error(w, errors.ErrBadRequest)
 			return
 		}
 
@@ -69,18 +69,18 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 		password := r.Form.Get("password")
 
 		if email == "" || password == "" {
-			render.JSONError(w, errors.ErrBadRequest)
+			render.Error(w, errors.ErrBadRequest)
 			return
 		}
 
 		claimedUser, err := store.GetUserByEmail(email)
 		if err != nil {
-			render.JSONError(w, errors.ErrNotFound)
+			render.Error(w, errors.ErrNotFound)
 			return
 		}
 
 		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(password)); err != nil {
-			render.JSONError(w, errors.ErrUnauthorized)
+			render.Error(w, errors.ErrUnauthorized)
 			return
 		}
 
@@ -97,7 +97,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 
 		tokenString, err := authProvider.CreateToken(claims)
 		if err != nil {
-			render.JSONError(w, errors.ErrInternal)
+			render.Error(w, errors.ErrInternal)
 			return
 		}
 

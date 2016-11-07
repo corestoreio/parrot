@@ -20,15 +20,13 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
 	if errs != nil {
-		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errors.ErrorSliceToJSON(errs),
-		})
+		render.ErrorWithStatus(w, http.StatusBadRequest, errs)
 		return
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -36,7 +34,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateUser(&user)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -48,23 +46,22 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 func updateUser(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
 	if errs != nil {
-		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errors.ErrorSliceToJSON(errs),
-		})
+		render.ErrorWithStatus(w, http.StatusBadRequest, errs)
+		return
 
 	}
 	user.ID = id
 
 	err = store.UpdateUser(&user)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -74,13 +71,13 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 func showUser(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	user, err := store.GetUser(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -90,13 +87,13 @@ func showUser(w http.ResponseWriter, r *http.Request) {
 func deleteUser(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	resultID, err := store.DeleteUser(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -121,9 +118,9 @@ func getUserIDFromContext(ctx context.Context) (int, error) {
 	return id, nil
 }
 
-func decodeAndValidate(r io.Reader, m model.Validatable) []error {
+func decodeAndValidate(r io.Reader, m model.Validatable) error {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
-		return []error{errors.ErrBadRequest}
+		return errors.ErrBadRequest
 	}
 	return m.Validate()
 }

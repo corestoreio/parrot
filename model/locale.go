@@ -37,19 +37,19 @@ type Locale struct {
 	ProjectID int               `db:"project_id" json:"project_id"`
 }
 
-func (l *Locale) Validate() []error {
-	var errs []error
+func (l *Locale) Validate() error {
+	var errs []errors.Error
 	if !HasMinLength(l.Ident, 2) {
-		errs = append(errs, ErrInvalidLocaleIdent)
+		errs = append(errs, *ErrInvalidLocaleIdent)
 	}
 	if !HasMinLength(l.Language, 1) {
-		errs = append(errs, ErrInvalidLocaleLanguage)
+		errs = append(errs, *ErrInvalidLocaleLanguage)
 	}
 	if !HasMinLength(l.Country, 1) {
-		errs = append(errs, ErrInvalidLocaleCountry)
+		errs = append(errs, *ErrInvalidLocaleCountry)
 	}
 
-	return errs
+	return &errors.MultiError{Errors: errs}
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.

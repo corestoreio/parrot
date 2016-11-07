@@ -56,10 +56,10 @@ func (p *Project) SanitizeKeys() {
 	p.Keys = sk
 }
 
-func (p *Project) Validate() []error {
-	var errs []error
+func (p *Project) Validate() error {
+	var errs []errors.Error
 	if !HasMinLength(p.Name, 1) {
-		errs = append(errs, ErrInvalidProjectName)
+		errs = append(errs, *ErrInvalidProjectName)
 	}
-	return errs
+	return &errors.MultiError{Errors: errs}
 }

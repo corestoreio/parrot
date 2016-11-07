@@ -32,16 +32,16 @@ type User struct {
 }
 
 type Validatable interface {
-	Validate() []error
+	Validate() error
 }
 
-func (u *User) Validate() []error {
-	var errs []error
+func (u *User) Validate() error {
+	var errs []errors.Error
 	if !ValidEmail(u.Email) {
-		errs = append(errs, ErrInvalidEmail)
+		errs = append(errs, *ErrInvalidEmail)
 	}
 	if !HasMinLength(u.Password, 8) {
-		errs = append(errs, ErrInvalidPassword)
+		errs = append(errs, *ErrInvalidPassword)
 	}
-	return errs
+	return &errors.MultiError{Errors: errs}
 }

@@ -16,25 +16,23 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	project := model.Project{}
 	errs := decodeAndValidate(r.Body, &project)
 	if errs != nil {
-		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errors.ErrorSliceToJSON(errs),
-		})
+		render.ErrorWithStatus(w, http.StatusBadRequest, errs)
 		return
 	}
 	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
 	result, err := store.CreateProject(&project)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 	err = store.AssignProjectUser(result.ID, userID)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -44,13 +42,13 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 func updateProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 	project.ID = id
@@ -58,7 +56,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateProject(&project)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -68,13 +66,13 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 func showProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	project, err := store.GetProject(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -85,7 +83,7 @@ func showProjects(w http.ResponseWriter, r *http.Request) {
 	// TODO(anthonynsimon): only show projects for which user has permission
 	projects, err := store.GetProjects()
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 
@@ -95,13 +93,13 @@ func showProjects(w http.ResponseWriter, r *http.Request) {
 func deleteProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.JSONError(w, errors.ErrBadRequest)
+		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
 	resultID, err := store.DeleteProject(id)
 	if err != nil {
-		render.JSONError(w, errors.ErrInternal)
+		render.Error(w, errors.ErrInternal)
 		return
 	}
 

@@ -41,32 +41,27 @@ var (
 )
 
 type Error struct {
-	Status  int
-	Type    string
-	Message string
-}
-
-func (e *Error) Error() string {
-	return fmt.Sprintf("error: status: %d type: %s message: %s", e.Status, e.Type, e.Message)
-}
-
-func (e *Error) AsMap() map[string]interface{} {
-	m := make(map[string]interface{})
-	m["status"] = e.Status
-	m["type"] = e.Type
-	m["message"] = e.Message
-	return m
+	Status  int    `json:"status"`
+	Type    string `json:"type"`
+	Message string `json:"message"`
 }
 
 func New(s int, t, m string) *Error {
 	return &Error{Status: s, Type: t, Message: m}
 }
 
-func ErrorSliceToJSON(s []error) []map[string]interface{} {
-	result := make([]map[string]interface{}, 0)
-	for _, err := range s {
-		casted := err.(*Error)
-		result = append(result, casted.AsMap())
+type MultiError struct {
+	Errors []Error `json:"errors,omitempty"`
+}
+
+func (e *Error) Error() string {
+	return fmt.Sprintf("error: status: %d type: %s message: %s", e.Status, e.Type, e.Message)
+}
+
+func (e *MultiError) Error() string {
+	result := ""
+	for _, err := range e.Errors {
+		result += fmt.Sprintf("%s\n", err.Error())
 	}
 	return result
 }

@@ -9,7 +9,7 @@ import (
 func ping(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"status":  "200",
-		"message": "Backend says hello.",
+		"message": "Parrot says hello.",
 	})
 }
 
