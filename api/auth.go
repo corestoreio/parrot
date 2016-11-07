@@ -10,6 +10,7 @@ import (
 
 	"github.com/anthonynsimon/parrot/api/auth"
 	"github.com/anthonynsimon/parrot/errors"
+	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -31,7 +32,7 @@ func getTokenString(r *http.Request) (string, error) {
 	return token, nil
 }
 
-func newTokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
+func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
@@ -56,27 +57,31 @@ func newTokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 	}
 }
 
-func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Request) error {
-	return func(w http.ResponseWriter, r *http.Request) error {
+func authenticate(authProvider auth.Provider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
-			return errors.ErrBadRequest
+			render.JSONError(w, errors.ErrBadRequest)
+			return
 		}
 
 		email := r.Form.Get("email")
 		password := r.Form.Get("password")
 
 		if email == "" || password == "" {
-			return errors.ErrBadRequest
+			render.JSONError(w, errors.ErrBadRequest)
+			return
 		}
 
 		claimedUser, err := store.GetUserByEmail(email)
 		if err != nil {
-			return errors.ErrNotFound
+			render.JSONError(w, errors.ErrNotFound)
+			return
 		}
 
 		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(password)); err != nil {
-			return errors.ErrUnauthorized
+			render.JSONError(w, errors.ErrUnauthorized)
+			return
 		}
 
 		// Create the Claims
@@ -92,7 +97,8 @@ func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Re
 
 		tokenString, err := authProvider.CreateToken(claims)
 		if err != nil {
-			return err
+			render.JSONError(w, errors.ErrInternal)
+			return
 		}
 
 		data := map[string]string{
@@ -100,11 +106,8 @@ func authenticate(authProvider auth.Provider) func(http.ResponseWriter, *http.Re
 			"token_type": "bearer",
 			"expires_in": fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 		}
-		// Handle response writing here instead of letting render.JSON do it
-		// Set no cache headers
-		authResponse(w, http.StatusOK, data)
 
-		return nil
+		authResponse(w, http.StatusOK, data)
 	}
 }
 

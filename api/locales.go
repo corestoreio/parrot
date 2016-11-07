@@ -12,10 +12,11 @@ import (
 	"github.com/pressly/chi"
 )
 
-func createLocale(w http.ResponseWriter, r *http.Request) error {
+func createLocale(w http.ResponseWriter, r *http.Request) {
 	projID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	loc := model.Locale{}
@@ -24,68 +25,75 @@ func createLocale(w http.ResponseWriter, r *http.Request) error {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
 			"errors": errors.ErrorSliceToJSON(errs),
 		})
-		return nil
+		return
 	}
 	loc.ProjectID = projID
 
 	proj, err := store.GetProject(projID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	loc.SyncKeys(proj.Keys)
 
 	err = store.CreateLocale(&loc)
 	if err != nil {
-		return errors.ErrInternal
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusCreated, loc)
-	return nil
 }
 
-func showLocale(w http.ResponseWriter, r *http.Request) error {
+func showLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	loc, err := store.GetProjectLocale(projectID, id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	proj, err := store.GetProject(projectID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	loc.SyncKeys(proj.Keys)
 
 	render.JSON(w, http.StatusOK, loc)
-	return nil
 }
 
-func findLocales(w http.ResponseWriter, r *http.Request) error {
+func findLocales(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 
 	}
 	localeIdents := r.URL.Query()["locale"]
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	for i := range locs {
@@ -93,55 +101,59 @@ func findLocales(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	render.JSON(w, http.StatusOK, locs)
-	return nil
 }
 
-func updateLocale(w http.ResponseWriter, r *http.Request) error {
+func updateLocale(w http.ResponseWriter, r *http.Request) {
 	// TODO: reduce number of db calls
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 	loc.ID = id
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	loc.SyncKeys(project.Keys)
 
 	err = store.UpdateLocale(loc)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, loc)
-	return nil
 }
 
-func deleteLocale(w http.ResponseWriter, r *http.Request) error {
+func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	resultID, err := store.DeleteLocale(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("deleted locale with id %d", resultID),
 	})
-	return nil
 }

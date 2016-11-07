@@ -14,43 +14,43 @@ var store datastore.Store
 func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 	// TODO: inject store via closures instead of keeping global var
 	store = ds
-	tokenMiddleware := newTokenMiddleware(authProvider)
+	handleToken := tokenMiddleware(authProvider)
 
 	router := chi.NewRouter()
 	router.Use(cors)
 
-	router.Get(paths.PingPath, apiHandlerFunc(ping).ServeHTTP)
-	router.Post(paths.AuthenticatePath, apiHandlerFunc(authenticate(authProvider)).ServeHTTP)
+	router.Get(paths.PingPath, ping)
+	router.Post(paths.AuthenticatePath, authenticate(authProvider))
 
 	router.Route(paths.UsersPath, func(dr chi.Router) {
-		dr.Post("/", apiHandlerFunc(createUser).ServeHTTP)
+		dr.Post("/", createUser)
 		dr.Route("/self", func(pr chi.Router) {
 
-			pr.Get("/projects", apiHandlerFunc(getUserProjects).ServeHTTP)
+			pr.Get("/projects", getUserProjects)
 		})
 	})
 
 	router.Route(paths.ProjectsPath, func(pr chi.Router) {
 		// Past this point, all routes require a valid token
-		pr.Use(tokenMiddleware)
-		pr.Get("/", apiHandlerFunc(getUserProjects).ServeHTTP)
-		pr.Post("/", apiHandlerFunc(createProject).ServeHTTP)
-		pr.Get("/:projectID", apiHandlerFunc(showProject).ServeHTTP)
-		pr.Put("/:projectID", apiHandlerFunc(updateProject).ServeHTTP)
-		pr.Delete("/:projectID", apiHandlerFunc(deleteProject).ServeHTTP)
+		pr.Use(handleToken)
+		pr.Get("/", getUserProjects)
+		pr.Post("/", createProject)
+		pr.Get("/:projectID", showProject)
+		pr.Put("/:projectID", updateProject)
+		pr.Delete("/:projectID", deleteProject)
 
 		pr.Route("/:projectID"+paths.UsersPath, func(dr chi.Router) {
-			dr.Get("/", apiHandlerFunc(getProjectUsers).ServeHTTP)
-			dr.Post("/", apiHandlerFunc(assignProjectUser).ServeHTTP)
-			dr.Post("/revoke", apiHandlerFunc(revokeProjectUser).ServeHTTP)
+			dr.Get("/", getProjectUsers)
+			dr.Post("/", assignProjectUser)
+			dr.Post("/revoke", revokeProjectUser)
 		})
 
 		pr.Route("/:projectID"+paths.LocalesPath, func(dr chi.Router) {
-			dr.Post("/", apiHandlerFunc(createLocale).ServeHTTP)
-			dr.Get("/", apiHandlerFunc(findLocales).ServeHTTP)
-			dr.Get("/:localeID", apiHandlerFunc(showLocale).ServeHTTP)
-			dr.Put("/:localeID", apiHandlerFunc(updateLocale).ServeHTTP)
-			dr.Delete("/:localeID", apiHandlerFunc(deleteLocale).ServeHTTP)
+			dr.Post("/", createLocale)
+			dr.Get("/", findLocales)
+			dr.Get("/:localeID", showLocale)
+			dr.Put("/:localeID", updateLocale)
+			dr.Delete("/:localeID", deleteLocale)
 		})
 	})
 

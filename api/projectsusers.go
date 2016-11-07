@@ -11,63 +11,67 @@ import (
 	"github.com/pressly/chi"
 )
 
-func getUserProjects(w http.ResponseWriter, r *http.Request) error {
+func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	id, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	projects, err := store.GetUserProjects(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, projects)
-	return nil
 }
 
-func getProjectUsers(w http.ResponseWriter, r *http.Request) error {
+func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	users, err := store.GetProjectUsers(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, users)
-	return nil
 }
 
-func assignProjectUser(w http.ResponseWriter, r *http.Request) error {
+func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	err := store.AssignProjectUser(pu.ProjectID, pu.UserID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, pu)
-	return nil
 }
 
-func revokeProjectUser(w http.ResponseWriter, r *http.Request) error {
+func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 	// TODO: handle input validation
 
 	err := store.RevokeProjectUser(pu.ProjectID, pu.UserID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, pu)
-	return nil
 }

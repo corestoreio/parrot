@@ -15,7 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func createUser(w http.ResponseWriter, r *http.Request) error {
+func createUser(w http.ResponseWriter, r *http.Request) {
 	// TODO(anthonynsimon): handle user already exists
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
@@ -23,31 +23,33 @@ func createUser(w http.ResponseWriter, r *http.Request) error {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
 			"errors": errors.ErrorSliceToJSON(errs),
 		})
-		return nil
+		return
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	user.Password = string(hashed)
 
 	err = store.CreateUser(&user)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("created user with email: %s", user.Email),
 	})
-	return nil
 }
 
-func updateUser(w http.ResponseWriter, r *http.Request) error {
+func updateUser(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	user := model.User{}
@@ -56,49 +58,51 @@ func updateUser(w http.ResponseWriter, r *http.Request) error {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
 			"errors": errors.ErrorSliceToJSON(errs),
 		})
-		return nil
+
 	}
 	user.ID = id
 
 	err = store.UpdateUser(&user)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, user)
-	return nil
 }
 
-func showUser(w http.ResponseWriter, r *http.Request) error {
+func showUser(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	user, err := store.GetUser(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, user)
-	return nil
 }
 
-func deleteUser(w http.ResponseWriter, r *http.Request) error {
+func deleteUser(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	resultID, err := store.DeleteUser(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("deleted user with id %d", resultID),
 	})
-	return nil
 }
 
 func getUserIDFromContext(ctx context.Context) (int, error) {

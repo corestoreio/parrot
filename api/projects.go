@@ -12,94 +12,100 @@ import (
 	"github.com/pressly/chi"
 )
 
-func createProject(w http.ResponseWriter, r *http.Request) error {
+func createProject(w http.ResponseWriter, r *http.Request) {
 	project := model.Project{}
 	errs := decodeAndValidate(r.Body, &project)
 	if errs != nil {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
 			"errors": errors.ErrorSliceToJSON(errs),
 		})
-		return nil
+		return
 	}
 	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	result, err := store.CreateProject(&project)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 	err = store.AssignProjectUser(result.ID, userID)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusCreated, result)
-	return nil
 }
 
-func updateProject(w http.ResponseWriter, r *http.Request) error {
+func updateProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 	project.ID = id
 	project.SanitizeKeys()
 
 	err = store.UpdateProject(&project)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, project)
-	return nil
 }
 
-func showProject(w http.ResponseWriter, r *http.Request) error {
+func showProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	project, err := store.GetProject(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, project)
-	return nil
 }
 
-func showProjects(w http.ResponseWriter, r *http.Request) error {
+func showProjects(w http.ResponseWriter, r *http.Request) {
 	// TODO(anthonynsimon): only show projects for which user has permission
 	projects, err := store.GetProjects()
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, projects)
-	return nil
 }
 
-func deleteProject(w http.ResponseWriter, r *http.Request) error {
+func deleteProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		return errors.ErrBadRequest
+		render.JSONError(w, errors.ErrBadRequest)
+		return
 	}
 
 	resultID, err := store.DeleteProject(id)
 	if err != nil {
-		return err
+		render.JSONError(w, errors.ErrInternal)
+		return
 	}
 
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("deleted project with id %d and all related locales", resultID),
 	})
-	return nil
 }
