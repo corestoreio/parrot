@@ -1,5 +1,7 @@
 package model
 
+import "errors"
+
 type ProjectStorer interface {
 	GetProjects() ([]Project, error)
 	GetProject(int) (*Project, error)
@@ -29,4 +31,24 @@ type Project struct {
 type ProjectUser struct {
 	ProjectID int `json:"project_id"`
 	UserID    int `json:"user_id"`
+}
+
+func (p *Project) SanitizeKeys() {
+	var sk []string
+	for _, key := range p.Keys {
+		if key == "" {
+			continue
+		}
+		sk = append(sk, key)
+	}
+
+	p.Keys = sk
+}
+
+func (p *Project) Validate() []error {
+	var errs []error
+	if !ValidateMinLength(p.Name, 1) {
+		errs = append(errs, errors.New("project name cannot be empty"))
+	}
+	return errs
 }

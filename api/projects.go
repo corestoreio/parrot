@@ -13,16 +13,20 @@ import (
 )
 
 func createProject(w http.ResponseWriter, r *http.Request) error {
-	project := &model.Project{}
-	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		return errors.ErrBadRequest
+	project := model.Project{}
+	errs := decodeAndValidate(r.Body, &project)
+	if errs != nil {
+		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
+			"errors": errs,
+		})
+		return nil
 	}
 	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
 		return err
 	}
 
-	result, err := store.CreateProject(project)
+	result, err := store.CreateProject(&project)
 	if err != nil {
 		return err
 	}
@@ -41,23 +45,14 @@ func updateProject(w http.ResponseWriter, r *http.Request) error {
 		return errors.ErrBadRequest
 	}
 
-	project := &model.Project{}
+	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		return errors.ErrBadRequest
 	}
 	project.ID = id
+	project.SanitizeKeys()
 
-	var sanitizedKeys []string
-	for _, key := range project.Keys {
-		if key == "" {
-			continue
-		}
-		sanitizedKeys = append(sanitizedKeys, key)
-	}
-
-	project.Keys = sanitizedKeys
-
-	err = store.UpdateProject(project)
+	err = store.UpdateProject(&project)
 	if err != nil {
 		return err
 	}
