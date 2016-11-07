@@ -126,7 +126,7 @@ func authResponse(w http.ResponseWriter, status int, data interface{}) {
 
 	encoded, err := json.Marshal(data)
 	if err != nil {
-		http.Error(w, errors.ErrInternal.Message, errors.ErrInternal.Code)
+		http.Error(w, errors.ErrInternal.Message, errors.ErrInternal.Status)
 	}
 
 	w.Write(encoded)
