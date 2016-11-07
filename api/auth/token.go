@@ -6,6 +6,8 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+// TODO: refactor into auth provider package with its own handlers
+
 type Provider struct {
 	Name       string
 	SigningKey []byte
