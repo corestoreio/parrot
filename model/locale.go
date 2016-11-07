@@ -1,5 +1,7 @@
 package model
 
+import "errors"
+
 type LocaleStorer interface {
 	GetLocale(id int) (*Locale, error)
 	CreateLocale(doc *Locale) error
@@ -14,6 +16,21 @@ type Locale struct {
 	Country   string            `db:"country" json:"country"`
 	Pairs     map[string]string `db:"pairs" json:"pairs"`
 	ProjectID int               `db:"project_id" json:"project_id"`
+}
+
+func (l *Locale) Validate() []error {
+	var errs []error
+	if !HasMinLength(l.Ident, 2) {
+		errs = append(errs, errors.New("ident must be at least 2 characters long"))
+	}
+	if !HasMinLength(l.Language, 1) {
+		errs = append(errs, errors.New("language cannot be empty"))
+	}
+	if !HasMinLength(l.Country, 1) {
+		errs = append(errs, errors.New("country cannot be empty"))
+	}
+
+	return errs
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.

@@ -18,11 +18,14 @@ func createLocale(w http.ResponseWriter, r *http.Request) error {
 		return errors.ErrBadRequest
 	}
 
-	loc := &model.Locale{}
-	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
-		return errors.ErrBadRequest
+	loc := model.Locale{}
+	errs := decodeAndValidate(r.Body, &loc)
+	if errs != nil {
+		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
+			"errors": errs,
+		})
+		return nil
 	}
-
 	loc.ProjectID = projID
 
 	proj, err := store.GetProject(projID)
@@ -32,7 +35,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) error {
 
 	loc.SyncKeys(proj.Keys)
 
-	err = store.CreateLocale(loc)
+	err = store.CreateLocale(&loc)
 	if err != nil {
 		return errors.ErrInternal
 	}
@@ -94,6 +97,7 @@ func findLocales(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updateLocale(w http.ResponseWriter, r *http.Request) error {
+	// TODO: reduce number of db calls
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		return errors.ErrBadRequest
