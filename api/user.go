@@ -119,7 +119,7 @@ func getUserIDFromContext(ctx context.Context) (int, error) {
 
 func decodeAndValidate(r io.Reader, m model.Validatable) []string {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
-		return []string{errors.ErrBadRequest.Error()}
+		return []string{"malformed json"}
 	}
 	errs := m.Validate()
 	if errs != nil {
