@@ -43,5 +43,8 @@ func (u *User) Validate() error {
 	if !HasMinLength(u.Password, 8) {
 		errs = append(errs, *ErrInvalidPassword)
 	}
-	return &errors.MultiError{Errors: errs}
+	if errs != nil {
+		return &errors.MultiError{Errors: errs}
+	}
+	return nil
 }

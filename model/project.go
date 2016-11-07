@@ -61,5 +61,8 @@ func (p *Project) Validate() error {
 	if !HasMinLength(p.Name, 1) {
 		errs = append(errs, *ErrInvalidProjectName)
 	}
-	return &errors.MultiError{Errors: errs}
+	if errs != nil {
+		return &errors.MultiError{Errors: errs}
+	}
+	return nil
 }

@@ -48,8 +48,10 @@ func (l *Locale) Validate() error {
 	if !HasMinLength(l.Country, 1) {
 		errs = append(errs, *ErrInvalidLocaleCountry)
 	}
-
-	return &errors.MultiError{Errors: errs}
+	if errs != nil {
+		return &errors.MultiError{Errors: errs}
+	}
+	return nil
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.
