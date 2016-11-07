@@ -12,6 +12,7 @@ import (
 var store datastore.Store
 
 func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
+	// TODO: inject store via closures instead of keeping global var
 	store = ds
 	tokenMiddleware := newTokenMiddleware(authProvider)
 
