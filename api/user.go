@@ -21,7 +21,7 @@ func createUser(w http.ResponseWriter, r *http.Request) error {
 	errs := decodeAndValidate(r.Body, &user)
 	if errs != nil {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errs,
+			"errors": errors.ErrorSliceToJSON(errs),
 		})
 		return nil
 	}
@@ -54,7 +54,7 @@ func updateUser(w http.ResponseWriter, r *http.Request) error {
 	errs := decodeAndValidate(r.Body, &user)
 	if errs != nil {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errs,
+			"errors": errors.ErrorSliceToJSON(errs),
 		})
 		return nil
 	}
@@ -117,17 +117,9 @@ func getUserIDFromContext(ctx context.Context) (int, error) {
 	return id, nil
 }
 
-func decodeAndValidate(r io.Reader, m model.Validatable) []string {
+func decodeAndValidate(r io.Reader, m model.Validatable) []error {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
-		return []string{"malformed json"}
+		return []error{errors.ErrBadRequest}
 	}
-	errs := m.Validate()
-	if errs != nil {
-		var errStrings []string
-		for _, err := range errs {
-			errStrings = append(errStrings, err.Error())
-		}
-		return errStrings
-	}
-	return nil
+	return m.Validate()
 }

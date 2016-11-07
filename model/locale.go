@@ -1,6 +1,25 @@
 package model
 
-import "errors"
+import (
+	"net/http"
+
+	"github.com/anthonynsimon/parrot/errors"
+)
+
+var (
+	ErrInvalidLocaleIdent = errors.New(
+		http.StatusBadRequest,
+		"InvalidLocaleIdent",
+		"invalid field locale ident")
+	ErrInvalidLocaleLanguage = errors.New(
+		http.StatusBadRequest,
+		"InvalidLocaleLanguage",
+		"invalid field locale language")
+	ErrInvalidLocaleCountry = errors.New(
+		http.StatusBadRequest,
+		"InvalidLocaleCountry",
+		"invalid field locale country")
+)
 
 type LocaleStorer interface {
 	GetLocale(id int) (*Locale, error)
@@ -21,13 +40,13 @@ type Locale struct {
 func (l *Locale) Validate() []error {
 	var errs []error
 	if !HasMinLength(l.Ident, 2) {
-		errs = append(errs, errors.New("ident must be at least 2 characters long"))
+		errs = append(errs, ErrInvalidLocaleIdent)
 	}
 	if !HasMinLength(l.Language, 1) {
-		errs = append(errs, errors.New("language cannot be empty"))
+		errs = append(errs, ErrInvalidLocaleLanguage)
 	}
 	if !HasMinLength(l.Country, 1) {
-		errs = append(errs, errors.New("country cannot be empty"))
+		errs = append(errs, ErrInvalidLocaleCountry)
 	}
 
 	return errs

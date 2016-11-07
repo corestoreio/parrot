@@ -1,6 +1,17 @@
 package model
 
-import "errors"
+import (
+	"net/http"
+
+	"github.com/anthonynsimon/parrot/errors"
+)
+
+var (
+	ErrInvalidProjectName = errors.New(
+		http.StatusBadRequest,
+		"InvalidProjectName",
+		"invalid field project name")
+)
 
 type ProjectStorer interface {
 	GetProjects() ([]Project, error)
@@ -48,7 +59,7 @@ func (p *Project) SanitizeKeys() {
 func (p *Project) Validate() []error {
 	var errs []error
 	if !HasMinLength(p.Name, 1) {
-		errs = append(errs, errors.New("project name cannot be empty"))
+		errs = append(errs, ErrInvalidProjectName)
 	}
 	return errs
 }

@@ -1,6 +1,21 @@
 package model
 
-import "errors"
+import (
+	"net/http"
+
+	"github.com/anthonynsimon/parrot/errors"
+)
+
+var (
+	ErrInvalidEmail = errors.New(
+		http.StatusBadRequest,
+		"InvalidEmail",
+		"invalid email")
+	ErrInvalidPassword = errors.New(
+		http.StatusBadRequest,
+		"InvalidPassword",
+		"invalid password")
+)
 
 type UserStorer interface {
 	GetUser(int) (*User, error)
@@ -23,10 +38,10 @@ type Validatable interface {
 func (u *User) Validate() []error {
 	var errs []error
 	if !ValidEmail(u.Email) {
-		errs = append(errs, errors.New("email address is not valid"))
+		errs = append(errs, ErrInvalidEmail)
 	}
 	if !HasMinLength(u.Password, 8) {
-		errs = append(errs, errors.New("password should be at least 8 characters long"))
+		errs = append(errs, ErrInvalidPassword)
 	}
 	return errs
 }

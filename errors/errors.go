@@ -8,56 +8,65 @@ import (
 var (
 	ErrConflict = New(
 		http.StatusConflict,
-		http.StatusConflict,
+		"Conflict",
 		http.StatusText(http.StatusConflict))
-	ErrInvalidEmail = New(
-		http.StatusBadRequest,
-		7000,
-		"invalid email")
-	ErrInvalidPassword = New(
-		http.StatusBadRequest,
-		7001,
-		"invalid password")
 	ErrDuplicateEntry = New(
 		http.StatusConflict,
-		8000,
+		"DuplicateEntry",
 		"duplicate entry")
 	ErrNotImplemented = New(
 		http.StatusNotImplemented,
-		http.StatusNotImplemented,
+		"NotImplemented",
 		http.StatusText(http.StatusNotImplemented))
 	ErrInternal = New(
 		http.StatusInternalServerError,
-		http.StatusInternalServerError,
+		"Internal",
 		http.StatusText(http.StatusInternalServerError))
 	ErrUnauthorized = New(
 		http.StatusUnauthorized,
-		http.StatusUnauthorized,
+		"Unauthorized",
 		http.StatusText(http.StatusUnauthorized))
 	ErrForbiden = New(
 		http.StatusForbidden,
-		http.StatusForbidden,
+		"Forbiden",
 		http.StatusText(http.StatusForbidden))
 	ErrNotFound = New(
 		http.StatusNotFound,
-		http.StatusNotFound,
+		"NotFound",
 		http.StatusText(http.StatusNotFound))
 	ErrBadRequest = New(
 		http.StatusBadRequest,
-		http.StatusBadRequest,
+		"BadRequest",
 		http.StatusText(http.StatusBadRequest))
 )
 
 type Error struct {
 	Status  int
-	Code    int
+	Type    string
 	Message string
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("error: status: %d code: %d message: %s", e.Status, e.Code, e.Message)
+	return fmt.Sprintf("error: status: %d type: %s message: %s", e.Status, e.Type, e.Message)
 }
 
-func New(status, code int, message string) *Error {
-	return &Error{Status: status, Code: code, Message: message}
+func (e *Error) AsMap() map[string]interface{} {
+	m := make(map[string]interface{})
+	m["status"] = e.Status
+	m["type"] = e.Type
+	m["message"] = e.Message
+	return m
+}
+
+func New(s int, t, m string) *Error {
+	return &Error{Status: s, Type: t, Message: m}
+}
+
+func ErrorSliceToJSON(s []error) []map[string]interface{} {
+	result := make([]map[string]interface{}, 0)
+	for _, err := range s {
+		casted := err.(*Error)
+		result = append(result, casted.AsMap())
+	}
+	return result
 }

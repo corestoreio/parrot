@@ -17,7 +17,7 @@ func createProject(w http.ResponseWriter, r *http.Request) error {
 	errs := decodeAndValidate(r.Body, &project)
 	if errs != nil {
 		render.JSON(w, http.StatusBadRequest, map[string]interface{}{
-			"errors": errs,
+			"errors": errors.ErrorSliceToJSON(errs),
 		})
 		return nil
 	}
