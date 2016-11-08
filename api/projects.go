@@ -79,17 +79,6 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, project)
 }
 
-func showProjects(w http.ResponseWriter, r *http.Request) {
-	// TODO(anthonynsimon): only show projects for which user has permission
-	projects, err := store.GetProjects()
-	if err != nil {
-		render.Error(w, errors.ErrInternal)
-		return
-	}
-
-	render.JSON(w, http.StatusOK, projects)
-}
-
 func deleteProject(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
