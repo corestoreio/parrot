@@ -12,6 +12,8 @@ func parseError(err error) error {
 	if err == nil {
 		return nil
 	}
+
+	// Check if error is a pq driver error and match accordingly
 	e, ok := err.(*pq.Error)
 	if ok {
 		switch e.Code {
@@ -19,10 +21,14 @@ func parseError(err error) error {
 			return errors.ErrAlreadyExists
 		}
 	}
+
+	// Otherwise check if error comes from the sql package
 	switch err {
 	case sql.ErrNoRows:
 		return errors.ErrNotFound
 	}
+
+	// If no match could be done, simply return internal error
 	return errors.ErrInternal
 }
 
