@@ -60,11 +60,25 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateProjectUser(w http.ResponseWriter, r *http.Request) {
-	var pu model.ProjectUser
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
+	// Get updated role
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
 		render.Error(w, errors.ErrBadRequest)
 		return
 	}
+	// Prevent the user setting a different id via body
+	pu.ProjectID = projectID
+	pu.UserID = userID
 
 	result, err := store.UpdateProjectUser(pu)
 	if err != nil {
@@ -76,14 +90,18 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
-	var pu model.ProjectUser
-	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+	if err != nil {
 		render.Error(w, errors.ErrBadRequest)
 		return
 	}
-	// TODO: handle input validation
-
-	err := store.RevokeProjectUser(pu)
+	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
+	err = store.RevokeProjectUser(pu)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
 		return

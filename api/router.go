@@ -42,8 +42,8 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 		pr.Route("/:projectID"+paths.UsersPath, func(dr chi.Router) {
 			dr.Get("/", getProjectUsers)
 			dr.Post("/", assignProjectUser)
-			dr.Put("/", updateProjectUser)
-			dr.Post("/revoke", revokeProjectUser)
+			dr.Put("/:userID", updateProjectUser)
+			dr.Delete("/:userID", revokeProjectUser)
 		})
 
 		pr.Route("/:projectID"+paths.LocalesPath, func(dr chi.Router) {
