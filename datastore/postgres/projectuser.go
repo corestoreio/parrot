@@ -1,9 +1,6 @@
 package postgres
 
 import (
-	"database/sql"
-
-	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/lib/pq"
 )
@@ -14,10 +11,7 @@ func (db *PostgresDB) GetUserProjects(userID int) ([]model.Project, error) {
 							JOIN projects_users ON projects.id = projects_users.project_id
 							WHERE projects_users.user_id = $1`, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 	defer rows.Close()
 
@@ -28,7 +22,7 @@ func (db *PostgresDB) GetUserProjects(userID int) ([]model.Project, error) {
 
 		err := rows.Scan(&p.ID, &p.Name, &keys)
 		if err != nil {
-			return nil, err
+			return nil, parseError(err)
 		}
 
 		p.Keys = make([]string, len(keys))
@@ -40,7 +34,7 @@ func (db *PostgresDB) GetUserProjects(userID int) ([]model.Project, error) {
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	return projects, nil
@@ -52,10 +46,7 @@ func (db *PostgresDB) GetProjectUsers(projID int) ([]model.User, error) {
 							JOIN projects_users ON users.id = projects_users.user_id
 							WHERE projects_users.project_id = $1`, projID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 	defer rows.Close()
 
@@ -65,33 +56,27 @@ func (db *PostgresDB) GetProjectUsers(projID int) ([]model.User, error) {
 
 		err := rows.Scan(&u.ID, &u.Email, &u.Password)
 		if err != nil {
-			return nil, err
+			return nil, parseError(err)
 		}
 		u.Password = ""
 		users = append(users, u)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	return users, nil
 }
 
 func (db *PostgresDB) AssignProjectUser(projID, userID int) error {
-	err := db.QueryRow("INSERT INTO projects_users (project_id, user_id) VALUES($1, $2)",
-		projID, userID).Scan()
-	if err == sql.ErrNoRows {
-		return nil
-	}
-	return err
+	_, err := db.Exec("INSERT INTO projects_users (project_id, user_id) VALUES($1, $2)",
+		projID, userID)
+	return parseError(err)
 }
 
 func (db *PostgresDB) RevokeProjectUser(projID, userID int) error {
-	err := db.QueryRow("DELETE FROM projects_users WHERE project_id = $1 AND user_id = $2",
-		projID, userID).Scan()
-	if err == sql.ErrNoRows {
-		return nil
-	}
-	return err
+	_, err := db.Exec("DELETE FROM projects_users WHERE project_id = $1 AND user_id = $2",
+		projID, userID)
+	return parseError(err)
 }

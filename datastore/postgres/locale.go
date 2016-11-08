@@ -3,7 +3,6 @@ package postgres
 import (
 	"database/sql"
 
-	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/lib/pq/hstore"
 )
@@ -14,10 +13,7 @@ func (db *PostgresDB) GetLocale(id int) (*model.Locale, error) {
 	pairs := hstore.Hstore{}
 	err := row.Scan(&loc.ID, &loc.Ident, &pairs, &loc.ProjectID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	loc.Pairs = make(map[string]string)
@@ -38,11 +34,13 @@ func (db *PostgresDB) CreateLocale(loc *model.Locale) error {
 	}
 	values, err := h.Value()
 	if err != nil {
-		return err
+		return parseError(err)
 	}
 
-	return db.QueryRow("INSERT INTO locales (ident, language, country, pairs, project_id) VALUES($1, $2, $3, $4, $5) RETURNING id",
-		loc.Ident, loc.Language, loc.Country, values, loc.ProjectID).Scan(&loc.ID)
+	row := db.QueryRow("INSERT INTO locales (ident, language, country, pairs, project_id) VALUES($1, $2, $3, $4, $5) RETURNING id",
+		loc.Ident, loc.Language, loc.Country, values, loc.ProjectID)
+	err = row.Scan(&loc.ID)
+	return parseError(err)
 }
 
 func (db *PostgresDB) UpdateLocale(loc *model.Locale) error {
@@ -60,10 +58,7 @@ func (db *PostgresDB) UpdateLocale(loc *model.Locale) error {
 	row := db.QueryRow("UPDATE locales SET pairs = $1 WHERE id = $2 RETURNING *", values, loc.ID)
 	err = row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &h, &loc.ProjectID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return errors.ErrNotFound
-		}
-		return err
+		return parseError(err)
 	}
 
 	loc.Pairs = make(map[string]string)
@@ -77,8 +72,5 @@ func (db *PostgresDB) UpdateLocale(loc *model.Locale) error {
 
 func (db *PostgresDB) DeleteLocale(id int) (int, error) {
 	err := db.QueryRow("DELETE FROM locales WHERE id = $1 RETURNING id", id).Scan(&id)
-	if err == sql.ErrNoRows {
-		return -1, errors.ErrNotFound
-	}
-	return id, err
+	return id, parseError(err)
 }

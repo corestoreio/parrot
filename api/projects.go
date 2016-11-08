@@ -72,7 +72,7 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 
 	project, err := store.GetProject(id)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		render.Error(w, err)
 		return
 	}
 

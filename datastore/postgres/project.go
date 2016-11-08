@@ -12,10 +12,7 @@ import (
 func (db *PostgresDB) GetProjects() ([]model.Project, error) {
 	rows, err := db.Query("SELECT * FROM projects")
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 	defer rows.Close()
 
@@ -26,7 +23,7 @@ func (db *PostgresDB) GetProjects() ([]model.Project, error) {
 
 		err := rows.Scan(&p.ID, &p.Name, &keys)
 		if err != nil {
-			return nil, err
+			return nil, parseError(err)
 		}
 
 		p.Keys = make([]string, len(keys))
@@ -38,7 +35,7 @@ func (db *PostgresDB) GetProjects() ([]model.Project, error) {
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	return projects, nil
@@ -51,10 +48,7 @@ func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
 	keys := pq.StringArray{}
 	err := row.Scan(&p.ID, &p.Name, &keys)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	p.Keys = make([]string, len(keys))
@@ -73,7 +67,7 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 
 	values, err := keys.Value()
 	if err != nil {
-		return model.Project{}, err
+		return model.Project{}, parseError(err)
 	}
 
 	row := db.QueryRow("INSERT INTO projects (name, keys) VALUES($1, $2) RETURNING *", project.Name, values)
@@ -81,10 +75,7 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 	keys = pq.StringArray{}
 	err = row.Scan(&result.ID, &result.Name, &keys)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return model.Project{}, errors.ErrNotFound
-		}
-		return model.Project{}, err
+		return model.Project{}, parseError(err)
 	}
 
 	result.Keys = make([]string, len(keys))
@@ -104,17 +95,14 @@ func (db *PostgresDB) UpdateProject(project *model.Project) error {
 
 	values, err := keys.Value()
 	if err != nil {
-		return err
+		return parseError(err)
 	}
 
 	row := db.QueryRow("UPDATE projects SET keys = $1 WHERE id = $2 RETURNING *", values, project.ID)
 	keys = pq.StringArray{}
 	err = row.Scan(&project.ID, &project.Name, &keys)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return errors.ErrNotFound
-		}
-		return err
+		return parseError(err)
 	}
 
 	project.Keys = make([]string, len(keys))
@@ -139,10 +127,7 @@ func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error)
 	pairs := hstore.Hstore{}
 	err := row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	loc.Pairs = make(map[string]string)
@@ -158,10 +143,7 @@ func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error)
 func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
 	rows, err := db.Query("SELECT * FROM locales WHERE project_id = $1", projID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 	defer rows.Close()
 
@@ -172,7 +154,7 @@ func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]
 
 		err := rows.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
 		if err != nil {
-			return nil, err
+			return nil, parseError(err)
 		}
 
 		loc.Pairs = make(map[string]string)
@@ -186,7 +168,7 @@ func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	if len(localeIdents) > 0 {

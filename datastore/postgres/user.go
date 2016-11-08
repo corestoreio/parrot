@@ -1,8 +1,6 @@
 package postgres
 
 import (
-	"database/sql"
-
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 )
@@ -13,10 +11,7 @@ func (db *PostgresDB) GetUser(id int) (*model.User, error) {
 
 	err := row.Scan(&u.ID, &u.Email, &u.Password)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	return &u, nil
@@ -31,10 +26,7 @@ func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 
 	err := row.Scan(&u.ID, &u.Email, &u.Password)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.ErrNotFound
-		}
-		return nil, err
+		return nil, parseError(err)
 	}
 
 	return &u, nil
@@ -42,7 +34,8 @@ func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 
 func (db *PostgresDB) CreateUser(u *model.User) error {
 	row := db.QueryRow("INSERT INTO users (email, password) VALUES($1, $2) RETURNING id", u.Email, u.Password)
-	return row.Scan(&u.ID)
+	err := row.Scan(&u.ID)
+	return parseError(err)
 }
 
 func (db *PostgresDB) UpdateUser(u *model.User) error {
@@ -51,8 +44,5 @@ func (db *PostgresDB) UpdateUser(u *model.User) error {
 
 func (db *PostgresDB) DeleteUser(id int) (int, error) {
 	err := db.QueryRow("DELETE FROM users WHERE id = $1 RETURNING id", id).Scan(&id)
-	if err == sql.ErrNoRows {
-		return -1, errors.ErrNotFound
-	}
-	return id, err
+	return id, parseError(err)
 }

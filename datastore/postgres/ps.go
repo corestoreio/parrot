@@ -1,10 +1,6 @@
 package postgres
 
-import (
-	"database/sql"
-
-	_ "github.com/lib/pq"
-)
+import "database/sql"
 
 type PostgresDB struct {
 	*sql.DB

@@ -34,7 +34,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateUser(&user)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		render.Error(w, err)
 		return
 	}
 

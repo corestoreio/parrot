@@ -10,6 +10,10 @@ var (
 		http.StatusConflict,
 		"Conflict",
 		http.StatusText(http.StatusConflict))
+	ErrAlreadyExists = New(
+		http.StatusConflict,
+		"AlreadyExists",
+		"entry already exists")
 	ErrDuplicateEntry = New(
 		http.StatusConflict,
 		"DuplicateEntry",
