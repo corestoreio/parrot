@@ -29,6 +29,7 @@ type ProjectLocaleStorer interface {
 type ProjectUserStorer interface {
 	GetProjectUsers(projID int) ([]User, error)
 	GetUserProjects(userID int) ([]Project, error)
+	GetProjectUserRoles(projID int) ([]ProjectUser, error)
 	AssignProjectUser(ProjectUser) error
 	RevokeProjectUser(ProjectUser) error
 	UpdateProjectUser(ProjectUser) (*ProjectUser, error)
