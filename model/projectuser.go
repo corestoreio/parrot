@@ -10,7 +10,7 @@ type ProjectUserStorer interface {
 }
 
 type ProjectUser struct {
-	ProjectID int    `json:"project_id"`
-	UserID    int    `json:"user_id"`
-	Role      string `json:"role"`
+	ProjectID int    `db:"project_id" json:"project_id"`
+	UserID    int    `db:"user_id" json:"user_id"`
+	Role      string `db:"role" json:"role"`
 }

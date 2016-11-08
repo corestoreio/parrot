@@ -11,6 +11,12 @@ import (
 	"github.com/pressly/chi"
 )
 
+const (
+	AdminRole       = "admin"
+	ContributorRole = "contributor"
+	ReaderRole      = "reader"
+)
+
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	id, err := getUserIDFromContext(r.Context())
 	if err != nil {
@@ -28,13 +34,29 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProjectUsers(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		render.Error(w, errors.ErrBadRequest)
 		return
 	}
 
-	users, err := store.GetProjectUsers(id)
+	// TODO refactor into middleware
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canViewProjectRoles(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+
+	users, err := store.GetProjectUsers(projectID)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
 		return
@@ -49,8 +71,28 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		render.Error(w, errors.ErrBadRequest)
 		return
 	}
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
 
-	err := store.AssignProjectUser(pu)
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canAssignRoles(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+
+	err = store.AssignProjectUser(pu)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
 		return
@@ -80,6 +122,21 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 	pu.ProjectID = projectID
 	pu.UserID = userID
 
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canUpdateRoles(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+
 	result, err := store.UpdateProjectUser(pu)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
@@ -101,6 +158,22 @@ func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
+
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canRevokeRoles(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+
 	err = store.RevokeProjectUser(pu)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
@@ -108,4 +181,62 @@ func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.JSON(w, http.StatusOK, pu)
+}
+
+func getProjectUserRole(userID, projID int) (string, error) {
+	users, err := store.GetProjectUserRoles(projID)
+	if err != nil {
+		return "", err
+	}
+	for _, u := range users {
+		if u.UserID == userID {
+			return u.Role, nil
+		}
+	}
+	return "", errors.ErrNotFound
+}
+
+func isProjectUser(userID, projID int) (bool, error) {
+	users, err := store.GetProjectUsers(projID)
+	if err != nil {
+		return false, err
+	}
+	for _, u := range users {
+		if u.ID == userID {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func canAssignRoles(role string) bool {
+	switch role {
+	case AdminRole:
+		return true
+	}
+	return false
+}
+
+func canRevokeRoles(role string) bool {
+	switch role {
+	case AdminRole:
+		return true
+	}
+	return false
+}
+
+func canUpdateRoles(role string) bool {
+	switch role {
+	case AdminRole:
+		return true
+	}
+	return false
+}
+
+func canViewProjectRoles(role string) bool {
+	switch role {
+	case AdminRole, ContributorRole, ReaderRole:
+		return true
+	}
+	return false
 }

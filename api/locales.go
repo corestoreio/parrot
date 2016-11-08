@@ -13,9 +13,24 @@ import (
 )
 
 func createLocale(w http.ResponseWriter, r *http.Request) {
-	projID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canCreateLocales(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
 		return
 	}
 
@@ -25,9 +40,9 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 		render.ErrorWithStatus(w, http.StatusBadRequest, errs)
 		return
 	}
-	loc.ProjectID = projID
+	loc.ProjectID = projectID
 
-	proj, err := store.GetProject(projID)
+	proj, err := store.GetProject(projectID)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
 		return
@@ -56,6 +71,21 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canViewLocales(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+
 	loc, err := store.GetProjectLocale(projectID, id)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
@@ -81,6 +111,21 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 
 	}
 	localeIdents := r.URL.Query()["ident"]
+
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canViewLocales(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
@@ -114,6 +159,21 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canUpdateLocales(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
 		render.Error(w, errors.ErrBadRequest)
@@ -139,9 +199,29 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
+	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+
+	requesterID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+	requesterRole, err := getProjectUserRole(requesterID, projectID)
+	if err != nil {
+		render.Error(w, errors.ErrForbiden)
+		return
+	}
+	if !canDeleteLocales(requesterRole) {
+		render.Error(w, errors.ErrForbiden)
 		return
 	}
 
@@ -154,4 +234,36 @@ func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("deleted locale with id %d", resultID),
 	})
+}
+
+func canCreateLocales(role string) bool {
+	switch role {
+	case AdminRole, ContributorRole:
+		return true
+	}
+	return false
+}
+
+func canUpdateLocales(role string) bool {
+	switch role {
+	case AdminRole, ContributorRole:
+		return true
+	}
+	return false
+}
+
+func canDeleteLocales(role string) bool {
+	switch role {
+	case AdminRole:
+		return true
+	}
+	return false
+}
+
+func canViewLocales(role string) bool {
+	switch role {
+	case AdminRole, ContributorRole, ReaderRole:
+		return true
+	}
+	return false
 }

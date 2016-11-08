@@ -3,11 +3,11 @@ package postgres
 import (
 	"database/sql"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/lib/pq"
 )
 
-// TODO: logrus datastore err
 func parseError(err error) error {
 	if err == nil {
 		return nil
@@ -27,6 +27,8 @@ func parseError(err error) error {
 	case sql.ErrNoRows:
 		return errors.ErrNotFound
 	}
+
+	logrus.Error(err)
 
 	// If no match could be done, simply return internal error
 	return errors.ErrInternal

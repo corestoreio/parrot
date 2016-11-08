@@ -70,7 +70,7 @@ func (db *PostgresDB) GetProjectUsers(projID int) ([]model.User, error) {
 }
 
 func (db *PostgresDB) GetProjectUserRoles(projID int) ([]model.ProjectUser, error) {
-	rows, err := db.Query(`SELECT * from project_users WHERE project_id = $1`, projID)
+	rows, err := db.Query(`SELECT * from projects_users WHERE project_id = $1`, projID)
 	if err != nil {
 		return nil, parseError(err)
 	}
@@ -80,7 +80,7 @@ func (db *PostgresDB) GetProjectUserRoles(projID int) ([]model.ProjectUser, erro
 	for rows.Next() {
 		u := model.ProjectUser{}
 
-		err := rows.Scan(&u.ProjectID, &u.UserID, &u.Role)
+		err := rows.Scan(&u.UserID, &u.ProjectID, &u.Role)
 		if err != nil {
 			return nil, parseError(err)
 		}
