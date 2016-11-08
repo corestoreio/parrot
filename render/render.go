@@ -28,14 +28,14 @@ func Error(w http.ResponseWriter, err error) {
 	ErrorWithStatus(w, status, err)
 }
 
-func ErrorWithStatus(w http.ResponseWriter, status int, errs error) {
+func ErrorWithStatus(w http.ResponseWriter, status int, err error) {
 	w.Header().Set("Content-Type", jsonContentType)
 	w.WriteHeader(status)
 
 	body := apiResponseBody{
 		responseMeta: responseMeta{
 			Status: status,
-			Error:  errs},
+			Error:  err},
 		Payload: nil}
 
 	handleBody(w, body)
