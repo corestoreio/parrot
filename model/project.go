@@ -29,8 +29,9 @@ type ProjectLocaleStorer interface {
 type ProjectUserStorer interface {
 	GetProjectUsers(projID int) ([]User, error)
 	GetUserProjects(userID int) ([]Project, error)
-	AssignProjectUser(projID, userID int) error
-	RevokeProjectUser(projID, userID int) error
+	AssignProjectUser(ProjectUser) error
+	RevokeProjectUser(ProjectUser) error
+	UpdateProjectUser(ProjectUser) (*ProjectUser, error)
 }
 
 type Project struct {
@@ -40,8 +41,9 @@ type Project struct {
 }
 
 type ProjectUser struct {
-	ProjectID int `json:"project_id"`
-	UserID    int `json:"user_id"`
+	ProjectID int    `json:"project_id"`
+	UserID    int    `json:"user_id"`
+	Role      string `json:"role"`
 }
 
 func (p *Project) SanitizeKeys() {

@@ -50,13 +50,29 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := store.AssignProjectUser(pu.ProjectID, pu.UserID)
+	err := store.AssignProjectUser(pu)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
 		return
 	}
 
 	render.JSON(w, http.StatusOK, pu)
+}
+
+func updateProjectUser(w http.ResponseWriter, r *http.Request) {
+	var pu model.ProjectUser
+	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
+		render.Error(w, errors.ErrBadRequest)
+		return
+	}
+
+	result, err := store.UpdateProjectUser(pu)
+	if err != nil {
+		render.Error(w, errors.ErrInternal)
+		return
+	}
+
+	render.JSON(w, http.StatusOK, result)
 }
 
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +83,7 @@ func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	}
 	// TODO: handle input validation
 
-	err := store.RevokeProjectUser(pu.ProjectID, pu.UserID)
+	err := store.RevokeProjectUser(pu)
 	if err != nil {
 		render.Error(w, errors.ErrInternal)
 		return

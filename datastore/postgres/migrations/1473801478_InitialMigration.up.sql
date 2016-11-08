@@ -26,5 +26,6 @@ CREATE TABLE users (
 CREATE TABLE projects_users (
     user_id INTEGER REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     project_id INTEGER REFERENCES projects (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    role TEXT NOT NULL,
     CONSTRAINT projects_users_pkey PRIMARY KEY (user_id, project_id)
 );

@@ -69,14 +69,25 @@ func (db *PostgresDB) GetProjectUsers(projID int) ([]model.User, error) {
 	return users, nil
 }
 
-func (db *PostgresDB) AssignProjectUser(projID, userID int) error {
-	_, err := db.Exec("INSERT INTO projects_users (project_id, user_id) VALUES($1, $2)",
-		projID, userID)
+func (db *PostgresDB) AssignProjectUser(pu model.ProjectUser) error {
+	_, err := db.Exec("INSERT INTO projects_users (project_id, user_id, role) VALUES($1, $2, $3)",
+		pu.ProjectID, pu.UserID, pu.Role)
 	return parseError(err)
 }
 
-func (db *PostgresDB) RevokeProjectUser(projID, userID int) error {
+func (db *PostgresDB) RevokeProjectUser(pu model.ProjectUser) error {
 	_, err := db.Exec("DELETE FROM projects_users WHERE project_id = $1 AND user_id = $2",
-		projID, userID)
+		pu.ProjectID, pu.UserID)
 	return parseError(err)
+}
+
+func (db *PostgresDB) UpdateProjectUser(pu model.ProjectUser) (*model.ProjectUser, error) {
+	var result model.ProjectUser
+	row := db.QueryRow("UPDATE project_users SET role = $1 WHERE project_id = $2 AND user_id = $3 RETURNING *",
+		pu.Role, pu.ProjectID, pu.UserID)
+	err := row.Scan(&result)
+	if err != nil {
+		return nil, parseError(err)
+	}
+	return &result, nil
 }
