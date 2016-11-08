@@ -9,10 +9,10 @@ import (
 	"github.com/pressly/chi"
 )
 
+// TODO: inject store via closures instead of keeping global var
 var store datastore.Store
 
 func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
-	// TODO: inject store via closures instead of keeping global var
 	store = ds
 	handleToken := tokenMiddleware(authProvider)
 
