@@ -14,7 +14,6 @@ var (
 )
 
 type ProjectStorer interface {
-	GetProjects() ([]Project, error)
 	GetProject(int) (*Project, error)
 	CreateProject(*Project) (Project, error)
 	UpdateProject(*Project) error

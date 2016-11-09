@@ -1,10 +1,6 @@
 package postgres
 
-import (
-	"errors"
-
-	"github.com/anthonynsimon/parrot/model"
-)
+import "github.com/anthonynsimon/parrot/model"
 
 func (db *PostgresDB) GetUser(id int) (*model.User, error) {
 	u := model.User{}
@@ -34,10 +30,6 @@ func (db *PostgresDB) CreateUser(u *model.User) error {
 	row := db.QueryRow("INSERT INTO users (email, password) VALUES($1, $2) RETURNING id", u.Email, u.Password)
 	err := row.Scan(&u.ID)
 	return parseError(err)
-}
-
-func (db *PostgresDB) UpdateUser(u *model.User) error {
-	return errors.New("not implemented")
 }
 
 func (db *PostgresDB) DeleteUser(id int) (int, error) {

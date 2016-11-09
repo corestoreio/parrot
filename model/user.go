@@ -21,7 +21,6 @@ type UserStorer interface {
 	GetUser(int) (*User, error)
 	GetUserByEmail(string) (*User, error)
 	CreateUser(*User) error
-	UpdateUser(*User) error
 	DeleteUser(int) (int, error)
 }
 
