@@ -26,30 +26,30 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 		dr.Post("/", createUser)
 	})
 
-	router.Route("/projects", func(pr chi.Router) {
+	router.Route("/projects", func(r1 chi.Router) {
 		// Past this point, all routes require a valid token
-		pr.Use(handleToken)
-		pr.Get("/", getUserProjects)
-		pr.Post("/", createProject)
+		r1.Use(handleToken)
+		r1.Get("/", getUserProjects)
+		r1.Post("/", createProject)
 
-		pr.Route("/:projectID", func(dr chi.Router) {
-			pr.Get("/", mustAuthorize(canViewProject, showProject))
-			pr.Put("/", mustAuthorize(canUpdateProject, updateProject))
-			pr.Delete("/", mustAuthorize(canDeleteProject, deleteProject))
+		r1.Route("/:projectID", func(r2 chi.Router) {
+			r2.Get("/", mustAuthorize(canViewProject, showProject))
+			r2.Put("/", mustAuthorize(canUpdateProject, updateProject))
+			r2.Delete("/", mustAuthorize(canDeleteProject, deleteProject))
 
-			pr.Route("/users", func(dr chi.Router) {
-				dr.Get("/", mustAuthorize(canViewProjectRoles, getProjectUsers))
-				dr.Post("/", mustAuthorize(canAssignRoles, assignProjectUser))
-				dr.Put("/:userID", mustAuthorize(canUpdateRoles, updateProjectUser))
-				dr.Delete("/:userID", mustAuthorize(canRevokeRoles, revokeProjectUser))
+			r2.Route("/users", func(r3 chi.Router) {
+				r3.Get("/", mustAuthorize(canViewProjectRoles, getProjectUsers))
+				r3.Post("/", mustAuthorize(canAssignRoles, assignProjectUser))
+				r3.Put("/:userID", mustAuthorize(canUpdateRoles, updateProjectUser))
+				r3.Delete("/:userID", mustAuthorize(canRevokeRoles, revokeProjectUser))
 			})
 
-			pr.Route("/locales", func(dr chi.Router) {
-				dr.Get("/", mustAuthorize(canViewLocales, findLocales))
-				dr.Post("/", mustAuthorize(canCreateLocales, createLocale))
-				dr.Get("/:localeID", mustAuthorize(canViewLocales, showLocale))
-				dr.Put("/:localeID", mustAuthorize(canUpdateLocales, updateLocale))
-				dr.Delete("/:localeID", mustAuthorize(canDeleteLocales, deleteLocale))
+			r2.Route("/locales", func(r3 chi.Router) {
+				r3.Get("/", mustAuthorize(canViewLocales, findLocales))
+				r3.Post("/", mustAuthorize(canCreateLocales, createLocale))
+				r3.Get("/:localeID", mustAuthorize(canViewLocales, showLocale))
+				r3.Put("/:localeID", mustAuthorize(canUpdateLocales, updateLocale))
+				r3.Delete("/:localeID", mustAuthorize(canDeleteLocales, deleteLocale))
 			})
 		})
 	})
