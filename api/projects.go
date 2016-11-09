@@ -21,19 +21,19 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
 	result, err := store.CreateProject(&project)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 	pu := model.ProjectUser{ProjectID: result.ID, UserID: userID, Role: "admin"}
 	err = store.AssignProjectUser(pu)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -43,28 +43,28 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 func updateProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canUpdateProject(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	project.ID = projectID
@@ -72,7 +72,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateProject(&project)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -82,28 +82,28 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 func showProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canViewProject(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		render.Error(w, err)
+		handleError(w, err)
 		return
 	}
 
@@ -113,28 +113,28 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 func deleteProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canDeleteProject(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	resultID, err := store.DeleteProject(projectID)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 

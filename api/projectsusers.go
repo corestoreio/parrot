@@ -20,13 +20,13 @@ const (
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	id, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
 	projects, err := store.GetUserProjects(id)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -36,29 +36,29 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	// TODO refactor into middleware
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canViewProjectRoles(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	users, err := store.GetProjectUsers(projectID)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -68,33 +68,33 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canAssignRoles(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	err = store.AssignProjectUser(pu)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -104,18 +104,18 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
 	// Get updated role
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	// Prevent the user setting a different id via body
@@ -124,22 +124,22 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canUpdateRoles(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	result, err := store.UpdateProjectUser(pu)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -149,34 +149,34 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canRevokeRoles(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	err = store.RevokeProjectUser(pu)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 

@@ -25,7 +25,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -33,7 +33,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateUser(&user)
 	if err != nil {
-		render.Error(w, err)
+		handleError(w, err)
 		return
 	}
 

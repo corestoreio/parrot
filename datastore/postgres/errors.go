@@ -3,8 +3,7 @@ package postgres
 import (
 	"database/sql"
 
-	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/errors"
+	"github.com/anthonynsimon/parrot/datastore/errors"
 	"github.com/lib/pq"
 )
 
@@ -28,10 +27,8 @@ func parseError(err error) error {
 		return errors.ErrNotFound
 	}
 
-	logrus.Error(err)
-
 	// If no match could be done, simply return internal error
-	return errors.ErrInternal
+	return err
 }
 
 // For reference

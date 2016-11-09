@@ -15,22 +15,22 @@ import (
 func createLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canCreateLocales(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
@@ -44,7 +44,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := store.GetProject(projectID)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -52,7 +52,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateLocale(&loc)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -62,39 +62,39 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 func showLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, err)
 		return
 	}
 	if !canViewLocales(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	loc, err := store.GetProjectLocale(projectID, id)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, err)
 		return
 	}
 
 	proj, err := store.GetProject(projectID)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -106,7 +106,7 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 func findLocales(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 
 	}
@@ -114,28 +114,28 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canViewLocales(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -150,40 +150,40 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 	// TODO: reduce number of db calls
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canUpdateLocales(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	loc.ID = id
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -191,7 +191,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateLocale(loc)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
@@ -201,33 +201,33 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 
 	requesterID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		render.Error(w, errors.ErrBadRequest)
+		handleError(w, errors.ErrBadRequest)
 		return
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 	if !canDeleteLocales(requesterRole) {
-		render.Error(w, errors.ErrForbiden)
+		handleError(w, errors.ErrForbiden)
 		return
 	}
 
 	resultID, err := store.DeleteLocale(id)
 	if err != nil {
-		render.Error(w, errors.ErrInternal)
+		handleError(w, errors.ErrInternal)
 		return
 	}
 
