@@ -102,7 +102,6 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateLocale(w http.ResponseWriter, r *http.Request) {
-	// TODO: reduce number of db calls
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		handleError(w, errors.ErrBadRequest)
@@ -154,36 +153,4 @@ func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": fmt.Sprintf("deleted locale with id %d", resultID),
 	})
-}
-
-func canCreateLocales(role string) bool {
-	switch role {
-	case AdminRole, ContributorRole:
-		return true
-	}
-	return false
-}
-
-func canUpdateLocales(role string) bool {
-	switch role {
-	case AdminRole, ContributorRole:
-		return true
-	}
-	return false
-}
-
-func canDeleteLocales(role string) bool {
-	switch role {
-	case AdminRole:
-		return true
-	}
-	return false
-}
-
-func canViewLocales(role string) bool {
-	switch role {
-	case AdminRole, ContributorRole, ReaderRole:
-		return true
-	}
-	return false
 }

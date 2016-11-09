@@ -97,27 +97,3 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 		"message": fmt.Sprintf("deleted project with id %d and all related locales", resultID),
 	})
 }
-
-func canUpdateProject(role string) bool {
-	switch role {
-	case AdminRole, ContributorRole:
-		return true
-	}
-	return false
-}
-
-func canDeleteProject(role string) bool {
-	switch role {
-	case AdminRole:
-		return true
-	}
-	return false
-}
-
-func canViewProject(role string) bool {
-	switch role {
-	case AdminRole, ContributorRole, ReaderRole:
-		return true
-	}
-	return false
-}
