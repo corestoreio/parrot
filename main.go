@@ -8,7 +8,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
-	"github.com/anthonynsimon/parrot/api/auth"
+	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
 	"github.com/joho/godotenv"

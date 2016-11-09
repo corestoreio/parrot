@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/anthonynsimon/parrot/api/auth"
+	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"

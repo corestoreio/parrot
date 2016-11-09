@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/api/auth"
+	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/paths"
 	"github.com/pressly/chi"
