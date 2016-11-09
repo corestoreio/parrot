@@ -31,5 +31,5 @@ func handleError(w http.ResponseWriter, err error) {
 		}
 	}
 
-	render.ErrorWithStatus(w, outErr.Status, outErr)
+	render.Error(w, outErr.Status, outErr)
 }

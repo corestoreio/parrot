@@ -74,7 +74,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 
 		claimedUser, err := store.GetUserByEmail(email)
 		if err != nil {
-			handleError(w, errors.ErrNotFound)
+			handleError(w, err)
 			return
 		}
 

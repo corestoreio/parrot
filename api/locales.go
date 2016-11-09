@@ -37,7 +37,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 	loc := model.Locale{}
 	errs := decodeAndValidate(r.Body, &loc)
 	if errs != nil {
-		render.ErrorWithStatus(w, http.StatusBadRequest, errs)
+		render.Error(w, http.StatusBadRequest, errs)
 		return
 	}
 	loc.ProjectID = projectID
@@ -166,7 +166,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 	}
 	requesterRole, err := getProjectUserRole(requesterID, projectID)
 	if err != nil {
-		handleError(w, errors.ErrForbiden)
+		handleError(w, err)
 		return
 	}
 	if !canUpdateLocales(requesterRole) {
@@ -183,7 +183,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, err)
 		return
 	}
 

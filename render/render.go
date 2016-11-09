@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/errors"
 )
 
 var jsonContentType = "application/json; charset=utf-8"
@@ -20,15 +19,7 @@ type responseMeta struct {
 	Error  error `json:"error,omitempty"`
 }
 
-func Error(w http.ResponseWriter, err error) {
-	status := http.StatusInternalServerError
-	if e, ok := err.(*errors.Error); ok {
-		status = e.Status
-	}
-	ErrorWithStatus(w, status, err)
-}
-
-func ErrorWithStatus(w http.ResponseWriter, status int, err error) {
+func Error(w http.ResponseWriter, status int, err error) {
 	w.Header().Set("Content-Type", jsonContentType)
 	w.WriteHeader(status)
 
