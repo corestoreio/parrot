@@ -1,7 +1,8 @@
 package postgres
 
 import (
-	"github.com/anthonynsimon/parrot/errors"
+	"errors"
+
 	"github.com/anthonynsimon/parrot/model"
 )
 
@@ -18,9 +19,6 @@ func (db *PostgresDB) GetUser(id int) (*model.User, error) {
 }
 
 func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
-	if email == "" {
-		return nil, errors.ErrBadRequest
-	}
 	u := model.User{}
 	row := db.QueryRow("SELECT * FROM users WHERE email = $1", email)
 
@@ -39,7 +37,7 @@ func (db *PostgresDB) CreateUser(u *model.User) error {
 }
 
 func (db *PostgresDB) UpdateUser(u *model.User) error {
-	return errors.ErrNotImplemented
+	return errors.New("not implemented")
 }
 
 func (db *PostgresDB) DeleteUser(id int) (int, error) {
