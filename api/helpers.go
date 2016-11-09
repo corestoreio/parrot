@@ -2,12 +2,41 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/Sirupsen/logrus"
 	datastoreErrors "github.com/anthonynsimon/parrot/datastore/errors"
 	apiErrors "github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/render"
+	"github.com/pressly/chi"
 )
+
+type Authorizer func(string) bool
+
+func mustAuthorize(fn Authorizer, next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+		if err != nil {
+			handleError(w, apiErrors.ErrBadRequest)
+			return
+		}
+		requesterID, err := getUserIDFromContext(r.Context())
+		if err != nil {
+			handleError(w, apiErrors.ErrBadRequest)
+			return
+		}
+		requesterRole, err := getProjectUserRole(requesterID, projectID)
+		if err != nil {
+			handleError(w, err)
+			return
+		}
+		if !fn(requesterRole) {
+			handleError(w, apiErrors.ErrForbiden)
+			return
+		}
+		next.ServeHTTP(w, r)
+	}
+}
 
 func handleError(w http.ResponseWriter, err error) {
 	// Try to match store error

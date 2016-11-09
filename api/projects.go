@@ -47,21 +47,6 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canUpdateProject(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		handleError(w, errors.ErrBadRequest)
@@ -86,21 +71,6 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canViewProject(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	project, err := store.GetProject(projectID)
 	if err != nil {
 		handleError(w, err)
@@ -114,21 +84,6 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		handleError(w, errors.ErrBadRequest)
-		return
-	}
-
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canDeleteProject(requesterRole) {
-		handleError(w, errors.ErrForbiden)
 		return
 	}
 

@@ -40,22 +40,6 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO refactor into middleware
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canViewProjectRoles(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	users, err := store.GetProjectUsers(projectID)
 	if err != nil {
 		handleError(w, errors.ErrInternal)
@@ -66,6 +50,7 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func assignProjectUser(w http.ResponseWriter, r *http.Request) {
+	// TODO: decode and validate only required fields. Whitelisting?
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
 		handleError(w, errors.ErrBadRequest)
@@ -76,18 +61,7 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		handleError(w, errors.ErrBadRequest)
 		return
 	}
-
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canAssignRoles(requesterRole) {
+	if projectID != pu.ProjectID {
 		handleError(w, errors.ErrForbiden)
 		return
 	}
@@ -122,21 +96,6 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 	pu.ProjectID = projectID
 	pu.UserID = userID
 
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canUpdateRoles(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	result, err := store.UpdateProjectUser(pu)
 	if err != nil {
 		handleError(w, errors.ErrInternal)
@@ -158,21 +117,6 @@ func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
-
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canRevokeRoles(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
 
 	err = store.RevokeProjectUser(pu)
 	if err != nil {

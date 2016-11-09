@@ -19,21 +19,6 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canCreateLocales(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	loc := model.Locale{}
 	errs := decodeAndValidate(r.Body, &loc)
 	if errs != nil {
@@ -71,21 +56,6 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, err)
-		return
-	}
-	if !canViewLocales(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	loc, err := store.GetProjectLocale(projectID, id)
 	if err != nil {
 		handleError(w, err)
@@ -111,21 +81,6 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 
 	}
 	localeIdents := r.URL.Query()["ident"]
-
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canViewLocales(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
@@ -159,21 +114,6 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, err)
-		return
-	}
-	if !canUpdateLocales(requesterRole) {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
 		handleError(w, errors.ErrBadRequest)
@@ -199,29 +139,9 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		handleError(w, errors.ErrBadRequest)
-		return
-	}
-
-	requesterID, err := getUserIDFromContext(r.Context())
-	if err != nil {
-		handleError(w, errors.ErrBadRequest)
-		return
-	}
-	requesterRole, err := getProjectUserRole(requesterID, projectID)
-	if err != nil {
-		handleError(w, errors.ErrForbiden)
-		return
-	}
-	if !canDeleteLocales(requesterRole) {
-		handleError(w, errors.ErrForbiden)
 		return
 	}
 
