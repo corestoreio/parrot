@@ -15,11 +15,16 @@ import (
 )
 
 func createUser(w http.ResponseWriter, r *http.Request) {
-	// TODO(anthonynsimon): handle user already exists
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
 	if errs != nil {
 		render.Error(w, http.StatusBadRequest, errs)
+		return
+	}
+
+	existingUser, err := store.GetUserByEmail(user.Email)
+	if err == nil && existingUser.Email == user.Email {
+		handleError(w, errors.ErrAlreadyExists)
 		return
 	}
 
