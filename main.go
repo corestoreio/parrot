@@ -44,8 +44,10 @@ func main() {
 
 	// init routers and middleware
 	mainRouter := chi.NewRouter()
-	mainRouter.Use(logger.Request)
-	mainRouter.Use(middleware.StripSlashes)
+	mainRouter.Use(
+		logger.Request,
+		middleware.StripSlashes,
+	)
 
 	ap := auth.Provider{
 		Name:       string([]byte(os.Getenv("DOMAIN"))),
