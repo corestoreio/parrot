@@ -37,22 +37,25 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 
 		r1.Route("/:projectID", func(r2 chi.Router) {
 			r2.Get("/", mustAuthorize(CanViewProject, showProject))
-			r2.Put("/", mustAuthorize(CanUpdateProject, updateProject))
+			r2.Patch("/keys", mustAuthorize(CanUpdateProject, updateProjectKeys))
 			r2.Delete("/", mustAuthorize(CanDeleteProject, deleteProject))
 
-			r2.Route("/users", func(r3 chi.Router) {
+			r2.Route("/roles", func(r3 chi.Router) {
 				r3.Get("/", mustAuthorize(CanViewProjectRoles, getProjectUsers))
 				r3.Post("/", mustAuthorize(CanAssignRoles, assignProjectUser))
-				r3.Put("/:userID", mustAuthorize(CanUpdateRoles, updateProjectUser))
+				r3.Patch("/:userID/role", mustAuthorize(CanUpdateRoles, updateProjectUserRole))
 				r3.Delete("/:userID", mustAuthorize(CanRevokeRoles, revokeProjectUser))
 			})
 
 			r2.Route("/locales", func(r3 chi.Router) {
 				r3.Get("/", mustAuthorize(CanViewLocales, findLocales))
 				r3.Post("/", mustAuthorize(CanCreateLocales, createLocale))
-				r3.Get("/:localeID", mustAuthorize(CanViewLocales, showLocale))
-				r3.Put("/:localeID", mustAuthorize(CanUpdateLocales, updateLocale))
-				r3.Delete("/:localeID", mustAuthorize(CanDeleteLocales, deleteLocale))
+
+				r3.Route("/:localeID", func(r4 chi.Router) {
+					r4.Get("/", mustAuthorize(CanViewLocales, showLocale))
+					r4.Patch("/pairs", mustAuthorize(CanUpdateLocales, updateLocalePairs))
+					r4.Delete("/", mustAuthorize(CanDeleteLocales, deleteLocale))
+				})
 			})
 		})
 	})

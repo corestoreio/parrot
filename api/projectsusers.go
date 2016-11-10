@@ -68,7 +68,7 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, pu)
 }
 
-func updateProjectUser(w http.ResponseWriter, r *http.Request) {
+func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		handleError(w, ErrBadRequest)
@@ -79,15 +79,21 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
+
 	// Get updated role
-	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
+	data := struct {
+		Role string `json:"role"`
+	}{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	// Prevent the user setting a different id via body
-	pu.ProjectID = projectID
-	pu.UserID = userID
+	if !isRole(data.Role) {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	pu := model.ProjectUser{UserID: userID, ProjectID: projectID, Role: data.Role}
 
 	result, err := store.UpdateProjectUser(pu)
 	if err != nil {

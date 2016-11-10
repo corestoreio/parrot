@@ -38,7 +38,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
-func updateProject(w http.ResponseWriter, r *http.Request) {
+func updateProjectKeys(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
 		handleError(w, ErrBadRequest)

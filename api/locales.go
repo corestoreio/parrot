@@ -99,7 +99,7 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, locs)
 }
 
-func updateLocale(w http.ResponseWriter, r *http.Request) {
+func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
 		handleError(w, ErrBadRequest)

@@ -61,6 +61,15 @@ var permissions = map[Role][]RoleGrant{
 	},
 }
 
+func isRole(r string) bool {
+	v := Role(r)
+	switch v {
+	case OwnerRole, EditorRole, ViewerRole:
+		return true
+	}
+	return false
+}
+
 func isAllowed(r Role, a RoleGrant) bool {
 	actions, ok := permissions[r]
 	if !ok {
