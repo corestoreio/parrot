@@ -1,6 +1,10 @@
 package model
 
-import "regexp"
+import (
+	"regexp"
+
+	"github.com/anthonynsimon/parrot/errors"
+)
 
 var (
 	emailRegex *regexp.Regexp
@@ -16,4 +20,9 @@ func ValidEmail(str string) bool {
 
 func HasMinLength(str string, min int) bool {
 	return len(str) >= min
+}
+
+func NewValidationError(errs []errors.Error) error {
+	err := errors.ErrUnprocessable
+	return errors.NewMultiError(err.Status, err.Type, err.Message, errs)
 }
