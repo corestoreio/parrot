@@ -3,7 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/Sirupsen/logrus"
+	datastoreErrors "github.com/anthonynsimon/parrot/datastore/errors"
 	"github.com/anthonynsimon/parrot/errors"
+	"github.com/anthonynsimon/parrot/render"
 )
 
 var (
@@ -40,3 +43,28 @@ var (
 		"UnsupportedMediaType",
 		http.StatusText(http.StatusUnsupportedMediaType))
 )
+
+func handleError(w http.ResponseWriter, err error) {
+	// Try to match store error
+	var outErr *errors.Error
+	// If cast is successful, done, we got our error
+	if castedErr, ok := err.(*errors.Error); ok {
+		outErr = castedErr
+	} else {
+		// Check if it is a datastore error
+		switch err {
+		case datastoreErrors.ErrNotFound:
+			outErr = ErrNotFound
+		case datastoreErrors.ErrAlreadyExists:
+			outErr = ErrAlreadyExists
+		default:
+			// If no match was found, log it and write internal error to response
+			// TODO: conform error tags in log
+			logrus.Error(err)
+			outErr = ErrInternal
+
+		}
+	}
+
+	render.Error(w, outErr.Status, outErr)
+}
