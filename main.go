@@ -19,7 +19,7 @@ import (
 func init() {
 	// Config log
 	logrus.SetOutput(os.Stdout)
-	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.SetFormatter(&logrus.TextFormatter{})
 	logrus.SetLevel(logrus.InfoLevel)
 }
 
