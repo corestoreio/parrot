@@ -59,7 +59,7 @@ func New(s int, t, m string) *Error {
 }
 
 type MultiError struct {
-	Status  int     `json:"status"`
+	Status  int     `json:"status,omitempty"`
 	Type    string  `json:"type"`
 	Message string  `json:"message"`
 	Errors  []Error `json:"errors,omitempty"`

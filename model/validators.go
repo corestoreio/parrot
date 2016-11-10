@@ -9,6 +9,11 @@ import (
 var (
 	emailRegex *regexp.Regexp
 )
+var (
+	ErrValidationFailure = &errors.Error{
+		Type:    "ValidationFailure",
+		Message: "data validation failed"}
+)
 
 func init() {
 	emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
@@ -23,6 +28,8 @@ func HasMinLength(str string, min int) bool {
 }
 
 func NewValidationError(errs []errors.Error) error {
-	err := errors.ErrUnprocessable
-	return errors.NewMultiError(err.Status, err.Type, err.Message, errs)
+	return &errors.MultiError{
+		Type:    ErrValidationFailure.Type,
+		Message: ErrValidationFailure.Message,
+		Errors:  errs}
 }
