@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
 	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
@@ -18,14 +18,16 @@ import (
 
 func init() {
 	// Config log
-	log.SetFormatter(&log.TextFormatter{})
+	logrus.SetOutput(os.Stdout)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.SetLevel(logrus.InfoLevel)
 }
 
 func main() {
 	// init environment variables
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 
 	// init and ping datastore
@@ -34,12 +36,12 @@ func main() {
 
 	ds, err := datastore.NewDatastore(dbName, dbURL)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 
 	defer ds.Close()
 	if err = ds.Ping(); err != nil {
-		log.Fatal(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
+		logrus.Fatal(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
 	}
 
 	// init routers and middleware
@@ -68,7 +70,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	fmt.Println(fmt.Sprintf("Listening on %s", addr))
+	logrus.Info(fmt.Sprintf("Listening on %s", addr))
 
-	log.Fatal(s.ListenAndServe())
+	logrus.Fatal(s.ListenAndServe())
 }

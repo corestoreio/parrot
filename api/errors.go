@@ -58,8 +58,6 @@ func handleError(w http.ResponseWriter, err error) {
 		case datastoreErrors.ErrAlreadyExists:
 			outErr = ErrAlreadyExists
 		default:
-			// If no match was found, log it and write internal error to response
-			// TODO: conform error tags in log
 			logrus.Error(err)
 			outErr = ErrInternal
 
