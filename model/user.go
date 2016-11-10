@@ -1,20 +1,14 @@
 package model
 
-import (
-	"net/http"
-
-	"github.com/anthonynsimon/parrot/errors"
-)
+import "github.com/anthonynsimon/parrot/errors"
 
 var (
-	ErrInvalidEmail = errors.New(
-		http.StatusBadRequest,
-		"InvalidEmail",
-		"invalid email")
-	ErrInvalidPassword = errors.New(
-		http.StatusBadRequest,
-		"InvalidPassword",
-		"invalid password")
+	ErrInvalidEmail = &errors.Error{
+		Type:    "InvalidEmail",
+		Message: "invalid email"}
+	ErrInvalidPassword = &errors.Error{
+		Type:    "InvalidPassword",
+		Message: "invalid password"}
 )
 
 type UserStorer interface {

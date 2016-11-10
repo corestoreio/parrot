@@ -1,24 +1,17 @@
 package model
 
-import (
-	"net/http"
-
-	"github.com/anthonynsimon/parrot/errors"
-)
+import "github.com/anthonynsimon/parrot/errors"
 
 var (
-	ErrInvalidLocaleIdent = errors.New(
-		http.StatusBadRequest,
-		"InvalidLocaleIdent",
-		"invalid field locale ident")
-	ErrInvalidLocaleLanguage = errors.New(
-		http.StatusBadRequest,
-		"InvalidLocaleLanguage",
-		"invalid field locale language")
-	ErrInvalidLocaleCountry = errors.New(
-		http.StatusBadRequest,
-		"InvalidLocaleCountry",
-		"invalid field locale country")
+	ErrInvalidLocaleIdent = &errors.Error{
+		Type:    "InvalidLocaleIdent",
+		Message: "invalid field locale ident"}
+	ErrInvalidLocaleLanguage = &errors.Error{
+		Type:    "InvalidLocaleLanguage",
+		Message: "invalid field locale language"}
+	ErrInvalidLocaleCountry = &errors.Error{
+		Type:    "InvalidLocaleCountry",
+		Message: "invalid field locale country"}
 )
 
 type LocaleStorer interface {

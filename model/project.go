@@ -1,16 +1,11 @@
 package model
 
-import (
-	"net/http"
-
-	"github.com/anthonynsimon/parrot/errors"
-)
+import "github.com/anthonynsimon/parrot/errors"
 
 var (
-	ErrInvalidProjectName = errors.New(
-		http.StatusBadRequest,
-		"InvalidProjectName",
-		"invalid field project name")
+	ErrInvalidProjectName = &errors.Error{
+		Type:    "InvalidProjectName",
+		Message: "invalid field project name"}
 )
 
 type ProjectStorer interface {

@@ -49,7 +49,7 @@ var (
 )
 
 type Error struct {
-	Status  int    `json:"status"`
+	Status  int    `json:"status,omitempty"`
 	Type    string `json:"type"`
 	Message string `json:"message"`
 }
