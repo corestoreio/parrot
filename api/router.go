@@ -51,7 +51,7 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 				r3.Get("/", mustAuthorize(CanViewLocales, findLocales))
 				r3.Post("/", mustAuthorize(CanCreateLocales, createLocale))
 
-				r3.Route("/:localeID", func(r4 chi.Router) {
+				r3.Route("/:localeIdent", func(r4 chi.Router) {
 					r4.Get("/", mustAuthorize(CanViewLocales, showLocale))
 					r4.Patch("/pairs", mustAuthorize(CanUpdateLocales, updateLocalePairs))
 					r4.Delete("/", mustAuthorize(CanDeleteLocales, deleteLocale))

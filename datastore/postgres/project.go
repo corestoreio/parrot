@@ -108,6 +108,25 @@ func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error)
 	return &loc, nil
 }
 
+func (db *PostgresDB) GetProjectLocaleByIdent(projectID int, ident string) (*model.Locale, error) {
+	loc := model.Locale{}
+	row := db.QueryRow("SELECT * FROM locales WHERE project_id = $1 AND ident = $2", projectID, ident)
+	pairs := hstore.Hstore{}
+	err := row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
+	if err != nil {
+		return nil, parseError(err)
+	}
+
+	loc.Pairs = make(map[string]string)
+	for k, v := range pairs.Map {
+		if v.Valid {
+			loc.Pairs[k] = v.String
+		}
+	}
+
+	return &loc, nil
+}
+
 func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
 	rows, err := db.Query("SELECT * FROM locales WHERE project_id = $1", projID)
 	if err != nil {

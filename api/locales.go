@@ -48,13 +48,13 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
-	if err != nil {
+	ident := chi.URLParam(r, "localeIdent")
+	if ident == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
 
-	loc, err := store.GetProjectLocale(projectID, id)
+	loc, err := store.GetProjectLocaleByIdent(projectID, ident)
 	if err != nil {
 		handleError(w, err)
 		return
@@ -100,8 +100,8 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
-	if err != nil {
+	ident := chi.URLParam(r, "localeIdent")
+	if ident == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -112,11 +112,10 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 	}
 
 	loc := &model.Locale{}
-	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&loc.Pairs); err != nil {
 		handleError(w, ErrUnprocessable)
 		return
 	}
-	loc.ID = id
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
@@ -126,13 +125,13 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 
 	loc.SyncKeys(project.Keys)
 
-	err = store.UpdateLocale(loc)
+	result, err := store.UpdateProjectLocalePairs(projectID, ident, loc.Pairs)
 	if err != nil {
 		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, loc)
+	render.JSON(w, http.StatusOK, result)
 }
 
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
