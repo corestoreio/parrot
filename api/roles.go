@@ -1,10 +1,78 @@
 package api
 
+import (
+	"net/http"
+	"strconv"
+
+	"github.com/pressly/chi"
+)
+
+type Role string
+type RoleGrant int
+type Authorizer func(string) bool
+
 const (
 	OwnerRole  = "owner"
 	EditorRole = "editor"
 	ViewerRole = "viewer"
 )
+
+const (
+	CanAssignRoles = iota
+	CanRevokeRoles
+	CanUpdateRoles
+	CanViewProjectRoles
+	CanUpdateProject
+	CanDeleteProject
+	CanViewProject
+	CanCreateLocales
+	CanUpdateLocales
+	CanDeleteLocales
+	CanViewLocales
+)
+
+var permissions = map[Role][]RoleGrant{
+	OwnerRole: []RoleGrant{
+		CanAssignRoles,
+		CanRevokeRoles,
+		CanUpdateRoles,
+		CanViewProjectRoles,
+		CanUpdateProject,
+		CanDeleteProject,
+		CanViewProject,
+		CanCreateLocales,
+		CanUpdateLocales,
+		CanDeleteLocales,
+		CanViewLocales,
+	},
+	EditorRole: []RoleGrant{
+		CanViewProjectRoles,
+		CanUpdateProject,
+		CanViewProject,
+		CanCreateLocales,
+		CanUpdateLocales,
+		CanDeleteLocales,
+		CanViewLocales,
+	},
+	ViewerRole: []RoleGrant{
+		CanViewProjectRoles,
+		CanViewProject,
+		CanViewLocales,
+	},
+}
+
+func isAllowed(r Role, a RoleGrant) bool {
+	actions, ok := permissions[r]
+	if !ok {
+		return false
+	}
+	for _, currentAction := range actions {
+		if currentAction == a {
+			return true
+		}
+	}
+	return false
+}
 
 func getProjectUserRole(userID, projID int) (string, error) {
 	users, err := store.GetProjectUserRoles(projID)
@@ -19,90 +87,27 @@ func getProjectUserRole(userID, projID int) (string, error) {
 	return "", ErrNotFound
 }
 
-func canAssignRoles(role string) bool {
-	switch role {
-	case OwnerRole:
-		return true
+func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
+		if err != nil {
+			handleError(w, ErrBadRequest)
+			return
+		}
+		requesterID, err := getUserIDFromContext(r.Context())
+		if err != nil {
+			handleError(w, ErrBadRequest)
+			return
+		}
+		requesterRole, err := getProjectUserRole(requesterID, projectID)
+		if err != nil {
+			handleError(w, err)
+			return
+		}
+		if !isAllowed(Role(requesterRole), action) {
+			handleError(w, ErrForbiden)
+			return
+		}
+		next.ServeHTTP(w, r)
 	}
-	return false
-}
-
-func canRevokeRoles(role string) bool {
-	switch role {
-	case OwnerRole:
-		return true
-	}
-	return false
-}
-
-func canUpdateRoles(role string) bool {
-	switch role {
-	case OwnerRole:
-		return true
-	}
-	return false
-}
-
-func canViewProjectRoles(role string) bool {
-	switch role {
-	case OwnerRole, EditorRole, ViewerRole:
-		return true
-	}
-	return false
-}
-
-func canUpdateProject(role string) bool {
-	switch role {
-	case OwnerRole, EditorRole:
-		return true
-	}
-	return false
-}
-
-func canDeleteProject(role string) bool {
-	switch role {
-	case OwnerRole:
-		return true
-	}
-	return false
-}
-
-func canViewProject(role string) bool {
-	switch role {
-	case OwnerRole, EditorRole, ViewerRole:
-		return true
-	}
-	return false
-}
-
-func canCreateLocales(role string) bool {
-	switch role {
-	case OwnerRole, EditorRole:
-		return true
-	}
-	return false
-}
-
-func canUpdateLocales(role string) bool {
-	switch role {
-	case OwnerRole, EditorRole:
-		return true
-	}
-	return false
-}
-
-func canDeleteLocales(role string) bool {
-	switch role {
-	case OwnerRole:
-		return true
-	}
-	return false
-}
-
-func canViewLocales(role string) bool {
-	switch role {
-	case OwnerRole, EditorRole, ViewerRole:
-		return true
-	}
-	return false
 }
