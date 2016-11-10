@@ -16,7 +16,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	project := model.Project{}
 	errs := decodeAndValidate(r.Body, &project)
 	if errs != nil {
-		render.Error(w, http.StatusBadRequest, errs)
+		render.Error(w, http.StatusUnprocessableEntity, errs)
 		return
 	}
 	userID, err := getUserIDFromContext(r.Context())

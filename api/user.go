@@ -18,7 +18,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
 	if errs != nil {
-		render.Error(w, http.StatusBadRequest, errs)
+		render.Error(w, http.StatusUnprocessableEntity, errs)
 		return
 	}
 

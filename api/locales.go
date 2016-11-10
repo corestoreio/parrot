@@ -22,7 +22,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 	loc := model.Locale{}
 	errs := decodeAndValidate(r.Body, &loc)
 	if errs != nil {
-		render.Error(w, http.StatusBadRequest, errs)
+		render.Error(w, http.StatusUnprocessableEntity, errs)
 		return
 	}
 	loc.ProjectID = projectID
