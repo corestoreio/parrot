@@ -10,13 +10,13 @@ var (
 
 type ProjectStorer interface {
 	GetProject(int) (*Project, error)
-	CreateProject(*Project) (Project, error)
-	UpdateProject(*Project) error
-	DeleteProject(int) (int, error)
+	CreateProject(Project) (*Project, error)
+	UpdateProject(Project) (*Project, error)
+	DeleteProject(int) error
 }
 
 type ProjectLocaleStorer interface {
-	UpdateProjectLocalePairs(projID int, localeIdent string, pairs map[string]string) (*Locale, error)
+	UpdateLocalePairs(projID int, localeIdent string, pairs map[string]string) (*Locale, error)
 	GetProjectLocaleByIdent(projID int, localeIdent string) (*Locale, error)
 	FindProjectLocales(projID int, localeIdents ...string) ([]Locale, error)
 }

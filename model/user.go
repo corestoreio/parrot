@@ -13,8 +13,7 @@ var (
 
 type UserStorer interface {
 	GetUserByEmail(string) (*User, error)
-	CreateUser(*User) error
-	DeleteUser(int) (int, error)
+	CreateUser(User) (*User, error)
 }
 
 type User struct {

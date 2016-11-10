@@ -34,15 +34,15 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	user.Password = string(hashed)
 
-	err = store.CreateUser(&user)
+	result, err := store.CreateUser(user)
 	if err != nil {
 		handleError(w, err)
 		return
 	}
 
 	// Hide password
-	user.Password = ""
-	render.JSON(w, http.StatusCreated, user)
+	result.Password = ""
+	render.JSON(w, http.StatusCreated, result)
 }
 
 func getUserIDFromContext(ctx context.Context) (int, error) {

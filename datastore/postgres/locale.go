@@ -7,7 +7,7 @@ import (
 	"github.com/lib/pq/hstore"
 )
 
-func (db *PostgresDB) CreateLocale(loc *model.Locale) error {
+func (db *PostgresDB) CreateLocale(loc model.Locale) (*model.Locale, error) {
 	h := hstore.Hstore{}
 	h.Map = make(map[string]sql.NullString)
 	for k, v := range loc.Pairs {
@@ -15,16 +15,16 @@ func (db *PostgresDB) CreateLocale(loc *model.Locale) error {
 	}
 	values, err := h.Value()
 	if err != nil {
-		return parseError(err)
+		return nil, parseError(err)
 	}
 
 	row := db.QueryRow("INSERT INTO locales (ident, language, country, pairs, project_id) VALUES($1, $2, $3, $4, $5) RETURNING id",
 		loc.Ident, loc.Language, loc.Country, values, loc.ProjectID)
 	err = row.Scan(&loc.ID)
-	return parseError(err)
+	return &loc, parseError(err)
 }
 
-func (db *PostgresDB) UpdateProjectLocalePairs(projID int, localeIdent string, pairs map[string]string) (*model.Locale, error) {
+func (db *PostgresDB) UpdateLocalePairs(projID int, localeIdent string, pairs map[string]string) (*model.Locale, error) {
 	h := hstore.Hstore{}
 	h.Map = make(map[string]sql.NullString)
 	for k, v := range pairs {
@@ -52,7 +52,7 @@ func (db *PostgresDB) UpdateProjectLocalePairs(projID int, localeIdent string, p
 	return &loc, nil
 }
 
-func (db *PostgresDB) DeleteLocale(id int) (int, error) {
-	err := db.QueryRow("DELETE FROM locales WHERE id = $1 RETURNING id", id).Scan(&id)
-	return id, parseError(err)
+func (db *PostgresDB) DeleteLocale(projID int, ident string) error {
+	_, err := db.Exec("DELETE FROM locales WHERE project_id = $1 AND ident = $2", projID, ident)
+	return parseError(err)
 }

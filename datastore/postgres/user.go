@@ -14,13 +14,8 @@ func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 	return &u, nil
 }
 
-func (db *PostgresDB) CreateUser(u *model.User) error {
-	row := db.QueryRow("INSERT INTO users (email, password) VALUES($1, $2) RETURNING id", u.Email, u.Password)
-	err := row.Scan(&u.ID)
-	return parseError(err)
-}
-
-func (db *PostgresDB) DeleteUser(id int) (int, error) {
-	err := db.QueryRow("DELETE FROM users WHERE id = $1 RETURNING id", id).Scan(&id)
-	return id, parseError(err)
+func (db *PostgresDB) CreateUser(u model.User) (*model.User, error) {
+	row := db.QueryRow("INSERT INTO users (email, password) VALUES($1, $2) RETURNING id, email", u.Email, u.Password)
+	err := row.Scan(&u.ID, &u.Email)
+	return &u, parseError(err)
 }

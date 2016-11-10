@@ -23,7 +23,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := store.CreateProject(&project)
+	result, err := store.CreateProject(project)
 	if err != nil {
 		handleError(w, err)
 		return
@@ -46,20 +46,20 @@ func updateProjectKeys(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project := model.Project{}
-	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&project.Keys); err != nil {
 		handleError(w, err)
 		return
 	}
 	project.ID = projectID
 	project.SanitizeKeys()
 
-	err = store.UpdateProject(&project)
+	result, err := store.UpdateProject(project)
 	if err != nil {
 		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, project)
+	render.JSON(w, http.StatusOK, result)
 }
 
 func showProject(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +85,7 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = store.DeleteProject(projectID)
+	err = store.DeleteProject(projectID)
 	if err != nil {
 		handleError(w, err)
 		return

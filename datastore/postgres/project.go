@@ -27,7 +27,7 @@ func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
 	return &p, nil
 }
 
-func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, error) {
+func (db *PostgresDB) CreateProject(project model.Project) (*model.Project, error) {
 	keys := make(pq.StringArray, len(project.Keys))
 	for i, v := range project.Keys {
 		keys[i] = v
@@ -35,7 +35,7 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 
 	values, err := keys.Value()
 	if err != nil {
-		return model.Project{}, parseError(err)
+		return nil, parseError(err)
 	}
 
 	row := db.QueryRow("INSERT INTO projects (name, keys) VALUES($1, $2) RETURNING *", project.Name, values)
@@ -43,7 +43,7 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 	keys = pq.StringArray{}
 	err = row.Scan(&result.ID, &result.Name, &keys)
 	if err != nil {
-		return model.Project{}, parseError(err)
+		return nil, parseError(err)
 	}
 
 	result.Keys = make([]string, len(keys))
@@ -51,10 +51,10 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 		result.Keys[i] = v
 	}
 
-	return result, nil
+	return &result, nil
 }
 
-func (db *PostgresDB) UpdateProject(project *model.Project) error {
+func (db *PostgresDB) UpdateProject(project model.Project) (*model.Project, error) {
 	keys := make(pq.StringArray, len(project.Keys))
 	for i, v := range project.Keys {
 		keys[i] = v
@@ -62,14 +62,14 @@ func (db *PostgresDB) UpdateProject(project *model.Project) error {
 
 	values, err := keys.Value()
 	if err != nil {
-		return parseError(err)
+		return nil, parseError(err)
 	}
 
 	row := db.QueryRow("UPDATE projects SET keys = $1 WHERE id = $2 RETURNING *", values, project.ID)
 	keys = pq.StringArray{}
 	err = row.Scan(&project.ID, &project.Name, &keys)
 	if err != nil {
-		return parseError(err)
+		return nil, parseError(err)
 	}
 
 	project.Keys = make([]string, len(keys))
@@ -77,15 +77,15 @@ func (db *PostgresDB) UpdateProject(project *model.Project) error {
 		project.Keys[i] = v
 	}
 
-	return nil
+	return &project, nil
 }
 
-func (db *PostgresDB) DeleteProject(id int) (int, error) {
-	err := db.QueryRow("DELETE FROM projects WHERE id = $1 RETURNING id", id).Scan(&id)
+func (db *PostgresDB) DeleteProject(id int) error {
+	_, err := db.Exec("DELETE FROM projects WHERE id = $1", id)
 	if err == sql.ErrNoRows {
-		return -1, errors.ErrNotFound
+		return errors.ErrNotFound
 	}
-	return id, err
+	return err
 }
 
 func (db *PostgresDB) GetProjectLocaleByIdent(projectID int, ident string) (*model.Locale, error) {

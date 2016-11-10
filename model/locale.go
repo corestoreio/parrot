@@ -15,8 +15,8 @@ var (
 )
 
 type LocaleStorer interface {
-	CreateLocale(loc *Locale) error
-	DeleteLocale(id int) (int, error)
+	CreateLocale(loc Locale) (*Locale, error)
+	DeleteLocale(projID int, ident string) error
 }
 
 type Locale struct {
