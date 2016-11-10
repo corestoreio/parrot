@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/anthonynsimon/parrot/auth"
+	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
@@ -57,27 +58,24 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 
 func authenticate(authProvider auth.Provider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := r.ParseForm()
-		if err != nil {
+		user := model.User{}
+		if errs := decodeAndValidate(r.Body, &user); errs != nil {
+			render.Error(w, http.StatusUnprocessableEntity, errs)
+			return
+		}
+
+		if user.Email == "" || user.Password == "" {
 			handleError(w, ErrBadRequest)
 			return
 		}
 
-		email := r.Form.Get("email")
-		password := r.Form.Get("password")
-
-		if email == "" || password == "" {
-			handleError(w, ErrBadRequest)
-			return
-		}
-
-		claimedUser, err := store.GetUserByEmail(email)
+		claimedUser, err := store.GetUserByEmail(user.Email)
 		if err != nil {
 			handleError(w, err)
 			return
 		}
 
-		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(password)); err != nil {
+		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(user.Password)); err != nil {
 			handleError(w, ErrUnauthorized)
 			return
 		}
