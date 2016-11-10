@@ -17,13 +17,14 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 	handleToken := tokenMiddleware(authProvider)
 
 	router := chi.NewRouter()
-	router.Use(cors)
+	// Enforce use of Content-Type header for POST, PUT and PATCH methods and validate it's JSON
+	router.Use(cors, enforceContentTypeJSON)
 
 	router.Get("/ping", ping)
 	router.Post("/authenticate", authenticate(authProvider))
 
-	router.Route("/users", func(dr chi.Router) {
-		dr.Post("/", createUser)
+	router.Route("/users", func(r1 chi.Router) {
+		r1.Post("/", createUser)
 	})
 
 	router.Route("/projects", func(r1 chi.Router) {

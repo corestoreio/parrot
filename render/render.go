@@ -7,7 +7,10 @@ import (
 	"github.com/Sirupsen/logrus"
 )
 
-var jsonContentType = "application/json; charset=utf-8"
+var (
+	jsonContentType        = "application/json"
+	jsonContentTypeCharset = "application/json; charset=utf-8"
+)
 
 type apiResponseBody struct {
 	responseMeta `json:"meta,omitempty"`

@@ -46,6 +46,10 @@ var (
 		http.StatusUnprocessableEntity,
 		"UnprocessableEntity",
 		http.StatusText(http.StatusUnprocessableEntity))
+	ErrUnsupportedMediaType = New(
+		http.StatusUnsupportedMediaType,
+		"UnsupportedMediaType",
+		http.StatusText(http.StatusUnsupportedMediaType))
 )
 
 type Error struct {
