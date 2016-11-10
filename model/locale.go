@@ -15,9 +15,7 @@ var (
 )
 
 type LocaleStorer interface {
-	GetLocale(id int) (*Locale, error)
-	CreateLocale(doc *Locale) error
-	UpdateLocale(doc *Locale) error
+	CreateLocale(loc *Locale) error
 	DeleteLocale(id int) (int, error)
 }
 

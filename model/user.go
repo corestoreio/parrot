@@ -12,7 +12,6 @@ var (
 )
 
 type UserStorer interface {
-	GetUser(int) (*User, error)
 	GetUserByEmail(string) (*User, error)
 	CreateUser(*User) error
 	DeleteUser(int) (int, error)

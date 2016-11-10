@@ -54,7 +54,6 @@ func (db *PostgresDB) CreateProject(project *model.Project) (model.Project, erro
 	return result, nil
 }
 
-// TODO: handle project name update and non destructive key updating?
 func (db *PostgresDB) UpdateProject(project *model.Project) error {
 	keys := make(pq.StringArray, len(project.Keys))
 	for i, v := range project.Keys {
@@ -87,25 +86,6 @@ func (db *PostgresDB) DeleteProject(id int) (int, error) {
 		return -1, errors.ErrNotFound
 	}
 	return id, err
-}
-
-func (db *PostgresDB) GetProjectLocale(projID, docID int) (*model.Locale, error) {
-	row := db.QueryRow("SELECT * FROM locales WHERE project_id = $1 AND id = $2", projID, docID)
-	loc := model.Locale{}
-	pairs := hstore.Hstore{}
-	err := row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
-	if err != nil {
-		return nil, parseError(err)
-	}
-
-	loc.Pairs = make(map[string]string)
-	for k, v := range pairs.Map {
-		if v.Valid {
-			loc.Pairs[k] = v.String
-		}
-	}
-
-	return &loc, nil
 }
 
 func (db *PostgresDB) GetProjectLocaleByIdent(projectID int, ident string) (*model.Locale, error) {

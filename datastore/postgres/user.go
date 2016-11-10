@@ -2,18 +2,6 @@ package postgres
 
 import "github.com/anthonynsimon/parrot/model"
 
-func (db *PostgresDB) GetUser(id int) (*model.User, error) {
-	u := model.User{}
-	row := db.QueryRow("SELECT * FROM users WHERE id = $1", id)
-
-	err := row.Scan(&u.ID, &u.Email, &u.Password)
-	if err != nil {
-		return nil, parseError(err)
-	}
-
-	return &u, nil
-}
-
 func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 	u := model.User{}
 	row := db.QueryRow("SELECT * FROM users WHERE email = $1", email)
