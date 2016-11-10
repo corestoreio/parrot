@@ -6,6 +6,7 @@ import (
 	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/pressly/chi"
+	"github.com/pressly/chi/middleware"
 )
 
 // TODO: inject store via closures instead of keeping global var
@@ -17,7 +18,7 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 
 	router := chi.NewRouter()
 	// Enforce use of Content-Type header for POST, PUT and PATCH methods and validate it's JSON
-	router.Use(cors, enforceContentTypeJSON)
+	router.Use(middleware.DefaultCompress, cors, enforceContentTypeJSON)
 
 	router.Get("/ping", ping)
 	router.Post("/authenticate", authenticate(authProvider))
