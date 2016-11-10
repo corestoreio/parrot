@@ -42,6 +42,10 @@ var (
 		http.StatusBadRequest,
 		"BadRequest",
 		http.StatusText(http.StatusBadRequest))
+	ErrUnprocessable = New(
+		http.StatusUnprocessableEntity,
+		"UnprocessableEntity",
+		http.StatusText(http.StatusUnprocessableEntity))
 )
 
 type Error struct {
@@ -55,7 +59,14 @@ func New(s int, t, m string) *Error {
 }
 
 type MultiError struct {
-	Errors []Error `json:"errors,omitempty"`
+	Status  int     `json:"status"`
+	Type    string  `json:"type"`
+	Message string  `json:"message"`
+	Errors  []Error `json:"errors,omitempty"`
+}
+
+func NewMultiError(s int, t, m string, errs []Error) *MultiError {
+	return &MultiError{Status: s, Type: t, Message: m, Errors: errs}
 }
 
 func (e *Error) Error() string {

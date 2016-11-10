@@ -49,7 +49,8 @@ func (p *Project) Validate() error {
 		errs = append(errs, *ErrInvalidProjectName)
 	}
 	if errs != nil {
-		return &errors.MultiError{Errors: errs}
+		err := errors.ErrUnprocessable
+		return errors.NewMultiError(err.Status, err.Type, err.Message, errs)
 	}
 	return nil
 }
