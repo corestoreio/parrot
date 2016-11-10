@@ -19,19 +19,6 @@ func getProjectUserRole(userID, projID int) (string, error) {
 	return "", ErrNotFound
 }
 
-func isProjectUser(userID, projID int) (bool, error) {
-	users, err := store.GetProjectUsers(projID)
-	if err != nil {
-		return false, err
-	}
-	for _, u := range users {
-		if u.ID == userID {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
 func canAssignRoles(role string) bool {
 	switch role {
 	case OwnerRole:
