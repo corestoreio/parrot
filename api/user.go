@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	"golang.org/x/crypto/bcrypt"
@@ -24,13 +23,13 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	existingUser, err := store.GetUserByEmail(user.Email)
 	if err == nil && existingUser.Email == user.Email {
-		handleError(w, errors.ErrAlreadyExists)
+		handleError(w, ErrAlreadyExists)
 		return
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -50,22 +49,22 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 func getUserIDFromContext(ctx context.Context) (int, error) {
 	v := ctx.Value("userID")
 	if v == nil {
-		return -1, errors.ErrInternal
+		return -1, ErrInternal
 	}
 	str := v.(string)
 	if v == "" {
-		return -1, errors.ErrInternal
+		return -1, ErrInternal
 	}
 	id, err := strconv.Atoi(str)
 	if err != nil {
-		return -1, errors.ErrInternal
+		return -1, ErrInternal
 	}
 	return id, nil
 }
 
 func decodeAndValidate(r io.Reader, m model.Validatable) error {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
-		return errors.ErrBadRequest
+		return ErrBadRequest
 	}
 	return m.Validate()
 }

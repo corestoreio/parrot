@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	"github.com/pressly/chi"
@@ -21,19 +20,19 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
 	result, err := store.CreateProject(&project)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 	pu := model.ProjectUser{ProjectID: result.ID, UserID: userID, Role: "admin"}
 	err = store.AssignProjectUser(pu)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -43,13 +42,13 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 func updateProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
 	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 	project.ID = projectID
@@ -57,7 +56,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateProject(&project)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -67,7 +66,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 func showProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
@@ -83,13 +82,13 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 func deleteProject(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
 	resultID, err := store.DeleteProject(projectID)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 

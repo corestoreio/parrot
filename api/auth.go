@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/anthonynsimon/parrot/auth"
-	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
@@ -36,12 +35,12 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
 			if err != nil {
-				handleError(w, errors.ErrUnauthorized)
+				handleError(w, ErrUnauthorized)
 				return
 			}
 			claims, err := ap.ParseAndVerifyToken(tokenString)
 			if err != nil {
-				handleError(w, errors.ErrUnauthorized)
+				handleError(w, ErrUnauthorized)
 				return
 			}
 
@@ -60,7 +59,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
-			handleError(w, errors.ErrBadRequest)
+			handleError(w, ErrBadRequest)
 			return
 		}
 
@@ -68,7 +67,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 		password := r.Form.Get("password")
 
 		if email == "" || password == "" {
-			handleError(w, errors.ErrBadRequest)
+			handleError(w, ErrBadRequest)
 			return
 		}
 
@@ -79,7 +78,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 		}
 
 		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(password)); err != nil {
-			handleError(w, errors.ErrUnauthorized)
+			handleError(w, ErrUnauthorized)
 			return
 		}
 
@@ -96,7 +95,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 
 		tokenString, err := authProvider.CreateToken(claims)
 		if err != nil {
-			handleError(w, errors.ErrInternal)
+			handleError(w, ErrInternal)
 			return
 		}
 

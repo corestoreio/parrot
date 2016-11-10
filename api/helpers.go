@@ -6,7 +6,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	datastoreErrors "github.com/anthonynsimon/parrot/datastore/errors"
-	apiErrors "github.com/anthonynsimon/parrot/errors"
+	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/render"
 	"github.com/pressly/chi"
 )
@@ -23,12 +23,12 @@ func mustAuthorize(fn Authorizer, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 		if err != nil {
-			handleError(w, apiErrors.ErrBadRequest)
+			handleError(w, ErrBadRequest)
 			return
 		}
 		requesterID, err := getUserIDFromContext(r.Context())
 		if err != nil {
-			handleError(w, apiErrors.ErrBadRequest)
+			handleError(w, ErrBadRequest)
 			return
 		}
 		requesterRole, err := getProjectUserRole(requesterID, projectID)
@@ -37,7 +37,7 @@ func mustAuthorize(fn Authorizer, next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		if !fn(requesterRole) {
-			handleError(w, apiErrors.ErrForbiden)
+			handleError(w, ErrForbiden)
 			return
 		}
 		next.ServeHTTP(w, r)
@@ -46,22 +46,22 @@ func mustAuthorize(fn Authorizer, next http.HandlerFunc) http.HandlerFunc {
 
 func handleError(w http.ResponseWriter, err error) {
 	// Try to match store error
-	var outErr *apiErrors.Error
+	var outErr *errors.Error
 	// If cast is successful, done, we got our error
-	if castedErr, ok := err.(*apiErrors.Error); ok {
+	if castedErr, ok := err.(*errors.Error); ok {
 		outErr = castedErr
 	} else {
 		// Check if it is a datastore error
 		switch err {
 		case datastoreErrors.ErrNotFound:
-			outErr = apiErrors.ErrNotFound
+			outErr = ErrNotFound
 		case datastoreErrors.ErrAlreadyExists:
-			outErr = apiErrors.ErrAlreadyExists
+			outErr = ErrAlreadyExists
 		default:
 			// If no match was found, log it and write internal error to response
 			// TODO: conform error tags in log
 			logrus.Error(err)
-			outErr = apiErrors.ErrInternal
+			outErr = ErrInternal
 
 		}
 	}
@@ -75,7 +75,7 @@ func enforceContentTypeJSON(next http.Handler) http.Handler {
 		case "POST", "PUT", "PATCH":
 			ct := r.Header.Get("Content-Type")
 			if !isValidContentType(ct) {
-				handleError(w, apiErrors.ErrUnsupportedMediaType)
+				handleError(w, ErrUnsupportedMediaType)
 				return
 			}
 		}

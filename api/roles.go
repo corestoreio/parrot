@@ -1,7 +1,5 @@
 package api
 
-import "github.com/anthonynsimon/parrot/errors"
-
 const (
 	AdminRole       = "admin"
 	ContributorRole = "contributor"
@@ -18,7 +16,7 @@ func getProjectUserRole(userID, projID int) (string, error) {
 			return u.Role, nil
 		}
 	}
-	return "", errors.ErrNotFound
+	return "", ErrNotFound
 }
 
 func isProjectUser(userID, projID int) (bool, error) {

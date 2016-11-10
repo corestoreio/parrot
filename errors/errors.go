@@ -1,56 +1,6 @@
 package errors
 
-import (
-	"fmt"
-	"net/http"
-)
-
-var (
-	ErrConflict = New(
-		http.StatusConflict,
-		"Conflict",
-		http.StatusText(http.StatusConflict))
-	ErrAlreadyExists = New(
-		http.StatusConflict,
-		"AlreadyExists",
-		"entry already exists")
-	ErrDuplicateEntry = New(
-		http.StatusConflict,
-		"DuplicateEntry",
-		"duplicate entry")
-	ErrNotImplemented = New(
-		http.StatusNotImplemented,
-		"NotImplemented",
-		http.StatusText(http.StatusNotImplemented))
-	ErrInternal = New(
-		http.StatusInternalServerError,
-		"Internal",
-		http.StatusText(http.StatusInternalServerError))
-	ErrUnauthorized = New(
-		http.StatusUnauthorized,
-		"Unauthorized",
-		http.StatusText(http.StatusUnauthorized))
-	ErrForbiden = New(
-		http.StatusForbidden,
-		"Forbiden",
-		http.StatusText(http.StatusForbidden))
-	ErrNotFound = New(
-		http.StatusNotFound,
-		"NotFound",
-		http.StatusText(http.StatusNotFound))
-	ErrBadRequest = New(
-		http.StatusBadRequest,
-		"BadRequest",
-		http.StatusText(http.StatusBadRequest))
-	ErrUnprocessable = New(
-		http.StatusUnprocessableEntity,
-		"UnprocessableEntity",
-		http.StatusText(http.StatusUnprocessableEntity))
-	ErrUnsupportedMediaType = New(
-		http.StatusUnsupportedMediaType,
-		"UnsupportedMediaType",
-		http.StatusText(http.StatusUnsupportedMediaType))
-)
+import "fmt"
 
 type Error struct {
 	Status  int    `json:"status,omitempty"`

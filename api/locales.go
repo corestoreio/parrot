@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/anthonynsimon/parrot/errors"
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	"github.com/pressly/chi"
@@ -15,7 +14,7 @@ import (
 func createLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
@@ -29,7 +28,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := store.GetProject(projectID)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -37,7 +36,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateLocale(&loc)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -47,12 +46,12 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 func showLocale(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
@@ -76,7 +75,7 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 func findLocales(w http.ResponseWriter, r *http.Request) {
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 
 	}
@@ -84,13 +83,13 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -104,18 +103,18 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 func updateLocale(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 	loc.ID = id
@@ -130,7 +129,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateLocale(loc)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
@@ -140,13 +139,13 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "localeID"))
 	if err != nil {
-		handleError(w, errors.ErrBadRequest)
+		handleError(w, ErrBadRequest)
 		return
 	}
 
 	resultID, err := store.DeleteLocale(id)
 	if err != nil {
-		handleError(w, errors.ErrInternal)
+		handleError(w, ErrInternal)
 		return
 	}
 
