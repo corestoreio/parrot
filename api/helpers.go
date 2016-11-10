@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/pressly/chi"
+
+	"github.com/anthonynsimon/parrot/render"
 )
 
 var (
@@ -65,4 +67,14 @@ func isValidContentType(ct string) bool {
 		}
 	}
 	return false
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
+	render.JSON(w, http.StatusOK, map[string]interface{}{
+		"message": "Parrot says hello.",
+	})
+}
+
+func options(w http.ResponseWriter, r *http.Request) {
+	render.JSON(w, http.StatusOK, nil)
 }
