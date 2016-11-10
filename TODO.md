@@ -1,15 +1,14 @@
 - Switch to SSL only, respond with error if not using it
-- Switch to URI: /projects/UUID/locales/en_US
-- Refactor routes to subresouces (ex.: PATCH projects/1/keys and PATCH projects/1/locales/2/pairs)
-- Log internal errors, setup modes?
-- Validate request body id has permission (url id and body obj id must match?)
-- Non-destructive store? Add snapshots or append only?
-- Refactor main to cli and make configurable
 - Update docker and nginx confs
+- Add rate limiting
+- Add gzip compression
+- Add cache (redis?)
+
 - Handle HEAD locale revisions (how would this work with project keys update while using old HEAD?)
-- Add url query param for filtering
+- Pass project user role on GET /projects/:id/users
+
+- Add support for client access token and role
+
 - Separate auth issuing service from authenticator, conform to oauth2?
-- Add rate limiting (via nginx?)
-- Add gzip compression (via nginx?)
-- Add cache (infront of app?)
-- Add support for client access token and role?
+- Refactor main to cli and make configurable
+- Non-destructive store? Add snapshots or append only?
