@@ -61,7 +61,7 @@ func JSONWithHeaders(w http.ResponseWriter, status int, headers map[string]strin
 }
 
 func handleBody(w http.ResponseWriter, body apiResponseBody) {
-	encoded, err := json.Marshal(body)
+	encoded, err := json.MarshalIndent(body, "", "    ")
 	if err != nil {
 		logrus.Error(err)
 	}
