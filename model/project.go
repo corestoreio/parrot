@@ -18,7 +18,7 @@ type ProjectStorer interface {
 type ProjectLocaleStorer interface {
 	UpdateLocalePairs(projID int, localeIdent string, pairs map[string]string) (*Locale, error)
 	GetProjectLocaleByIdent(projID int, localeIdent string) (*Locale, error)
-	FindProjectLocales(projID int, localeIdents ...string) ([]Locale, error)
+	GetProjectLocales(projID int, localeIdents ...string) ([]Locale, error)
 }
 
 type Project struct {

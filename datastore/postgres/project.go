@@ -107,7 +107,7 @@ func (db *PostgresDB) GetProjectLocaleByIdent(projectID int, ident string) (*mod
 	return &loc, nil
 }
 
-func (db *PostgresDB) FindProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
+func (db *PostgresDB) GetProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
 	rows, err := db.Query("SELECT * FROM locales WHERE project_id = $1", projID)
 	if err != nil {
 		return nil, parseError(err)
