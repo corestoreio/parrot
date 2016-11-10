@@ -19,7 +19,7 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 
 	projects, err := store.GetUserProjects(id)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -35,7 +35,7 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 
 	users, err := store.GetProjectUsers(projectID)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -61,7 +61,7 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 
 	err = store.AssignProjectUser(pu)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -91,7 +91,7 @@ func updateProjectUser(w http.ResponseWriter, r *http.Request) {
 
 	result, err := store.UpdateProjectUser(pu)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -113,9 +113,9 @@ func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 
 	err = store.RevokeProjectUser(pu)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, pu)
+	render.JSON(w, http.StatusNoContent, nil)
 }

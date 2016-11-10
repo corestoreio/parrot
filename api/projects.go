@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -20,19 +19,19 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, err := getUserIDFromContext(r.Context())
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
 	result, err := store.CreateProject(&project)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
-	pu := model.ProjectUser{ProjectID: result.ID, UserID: userID, Role: "admin"}
+	pu := model.ProjectUser{ProjectID: result.ID, UserID: userID, Role: AdminRole}
 	err = store.AssignProjectUser(pu)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -48,7 +47,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 
 	project := model.Project{}
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, err)
 		return
 	}
 	project.ID = projectID
@@ -56,7 +55,7 @@ func updateProject(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateProject(&project)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -86,13 +85,11 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resultID, err := store.DeleteProject(projectID)
+	_, err = store.DeleteProject(projectID)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, map[string]interface{}{
-		"message": fmt.Sprintf("deleted project with id %d and all related locales", resultID),
-	})
+	render.JSON(w, http.StatusNoContent, nil)
 }

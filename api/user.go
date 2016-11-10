@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -29,7 +28,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -41,9 +40,9 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.JSON(w, http.StatusCreated, map[string]interface{}{
-		"message": fmt.Sprintf("created user with email: %s", user.Email),
-	})
+	// Hide password
+	user.Password = ""
+	render.JSON(w, http.StatusCreated, user)
 }
 
 func getUserIDFromContext(ctx context.Context) (int, error) {

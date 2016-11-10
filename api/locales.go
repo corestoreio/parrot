@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -28,7 +27,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := store.GetProject(projectID)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -36,7 +35,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.CreateLocale(&loc)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -83,13 +82,13 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 
 	locs, err := store.FindProjectLocales(projectID, localeIdents...)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
 	project, err := store.GetProject(projectID)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -114,7 +113,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc); err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, ErrUnprocessable)
 		return
 	}
 	loc.ID = id
@@ -129,7 +128,7 @@ func updateLocale(w http.ResponseWriter, r *http.Request) {
 
 	err = store.UpdateLocale(loc)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
@@ -143,13 +142,11 @@ func deleteLocale(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resultID, err := store.DeleteLocale(id)
+	_, err = store.DeleteLocale(id)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, map[string]interface{}{
-		"message": fmt.Sprintf("deleted locale with id %d", resultID),
-	})
+	render.JSON(w, http.StatusNoContent, nil)
 }
