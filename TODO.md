@@ -1,7 +1,4 @@
-- Switch to SSL only, respond with error if not using it
-- Update docker and nginx confs
-- Add rate limiting
-- Add gzip compression
+- Update docker config
 - Add cache (redis?)
 
 - Handle HEAD locale revisions (how would this work with project keys update while using old HEAD?)
