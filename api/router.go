@@ -19,7 +19,6 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 	// Enforce use of Content-Type header for POST, PUT and PATCH methods and validate it's JSON
 	router.Use(
 		enforceContentTypeJSON,
-		cors,
 	)
 
 	router.Get("/ping", ping)

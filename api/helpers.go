@@ -44,7 +44,3 @@ func ping(w http.ResponseWriter, r *http.Request) {
 		"message": "Parrot says hello.",
 	})
 }
-
-func options(w http.ResponseWriter, r *http.Request) {
-	render.JSON(w, http.StatusOK, nil)
-}
