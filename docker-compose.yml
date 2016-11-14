@@ -1,5 +1,9 @@
 version: '2'
 
+volumes: 
+    # Create a volume in the host system to persist postgres data
+    pgdata: {}
+
 services:
     proxy:
         build:
@@ -18,8 +22,6 @@ services:
             - "5432:5432"
         build:
             context: ./docker/postgres
-        ## Enable 'volumes' section to persist Postgres data
-        ## Replace '/your/absolute/path' with the path on the
-        ## host system in which you want to persist the data
-        # volumes:
-        #     - /your/absolute/path:/var/lib/postgresql/data
+        volumes:
+            # Use the pgdata volume to persist this db
+            - pgdata:/var/lib/postgresql/data/pgdata
