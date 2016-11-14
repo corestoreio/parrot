@@ -1,4 +1,5 @@
 version: '2'
+
 services:
     proxy:
         build:
@@ -13,5 +14,12 @@ services:
         depends_on:
             - db
     db:
+        ports:
+            - "5432:5432"
         build:
             context: ./docker/postgres
+        ## Enable 'volumes' section to persist Postgres data
+        ## Replace '/your/absolute/path' with the path on the
+        ## host system in which you want to persist the data
+        # volumes:
+        #     - /your/absolute/path:/var/lib/postgresql/data
