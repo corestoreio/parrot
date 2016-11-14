@@ -1,9 +1,9 @@
 {
-  "host": "localhost",
+  "host": "db",
   "port": 5432,
-  "username": "testuser",
-  "password": "test",
-  "database": "testdb",
+  "username": "postgres",
+  "password": "",
+  "database": "parrot",
   "sslmode": "disable",
   "migration-table": "public.schema_migrations",
   "migration-folder": "datastore/postgres/migrations",
