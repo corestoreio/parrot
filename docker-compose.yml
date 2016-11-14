@@ -1,0 +1,16 @@
+version: '2'
+services:
+    proxy:
+        build:
+            context: ./docker/nginx 
+        depends_on:
+            - api
+        ports: 
+            - "443:443"
+    api:
+        build: .
+        env_file: ./.env
+        depends_on:
+            - db
+    db:
+        image: postgres:9.4
