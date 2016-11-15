@@ -12,6 +12,7 @@ RUN \
 
 COPY nginx.conf /etc/nginx
 COPY mime.types /etc/nginx
+COPY headers.conf /etc/nginx
 COPY sites-enabled /etc/nginx/sites-enabled
 COPY certs /etc/nginx/certs
 
