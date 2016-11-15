@@ -1,12 +1,12 @@
--- CREATE EXTENSION hstore;
+CREATE EXTENSION IF NOT EXISTS hstore;
 
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     keys text[]
 );
 
-CREATE TABLE locales (
+CREATE TABLE IF NOT EXISTS locales (
     id SERIAL PRIMARY KEY,
     ident TEXT NOT NULL,
     language TEXT NOT NULL,
@@ -16,14 +16,14 @@ CREATE TABLE locales (
     UNIQUE (ident, project_id)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     UNIQUE (email)
 );
 
-CREATE TABLE projects_users (
+CREATE TABLE IF NOT EXISTS projects_users (
     user_id INTEGER REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     project_id INTEGER REFERENCES projects (id) ON UPDATE CASCADE ON DELETE CASCADE,
     role TEXT NOT NULL,
