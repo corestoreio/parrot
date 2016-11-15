@@ -41,8 +41,8 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-
 	defer ds.Close()
+
 	blockAndRetry(5*time.Second, func() bool {
 		if err = ds.Ping(); err != nil {
 			logrus.Error(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
