@@ -43,6 +43,7 @@ func main() {
 	}
 	defer ds.Close()
 
+	// Ping DB until service is up, block meanwhile
 	blockAndRetry(5*time.Second, func() bool {
 		if err = ds.Ping(); err != nil {
 			logrus.Error(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
