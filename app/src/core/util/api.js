@@ -1,20 +1,20 @@
 import { getToken } from './token';
 import { browserHistory } from 'react-router';
 
-export const extractJson = (response) => {
+export const extractJSON = (response) => {
     if (!response.ok) {
-        console.log(response);
         throw response.status;
     }
     return response.json();
 };
 
 
-export const apiRequest = (config={}) => {
+export const apiRequest = (config = {}) => {
     const headers = {
         "Accept": 'application/json',
+        "Content-Type": 'application/json',
     };
-    
+
     if (config.includeAuth) {
         const token = getToken();
         if (!token) {
@@ -28,5 +28,6 @@ export const apiRequest = (config={}) => {
         headers: headers,
         body: config.body
     })
-    .then(res => extractJson(res))
+        .then(res => extractJSON(res))
+        .then(json => json.payload)
 };

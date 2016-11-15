@@ -2,7 +2,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router'
 import App from './app';
-import HomePage from './containers/Home';
 import NotFound from './containers/NotFound';
 import LoginPage from './containers/Login';
 import RegisterPage from './containers/Register';

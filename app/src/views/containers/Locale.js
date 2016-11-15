@@ -6,7 +6,7 @@ import LoadingIndicator from './../components/LoadingIndicator';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import { goBack } from 'react-router-redux';
 
 class LocalePage extends React.Component {
@@ -47,7 +47,7 @@ class LocalePage extends React.Component {
             <div>
                 <LocalePairs pairs={locale.pairs}
                     onCommit={this.handleCommitPairs}
-                />
+                    />
             </div>
         );
     }
@@ -63,15 +63,15 @@ class LocalePage extends React.Component {
         return (
             <div>
                 <AppBar
-                    style={{position: 'fixed', top: 0}}
+                    style={{ position: 'fixed', top: 0 }}
                     title={locale ? locale.ident : ''}
                     showMenuIconButton={true}
                     iconElementLeft={backButton}
-                >
+                    >
                 </AppBar>
-                <div style={{marginTop: 60}}>
+                <div style={{ marginTop: 60 }}>
 
-                    <Toolbar style={{backgroundColor: '#0087A6'}}>
+                    <Toolbar style={{ backgroundColor: '#0087A6' }}>
                         <ToolbarGroup>
 
                         </ToolbarGroup>
@@ -102,7 +102,7 @@ const mapStateToProps = (state, ownProps) => {
             }
         }
     }
-        
+
     return {
         locale: locale,
         pending: state.locales.pending

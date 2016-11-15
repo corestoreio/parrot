@@ -11,7 +11,7 @@ import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 
 class ProjectPage extends React.Component {
     componentDidMount() {
@@ -44,7 +44,7 @@ class ProjectPage extends React.Component {
         );
     }
 
-    render () {
+    render() {
         const project = this.props.project;
         const backButton = (
             <IconButton onTouchTap={this.props.goBack}>
@@ -55,29 +55,29 @@ class ProjectPage extends React.Component {
         return (
             <div>
                 <AppBar
-                    style={{position: 'fixed', top: 0}}
+                    style={{ position: 'fixed', top: 0 }}
                     title={project ? project.name : ''}
                     showMenuIconButton={true}
                     iconElementLeft={backButton}
-                >
+                    >
                 </AppBar>
-                <div style={{marginTop: 60}}>
+                <div style={{ marginTop: 60 }}>
 
-                    <Toolbar style={{backgroundColor: '#0087A6'}}>
+                    <Toolbar style={{ backgroundColor: '#0087A6' }}>
                         <ToolbarGroup>
                             <FlatButton
-                                style={{color: 'white'}}
+                                style={{ color: 'white' }}
                                 label="Project Keys"
                                 onClick={this.props.linkToEditKeys}
-                            />
+                                />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <div style={{margin: 'auto'}}>
+                            <div style={{ margin: 'auto' }}>
                                 <LocaleSelectField
                                     availableLocales={this.props.availableLocales}
                                     label="Add locale"
                                     onSubmit={this.props.onLocaleAdd}
-                                />
+                                    />
                             </div>
                         </ToolbarGroup>
                     </Toolbar>
@@ -95,10 +95,10 @@ class ProjectPage extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     const id = parseInt(ownProps.params.projectId, 10);
     const result = state.projects.projects.find((element) => {
-            return element.id === id;
+        return element.id === id;
     });
-    const existingLocales = state.locales.activeLocales.map((elem)=>{
-        return {ident: elem.locale};
+    const existingLocales = state.locales.activeLocales.map((elem) => {
+        return { ident: elem.locale };
     });
 
     return {

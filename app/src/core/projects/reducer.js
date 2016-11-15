@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 };
 
 export function projectsReducer(state = INITIAL_STATE, action) {
-    switch(action.type) {
+    switch (action.type) {
         // Fetch projects
         case projectActions.FETCH_PROJECTS_PENDING:
             return {

@@ -1,4 +1,4 @@
-const apiRoot = 'http://localhost:8080/api';
+const apiRoot = 'https:/localhost/api';
 
 const Remotes = {
     authPath: () => apiRoot + '/authenticate',
@@ -6,7 +6,7 @@ const Remotes = {
     projectsPath: () => apiRoot + '/projects',
     projectPath: (id) => `${Remotes.projectsPath()}/${id}`,
     localesPath: (projectId) => `${Remotes.projectPath(projectId)}/locales`,
-    localePath: (projectId, localeId) => `${Remotes.localesPath(projectId)}/${localeId}`
+    localePath: (projectId, localeIdent) => `${Remotes.localesPath(projectId)}/${localeIdent}`
 }
 
 export default Remotes;

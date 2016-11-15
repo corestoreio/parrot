@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
@@ -15,35 +14,35 @@ export default class NewProjectDialog extends React.Component {
 				name: ''
 			}
 		};
-        this.handleChange = this.handleChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-    }
+		this.handleChange = this.handleChange.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
+	}
 
-    static propTypes = {
-        onSubmit: PropTypes.func.isRequired
-    }
+	static propTypes = {
+		onSubmit: PropTypes.func.isRequired
+	}
 
-    handleChange(e) {
-        e.preventDefault();
+	handleChange(e) {
+		e.preventDefault();
 		const project = this.state.project;
-        project[e.target.id] = e.target.value;
+		project[e.target.id] = e.target.value;
 		this.setState({
 			project: project
 		});
-    }
+	}
 
 	onSubmit(e) {
-        e.preventDefault();
-        this.props.onSubmit(this.state.project);
+		e.preventDefault();
+		this.props.onSubmit(this.state.project);
 		this.handleClose();
-    }
+	}
 
 	handleOpen = () => {
-		this.setState({open: true});
+		this.setState({ open: true });
 	};
 
 	handleClose = () => {
-		this.setState({open: false});
+		this.setState({ open: false });
 	};
 
 	render() {
@@ -52,13 +51,13 @@ export default class NewProjectDialog extends React.Component {
 				label="Cancel"
 				primary={true}
 				onTouchTap={this.handleClose}
-			/>,
+				/>,
 			<FlatButton
 				label="Submit"
 				primary={true}
-                keyboardFocused={true}
+				keyboardFocused={true}
 				onTouchTap={this.onSubmit}
-			/>,
+				/>,
 		];
 
 		return (
@@ -73,13 +72,13 @@ export default class NewProjectDialog extends React.Component {
 					modal={false}
 					onRequestClose={this.handleClose}
 					open={this.state.open}
-				>
+					>
 					<TextField
 						id="name"
 						hintText="The project's name"
 						floatingLabelText="Name"
 						onChange={this.handleChange}
-					/>
+						/>
 				</Dialog>
 			</div>
 		);

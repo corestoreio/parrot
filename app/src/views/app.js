@@ -2,7 +2,6 @@ import React from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import './css/app.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { connect } from 'react-redux';
 
 // Needed for onTouchTap
 injectTapEventPlugin();

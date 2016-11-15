@@ -11,7 +11,7 @@ export const localeActions = {
     FETCH_LOCALE_PENDING: 'FETCH_LOCALE_PENDING',
     FETCH_LOCALE_REJECTED: 'FETCH_LOCALE_REJECTED',
     FETCH_LOCALE_FULFILLED: 'FETCH_LOCALE_FULFILLED',
-    
+
     FETCH_LOCALES: 'FETCH_LOCALES',
     FETCH_LOCALES_PENDING: 'FETCH_LOCALES_PENDING',
     FETCH_LOCALES_REJECTED: 'FETCH_LOCALES_REJECTED',
@@ -38,9 +38,9 @@ export function updateLocale(projectId, locale) {
     return {
         type: localeActions.UPDATE_LOCALE,
         payload: apiRequest({
-            method: 'PUT',
-            path: Remotes.localePath(projectId, locale.id),
-            body: JSON.stringify(locale),
+            method: 'PATCH',
+            path: Remotes.localePath(projectId, locale.ident) + '/pairs',
+            body: JSON.stringify(locale.pairs),
             includeAuth: true
         })
     };
@@ -52,7 +52,7 @@ export function createLocale(projectId, locale) {
         payload: apiRequest({
             method: 'POST',
             path: Remotes.localesPath(projectId),
-            body:  JSON.stringify(locale),
+            body: JSON.stringify(locale),
             includeAuth: true
         })
     };
