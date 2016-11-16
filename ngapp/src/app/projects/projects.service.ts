@@ -39,10 +39,26 @@ export class ProjectsService {
       })
   }
 
+  createProject(project) {
+    return this.http.post(
+      `${API_BASE_URL}/projects`,
+      JSON.stringify(project),
+      { headers: this.getApiHeaders() }
+    )
+      .map(res => res.json())
+      .map(res => {
+        let project = res.payload;
+        if (!project) {
+          throw new Error("no project in response");
+        }
+        return project;
+      })
+  }
+
   private getApiHeaders() {
     let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     return headers;
   }
-
 }
