@@ -6,14 +6,14 @@ import { ProjectComponent } from './project/project.component';
 import { AuthService } from './../auth.service';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     imports: [
         ProjectsRoutingModule,
         HttpModule,
         FormsModule,
-        BrowserModule
+        CommonModule
     ],
     declarations: [
         ProjectsComponent,
