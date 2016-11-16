@@ -1,4 +1,5 @@
 <section>
+  <create-project [onSubmit]="createProject"> </create-project>
   <ul>
     <li *ngFor="let project of projects">
       <a href="#" [routerLink]="['/projects', project.id]">
@@ -6,5 +7,4 @@
           </a>
     </li>
   </ul>
-  <create-project [onSubmit]="createProject"> </create-project>
 </section>
