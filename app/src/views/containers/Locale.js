@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import LocalePairs from './../components/LocalePairs';
-import { fetchLocales, updateLocale } from './../../core/locales';
+import { fetchLocales, updateLocale, getLocale } from './../../core/locales';
 import LoadingIndicator from './../components/LoadingIndicator';
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
@@ -92,19 +92,9 @@ class LocalePage extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const ident = ownProps.params.localeId;
-    let locale = null;
-    let activeLocales = state.locales.activeLocales;
-    if (activeLocales && ident) {
-        for (let i = 0; i < activeLocales.length; i++) {
-            if (activeLocales[i].ident === ident) {
-                locale = Object.assign({}, activeLocales[i]);
-                break;
-            }
-        }
-    }
 
     return {
-        locale: locale,
+        locale: getLocale(state, ident),
         pending: state.locales.pending
     };
 };

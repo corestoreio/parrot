@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { push, goBack } from 'react-router-redux';
 import { connect } from 'react-redux';
-import { fetchProjects } from './../../core/projects';
+import { fetchProjects, getProject } from './../../core/projects';
 import { fetchLocales, createLocale } from './../../core/locales';
 import { getAvailableLocales } from './../../core/util/locale';
 import LocaleList from './../components/LocaleList';
@@ -94,17 +94,11 @@ class ProjectPage extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const id = parseInt(ownProps.params.projectId, 10);
-    const result = state.projects.projects.find((element) => {
-        return element.id === id;
-    });
-    const existingLocales = state.locales.activeLocales.map((elem) => {
-        return { ident: elem.locale };
-    });
 
     return {
-        project: result,
+        project: getProject(state, id),
         pending: state.projects.pending,
-        availableLocales: getAvailableLocales(existingLocales),
+        availableLocales: getAvailableLocales(state.locales.activeLocales),
         locales: state.locales.activeLocales
     };
 };
