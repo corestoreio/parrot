@@ -3,8 +3,7 @@ import { ProjectsService } from './../projects.service';
 
 @Component({
     selector: 'create-project',
-    templateUrl: './create-project.component.html',
-    styleUrls: ['./create-project.component.css']
+    templateUrl: './create-project.component.html'
 })
 export class CreateProjectComponent {
     @Input()
