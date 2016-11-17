@@ -4,10 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ProjectsService } from './../projects.service';
 
 @Component({
-  selector: 'app-project',
-  templateUrl: './project.component.html'
+  selector: 'project-detail',
+  templateUrl: './project-detail.component.html'
 })
-export class ProjectComponent implements OnInit {
+export class ProjectDetailComponent implements OnInit {
   private project;
 
   constructor(private service: ProjectsService, private route: ActivatedRoute) { }

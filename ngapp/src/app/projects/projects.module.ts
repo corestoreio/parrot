@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ProjectsRoutingModule } from './projects-routing.module';
 import { ProjectsService } from './projects.service';
 import { ProjectsComponent } from './projects.component';
-import { ProjectComponent } from './project/project.component';
+import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
     ],
     declarations: [
         ProjectsComponent,
-        ProjectComponent,
+        ProjectDetailComponent,
         CreateProjectComponent
     ],
     providers: [
