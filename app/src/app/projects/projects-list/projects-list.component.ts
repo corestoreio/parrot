@@ -7,9 +7,11 @@ import { ProjectsService } from './../projects.service';
 })
 export class ProjectsListComponent implements OnInit {
   projects;
+  loading: boolean;
 
   constructor(private projectsService: ProjectsService) {
     this.projects = [];
+    this.loading = false;
   }
 
   ngOnInit() {
@@ -18,12 +20,15 @@ export class ProjectsListComponent implements OnInit {
   }
 
   getProjects() {
+    this.loading = true;
     this.projectsService.getProjects().subscribe(
       res => {
         this.projects = res;
+        this.loading = false;
       },
       err => {
         // TODO
+        this.loading = false;
       }
     );
   }

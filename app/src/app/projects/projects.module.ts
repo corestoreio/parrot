@@ -7,10 +7,13 @@ import { ProjectsListComponent } from './projects-list/projects-list.component';
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 
+import { MaterialModule } from '@angular/material';
+
 @NgModule({
     imports: [
         FormsModule,
-        CommonModule
+        CommonModule,
+        MaterialModule.forRoot()
     ],
     exports: [
         ProjectsListComponent,

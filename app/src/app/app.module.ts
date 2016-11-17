@@ -15,6 +15,8 @@ import { LocalesModule } from './locales/locales.module';
 
 import { HomePageComponent } from './pages/home/home-page.component';
 
+import { MaterialModule } from '@angular/material';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -27,7 +29,8 @@ import { HomePageComponent } from './pages/home/home-page.component';
         AppRoutingModule,
         ProjectsModule,
         LocalesModule,
-        AuthModule
+        AuthModule,
+        MaterialModule.forRoot()
     ],
     providers: [AuthService, AuthGuard],
     bootstrap: [AppComponent]
