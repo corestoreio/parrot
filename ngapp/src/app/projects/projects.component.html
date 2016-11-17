@@ -2,7 +2,7 @@
   <create-project [onSubmit]="createProject"> </create-project>
   <ul>
     <li *ngFor="let project of projects">
-      <a href="#" [routerLink]="['/projects', project.id]">
+      <a href="#" [routerLink]="project.id">
           {{project.name}}
           </a>
     </li>
