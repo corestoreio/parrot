@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +11,6 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 @NgModule({
     imports: [
         ProjectsRoutingModule,
-        HttpModule,
         FormsModule,
         CommonModule
     ],

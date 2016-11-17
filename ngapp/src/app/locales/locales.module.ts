@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { LocalesRoutingModule } from './locales-routing.module';
@@ -10,8 +8,6 @@ import { LocalesComponent } from './locales.component';
 @NgModule({
     imports: [
         LocalesRoutingModule,
-        HttpModule,
-        FormsModule,
         CommonModule
     ],
     declarations: [
