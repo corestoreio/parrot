@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
 import { ProjectsModule } from './projects/projects.module';
+import { LocalesModule } from './locales/locales.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ProjectsModule } from './projects/projects.module';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    ProjectsModule
+    ProjectsModule,
+    LocalesModule
   ],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
