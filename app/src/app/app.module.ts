@@ -13,9 +13,12 @@ import { AuthModule } from './auth/auth.module';
 import { ProjectsModule } from './projects/projects.module';
 import { LocalesModule } from './locales/locales.module';
 
+import { HomePageComponent } from './pages/home/home-page.component';
+
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        HomePageComponent
     ],
     imports: [
         BrowserModule,
