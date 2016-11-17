@@ -1,0 +1,10 @@
+<section>
+  <create-project [onSubmit]="createProject"> </create-project>
+  <ul>
+    <li *ngFor="let project of projects">
+      <a href="#" [routerLink]="project.id">
+          {{project.name}}
+          </a>
+    </li>
+  </ul>
+</section>
