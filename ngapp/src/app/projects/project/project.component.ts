@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectsService } from './../projects.service';
 import { ActivatedRoute } from '@angular/router';
+
+import { ProjectsService } from './../projects.service';
 
 @Component({
   selector: 'app-project',
-  templateUrl: './project.component.html',
-  styleUrls: ['./project.component.css']
+  templateUrl: './project.component.html'
 })
 export class ProjectComponent implements OnInit {
   private project;

@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { LocalesRoutingModule } from './locales-routing.module';
 import { LocalesService } from './locales.service';
 import { LocalesComponent } from './locales.component';
-import { AuthService } from './../auth.service';
 
 @NgModule({
     imports: [
@@ -19,8 +18,7 @@ import { AuthService } from './../auth.service';
         LocalesComponent
     ],
     providers: [
-        LocalesService,
-        AuthService
+        LocalesService
     ]
 })
 export class LocalesModule { }

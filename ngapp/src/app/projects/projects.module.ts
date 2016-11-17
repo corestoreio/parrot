@@ -8,7 +8,6 @@ import { ProjectsService } from './projects.service';
 import { ProjectsComponent } from './projects.component';
 import { ProjectComponent } from './project/project.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
-import { AuthService } from './../auth.service';
 
 @NgModule({
     imports: [
@@ -23,8 +22,7 @@ import { AuthService } from './../auth.service';
         CreateProjectComponent
     ],
     providers: [
-        ProjectsService,
-        AuthService
+        ProjectsService
     ]
 })
 export class ProjectsModule { }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { API_BASE_URL } from './app.constants';
+
+import { API_BASE_URL } from './../app.constants';
 
 @Injectable()
 export class AuthService {

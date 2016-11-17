@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ProjectsComponent } from './projects.component';
 import { ProjectComponent } from './project/project.component';
-import { AuthGuard } from './../auth.guard';
+import { AuthGuard } from './../auth/auth.guard';
 
 const projectsRoutes = [
     { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
