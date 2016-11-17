@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { tokenNotExpired } from 'angular2-jwt';
+
 import { API_BASE_URL } from './../app.constants';
 
 @Injectable()
@@ -11,7 +13,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return !!this.getToken();
+    return tokenNotExpired('token');
   }
 
   getToken() {
