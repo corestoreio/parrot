@@ -55,6 +55,22 @@ export class ProjectsService {
       })
   }
 
+  updateProjectKeys(projectId: number, keys) {
+    return this.http.patch(
+      `${API_BASE_URL}/projects/${projectId}/keys`,
+      JSON.stringify(keys),
+      { headers: this.getApiHeaders() }
+    )
+      .map(res => res.json())
+      .map(res => {
+        let payload = res.payload;
+        if (!payload) {
+          throw new Error("no payload in response");
+        }
+        return payload;
+      })
+  }
+
   private getApiHeaders() {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

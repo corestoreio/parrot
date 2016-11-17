@@ -10,6 +10,38 @@ export class LocalesService {
 
     constructor(private http: Http, private auth: AuthService) { }
 
+    createLocale(projectId: number, locale) {
+        return this.http.post(
+            `${API_BASE_URL}/projects/${projectId}/locales`,
+            JSON.stringify(locale),
+            { headers: this.getApiHeaders() }
+        )
+            .map(res => res.json())
+            .map(res => {
+                let locale = res.payload;
+                if (!locale) {
+                    throw new Error("no locale in response");
+                }
+                return locale;
+            })
+    }
+
+    updateLocalePairs(projectId: number, localeIdent: string, pairs) {
+        return this.http.patch(
+            `${API_BASE_URL}/projects/${projectId}/locales/${localeIdent}/pairs`,
+            JSON.stringify(pairs),
+            { headers: this.getApiHeaders() }
+        )
+            .map(res => res.json())
+            .map(res => {
+                let payload = res.payload;
+                if (!payload) {
+                    throw new Error("no payload in response");
+                }
+                return payload;
+            })
+    }
+
     getLocales(projectId: number) {
         return this.http.get(
             `${API_BASE_URL}/projects/${projectId}/locales`,
@@ -22,6 +54,21 @@ export class LocalesService {
                     throw new Error("no projects in response");
                 }
                 return projects;
+            })
+    }
+
+    getLocale(projectId: number, localeIdent: string) {
+        return this.http.get(
+            `${API_BASE_URL}/projects/${projectId}/locales/${localeIdent}`,
+            { headers: this.getApiHeaders() }
+        )
+            .map(res => res.json())
+            .map(res => {
+                let locale = res.payload;
+                if (!locale) {
+                    throw new Error("no locale in response");
+                }
+                return locale;
             })
     }
 
