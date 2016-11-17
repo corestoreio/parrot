@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { LocalesService } from './locales.service';
+import { LocalesService } from './../locales.service';
 
 @Component({
-    selector: 'locales',
-    templateUrl: './locales.component.html'
+    selector: 'locales-list',
+    templateUrl: './locales-list.component.html'
 })
-export class LocalesComponent {
+export class LocalesListComponent {
     locales;
 
     constructor(private service: LocalesService, private route: ActivatedRoute) {

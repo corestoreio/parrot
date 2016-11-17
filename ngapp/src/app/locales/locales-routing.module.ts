@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { LocalesComponent } from './locales.component';
+import { LocalesListComponent } from './locales-list/locales-list.component';
 import { AuthGuard } from './../auth/auth.guard';
 
 const localesRoutes = [
-    { path: 'projects/:projectId/locales', component: LocalesComponent, canActivate: [AuthGuard] }
+    { path: 'projects/:projectId/locales', component: LocalesListComponent, canActivate: [AuthGuard] }
 ]
 
 @NgModule({

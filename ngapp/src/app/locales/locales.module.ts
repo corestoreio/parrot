@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { LocalesRoutingModule } from './locales-routing.module';
 import { LocalesService } from './locales.service';
-import { LocalesComponent } from './locales.component';
+import { LocalesListComponent } from './locales-list/locales-list.component';
 
 @NgModule({
     imports: [
@@ -11,7 +11,7 @@ import { LocalesComponent } from './locales.component';
         CommonModule
     ],
     declarations: [
-        LocalesComponent
+        LocalesListComponent
     ],
     providers: [
         LocalesService
