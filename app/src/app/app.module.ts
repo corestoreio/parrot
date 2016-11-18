@@ -6,10 +6,12 @@ import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthService } from './auth/auth.service';
-import { AuthGuard } from './auth/auth.guard';
 
 import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
+import { UnauthGuard } from './auth/unauth.guard';
+
 import { ProjectsModule } from './projects/projects.module';
 import { LocalesModule } from './locales/locales.module';
 
@@ -26,13 +28,13 @@ import { MaterialModule } from '@angular/material';
         BrowserModule,
         FormsModule,
         HttpModule,
+        AuthModule,
         AppRoutingModule,
         ProjectsModule,
         LocalesModule,
-        AuthModule,
         MaterialModule.forRoot()
     ],
-    providers: [AuthService, AuthGuard],
+    providers: [AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
