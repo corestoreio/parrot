@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { LocalesService } from './../services/locales.service';
@@ -8,23 +8,6 @@ import { LocalesService } from './../services/locales.service';
     templateUrl: './locales-list.component.html'
 })
 export class LocalesListComponent {
+    @Input()
     locales;
-
-    constructor(private service: LocalesService, private route: ActivatedRoute) {
-        this.locales = [];
-    }
-
-    ngOnInit() {
-        this.getLocales();
-    }
-
-    getLocales() {
-        let projectId = this.route.snapshot.params['projectId'];
-        this.service.getLocales(projectId).subscribe(
-            res => { this.locales = res; },
-            err => { },
-            () => { }
-        )
-    }
-
 }
