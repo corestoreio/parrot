@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard } from './auth/auth.guard';
-import { UnauthGuard } from './auth/unauth.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { UnauthGuard } from './auth/guards/unauth.guard';
 
-import { HomePageComponent } from './pages/home/home-page.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
+import { HomePageComponent } from './pages';
+import { LoginComponent, RegisterComponent } from './auth';
 
 const appRoutes: Routes = [
     { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },

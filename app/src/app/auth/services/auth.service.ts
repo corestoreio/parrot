@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 
 import { tokenNotExpired } from 'angular2-jwt';
 
-import { API_BASE_URL } from './../app.constants';
+import { API_BASE_URL } from './../../app.constants';
 
 @Injectable()
 export class AuthService {

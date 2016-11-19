@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { LocalesService } from './../locales.service';
+import { LocalesService } from './../services/locales.service';
 
 @Component({
     selector: 'locales-list',

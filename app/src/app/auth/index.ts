@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './auth.guard';
-import { UnauthGuard } from './unauth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { UnauthGuard } from './guards/unauth.guard';
 
 @NgModule({
     imports: [
@@ -16,6 +16,15 @@ import { UnauthGuard } from './unauth.guard';
     declarations: [
         RegisterComponent,
         LoginComponent
-    ]
+    ],
+    providers: [AuthService]
 })
 export class AuthModule { }
+
+export {
+    AuthService,
+    RegisterComponent,
+    LoginComponent,
+    AuthGuard,
+    UnauthGuard
+};

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ProjectsService } from './../projects.service';
-
+import { ProjectsService } from './../services/projects.service';
 @Component({
   selector: 'project-detail',
   templateUrl: './project-detail.component.html'
