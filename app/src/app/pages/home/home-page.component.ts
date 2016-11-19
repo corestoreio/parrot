@@ -23,9 +23,7 @@ export class HomePageComponent implements OnInit {
             res => {
                 this.projects = this.projects.concat(res);
             },
-            err => {
-                // TODO
-            }
+            err => { }
         );
     }
 
