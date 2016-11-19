@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { LocalesService } from './../../locales';
 import { ProjectsService } from './../../projects';
 
 @Component({
@@ -9,20 +10,35 @@ import { ProjectsService } from './../../projects';
 })
 export class ProjectPageComponent implements OnInit {
     private project;
+    private locales;
 
-    constructor(private projectsService: ProjectsService, private route: ActivatedRoute) {
-        this.fetchProject = this.fetchProject.bind(this);
+    constructor(
+        private projectsService: ProjectsService,
+        private localesService: LocalesService,
+        private route: ActivatedRoute
+    ) {
+        this.getProject = this.getProject.bind(this);
+        this.getLocales = this.getLocales.bind(this);
     }
 
     ngOnInit() {
-        let id = +this.route.snapshot.params['projectId'];
-        this.fetchProject(id);
+        let projectId = +this.route.snapshot.params['projectId'];
+        this.getProject(projectId);
+        this.getLocales(projectId);
     }
 
-    fetchProject(id: number) {
-        this.projectsService.getProject(id).subscribe(
+    getProject(projectId: number) {
+        this.projectsService.getProject(projectId).subscribe(
             res => { this.project = res },
             err => { }
         );
+    }
+
+    getLocales(projectId: number) {
+        this.localesService.getLocales(projectId).subscribe(
+            res => { this.locales = res; },
+            err => { },
+            () => { }
+        )
     }
 }
