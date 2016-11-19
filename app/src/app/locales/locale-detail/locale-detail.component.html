@@ -1,0 +1,10 @@
+<div *ngIf="locale">
+    {{locale.ident}} {{locale.language}} {{locale.country}}
+    <br /><br /><strong> Pairs:</strong>
+    <br />
+    <ul>
+        <li *ngFor="let pair of locale.pairs | objtopairs ">
+            {{pair.key}} => {{pair.value}}
+        </li>
+    </ul>
+</div>

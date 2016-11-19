@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { UnauthGuard } from './auth/guards/unauth.guard';
 
-import { HomePageComponent, ProjectPageComponent } from './pages';
+import { HomePageComponent, ProjectPageComponent, LocalePageComponent } from './pages';
 import { LoginComponent, RegisterComponent } from './auth';
 
 const appRoutes: Routes = [
@@ -12,6 +12,7 @@ const appRoutes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
     { path: 'projects', component: HomePageComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId', component: ProjectPageComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:projectId/locales/:localeIdent', component: LocalePageComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/projects', pathMatch: 'full' },
 ];
 @NgModule({
