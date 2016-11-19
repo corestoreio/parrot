@@ -12,6 +12,9 @@ import { LocalesListComponent } from './locales-list/locales-list.component';
     declarations: [
         LocalesListComponent
     ],
+    exports: [
+        LocalesListComponent
+    ],
     providers: [
         LocalesService
     ]

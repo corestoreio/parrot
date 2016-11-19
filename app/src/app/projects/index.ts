@@ -6,6 +6,7 @@ import { ProjectsService } from './services/projects.service';
 import { ProjectsListComponent } from './projects-list/projects-list.component';
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
+import { ProjectKeysComponent } from './project-keys/project-keys.component';
 
 import { MaterialModule } from '@angular/material';
 
@@ -18,12 +19,14 @@ import { MaterialModule } from '@angular/material';
     exports: [
         ProjectsListComponent,
         ProjectDetailComponent,
-        CreateProjectComponent
+        CreateProjectComponent,
+        ProjectKeysComponent
     ],
     declarations: [
         ProjectsListComponent,
         ProjectDetailComponent,
-        CreateProjectComponent
+        CreateProjectComponent,
+        ProjectKeysComponent
     ],
     providers: [
         ProjectsService
@@ -35,5 +38,6 @@ export {
     ProjectsService,
     ProjectsListComponent,
     ProjectDetailComponent,
-    CreateProjectComponent
+    CreateProjectComponent,
+    ProjectKeysComponent
 };

@@ -13,6 +13,10 @@ import { UnauthGuard } from './guards/unauth.guard';
         FormsModule,
         CommonModule
     ],
+    exports: [
+        RegisterComponent,
+        LoginComponent
+    ],
     declarations: [
         RegisterComponent,
         LoginComponent
