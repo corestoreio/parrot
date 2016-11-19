@@ -1,0 +1,18 @@
+<div>
+    <h1>Create Locale</h1>
+    <form (ngSubmit)="onSubmit(f.value)" #f="ngForm">
+        <div>
+            <label for="ident">Ident</label>
+            <input type="text" id="ident" name="ident" required ngModel>
+        </div>
+        <div>
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" required ngModel>
+        </div>
+        <div>
+            <label for="language">Language</label>
+            <input type="text" id="language" name="language" required ngModel>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>

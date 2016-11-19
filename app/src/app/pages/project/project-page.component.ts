@@ -19,6 +19,7 @@ export class ProjectPageComponent implements OnInit {
     ) {
         this.getProject = this.getProject.bind(this);
         this.getLocales = this.getLocales.bind(this);
+        this.onCreateLocale = this.onCreateLocale.bind(this);
     }
 
     ngOnInit() {
@@ -39,6 +40,14 @@ export class ProjectPageComponent implements OnInit {
             res => { this.locales = res; },
             err => { },
             () => { }
+        )
+    }
+
+    onCreateLocale(locale) {
+        let projectId = +this.route.snapshot.params['projectId'];
+        this.localesService.createLocale(projectId, locale).subscribe(
+            res => { this.locales = this.locales.concat(res) },
+            err => { }
         )
     }
 }

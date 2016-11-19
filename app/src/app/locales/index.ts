@@ -1,19 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { LocalesService } from './services/locales.service';
 import { LocalesListComponent } from './locales-list/locales-list.component';
+import { CreateLocaleComponent } from './create-locale/create-locale.component';
 
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        FormsModule
     ],
     declarations: [
-        LocalesListComponent
+        LocalesListComponent,
+        CreateLocaleComponent
     ],
     exports: [
-        LocalesListComponent
+        LocalesListComponent,
+        CreateLocaleComponent
     ],
     providers: [
         LocalesService
@@ -21,4 +26,8 @@ import { LocalesListComponent } from './locales-list/locales-list.component';
 })
 export class LocalesModule { }
 
-export { LocalesService, LocalesListComponent };
+export {
+    LocalesService,
+    LocalesListComponent,
+    CreateLocaleComponent
+};
