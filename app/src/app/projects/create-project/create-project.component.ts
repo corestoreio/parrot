@@ -7,6 +7,14 @@ import { ProjectsService } from './../services/projects.service';
     templateUrl: './create-project.component.html'
 })
 export class CreateProjectComponent {
-    @Input()
-    onSubmit;
+    constructor(private projectsService: ProjectsService) {
+        // this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    onSubmit(project) {
+        this.projectsService.createProject(project).subscribe(
+            res => { },
+            err => { },
+        )
+    }
 }
