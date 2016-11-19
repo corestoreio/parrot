@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
 import { LocalesModule } from './locales';
-import { HomePageComponent } from './pages/home/home-page.component';
+import { HomePageComponent } from './pages';
 
 @NgModule({
     declarations: [
