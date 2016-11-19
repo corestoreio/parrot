@@ -8,12 +8,13 @@ import { AppComponent } from './app.component';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
 import { LocalesModule } from './locales';
-import { HomePageComponent } from './pages';
+import { HomePageComponent, ProjectPageComponent } from './pages';
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomePageComponent
+        HomePageComponent,
+        ProjectPageComponent
     ],
     imports: [
         // Core
