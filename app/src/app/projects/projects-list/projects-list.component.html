@@ -1,10 +1,5 @@
-<div>
-  <div *ngIf="loading">
-    <md-spinner></md-spinner>
-  </div>
-  <ul>
-    <li *ngFor="let project of projects">
-      <a>{{project.name}}</a>
-    </li>
-  </ul>
-</div>
+<ul>
+  <li *ngFor="let project of projects">
+    <a>{{project.name}}</a>
+  </li>
+</ul>
