@@ -1,8 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,13 +23,18 @@ import { MaterialModule } from '@angular/material';
         HomePageComponent
     ],
     imports: [
+        // Core
         BrowserModule,
-        FormsModule,
-        HttpModule,
-        AuthModule,
+
+        // Routing
         AppRoutingModule,
+
+        // App level modules
+        AuthModule,
         ProjectsModule,
         LocalesModule,
+
+        // Material design
         MaterialModule.forRoot()
     ],
     providers: [AuthService, AuthGuard, UnauthGuard],
