@@ -1,5 +1,5 @@
 <ul>
   <li *ngFor="let project of projects">
-    <a>{{project.name}}</a>
+    <a href="#" [routerLink]="['/projects', project.id]">{{project.name}}</a>
   </li>
 </ul>
