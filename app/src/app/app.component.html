@@ -1,4 +1,31 @@
-<div>
-  {{title}}
-  <router-outlet></router-outlet>
+<div class="main-container">
+  <header class="header header-1">
+    <div class="branding">
+      <span class="title">
+        {{title}}
+      </span>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown class="dropdown bottom-right">
+        <button class="nav-icon" clrDropdownToggle>
+          <clr-icon shape="user"></clr-icon>
+          <clr-icon shape="caret" class="icon-orient-down"></clr-icon>
+        </button>
+        <div class="dropdown-menu">
+          <a href="javascript://" clrDropdownItem>About</a>
+          <a href="javascript://" clrDropdownItem>Preferences</a>
+          <a href="javascript://" clrDropdownItem>Log out</a>
+        </div>
+      </clr-dropdown>
+    </div>
+  </header>
+
+  <div class="content-container">
+    <nav class="sidenav">
+    </nav>
+
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
