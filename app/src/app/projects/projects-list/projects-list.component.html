@@ -1,5 +1,4 @@
-<div class="spinner" *ngIf="loading">
-</div>
+<div class="spinner" *ngIf="loading"></div>
 <div class="row">
   <div class="col-xs-12">
     <a class="card clickable" [routerLink]="['/projects', project.id]" *ngFor="let project of projects">
