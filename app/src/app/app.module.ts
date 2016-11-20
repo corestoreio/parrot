@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ClarityModule } from 'clarity-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,9 @@ import { HomePageComponent, ProjectPageComponent, LocalePageComponent } from './
         AuthModule,
         ProjectsModule,
         LocalesModule,
+
+        // UI module
+        ClarityModule
     ],
     providers: [AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]
