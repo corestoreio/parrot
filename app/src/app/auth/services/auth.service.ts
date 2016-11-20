@@ -20,6 +20,10 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  logout() {
+    localStorage.removeItem('token');
+  }
+
   login(email, password) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
