@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from './services/auth.service';
@@ -11,7 +12,8 @@ import { UnauthGuard } from './guards/unauth.guard';
 @NgModule({
     imports: [
         FormsModule,
-        CommonModule
+        CommonModule,
+        HttpModule
     ],
     exports: [
         RegisterComponent,

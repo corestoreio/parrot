@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -14,7 +15,8 @@ import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
     imports: [
         CommonModule,
         FormsModule,
-        RouterModule
+        RouterModule,
+        HttpModule
     ],
     declarations: [
         LocalesListComponent,

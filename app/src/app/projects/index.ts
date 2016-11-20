@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
 
 import { ProjectsService } from './services/projects.service';
 import { ProjectsListComponent } from './projects-list/projects-list.component';
@@ -13,7 +14,8 @@ import { ProjectKeysComponent } from './project-keys/project-keys.component';
     imports: [
         FormsModule,
         CommonModule,
-        RouterModule
+        RouterModule,
+        HttpModule
     ],
     exports: [
         ProjectsListComponent,
