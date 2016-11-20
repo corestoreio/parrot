@@ -46,7 +46,7 @@ export class ProjectPageComponent implements OnInit {
     onCreateLocale(locale) {
         let projectId = +this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, locale).subscribe(
-            res => { this.locales = this.locales.concat(res) },
+            res => { },
             err => { console.log(err); }
         )
     }

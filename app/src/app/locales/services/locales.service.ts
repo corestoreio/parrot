@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { BehaviorSubject } from 'rxjs';
 
 import { AuthService } from './../../auth';
 import { API_BASE_URL } from './../../app.constants';
 
 @Injectable()
 export class LocalesService {
+
+    private locales = new BehaviorSubject([]);
 
     constructor(private http: Http, private auth: AuthService) { }
 
@@ -22,6 +25,7 @@ export class LocalesService {
                 if (!locale) {
                     throw new Error("no locale in response");
                 }
+                this.locales.next(this.locales.getValue().concat(locale));
                 return locale;
             })
     }
@@ -43,18 +47,19 @@ export class LocalesService {
     }
 
     getLocales(projectId: number) {
-        return this.http.get(
+        this.http.get(
             `${API_BASE_URL}/projects/${projectId}/locales`,
             { headers: this.getApiHeaders() }
         )
             .map(res => res.json())
-            .map(res => {
-                let projects = res.payload;
-                if (!projects) {
-                    throw new Error("no projects in response");
+            .subscribe(res => {
+                let locales = res.payload;
+                if (!locales) {
+                    throw new Error("no locales in response");
                 }
-                return projects;
-            })
+                this.locales.next(locales);
+            });
+        return this.locales.asObservable();
     }
 
     getLocale(projectId: number, localeIdent: string) {

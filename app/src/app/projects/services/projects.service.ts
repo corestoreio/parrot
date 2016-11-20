@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { BehaviorSubject } from 'rxjs';
 
 import { AuthService } from './../../auth';
 import { API_BASE_URL } from './../../app.constants';
@@ -8,21 +9,24 @@ import { API_BASE_URL } from './../../app.constants';
 @Injectable()
 export class ProjectsService {
 
+  private projects = new BehaviorSubject([]);
+
   constructor(private http: Http, private auth: AuthService) { }
 
   getProjects() {
-    return this.http.get(
+    this.http.get(
       `${API_BASE_URL}/projects`,
       { headers: this.getApiHeaders() }
     )
       .map(res => res.json())
-      .map(res => {
+      .subscribe(res => {
         let projects = res.payload;
         if (!projects) {
           throw new Error("no projects in response");
         }
-        return projects;
-      })
+        this.projects.next(projects);
+      });
+    return this.projects.asObservable();
   }
 
   getProject(id) {
@@ -52,8 +56,10 @@ export class ProjectsService {
         if (!project) {
           throw new Error("no project in response");
         }
+        let projects = this.projects.getValue().concat(project);
+        this.projects.next(projects);
         return project;
-      })
+      });
   }
 
   updateProjectKeys(projectId: number, keys) {
