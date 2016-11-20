@@ -23,7 +23,7 @@ export class HomePageComponent implements OnInit {
             res => {
                 this.projects = this.projects.concat(res);
             },
-            err => { }
+            err => { console.log(err); }
         );
     }
 
@@ -32,7 +32,7 @@ export class HomePageComponent implements OnInit {
             res => {
                 this.projects = res;
             },
-            err => { }
+            err => { console.log(err); }
         );
     }
 }

@@ -27,7 +27,7 @@ export class LocalePageComponent implements OnInit {
     getLocale(projectId: number, localeIdent: string) {
         this.localesService.getLocale(projectId, localeIdent).subscribe(
             res => { this.locale = res; },
-            err => { },
+            err => { console.log(err); },
             () => { }
         )
     }

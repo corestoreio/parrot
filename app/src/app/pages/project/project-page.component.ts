@@ -31,14 +31,14 @@ export class ProjectPageComponent implements OnInit {
     getProject(projectId: number) {
         this.projectsService.getProject(projectId).subscribe(
             res => { this.project = res },
-            err => { }
+            err => { console.log(err); }
         );
     }
 
     getLocales(projectId: number) {
         this.localesService.getLocales(projectId).subscribe(
             res => { this.locales = res; },
-            err => { },
+            err => { console.log(err); },
             () => { }
         )
     }
@@ -47,7 +47,7 @@ export class ProjectPageComponent implements OnInit {
         let projectId = +this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, locale).subscribe(
             res => { this.locales = this.locales.concat(res) },
-            err => { }
+            err => { console.log(err); }
         )
     }
 }
