@@ -1,21 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { ProjectsService } from './../services/projects.service';
 
 @Component({
     selector: 'project-keys',
     templateUrl: 'project-keys.component.html'
 })
-export class ProjectKeysComponent {
-    // constructor(private service: ProjectsService, private route: ActivatedRoute) { }
+export class ProjectKeysComponent implements OnInit {
+    private project;
 
-    // ngOnInit() {
-    //     this.fetchProject()
-    // }
+    constructor(private service: ProjectsService, private route: ActivatedRoute) { }
 
-    // private fetchProject() {
-    //     let id = +this.route.snapshot.params['projectId'];
-    //     this.service.getProject(id).subscribe(
-    //         res => { this.project = res },
-    //         err => { console.log(err);}
-    //     )
-    // }
+    ngOnInit() {
+        this.fetchProject()
+    }
+
+    private fetchProject() {
+        let id = +this.route.snapshot.params['projectId'];
+        this.service.getProject(id).subscribe(
+            res => { this.project = res },
+            err => { console.log(err); }
+        )
+    }
 }
