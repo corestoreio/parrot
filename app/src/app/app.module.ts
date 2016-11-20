@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,9 +27,6 @@ import { HomePageComponent, ProjectPageComponent, LocalePageComponent } from './
         AuthModule,
         ProjectsModule,
         LocalesModule,
-
-        // Material design
-        MaterialModule.forRoot()
     ],
     providers: [AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]

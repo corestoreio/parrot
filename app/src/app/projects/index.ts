@@ -9,14 +9,11 @@ import { ProjectDetailComponent } from './project-detail/project-detail.componen
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectKeysComponent } from './project-keys/project-keys.component';
 
-import { MaterialModule } from '@angular/material';
-
 @NgModule({
     imports: [
         FormsModule,
         CommonModule,
-        RouterModule,
-        MaterialModule.forRoot()
+        RouterModule
     ],
     exports: [
         ProjectsListComponent,
