@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 
 import { ProjectsService } from './../services/projects.service';
 
@@ -7,14 +8,36 @@ import { ProjectsService } from './../services/projects.service';
     templateUrl: './create-project.component.html'
 })
 export class CreateProjectComponent {
+    private modalOpen = false;
+
+    private project;
+
     constructor(private projectsService: ProjectsService) {
+        this.resetProject();
         this.createProject = this.createProject.bind(this);
     }
 
-    createProject(project) {
-        this.projectsService.createProject(project).subscribe(
+    openModal() {
+        this.modalOpen = true;
+    }
+
+    closeModal() {
+        this.modalOpen = false;
+        this.resetProject();
+    }
+
+    resetProject() {
+        this.project = {
+            name: ''
+        };
+    }
+
+    createProject() {
+        this.modalOpen = false;
+        this.projectsService.createProject(this.project).subscribe(
             res => { },
             err => { console.log(err); }
         );
+        this.resetProject();
     }
 }

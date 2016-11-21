@@ -1,10 +1,18 @@
-<div>
-    <h1>Create project</h1>
-    <form (ngSubmit)="createProject(f.value)" #f="ngForm">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required ngModel>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
-</div>
+<button class="btn btn-primary" (click)="openModal()">Create project</button>
+<clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'md'">
+    <h3 class="modal-title">Create a project</h3>
+    <div class="modal-body">
+        <form class="compact" (ngSubmit)="createProject()" #createProjectForm="ngForm">
+            <section class="form-block">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="The project's name" [(ngModel)]="project.name" autofocus required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!createProjectForm.form.valid">Create</button>
+                </div>
+            </section>
+        </form>
+    </div>
+</clr-modal>

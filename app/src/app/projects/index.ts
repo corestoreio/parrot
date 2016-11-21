@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { ClarityModule } from 'clarity-angular';
 
 import { ProjectsService } from './services/projects.service';
 import { ProjectsListComponent } from './projects-list/projects-list.component';
@@ -15,7 +16,8 @@ import { ProjectKeysComponent } from './project-keys/project-keys.component';
         FormsModule,
         CommonModule,
         RouterModule,
-        HttpModule
+        HttpModule,
+        ClarityModule
     ],
     exports: [
         ProjectsListComponent,
