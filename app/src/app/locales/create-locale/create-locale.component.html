@@ -1,18 +1,26 @@
-<div>
-    <h1>Create Locale</h1>
-    <form (ngSubmit)="createLocale(f.value)" #f="ngForm">
-        <div>
-            <label for="ident">Ident</label>
-            <input type="text" id="ident" name="ident" required ngModel>
-        </div>
-        <div>
-            <label for="country">Country</label>
-            <input type="text" id="country" name="country" required ngModel>
-        </div>
-        <div>
-            <label for="language">Language</label>
-            <input type="text" id="language" name="language" required ngModel>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
-</div>
+<button class="btn btn-primary" (click)="openModal()">Create locale</button>
+<clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'md'">
+    <h3 class="modal-title">Create a locale</h3>
+    <div class="modal-body">
+        <form class="compact" (ngSubmit)="createLocale()" #createLocaleForm="ngForm">
+            <section class="form-block">
+                <div class="form-group">
+                    <label for="ident">Ident</label>
+                    <input type="text" id="ident" name="name" placeholder="The locale's ident" [(ngModel)]="locale.ident" autofocus required>
+                </div>
+                <div class="form-group">
+                    <label for="ident">Country</label>
+                    <input type="text" id="country" name="country" placeholder="The locale's country" [(ngModel)]="locale.country" required>
+                </div>
+                <div class="form-group">
+                    <label for="ident">Language</label>
+                    <input type="text" id="language" name="language" placeholder="The locale's language" [(ngModel)]="locale.language" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!createLocaleForm.form.valid">Create</button>
+                </div>
+            </section>
+        </form>
+    </div>
+</clr-modal>

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ClarityModule } from 'clarity-angular';
 
 import { LocalesService } from './services/locales.service';
 import { LocalesListComponent } from './locales-list/locales-list.component';
@@ -16,7 +17,8 @@ import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
         CommonModule,
         FormsModule,
         RouterModule,
-        HttpModule
+        HttpModule,
+        ClarityModule
     ],
     declarations: [
         LocalesListComponent,
