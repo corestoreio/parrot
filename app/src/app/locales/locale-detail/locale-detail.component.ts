@@ -10,21 +10,14 @@ import { LocalesService } from './../services/locales.service';
 export class LocaleDetailComponent {
     private locale;
 
-    constructor(private localesService: LocalesService, private route: ActivatedRoute) {
-        this.getLocale = this.getLocale.bind(this);
-    }
+    constructor(private localesService: LocalesService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         let projectId = +this.route.snapshot.params['projectId'];
         let localeIdent = this.route.snapshot.params['localeIdent'];
-        this.getLocale(projectId, localeIdent);
-    }
-
-
-    getLocale(projectId: number, localeIdent: string) {
-        this.localesService.getLocale(projectId, localeIdent).subscribe(
+        this.localesService.fetchLocale(projectId, localeIdent).subscribe(
             res => { this.locale = res; },
             err => { console.log(err); }
-        )
+        );
     }
 }

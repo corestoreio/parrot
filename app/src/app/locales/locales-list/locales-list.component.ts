@@ -12,19 +12,23 @@ export class LocalesListComponent implements OnInit {
     private loading = false;
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
-        this.getLocales = this.getLocales.bind(this);
+        this.fetchLocales = this.fetchLocales.bind(this);
     }
 
     ngOnInit() {
+        this.localesService.locales.subscribe(
+            locales => { this.locales = locales }
+        );
         let projectId = +this.route.snapshot.params['projectId'];
-        this.getLocales(projectId);
+        this.fetchLocales(projectId);
     }
 
-    getLocales(projectId: number) {
+    fetchLocales(projectId: number) {
         this.loading = true;
-        this.localesService.getLocales(projectId).subscribe(
-            res => { this.locales = res; this.loading = false; },
-            err => { console.log(err); this.loading = false; },
+        this.localesService.fetchLocales(projectId).subscribe(
+            () => { },
+            err => { console.log(err); },
+            () => { this.loading = false; }
         );
     }
 }

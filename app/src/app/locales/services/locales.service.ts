@@ -9,12 +9,13 @@ import { API_BASE_URL } from './../../app.constants';
 @Injectable()
 export class LocalesService {
 
-    private locales = new BehaviorSubject([]);
+    private _locales = new BehaviorSubject([]);
+    public locales = this._locales.asObservable();
 
     constructor(private http: Http, private auth: AuthService) { }
 
     createLocale(projectId: number, locale) {
-        return this.http.post(
+        let request = this.http.post(
             `${API_BASE_URL}/projects/${projectId}/locales`,
             JSON.stringify(locale),
             { headers: this.getApiHeaders() }
@@ -25,9 +26,15 @@ export class LocalesService {
                 if (!locale) {
                     throw new Error("no locale in response");
                 }
-                this.locales.next(this.locales.getValue().concat(locale));
                 return locale;
-            })
+            }
+            ).share();
+
+        request.subscribe(locale => {
+            this._locales.next(this._locales.getValue().concat(locale));
+        });
+
+        return request;
     }
 
     updateLocalePairs(projectId: number, localeIdent: string, pairs) {
@@ -43,27 +50,33 @@ export class LocalesService {
                     throw new Error("no payload in response");
                 }
                 return payload;
-            })
+            }).share();
     }
 
-    getLocales(projectId: number) {
-        this.http.get(
+    fetchLocales(projectId: number) {
+        let request = this.http.get(
             `${API_BASE_URL}/projects/${projectId}/locales`,
             { headers: this.getApiHeaders() }
         )
             .map(res => res.json())
-            .subscribe(res => {
+            .map(res => {
                 let locales = res.payload;
                 if (!locales) {
                     throw new Error("no locales in response");
                 }
-                this.locales.next(locales);
-            });
-        return this.locales.asObservable();
+                return locales;
+            })
+            .share();
+
+        request.subscribe(locales => {
+            this._locales.next(locales);
+        });
+
+        return request;
     }
 
-    getLocale(projectId: number, localeIdent: string) {
-        return this.http.get(
+    fetchLocale(projectId: number, localeIdent: string) {
+        let request = this.http.get(
             `${API_BASE_URL}/projects/${projectId}/locales/${localeIdent}`,
             { headers: this.getApiHeaders() }
         )
@@ -74,7 +87,9 @@ export class LocalesService {
                     throw new Error("no locale in response");
                 }
                 return locale;
-            })
+            }).share();
+
+        return request;
     }
 
     private getApiHeaders() {

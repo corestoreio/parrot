@@ -12,7 +12,7 @@ export class CreateLocaleComponent {
     private modalOpen = false;
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
-        this.resetLocale();
+        this.resetFormModel();
         this.createLocale = this.createLocale.bind(this);
     }
 
@@ -22,10 +22,10 @@ export class CreateLocaleComponent {
 
     closeModal() {
         this.modalOpen = false;
-        this.resetLocale();
+        this.resetFormModel();
     }
 
-    resetLocale() {
+    resetFormModel() {
         this.locale = {
             ident: '',
             country: '',
@@ -37,9 +37,9 @@ export class CreateLocaleComponent {
         this.modalOpen = false;
         let projectId = +this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, this.locale).subscribe(
-            res => { },
+            () => { },
             err => { console.log(err); }
         )
-        this.resetLocale();
+        this.resetFormModel();
     }
 }
