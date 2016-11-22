@@ -65,8 +65,7 @@ export class LocalesService {
                     throw new Error("no locales in response");
                 }
                 return locales;
-            })
-            .share();
+            }).share();
 
         request.subscribe(locales => {
             this._locales.next(locales);
