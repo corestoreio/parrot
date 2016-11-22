@@ -9,24 +9,30 @@ import { API_BASE_URL } from './../../app.constants';
 @Injectable()
 export class ProjectsService {
 
-  private projects = new BehaviorSubject([]);
+  private _projects = new BehaviorSubject([]);
+  public projects = this._projects.asObservable();
 
   constructor(private http: Http, private auth: AuthService) { }
 
   getProjects() {
-    this.http.get(
+    let request = this.http.get(
       `${API_BASE_URL}/projects`,
       { headers: this.getApiHeaders() }
     )
       .map(res => res.json())
-      .subscribe(res => {
+      .map(res => {
         let projects = res.payload;
         if (!projects) {
           throw new Error("no projects in response");
         }
-        this.projects.next(projects);
-      });
-    return this.projects.asObservable();
+        return projects;
+      }).share();
+
+    request.subscribe(
+      projects => { this._projects.next(projects); }
+    );
+
+    return request;
   }
 
   getProject(id) {
@@ -41,11 +47,11 @@ export class ProjectsService {
           throw new Error("no project in response");
         }
         return project;
-      })
+      }).share();
   }
 
   createProject(project) {
-    return this.http.post(
+    let request = this.http.post(
       `${API_BASE_URL}/projects`,
       JSON.stringify(project),
       { headers: this.getApiHeaders() }
@@ -56,10 +62,16 @@ export class ProjectsService {
         if (!project) {
           throw new Error("no project in response");
         }
-        let projects = this.projects.getValue().concat(project);
-        this.projects.next(projects);
         return project;
+      }).share();
+
+    request.subscribe(
+      project => {
+        let projects = this._projects.getValue().concat(project);
+        this._projects.next(projects);
       });
+
+    return request;
   }
 
   updateProjectKeys(projectId: number, keys) {
@@ -75,7 +87,7 @@ export class ProjectsService {
           throw new Error("no payload in response");
         }
         return payload;
-      })
+      }).share();
   }
 
   private getApiHeaders() {

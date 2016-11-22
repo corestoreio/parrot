@@ -7,18 +7,24 @@ import { ProjectsService } from './../services/projects.service';
   templateUrl: './projects-list.component.html'
 })
 export class ProjectsListComponent implements OnInit {
-  private projects;
+  private projects = [];
   private loading = false;
 
-  constructor(private projectsService: ProjectsService) {
-    this.projects = [];
-  }
+  constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
+    this.projectsService.projects.subscribe(
+      projects => { this.projects = projects }
+    );
+    this.fetchProjects();
+  }
+
+  fetchProjects() {
     this.loading = true;
     this.projectsService.getProjects().subscribe(
-      res => { this.projects = res; this.loading = false; },
-      err => { console.log(err); this.loading = false; }
+      () => { },
+      err => { console.log(err); },
+      () => { this.loading = false; }
     )
   }
 }
