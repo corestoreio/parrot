@@ -1,7 +1,17 @@
-<div>
-    <ul>
-        <li *ngFor="let locale of locales">
-            <a [routerLink]="['locales', locale.ident]">{{locale.ident}}</a>
-        </li>
-    </ul>
+<div class="spinner spinner-md" *ngIf="loading"></div>
+<div class="row">
+    <div class="col-xs-12">
+        <a class="card clickable" [routerLink]="['locales', locale.ident]" *ngFor="let locale of locales">
+            <div class="card-block">
+                <h4 class="card-title">{{locale.ident}} - {{locale.country}} - {{locale.language}}</h4>
+                <p class="card-text">Lorem ipsum a la prosec lorem matril.</p>
+                <div class="progress-block">
+                    <label>Translations</label>
+                    <div class="progress-static">
+                        <div class="progress-meter" data-value="70"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>

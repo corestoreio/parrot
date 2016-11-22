@@ -9,6 +9,7 @@ import { LocalesService } from './../services/locales.service';
 })
 export class LocalesListComponent implements OnInit {
     private locales = [];
+    private loading = false;
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
         this.getLocales = this.getLocales.bind(this);
@@ -20,10 +21,10 @@ export class LocalesListComponent implements OnInit {
     }
 
     getLocales(projectId: number) {
+        this.loading = true;
         this.localesService.getLocales(projectId).subscribe(
-            res => { this.locales = res; },
-            err => { console.log(err); },
-            () => { }
-        )
+            res => { this.locales = res; this.loading = false; },
+            err => { console.log(err); this.loading = false; },
+        );
     }
 }
