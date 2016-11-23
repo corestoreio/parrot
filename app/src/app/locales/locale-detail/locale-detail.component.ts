@@ -35,6 +35,7 @@ export class LocaleDetailComponent {
     }
 
     commitPairs() {
+        this.loading = true;
         this.editing = false;
         this.localesService.updateLocalePairs(
             this.locale.project_id,
@@ -44,7 +45,7 @@ export class LocaleDetailComponent {
             .subscribe(
             result => { this.locale = result; this.modelToLocalCopy(); },
             err => { console.log(err); },
-            () => { },
+            () => { this.loading = false; },
         )
     }
 }

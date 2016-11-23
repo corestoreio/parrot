@@ -42,13 +42,14 @@ export class ProjectKeysComponent implements OnInit {
 
     commitKeys() {
         this.editing = false;
+        this.loading = true;
         this.service.updateProjectKeys(this.project.id, this.formKeys).subscribe(
             res => {
                 this.project = res;
                 this.formKeys = this.project.keys;
             },
             err => { console.log(err); },
-            () => { }
+            () => { this.loading = false; }
         );
     }
 
