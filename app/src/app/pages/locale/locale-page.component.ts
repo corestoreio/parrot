@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
     selector: 'locale-page',
     templateUrl: 'locale-page.component.html'
 })
-export class LocalePageComponent implements OnInit {
+export class LocalePage implements OnInit {
     ngOnInit() {
 
     }

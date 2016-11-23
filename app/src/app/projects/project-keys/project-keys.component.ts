@@ -9,6 +9,9 @@ import { ProjectsService } from './../services/projects.service';
 })
 export class ProjectKeysComponent implements OnInit {
     private project;
+    private formKeys = [];
+    private loading = false;
+    private editing = false;
 
     constructor(private service: ProjectsService, private route: ActivatedRoute) { }
 
@@ -17,10 +20,39 @@ export class ProjectKeysComponent implements OnInit {
     }
 
     private fetchProject() {
+        this.loading = true;
         let id = +this.route.snapshot.params['projectId'];
         this.service.getProject(id).subscribe(
-            res => { this.project = res },
-            err => { console.log(err); }
+            res => {
+                this.project = res;
+                this.formKeys = this.project.keys;
+            },
+            err => { console.log(err); },
+            () => { this.loading = false; }
         )
+    }
+
+    addKey() {
+        this.formKeys.push("");
+    }
+
+    enableEdit() {
+        this.editing = true;
+    }
+
+    commitKeys() {
+        this.editing = false;
+        this.service.updateProjectKeys(this.project.id, this.formKeys).subscribe(
+            res => {
+                this.project = res;
+                this.formKeys = this.project.keys;
+            },
+            err => { console.log(err); },
+            () => { }
+        );
+    }
+
+    trackIndex(index: number, obj: string): number {
+        return index;
     }
 }

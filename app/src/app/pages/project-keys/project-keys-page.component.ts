@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'project-page',
-    templateUrl: 'project-page.component.html'
+    selector: 'project-keys-page',
+    templateUrl: 'project-keys-page.component.html'
 })
-export class ProjectPage implements OnInit {
+export class ProjectKeysPage implements OnInit {
     ngOnInit() {
 
     }
