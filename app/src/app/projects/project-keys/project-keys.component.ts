@@ -25,7 +25,7 @@ export class ProjectKeysComponent implements OnInit {
         this.service.getProject(id).subscribe(
             res => {
                 this.project = res;
-                this.formKeys = this.project.keys;
+                this.modelToLocalCopy();
             },
             err => { console.log(err); },
             () => { this.loading = false; }
@@ -40,13 +40,22 @@ export class ProjectKeysComponent implements OnInit {
         this.editing = true;
     }
 
+    cancelEdit() {
+        this.editing = false;
+        this.modelToLocalCopy();
+    }
+
+    modelToLocalCopy() {
+        this.formKeys = [...this.project.keys];
+    }
+
     commitKeys() {
         this.editing = false;
         this.loading = true;
         this.service.updateProjectKeys(this.project.id, this.formKeys).subscribe(
             res => {
                 this.project = res;
-                this.formKeys = this.project.keys;
+                this.modelToLocalCopy();
             },
             err => { console.log(err); },
             () => { this.loading = false; }

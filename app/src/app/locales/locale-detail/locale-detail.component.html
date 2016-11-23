@@ -3,6 +3,7 @@
 
     <br /><br /><strong> Pairs:</strong>
     <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
+    <button class="btn btn-primary float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
     <button class="btn btn-primary float-right" (click)="commitPairs()" [hidden]="!editing">Commit</button>
     <br />
 

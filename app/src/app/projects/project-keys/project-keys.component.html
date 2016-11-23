@@ -3,6 +3,7 @@
 
     <br /><br /><strong> Keys:</strong>
     <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
+    <button class="btn btn-primary float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
     <button class="btn btn-primary float-right" (click)="commitKeys()" [hidden]="!editing">Commit</button>
     <button class="btn btn-primary float-right" (click)="addKey()">Add key</button>
     <br />

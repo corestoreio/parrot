@@ -30,6 +30,11 @@ export class LocaleDetailComponent {
         this.editing = true;
     }
 
+    cancelEdit() {
+        this.editing = false;
+        this.modelToLocalCopy();
+    }
+
     modelToLocalCopy() {
         this.localPairs = Object.assign({}, this.locale.pairs);
     }
