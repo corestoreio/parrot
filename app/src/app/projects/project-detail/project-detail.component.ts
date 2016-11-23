@@ -17,7 +17,7 @@ export class ProjectDetailComponent implements OnInit {
 	}
 
 	private fetchProject() {
-		let id = +this.route.snapshot.params['projectId'];
+		let id = this.route.snapshot.params['projectId'];
 		this.service.getProject(id).subscribe(
 			res => { this.project = res },
 			err => { console.log(err); }

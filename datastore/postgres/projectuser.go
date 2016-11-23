@@ -5,7 +5,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func (db *PostgresDB) GetUserProjects(userID int) ([]model.Project, error) {
+func (db *PostgresDB) GetUserProjects(userID string) ([]model.Project, error) {
 	rows, err := db.Query(`SELECT projects.*
 							FROM projects
 							JOIN projects_users ON projects.id = projects_users.project_id
@@ -40,7 +40,7 @@ func (db *PostgresDB) GetUserProjects(userID int) ([]model.Project, error) {
 	return projects, nil
 }
 
-func (db *PostgresDB) GetProjectUsers(projID int) ([]model.User, error) {
+func (db *PostgresDB) GetProjectUsers(projID string) ([]model.User, error) {
 	rows, err := db.Query(`SELECT users.*
 							FROM users
 							JOIN projects_users ON users.id = projects_users.user_id
@@ -69,7 +69,7 @@ func (db *PostgresDB) GetProjectUsers(projID int) ([]model.User, error) {
 	return users, nil
 }
 
-func (db *PostgresDB) GetProjectUserRoles(projID int) ([]model.ProjectUser, error) {
+func (db *PostgresDB) GetProjectUserRoles(projID string) ([]model.ProjectUser, error) {
 	rows, err := db.Query(`SELECT * from projects_users WHERE project_id = $1`, projID)
 	if err != nil {
 		return nil, parseError(err)

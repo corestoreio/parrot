@@ -9,7 +9,7 @@ import (
 	"github.com/lib/pq/hstore"
 )
 
-func (db *PostgresDB) GetProject(id int) (*model.Project, error) {
+func (db *PostgresDB) GetProject(id string) (*model.Project, error) {
 	p := model.Project{}
 	row := db.QueryRow("SELECT * FROM projects WHERE id = $1", id)
 
@@ -80,7 +80,7 @@ func (db *PostgresDB) UpdateProject(project model.Project) (*model.Project, erro
 	return &project, nil
 }
 
-func (db *PostgresDB) DeleteProject(id int) error {
+func (db *PostgresDB) DeleteProject(id string) error {
 	_, err := db.Exec("DELETE FROM projects WHERE id = $1", id)
 	if err == sql.ErrNoRows {
 		return errors.ErrNotFound
@@ -88,7 +88,7 @@ func (db *PostgresDB) DeleteProject(id int) error {
 	return err
 }
 
-func (db *PostgresDB) GetProjectLocaleByIdent(projectID int, ident string) (*model.Locale, error) {
+func (db *PostgresDB) GetProjectLocaleByIdent(projectID string, ident string) (*model.Locale, error) {
 	loc := model.Locale{}
 	row := db.QueryRow("SELECT * FROM locales WHERE project_id = $1 AND ident = $2", projectID, ident)
 	pairs := hstore.Hstore{}
@@ -107,7 +107,7 @@ func (db *PostgresDB) GetProjectLocaleByIdent(projectID int, ident string) (*mod
 	return &loc, nil
 }
 
-func (db *PostgresDB) GetProjectLocales(projID int, localeIdents ...string) ([]model.Locale, error) {
+func (db *PostgresDB) GetProjectLocales(projID string, localeIdents ...string) ([]model.Locale, error) {
 	rows, err := db.Query("SELECT * FROM locales WHERE project_id = $1", projID)
 	if err != nil {
 		return nil, parseError(err)

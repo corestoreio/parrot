@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
@@ -45,18 +44,14 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
-func getUserIDFromContext(ctx context.Context) (int, error) {
+func getUserIDFromContext(ctx context.Context) (string, error) {
 	v := ctx.Value("userID")
 	if v == nil {
-		return -1, ErrInternal
+		return "", ErrInternal
 	}
-	str := v.(string)
+	id := v.(string)
 	if v == "" {
-		return -1, ErrInternal
-	}
-	id, err := strconv.Atoi(str)
-	if err != nil {
-		return -1, ErrInternal
+		return "", ErrInternal
 	}
 	return id, nil
 }

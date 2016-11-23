@@ -19,7 +19,7 @@ export class LocalesListComponent implements OnInit {
         this.localesService.locales.subscribe(
             locales => { this.locales = locales }
         );
-        let projectId = +this.route.snapshot.params['projectId'];
+        let projectId = this.route.snapshot.params['projectId'];
         this.fetchLocales(projectId);
     }
 

@@ -16,16 +16,16 @@ var (
 
 type LocaleStorer interface {
 	CreateLocale(loc Locale) (*Locale, error)
-	DeleteLocale(projID int, ident string) error
+	DeleteLocale(projID string, ident string) error
 }
 
 type Locale struct {
-	ID        int               `db:"id" json:"id"`
+	ID        string            `db:"id" json:"id"`
 	Ident     string            `db:"ident" json:"ident"`
 	Language  string            `db:"language" json:"language"`
 	Country   string            `db:"country" json:"country"`
 	Pairs     map[string]string `db:"pairs" json:"pairs"`
-	ProjectID int               `db:"project_id" json:"project_id"`
+	ProjectID string            `db:"project_id" json:"project_id"`
 }
 
 func (l *Locale) Validate() error {

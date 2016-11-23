@@ -87,7 +87,7 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 				Issuer:    authProvider.Name,
 				IssuedAt:  now.Unix(),
 				ExpiresAt: now.Add(time.Hour * 24).Unix(),
-				Subject:   fmt.Sprintf("%d", claimedUser.ID),
+				Subject:   fmt.Sprintf("%s", claimedUser.ID),
 			},
 		}
 

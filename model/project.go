@@ -9,20 +9,20 @@ var (
 )
 
 type ProjectStorer interface {
-	GetProject(int) (*Project, error)
+	GetProject(string) (*Project, error)
 	CreateProject(Project) (*Project, error)
 	UpdateProject(Project) (*Project, error)
-	DeleteProject(int) error
+	DeleteProject(string) error
 }
 
 type ProjectLocaleStorer interface {
-	UpdateLocalePairs(projID int, localeIdent string, pairs map[string]string) (*Locale, error)
-	GetProjectLocaleByIdent(projID int, localeIdent string) (*Locale, error)
-	GetProjectLocales(projID int, localeIdents ...string) ([]Locale, error)
+	UpdateLocalePairs(projID string, localeIdent string, pairs map[string]string) (*Locale, error)
+	GetProjectLocaleByIdent(projID string, localeIdent string) (*Locale, error)
+	GetProjectLocales(projID string, localeIdents ...string) ([]Locale, error)
 }
 
 type Project struct {
-	ID   int      `db:"id" json:"id"`
+	ID   string   `db:"id" json:"id"`
 	Name string   `db:"name" json:"name"`
 	Keys []string `db:"keys" json:"keys"`
 }

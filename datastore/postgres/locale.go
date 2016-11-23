@@ -24,7 +24,7 @@ func (db *PostgresDB) CreateLocale(loc model.Locale) (*model.Locale, error) {
 	return &loc, parseError(err)
 }
 
-func (db *PostgresDB) UpdateLocalePairs(projID int, localeIdent string, pairs map[string]string) (*model.Locale, error) {
+func (db *PostgresDB) UpdateLocalePairs(projID string, localeIdent string, pairs map[string]string) (*model.Locale, error) {
 	h := hstore.Hstore{}
 	h.Map = make(map[string]sql.NullString)
 	for k, v := range pairs {
@@ -52,7 +52,7 @@ func (db *PostgresDB) UpdateLocalePairs(projID int, localeIdent string, pairs ma
 	return &loc, nil
 }
 
-func (db *PostgresDB) DeleteLocale(projID int, ident string) error {
+func (db *PostgresDB) DeleteLocale(projID string, ident string) error {
 	_, err := db.Exec("DELETE FROM locales WHERE project_id = $1 AND ident = $2", projID, ident)
 	return parseError(err)
 }

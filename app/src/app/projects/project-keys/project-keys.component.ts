@@ -21,7 +21,7 @@ export class ProjectKeysComponent implements OnInit {
 
     private fetchProject() {
         this.loading = true;
-        let id = +this.route.snapshot.params['projectId'];
+        let id = this.route.snapshot.params['projectId'];
         this.service.getProject(id).subscribe(
             res => {
                 this.project = res;

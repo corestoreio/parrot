@@ -36,7 +36,7 @@ export class CreateLocaleComponent {
 
     createLocale() {
         this.loading = true;
-        let projectId = +this.route.snapshot.params['projectId'];
+        let projectId = this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, this.locale).subscribe(
             () => { },
             err => { console.log(err); },

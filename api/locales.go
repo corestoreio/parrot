@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
@@ -11,8 +10,8 @@ import (
 )
 
 func createLocale(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -43,8 +42,8 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 }
 
 func showLocale(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -72,8 +71,8 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 }
 
 func findLocales(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 
@@ -105,8 +104,8 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -140,13 +139,13 @@ func deleteLocale(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
 
-	err = store.DeleteLocale(projectID, ident)
+	err := store.DeleteLocale(projectID, ident)
 	if err != nil {
 		handleError(w, err)
 		return

@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/pressly/chi"
 )
@@ -83,7 +82,7 @@ func isAllowed(r Role, a RoleGrant) bool {
 	return false
 }
 
-func getProjectUserRole(userID, projID int) (string, error) {
+func getProjectUserRole(userID, projID string) (string, error) {
 	users, err := store.GetProjectUserRoles(projID)
 	if err != nil {
 		return "", err
@@ -98,8 +97,8 @@ func getProjectUserRole(userID, projID int) (string, error) {
 
 func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-		if err != nil {
+		projectID := chi.URLParam(r, "projectID")
+		if projectID == "" {
 			handleError(w, ErrBadRequest)
 			return
 		}

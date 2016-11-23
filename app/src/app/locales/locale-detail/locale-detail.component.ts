@@ -16,7 +16,7 @@ export class LocaleDetailComponent {
     constructor(private localesService: LocalesService, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        let projectId = +this.route.snapshot.params['projectId'];
+        let projectId = this.route.snapshot.params['projectId'];
         let localeIdent = this.route.snapshot.params['localeIdent'];
         this.loading = true;
         this.localesService.fetchLocale(projectId, localeIdent).subscribe(

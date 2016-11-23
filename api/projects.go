@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
@@ -39,8 +38,8 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateProjectKeys(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -63,8 +62,8 @@ func updateProjectKeys(w http.ResponseWriter, r *http.Request) {
 }
 
 func showProject(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -79,13 +78,13 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteProject(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
 
-	err = store.DeleteProject(projectID)
+	err := store.DeleteProject(projectID)
 	if err != nil {
 		handleError(w, err)
 		return

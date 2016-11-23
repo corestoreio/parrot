@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
@@ -27,8 +26,8 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProjectUsers(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -49,8 +48,8 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -59,7 +58,7 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = store.AssignProjectUser(pu)
+	err := store.AssignProjectUser(pu)
 	if err != nil {
 		handleError(w, err)
 		return
@@ -69,13 +68,13 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
-	if err != nil {
+	userID := chi.URLParam(r, "userID")
+	if userID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
@@ -105,19 +104,19 @@ func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 }
 
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
-	projectID, err := strconv.Atoi(chi.URLParam(r, "projectID"))
-	if err != nil {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
-	if err != nil {
+	userID := chi.URLParam(r, "userID")
+	if userID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
 	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
 
-	err = store.RevokeProjectUser(pu)
+	err := store.RevokeProjectUser(pu)
 	if err != nil {
 		handleError(w, err)
 		return
