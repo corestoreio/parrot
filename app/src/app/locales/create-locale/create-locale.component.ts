@@ -10,6 +10,7 @@ import { LocalesService } from './../services/locales.service';
 export class CreateLocaleComponent {
     private locale;
     private modalOpen = false;
+    private loading = false;
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
         this.resetFormModel();
@@ -34,12 +35,16 @@ export class CreateLocaleComponent {
     }
 
     createLocale() {
-        this.modalOpen = false;
+        this.loading = true;
         let projectId = +this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, this.locale).subscribe(
             () => { },
-            err => { console.log(err); }
+            err => { console.log(err); },
+            () => {
+                this.loading = false;
+                this.closeModal();
+                this.resetFormModel();
+            }
         )
-        this.resetFormModel();
     }
 }

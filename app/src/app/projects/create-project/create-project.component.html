@@ -4,13 +4,15 @@
     <div class="modal-body">
         <form class="compact" (ngSubmit)="createProject()" #createProjectForm="ngForm">
             <section class="form-block">
+                <div class="spinner spinner-md" *ngIf="loading"></div>
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="The project's name" [(ngModel)]="project.name" autofocus required>
+                    <input type="text" id="name" name="name" placeholder="The project's name" [disabled]="loading" [(ngModel)]="project.name"
+                        autofocus required>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="!createProjectForm.form.valid">Create</button>
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!createProjectForm.form.valid || loading">Create</button>
                 </div>
             </section>
         </form>

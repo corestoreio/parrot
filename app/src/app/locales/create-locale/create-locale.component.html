@@ -2,6 +2,7 @@
 <clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'md'">
     <h3 class="modal-title">Create a locale</h3>
     <div class="modal-body">
+        <div class="spinner spinner-md" *ngIf="loading"></div>
         <form class="compact" (ngSubmit)="createLocale()" #createLocaleForm="ngForm">
             <section class="form-block">
                 <div class="form-group">
@@ -17,8 +18,8 @@
                     <input type="text" id="language" name="language" placeholder="The locale's language" [(ngModel)]="locale.language" required>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="!createLocaleForm.form.valid">Create</button>
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!createLocaleForm.form.valid || loading">Create</button>
                 </div>
             </section>
         </form>

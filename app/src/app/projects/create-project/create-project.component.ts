@@ -9,7 +9,7 @@ import { ProjectsService } from './../services/projects.service';
 })
 export class CreateProjectComponent {
     private modalOpen = false;
-
+    private loading = false;
     private project;
 
     constructor(private projectsService: ProjectsService) {
@@ -33,11 +33,14 @@ export class CreateProjectComponent {
     }
 
     createProject() {
-        this.modalOpen = false;
+        this.loading = true;
         this.projectsService.createProject(this.project).subscribe(
             res => { },
-            err => { console.log(err); }
+            err => { console.log(err); },
+            () => {
+                this.loading = false;
+                this.closeModal();
+            }
         );
-        this.resetProject();
     }
 }
