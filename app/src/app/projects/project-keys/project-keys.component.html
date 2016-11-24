@@ -12,7 +12,7 @@
         <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
         <clr-dg-row *ngFor="let key of project.keys; let i=index; trackBy: trackIndex">
             <clr-dg-cell>
-                <input type="text" [disabled]="!editing" [(ngModel)]="project.keys[i]">
+                <input type="text" [readonly]="!editing" [(ngModel)]="project.keys[i]">
             </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>{{ project.keys.length }} keys</clr-dg-footer>

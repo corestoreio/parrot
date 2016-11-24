@@ -12,6 +12,12 @@ body {
   transform: translate(-50%, -50%);
 }
 
+textarea[readonly="readonly"], textarea[readonly] {
+  border: none;
+  background: transparent;
+  cursor: default !important;
+}
+
 .float-left {
   float: left;
 }

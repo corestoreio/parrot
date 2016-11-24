@@ -13,7 +13,7 @@
         <clr-dg-row *ngFor="let pair of locale.pairs | objtopairs">
             <clr-dg-cell>{{pair.key}}</clr-dg-cell>
             <clr-dg-cell>
-                <textarea [disabled]="!editing" [(ngModel)]="locale.pairs[pair.key]"></textarea>
+                <textarea [readonly]="!editing" [(ngModel)]="locale.pairs[pair.key]"></textarea>
             </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>{{ (locale.pairs | objtopairs).length }} pairs</clr-dg-footer>
