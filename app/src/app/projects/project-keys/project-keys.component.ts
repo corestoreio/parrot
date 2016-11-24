@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ProjectsService } from './../services/projects.service';
+import { RestoreItemService } from './../../shared/restore-item.service';
 
 @Component({
+    providers: [RestoreItemService],
     selector: 'project-keys',
     templateUrl: 'project-keys.component.html'
 })
 export class ProjectKeysComponent implements OnInit {
-    private project;
-    private formKeys = [];
     private loading = false;
     private editing = false;
 
-    constructor(private service: ProjectsService, private route: ActivatedRoute) { }
+    constructor(
+        private service: ProjectsService,
+        private route: ActivatedRoute,
+        private restoreService: RestoreItemService<Object>,
+    ) { }
 
     ngOnInit() {
         this.fetchProject()
@@ -24,16 +28,19 @@ export class ProjectKeysComponent implements OnInit {
         let id = this.route.snapshot.params['projectId'];
         this.service.getProject(id).subscribe(
             res => {
-                this.project = res;
-                this.modelToLocalCopy();
+                this.restoreService.setOriginal(res);
             },
             err => { console.log(err); },
             () => { this.loading = false; }
         )
     }
 
+    get project() {
+        return this.restoreService.getCurrent();
+    }
+
     addKey() {
-        this.formKeys.push("");
+        this.project.keys.push("");
     }
 
     enableEdit() {
@@ -42,20 +49,15 @@ export class ProjectKeysComponent implements OnInit {
 
     cancelEdit() {
         this.editing = false;
-        this.modelToLocalCopy();
-    }
-
-    modelToLocalCopy() {
-        this.formKeys = [...this.project.keys];
+        this.restoreService.restoreOriginal();
     }
 
     commitKeys() {
         this.editing = false;
         this.loading = true;
-        this.service.updateProjectKeys(this.project.id, this.formKeys).subscribe(
+        this.service.updateProjectKeys(this.project.id, this.project.keys).subscribe(
             res => {
-                this.project = res;
-                this.modelToLocalCopy();
+                this.restoreService.setOriginal(res);
             },
             err => { console.log(err); },
             () => { this.loading = false; }

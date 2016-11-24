@@ -2,28 +2,37 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { LocalesService } from './../services/locales.service';
+import { RestoreItemService } from './../../shared/restore-item.service';
 
 @Component({
+    providers: [RestoreItemService],
     selector: 'locale-detail',
     templateUrl: './locale-detail.component.html'
 })
 export class LocaleDetailComponent {
-    private locale;
-    private localPairs = [];
     private loading = false;
     private editing = false;
 
-    constructor(private localesService: LocalesService, private route: ActivatedRoute) { }
+    constructor(private localesService: LocalesService,
+        private route: ActivatedRoute,
+        private restoreService: RestoreItemService<Object>,
+    ) { }
 
     ngOnInit() {
         let projectId = this.route.snapshot.params['projectId'];
         let localeIdent = this.route.snapshot.params['localeIdent'];
         this.loading = true;
         this.localesService.fetchLocale(projectId, localeIdent).subscribe(
-            res => { this.locale = res; this.modelToLocalCopy(); },
+            res => {
+                this.restoreService.setOriginal(res);
+            },
             err => { console.log(err); },
             () => { this.loading = false; }
         );
+    }
+
+    get locale(): any {
+        return this.restoreService.getCurrent();
     }
 
     enableEdit() {
@@ -32,11 +41,7 @@ export class LocaleDetailComponent {
 
     cancelEdit() {
         this.editing = false;
-        this.modelToLocalCopy();
-    }
-
-    modelToLocalCopy() {
-        this.localPairs = Object.assign({}, this.locale.pairs);
+        this.restoreService.restoreOriginal();
     }
 
     commitPairs() {
@@ -45,10 +50,12 @@ export class LocaleDetailComponent {
         this.localesService.updateLocalePairs(
             this.locale.project_id,
             this.locale.ident,
-            this.localPairs,
+            this.locale.pairs,
         )
             .subscribe(
-            result => { this.locale = result; this.modelToLocalCopy(); },
+            result => {
+                this.restoreService.setOriginal(result);
+            },
             err => { console.log(err); },
             () => { this.loading = false; },
         )
