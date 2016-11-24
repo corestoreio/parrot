@@ -2,10 +2,11 @@
     {{locale.ident}} {{locale.language}} {{locale.country}}
 
     <br /><br /><strong> Pairs:</strong>
-    <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
-    <button class="btn btn-warning float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
-    <button class="btn btn-success float-right" (click)="commitPairs()" [hidden]="!editing">Commit</button>
-    <br />
+    <div *ngIf="(locale.pairs | objtopairs).length > 0">
+        <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
+        <button class="btn btn-warning float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
+        <button class="btn btn-success float-right" (click)="commitPairs()" [hidden]="!editing">Commit</button>
+    </div>
 
     <clr-datagrid [clrDgLoading]="loading">
         <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
