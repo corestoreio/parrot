@@ -10,10 +10,13 @@
     <clr-datagrid [clrDgLoading]="loading">
         <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
         <clr-dg-column [clrDgField]="'value'">Value</clr-dg-column>
+
+        <clr-dg-placeholder>No project keys set</clr-dg-placeholder>
+
         <clr-dg-row *ngFor="let pair of locale.pairs | objtopairs">
             <clr-dg-cell>{{pair.key}}</clr-dg-cell>
             <clr-dg-cell>
-                <textarea [readonly]="!editing" [(ngModel)]="locale.pairs[pair.key]"></textarea>
+                <textarea [readonly]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea>
             </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>{{ (locale.pairs | objtopairs).length }} pairs</clr-dg-footer>
