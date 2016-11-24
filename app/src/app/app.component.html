@@ -12,8 +12,6 @@
           <clr-icon shape="caret" class="icon-orient-down"></clr-icon>
         </button>
         <div class="dropdown-menu">
-          <a href="javascript://" clrDropdownItem>About</a>
-          <a href="javascript://" clrDropdownItem>Preferences</a>
           <a (click)="logout()" clrDropdownItem>Log out</a>
         </div>
       </clr-dropdown>
@@ -24,5 +22,17 @@
     <div class="content-area">
       <router-outlet></router-outlet>
     </div>
+
+    <nav class="sidenav">
+      <section class="sidenav-content">
+        <section class="nav-group">
+          <input id="projects" type="checkbox">
+          <label for="projects">Projects</label>
+          <ul class="nav-list">
+            <li *ngFor="let project of projects"><a href="/projects/{{project.id}}" class="nav-link">{{project.name}}</a></li>
+          </ul>
+        </section>
+      </section>
+    </nav>
   </div>
 </div>
