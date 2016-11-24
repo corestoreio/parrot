@@ -25,6 +25,6 @@ export class ProjectsListComponent implements OnInit {
       () => { },
       err => { console.log(err); },
       () => { this.loading = false; }
-    )
+    );
   }
 }
