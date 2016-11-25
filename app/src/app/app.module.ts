@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { ClarityModule } from 'clarity-angular';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,13 +10,6 @@ import { LocalesModule } from './locales';
 import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomePage,
-        ProjectPage,
-        LocalePage,
-        ProjectKeysPage
-    ],
     imports: [
         // Core
         BrowserModule,
@@ -32,6 +24,13 @@ import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
 
         // UI module
         ClarityModule
+    ],
+    declarations: [
+        AppComponent,
+        HomePage,
+        ProjectPage,
+        LocalePage,
+        ProjectKeysPage,
     ],
     providers: [AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]

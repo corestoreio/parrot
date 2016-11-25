@@ -1,6 +1,6 @@
 <div>
     <a class="btn btn-primary" [routerLink]="['keys']">Keys</a>
-    <project-detail></project-detail>
+    <project-detail [project]="project" [loading]="loading"></project-detail>
     <create-locale></create-locale>
     <locales-list></locales-list>
 </div>

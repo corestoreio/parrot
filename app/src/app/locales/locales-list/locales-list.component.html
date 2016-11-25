@@ -1,5 +1,5 @@
 <div class="spinner spinner-md" *ngIf="loading"></div>
-<div class="row">
+<div class="row" *ngIf="!loading">
     <div class="col-xs-12">
         <a class="card clickable" [routerLink]="['locales', locale.ident]" *ngFor="let locale of locales">
             <div class="card-block">

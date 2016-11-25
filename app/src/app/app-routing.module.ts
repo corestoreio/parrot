@@ -17,11 +17,7 @@ const appRoutes: Routes = [
     { path: '', redirectTo: '/projects', pathMatch: 'full' },
 ];
 @NgModule({
-    imports: [
-        RouterModule.forRoot(appRoutes)
-    ],
-    exports: [
-        RouterModule
-    ]
+    imports: [RouterModule.forRoot(appRoutes)],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

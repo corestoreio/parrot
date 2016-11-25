@@ -15,7 +15,7 @@ import { ProjectKeysComponent } from './project-keys/project-keys.component';
     imports: [
         FormsModule,
         CommonModule,
-        RouterModule,
+        RouterModule.forChild([]),
         HttpModule,
         ClarityModule
     ],

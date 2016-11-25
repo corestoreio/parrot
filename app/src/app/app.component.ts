@@ -32,6 +32,10 @@ export class AppComponent implements OnInit {
     );
   }
 
+  isRootRoute() {
+    return this.router.url.toString() == "/projects";
+  }
+
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);

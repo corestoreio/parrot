@@ -16,7 +16,7 @@ import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
     imports: [
         CommonModule,
         FormsModule,
-        RouterModule,
+        RouterModule.forChild([]),
         HttpModule,
         ClarityModule
     ],

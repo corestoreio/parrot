@@ -1,5 +1,8 @@
-<div *ngIf="project">
-  {{project.name}}
-  <br /><br /><strong> Keys:</strong>
-  <br /> {{project.keys}}
+<div class="spinner spinner-md" *ngIf="loading"></div>
+<div *ngIf="!loading">
+  <div *ngIf="project">
+    {{project.name}}
+    <br /><br /><strong> Keys:</strong>
+    <br /> {{project.keys}}
+  </div>
 </div>

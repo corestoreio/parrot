@@ -23,16 +23,16 @@
       <router-outlet></router-outlet>
     </div>
 
-    <nav class="sidenav">
+    <nav class="sidenav" [hidden]="isRootRoute()">
       <section class="sidenav-content">
         <section class="nav-group">
-          <input id="projects" type="checkbox">
-          <label for="projects">Projects</label>
+          <label for="projects"><a routerLink="/projects">Projects</a></label>
           <ul class="nav-list">
-            <li *ngFor="let project of projects"><a href="/projects/{{project.id}}" class="nav-link">{{project.name}}</a></li>
+            <li *ngFor="let project of projects"><a class="nav-link" [routerLink]="['/projects', project.id]" routerLinkActive="active">{{project.name}}</a></li>
           </ul>
         </section>
       </section>
     </nav>
+
   </div>
 </div>
