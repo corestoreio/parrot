@@ -10,10 +10,10 @@ import { LoginComponent, RegisterComponent } from './auth';
 const appRoutes: Routes = [
     { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
     { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
-    { path: 'projects', component: HomePage, canActivate: [AuthGuard] },
-    { path: 'projects/:projectId', component: ProjectPage, canActivate: [AuthGuard] },
-    { path: 'projects/:projectId/keys', component: ProjectKeysPage, canActivate: [AuthGuard] },
-    { path: 'projects/:projectId/locales/:localeIdent', component: LocalePage, canActivate: [AuthGuard] },
+    { path: 'projects', component: HomePage, canLoad: [AuthGuard] },
+    { path: 'projects/:projectId', component: ProjectPage, canLoad: [AuthGuard] },
+    { path: 'projects/:projectId/keys', component: ProjectKeysPage, canLoad: [AuthGuard] },
+    { path: 'projects/:projectId/locales/:localeIdent', component: LocalePage, canLoad: [AuthGuard] },
     { path: '', redirectTo: '/projects', pathMatch: 'full' },
 ];
 @NgModule({
