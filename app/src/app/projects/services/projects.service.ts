@@ -14,7 +14,7 @@ export class ProjectsService {
 
   constructor(private http: Http, private auth: AuthService) { }
 
-  getProjects() {
+  fetchProjects() {
     let request = this.http.get(
       `${API_BASE_URL}/projects`,
       { headers: this.getApiHeaders() }
@@ -35,7 +35,7 @@ export class ProjectsService {
     return request;
   }
 
-  getProject(id) {
+  fetchProject(id) {
     return this.http.get(
       `${API_BASE_URL}/projects/${id}`,
       { headers: this.getApiHeaders() }

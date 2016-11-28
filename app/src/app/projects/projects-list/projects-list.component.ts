@@ -21,7 +21,7 @@ export class ProjectsListComponent implements OnInit {
 
   fetchProjects() {
     this.loading = true;
-    this.projectsService.getProjects().subscribe(
+    this.projectsService.fetchProjects().subscribe(
       () => { },
       err => { console.log(err); },
       () => { this.loading = false; }

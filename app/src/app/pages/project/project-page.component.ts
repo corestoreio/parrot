@@ -22,7 +22,7 @@ export class ProjectPage implements OnInit {
             .map(params => params['projectId'])
             .switchMap(projectId => {
                 this.loading = true;
-                return this.projectsService.getProject(projectId);
+                return this.projectsService.fetchProject(projectId);
             })
             .subscribe(project => {
                 this.project = project; this.loading = false;
