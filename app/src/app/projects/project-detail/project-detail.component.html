@@ -1,13 +1,5 @@
-<div class="row">
-  <div class="col-xs-12">
-
-    <div class="spinner spinner-md" *ngIf="loading"></div>
-
-    <div *ngIf="!loading && project">
-      {{project.name}}
-      <br /><br /><strong> Keys:</strong>
-      <br /> {{project.keys}}
-    </div>
-
-  </div>
+<div *ngIf="project">
+  <strong>{{project.name}}</strong>
+  <br /><strong> Keys:</strong>
+  <br /> {{project.keys}}
 </div>

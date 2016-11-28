@@ -13,21 +13,52 @@ import { LocalesService } from './../../locales/services/locales.service';
 })
 export class ProjectPage implements OnInit {
     private project;
-    private loading = false;
+    private locales;
+    private projectPending = false;
+    private localesPending = false;
 
-    constructor(private router: ActivatedRoute, private projectsService: ProjectsService) { }
+    private get loading() {
+        return this.projectPending || this.localesPending;
+    }
+
+    constructor(private router: ActivatedRoute, private projectsService: ProjectsService, private localesService: LocalesService) { }
 
     ngOnInit() {
-        this.router.params
-            .map(params => params['projectId'])
-            .switchMap(projectId => {
-                this.loading = true;
-                return this.projectsService.fetchProject(projectId);
-            })
-            .subscribe(project => {
-                this.project = project; this.loading = false;
-            }, err => {
-                console.log(err); this.loading = false;
+        this.router.params.subscribe(
+            params => {
+                this.fetchProject(params['projectId']);
+                this.fetchLocales(params['projectId']);
+            }
+        );
+    }
+
+    fetchProject(projectId) {
+        this.projectPending = true;
+        this.projectsService.fetchProject(projectId)
+            .subscribe(
+            project => {
+                this.project = project;
+            },
+            err => {
+                console.log(err);
+            },
+            () => {
+                this.projectPending = false;
+            });
+    }
+
+    fetchLocales(projectId) {
+        this.localesPending = true;
+        this.localesService.fetchLocales(projectId)
+            .subscribe(
+            locales => {
+                this.locales = locales;
+            },
+            err => {
+                console.log(err);
+            },
+            () => {
+                this.localesPending = false;
             });
     }
 }

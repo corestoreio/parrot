@@ -1,22 +1,18 @@
 <div class="row">
     <div class="col-xs-12">
 
-        <div class="spinner spinner-md" *ngIf="loading"></div>
-
-        <div *ngIf="!loading">
-            <a class="card clickable" [routerLink]="['locales', locale.ident]" *ngFor="let locale of locales">
-                <div class="card-block">
-                    <h4 class="card-title">{{locale.ident}} - {{locale.country}} - {{locale.language}}</h4>
-                    <p class="card-text">Lorem ipsum a la prosec lorem matril.</p>
-                    <div class="progress-block">
-                        <label>Translations</label>
-                        <div class="progress-static">
-                            <div class="progress-meter" data-value="70"></div>
-                        </div>
+        <a class="card clickable" [routerLink]="['locales', locale.ident]" *ngFor="let locale of locales">
+            <div class="card-block">
+                <h4 class="card-title">{{locale.ident}} - {{locale.country}} - {{locale.language}}</h4>
+                <p class="card-text">Lorem ipsum a la prosec lorem matril.</p>
+                <div class="progress-block">
+                    <label>Translations</label>
+                    <div class="progress-static">
+                        <div class="progress-meter" data-value="70"></div>
                     </div>
                 </div>
-            </a>
-        </div>
+            </div>
+        </a>
 
     </div>
 </div>
