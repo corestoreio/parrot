@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ClarityModule } from 'clarity-angular';
 
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
@@ -13,6 +14,7 @@ import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
     imports: [
         // Core
         BrowserModule,
+        CoreModule,
 
         // Routing
         AppRoutingModule,

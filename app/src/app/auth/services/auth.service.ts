@@ -9,8 +9,7 @@ import { API_BASE_URL } from './../../app.constants';
 @Injectable()
 export class AuthService {
 
-  constructor(private http: Http) {
-  }
+  constructor(private http: Http) { }
 
   isLoggedIn() {
     return tokenNotExpired('token');

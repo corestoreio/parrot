@@ -1,38 +1,10 @@
 <div class="main-container">
-  <header class="header header-1">
-    <div class="branding">
-      <span class="title">
-        {{title}}
-      </span>
-    </div>
-    <div class="header-actions">
-      <clr-dropdown class="dropdown bottom-right">
-        <button class="nav-icon" clrDropdownToggle>
-          <clr-icon shape="user"></clr-icon>
-          <clr-icon shape="caret" class="icon-orient-down"></clr-icon>
-        </button>
-        <div class="dropdown-menu">
-          <a (click)="logout()" clrDropdownItem>Log out</a>
-        </div>
-      </clr-dropdown>
-    </div>
-  </header>
+  <appbar title="title"></appbar>
 
   <div class="content-container">
     <div class="content-area">
       <router-outlet></router-outlet>
     </div>
-
-    <nav class="sidenav" [hidden]="isRootRoute()">
-      <section class="sidenav-content">
-        <section class="nav-group">
-          <label for="projects"><a routerLink="/projects">Projects</a></label>
-          <ul class="nav-list">
-            <li *ngFor="let project of projects"><a class="nav-link" [routerLink]="['/projects', project.id]" routerLinkActive="active">{{project.name}}</a></li>
-          </ul>
-        </section>
-      </section>
-    </nav>
 
   </div>
 </div>

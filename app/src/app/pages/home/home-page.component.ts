@@ -4,7 +4,8 @@ import { ProjectsService } from './../../projects/services/projects.service';
 
 @Component({
     selector: 'home-page',
-    templateUrl: 'home-page.component.html'
+    templateUrl: 'home-page.component.html',
+    providers: [ProjectsService]
 })
 export class HomePage implements OnInit {
     private projects;

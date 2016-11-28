@@ -1,0 +1,18 @@
+<header class="header header-1">
+    <div class="branding">
+        <span class="title">
+        {{title}}
+      </span>
+    </div>
+    <div class="header-actions">
+        <clr-dropdown class="dropdown bottom-right">
+            <button class="nav-icon" clrDropdownToggle>
+          <clr-icon shape="user"></clr-icon>
+          <clr-icon shape="caret" class="icon-orient-down"></clr-icon>
+        </button>
+            <div class="dropdown-menu">
+                <a (click)="logout()" clrDropdownItem>Log out</a>
+            </div>
+        </clr-dropdown>
+    </div>
+</header>
