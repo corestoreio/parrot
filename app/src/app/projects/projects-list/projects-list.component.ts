@@ -1,30 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-
-import { ProjectsService } from './../services/projects.service';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'projects-list',
   templateUrl: './projects-list.component.html'
 })
-export class ProjectsListComponent implements OnInit {
-  private projects = [];
-  private loading = false;
-
-  constructor(private projectsService: ProjectsService) { }
-
-  ngOnInit() {
-    this.projectsService.projects.subscribe(
-      projects => { this.projects = projects }
-    );
-    this.fetchProjects();
-  }
-
-  fetchProjects() {
-    this.loading = true;
-    this.projectsService.fetchProjects().subscribe(
-      () => { },
-      err => { console.log(err); },
-      () => { this.loading = false; }
-    );
-  }
+export class ProjectsListComponent {
+  @Input()
+  private projects;
 }

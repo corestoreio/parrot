@@ -1,4 +1,5 @@
-<section>
+<div class="spinner spinner-md centered" *ngIf="loading"></div>
+<section *ngIf="!loading">
     <create-project></create-project>
-    <projects-list></projects-list>
+    <projects-list [projects]="projects"></projects-list>
 </section>
