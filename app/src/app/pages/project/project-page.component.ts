@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
@@ -14,51 +14,21 @@ import { LocalesService } from './../../locales/services/locales.service';
 export class ProjectPage implements OnInit {
     private project;
     private locales;
-    private projectPending = false;
-    private localesPending = false;
+    private loading = false;
 
-    private get loading() {
-        return this.projectPending || this.localesPending;
-    }
-
-    constructor(private router: ActivatedRoute, private projectsService: ProjectsService, private localesService: LocalesService) { }
+    constructor(private router: Router, private route: ActivatedRoute, private projectsService: ProjectsService, private localesService: LocalesService) { }
 
     ngOnInit() {
-        this.router.params.subscribe(
-            params => {
-                this.fetchProject(params['projectId']);
-                this.fetchLocales(params['projectId']);
+        this.loading = true;
+        this.route.data.subscribe(data => {
+            this.project = data['project'];
+            this.locales = data['locales'];
+            this.loading = false;
+        });
+        this.router.events.subscribe(v => {
+            if (v instanceof NavigationStart) {
+                this.loading = true;
             }
-        );
-    }
-
-    fetchProject(projectId) {
-        this.projectPending = true;
-        this.projectsService.fetchProject(projectId)
-            .subscribe(
-            project => {
-                this.project = project;
-            },
-            err => {
-                console.log(err);
-            },
-            () => {
-                this.projectPending = false;
-            });
-    }
-
-    fetchLocales(projectId) {
-        this.localesPending = true;
-        this.localesService.fetchLocales(projectId)
-            .subscribe(
-            locales => {
-                this.locales = locales;
-            },
-            err => {
-                console.log(err);
-            },
-            () => {
-                this.localesPending = false;
-            });
+        })
     }
 }
