@@ -1,12 +1,14 @@
 import { Component, Input } from '@angular/core';
 
+import { Locale } from './../model/locale';
+
 @Component({
     selector: 'locales-list',
     templateUrl: './locales-list.component.html'
 })
 export class LocalesListComponent {
     @Input()
-    private locales;
+    private locales: Locale;
     @Input()
-    private loading;
+    private loading: boolean;
 }

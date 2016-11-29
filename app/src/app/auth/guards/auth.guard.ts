@@ -7,11 +7,11 @@ import { AuthService } from './../services/auth.service';
 export class AuthGuard implements CanActivate, CanLoad {
   constructor(private auth: AuthService, private router: Router) { }
 
-  canLoad() {
+  canLoad(): boolean {
     return this.loggedInOrRedirect();
   }
 
-  canActivate() {
+  canActivate(): boolean {
     return this.loggedInOrRedirect();
   }
 

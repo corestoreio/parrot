@@ -14,7 +14,7 @@ export interface RequestOptions {
 
 @Injectable()
 export class APIService {
-    private apiEndpoint;
+    private apiEndpoint: string;
 
     constructor(private http: Http) {
         this.apiEndpoint = AppConfig.apiEndpoint;
@@ -34,7 +34,7 @@ export class APIService {
         return headers;
     }
 
-    request(options: RequestOptions): any {
+    request(options: RequestOptions): Observable<any> {
         return this.http.request(
             `${this.apiEndpoint}${options.uri}`, {
                 method: options.method || 'GET',

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { RestoreItemService } from './../../shared/restore-item.service';
+import { Locale } from './../model/locale';
 
 @Component({
     providers: [RestoreItemService],
@@ -9,25 +10,25 @@ import { RestoreItemService } from './../../shared/restore-item.service';
 })
 export class LocaleDetailComponent {
     @Input()
-    private loading;
+    private loading: boolean;
     @Input()
-    private onCommitPairs;
+    private onCommitPairs: Function;
 
     @Input()
-    set locale(value) {
+    set locale(value: Locale) {
         if (!value) {
             return;
         }
         this.restoreService.setOriginal(value);
     }
 
-    get locale(): any {
+    get locale(): Locale {
         return this.restoreService.getCurrent();
     }
 
     private editing = false;
 
-    constructor(private restoreService: RestoreItemService<Object>) { }
+    constructor(private restoreService: RestoreItemService<Locale>) { }
 
     ngOnInit() { }
 

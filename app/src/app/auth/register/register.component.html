@@ -2,7 +2,7 @@
 
   <h1>Register</h1>
 
-  <div class="alert alert-danger" *ngIf="errors.length > 0">
+  <div class="alert alert-danger" *ngIf="errors && errors.length > 0">
     <div class="alert-item" *ngFor="let err of errors">
       <span class="alert-text">{{err}}</span>
     </div>

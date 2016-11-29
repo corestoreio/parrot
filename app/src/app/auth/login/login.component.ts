@@ -8,7 +8,7 @@ import { AuthService } from './../services/auth.service';
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-  private errors = [];
+  private errors: string[];
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/register']);
   }
 
-  onSubmit(email, password) {
+  onSubmit(email: string, password: string) {
     this.auth.login(email, password).subscribe(
       result => {
         this.router.navigate(['/projects']);

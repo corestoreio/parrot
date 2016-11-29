@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ProjectsService } from './../services/projects.service';
 import { RestoreItemService } from './../../shared/restore-item.service';
+import { Project } from './../model/project';
 
 @Component({
     providers: [RestoreItemService],
@@ -13,32 +14,32 @@ export class ProjectKeysComponent implements OnInit {
     @Input()
     private onCommitKeys;
     @Input()
-    private loading = false;
+    private loading: boolean;
 
     @Input()
-    set project(value) {
+    set project(value: Project) {
         if (!value) {
             return;
         }
         this.restoreService.setOriginal(value);
     }
 
-    private editing = false;
-
-    get project() {
+    get project(): Project {
         return this.restoreService.getCurrent();
     }
+
+    private editing: boolean;
 
     constructor(
         private service: ProjectsService,
         private route: ActivatedRoute,
-        private restoreService: RestoreItemService<Object>,
+        private restoreService: RestoreItemService<Project>,
     ) { }
 
     ngOnInit() { }
 
     addKey() {
-        this.project.keys.push("");
+        this.project.keys.push('');
         this.enableEdit();
     }
 

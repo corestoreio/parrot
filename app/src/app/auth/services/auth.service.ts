@@ -11,20 +11,20 @@ export class AuthService {
 
   constructor(private api: APIService) { }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     let token = this.getToken();
     return tokenNotExpired(null, token);
   }
 
-  getToken() {
+  getToken(): string {
     return localStorage.getItem('token');
   }
 
-  logout() {
+  removeToken(): void {
     localStorage.removeItem('token');
   }
 
-  login(email, password) {
+  login(email: string, password: string): Observable<boolean> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -44,7 +44,7 @@ export class AuthService {
       });
   }
 
-  register(email, password) {
+  register(email: string, password: string): Observable<boolean> {
     return this.api.request({
       uri: '/users',
       method: 'POST',

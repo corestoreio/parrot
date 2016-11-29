@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 import { APIService } from './../../shared/api.service';
+import { Locale } from './../model/locale';
 
 @Injectable()
 export class LocalesService {
 
-    private _locales = new BehaviorSubject([]);
-    public locales = this._locales.asObservable();
+    private _locales = new BehaviorSubject<Locale[]>([]);
+    public locales: Observable<Locale[]> = this._locales.asObservable();
 
     constructor(private api: APIService) { }
 
-    createLocale(projectId: number, locale) {
+    createLocale(projectId: number, locale: Locale): Observable<Locale> {
         let request = this.api.request({
             uri: `/projects/${projectId}/locales`,
             method: 'POST',
@@ -34,7 +36,7 @@ export class LocalesService {
         return request;
     }
 
-    updateLocalePairs(projectId: number, localeIdent: string, pairs) {
+    updateLocalePairs(projectId: string, localeIdent: string, pairs): Observable<Locale> {
         return this.api.request({
             uri: `/projects/${projectId}/locales/${localeIdent}/pairs`,
             method: 'PATCH',
@@ -49,7 +51,7 @@ export class LocalesService {
             }).share();
     }
 
-    fetchLocales(projectId: number) {
+    fetchLocales(projectId: string): Observable<Locale[]> {
         let request = this.api.request({
             uri: `/projects/${projectId}/locales/`,
             method: 'GET',
@@ -69,7 +71,7 @@ export class LocalesService {
         return request;
     }
 
-    fetchLocale(projectId: number, localeIdent: string) {
+    fetchLocale(projectId: string, localeIdent: string): Observable<Locale> {
         let request = this.api.request({
             uri: `/projects/${projectId}/locales/${localeIdent}`,
             method: 'GET',

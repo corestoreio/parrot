@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 import { APIService } from './../../shared/api.service';
+import { Project } from './../model/project';
 
 @Injectable()
 export class ProjectsService {
@@ -12,7 +14,7 @@ export class ProjectsService {
 
   constructor(private api: APIService) { }
 
-  fetchProjects() {
+  fetchProjects(): Observable<Project[]> {
     let request = this.api.request({
       uri: '/projects',
       method: 'GET',
@@ -32,7 +34,7 @@ export class ProjectsService {
     return request;
   }
 
-  fetchProject(id) {
+  fetchProject(id): Observable<Project> {
     return this.api.request({
       uri: `/projects/${id}`,
       method: 'GET',
@@ -46,7 +48,7 @@ export class ProjectsService {
       }).share();
   }
 
-  createProject(project) {
+  createProject(project): Observable<Project> {
     let request = this.api.request({
       uri: '/projects',
       method: 'POST',
@@ -69,7 +71,7 @@ export class ProjectsService {
     return request;
   }
 
-  updateProjectKeys(projectId: number, keys) {
+  updateProjectKeys(projectId: string, keys): Observable<Project> {
     return this.api.request({
       uri: `/projects/${projectId}/keys`,
       method: 'PATCH',

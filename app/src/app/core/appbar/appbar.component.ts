@@ -9,14 +9,14 @@ import { AuthService } from './../../auth';
 })
 export class AppBarComponent implements OnInit {
     @Input()
-    title;
+    title: string;
 
     constructor(private auth: AuthService, private router: Router) { }
 
     ngOnInit() { }
 
-    logout() {
-        this.auth.logout();
+    logout(): void {
+        this.auth.removeToken();
         this.router.navigate(['/login']);
     }
 }

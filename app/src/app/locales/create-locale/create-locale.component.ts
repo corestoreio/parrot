@@ -2,15 +2,16 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { LocalesService } from './../services/locales.service';
+import { Locale } from './../model/locale';
 
 @Component({
     selector: 'create-locale',
     templateUrl: 'create-locale.component.html'
 })
 export class CreateLocaleComponent {
-    private locale;
-    private modalOpen = false;
-    private loading = false;
+    private locale: Locale;
+    private modalOpen: boolean;
+    private loading: boolean;
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
         this.resetFormModel();
@@ -28,9 +29,12 @@ export class CreateLocaleComponent {
 
     resetFormModel() {
         this.locale = {
+            id: '',
             ident: '',
             country: '',
-            language: ''
+            language: '',
+            project_id: '',
+            pairs: {},
         };
     }
 

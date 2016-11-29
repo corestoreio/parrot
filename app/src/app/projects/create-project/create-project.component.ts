@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
+import { Project } from './../model/project';
 import { ProjectsService } from './../services/projects.service';
 
 @Component({
@@ -8,9 +9,9 @@ import { ProjectsService } from './../services/projects.service';
     templateUrl: './create-project.component.html'
 })
 export class CreateProjectComponent {
-    private project;
-    private modalOpen = false;
-    private loading = false;
+    private project: Project;
+    private modalOpen: boolean;
+    private loading: boolean;
 
     constructor(private projectsService: ProjectsService) {
         this.resetProject();
@@ -28,7 +29,9 @@ export class CreateProjectComponent {
 
     resetProject() {
         this.project = {
-            name: ''
+            id: '',
+            name: '',
+            keys: []
         };
     }
 
