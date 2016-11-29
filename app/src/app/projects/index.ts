@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { ClarityModule } from 'clarity-angular';
 
+import { CoreModule } from './../core/core.module';
 import { ProjectsService } from './services/projects.service';
 import { ProjectsListComponent } from './projects-list/projects-list.component';
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
@@ -17,7 +18,8 @@ import { ProjectKeysComponent } from './project-keys/project-keys.component';
         CommonModule,
         RouterModule.forChild([]),
         HttpModule,
-        ClarityModule
+        ClarityModule,
+        CoreModule
     ],
     exports: [
         ProjectsListComponent,

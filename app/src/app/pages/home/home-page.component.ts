@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ProjectsService } from './../../projects/services/projects.service';
+import { SpinnerService, SpinnerState } from './../../core/spinner/spinner.service';
 
 @Component({
     selector: 'home-page',
@@ -11,21 +12,21 @@ export class HomePage implements OnInit {
     private projects;
     private loading = false;
 
-    constructor(private projectsService: ProjectsService) { }
+    constructor(private projectsService: ProjectsService, private spinnerService: SpinnerService) { }
 
     ngOnInit() {
-        this.projectsService.projects.subscribe(
-            projects => { this.projects = projects; }
-        );
+        this.spinnerService.spinnerState
+            .subscribe((state: SpinnerState) => this.loading = state.show);
+        this.projectsService.projects
+            .subscribe(projects => this.projects = projects);
         this.fetchProjects();
     }
 
     fetchProjects() {
-        this.loading = true;
+        this.spinnerService.show();
         this.projectsService.fetchProjects().subscribe(
             () => { },
             err => { console.log(err); },
-            () => { this.loading = false; }
-        );
+            () => this.spinnerService.hide());
     }
 }
