@@ -20,37 +20,18 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  handleError(err) {
-    if (!err || !(err instanceof Object)) {
-      console.error(err);
-      return;
-    }
-
-    switch (err.type) {
-      case "ValidationFailure":
-        this.errors = err.errors;
-        break;
-      case "AlreadyExists":
-        this.errors = [err];
-        break;
-      default:
-        console.error(err);
-        break;
-    }
-  }
-
   onSubmit(email, password) {
     this.auth.register(email, password).subscribe(
-      result => {
+      () => {
         this.auth.login(email, password).subscribe(
-          result => {
+          () => {
             this.router.navigate(['/projects']);
           },
           err => {
-
+            err => this.errors = err
           });
       },
-      err => this.handleError(err)
+      err => this.errors = err
     );
   }
 }

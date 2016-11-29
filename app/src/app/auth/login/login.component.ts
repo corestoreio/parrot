@@ -8,6 +8,7 @@ import { AuthService } from './../services/auth.service';
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
+  private errors = [];
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -22,8 +23,8 @@ export class LoginComponent implements OnInit {
       result => {
         this.router.navigate(['/projects']);
       },
-      error => {
-        // TODO: handle error
+      err => {
+        this.errors = err;
       });
   }
 }
