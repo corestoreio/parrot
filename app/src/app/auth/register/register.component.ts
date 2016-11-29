@@ -11,7 +11,10 @@ export class RegisterComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 
   onSubmit(email, password) {

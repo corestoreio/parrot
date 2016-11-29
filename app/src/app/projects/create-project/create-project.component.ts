@@ -8,9 +8,9 @@ import { ProjectsService } from './../services/projects.service';
     templateUrl: './create-project.component.html'
 })
 export class CreateProjectComponent {
+    private project;
     private modalOpen = false;
     private loading = false;
-    private project;
 
     constructor(private projectsService: ProjectsService) {
         this.resetProject();

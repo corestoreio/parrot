@@ -3,6 +3,12 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.login-wrap {
+  width: 440px;
+  display: table;
+  margin: 0 auto;
+}
+
 .spinner.centered {
   margin: 0;
   position: absolute;
