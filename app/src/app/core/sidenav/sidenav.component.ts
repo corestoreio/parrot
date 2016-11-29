@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'sidenav',
+    selector: 'parrot-sidenav',
     templateUrl: 'sidenav.component.html'
 })
 export class SideNavComponent implements OnInit {

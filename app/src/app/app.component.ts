@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'root',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'Parrot';
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
+
+  sidenavVisible() {
+    // Match nested routes of /projects/*
+    return this.router.url.match(/projects\/[\w\d].*/);
+  }
 }

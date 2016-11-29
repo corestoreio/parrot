@@ -2,9 +2,16 @@
   <appbar title="{{title}}"></appbar>
 
   <div class="content-container">
+
     <div class="content-area">
-      <parrot-spinner></parrot-spinner>
-      <router-outlet></router-outlet>
+      <div class="row">
+        <div class="col-xs-2" *ngIf="sidenavVisible()">
+          <parrot-sidenav></parrot-sidenav>
+        </div>
+        <div class="col-xs">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
     </div>
 
   </div>
