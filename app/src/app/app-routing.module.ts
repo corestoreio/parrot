@@ -13,6 +13,7 @@ const appRoutes: Routes = [
     { path: 'projects', component: HomePage, canActivate: [AuthGuard] },
     { path: 'projects/:projectId', component: ProjectPage, canActivate: [AuthGuard] },
     { path: 'projects/:projectId/keys', component: ProjectKeysPage, canActivate: [AuthGuard] },
+    { path: 'projects/:projectId/locales', redirectTo: '/projects/:projectId', pathMatch: 'full' },
     { path: 'projects/:projectId/locales/:localeIdent', component: LocalePage, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/projects', pathMatch: 'full' },
 ];
