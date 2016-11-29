@@ -1,7 +1,9 @@
-<div class="spinner spinner-md centered" *ngIf="loading"></div>
-<div *ngIf="!loading">
+<section>
+    <h1>{{project.name}}</h1>
     <a class="btn btn-primary" [routerLink]="['keys']">Keys</a>
     <project-detail [project]="project"></project-detail>
-    <create-locale></create-locale>
-    <locales-list [locales]="locales"></locales-list>
-</div>
+    <create-project></create-project>
+    <div *ngIf="!loading">
+        <locales-list [locales]="locales"></locales-list>
+    </div>
+</section>

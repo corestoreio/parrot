@@ -1,4 +1,7 @@
-<section *ngIf="!loading">
+<section>
+    <h1>Projects</h1>
     <create-project></create-project>
-    <projects-list [projects]="projects"></projects-list>
+    <div *ngIf="!loading">
+        <projects-list [projects]="projects"></projects-list>
+    </div>
 </section>
