@@ -15,11 +15,10 @@ Backend:
 - Add cache (redis?)
 
 Frontend:
-- Restyle with simple custom classes.
-- Refactor api calls.
-- Add error handling service.
-- Add project sidenav.
+- Add current project sidenav.
 - Add contributors feature module.
-- Add API feature module (generate and manage client tokens?).
+- Restyle with simple custom classes?.
+- Add Client API feature module (generate and manage client tokens?).
+- Add API error-message map.
+- Add typings.
 - Add tests.
-- Introduce typings.
