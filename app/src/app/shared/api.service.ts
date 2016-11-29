@@ -42,6 +42,17 @@ export class APIService {
                 body: options.body,
             })
             .map(res => res.json())
-            .catch(err => Observable.throw(err.json().meta.error || 'unkown error'));
+            .catch(err => Observable.throw(this.mapErrors(err.json().meta.error)));
+    }
+
+    mapErrors(error: any): string[] {
+        switch (error.type) {
+            case "ValidationFailure":
+                return error.errors.map(err => err.message);
+            case "AlreadyExists":
+                return [error.message];
+            default:
+                return ['unkown error'];
+        }
     }
 }
