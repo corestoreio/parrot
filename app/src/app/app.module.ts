@@ -5,6 +5,7 @@ import { ClarityModule } from 'clarity-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
+import { APIService } from './shared/api.service';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
 import { LocalesModule } from './locales';
@@ -34,7 +35,7 @@ import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
         LocalePage,
         ProjectKeysPage,
     ],
-    providers: [AuthService, AuthGuard, UnauthGuard],
+    providers: [APIService, AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

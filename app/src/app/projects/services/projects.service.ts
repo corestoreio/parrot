@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { AuthService } from './../../auth';
-import { API_BASE_URL } from './../../app.constants';
+import { APIService } from './../../shared/api.service';
 
 @Injectable()
 export class ProjectsService {
@@ -12,14 +10,13 @@ export class ProjectsService {
   private _projects = new BehaviorSubject([]);
   public projects = this._projects.asObservable();
 
-  constructor(private http: Http, private auth: AuthService) { }
+  constructor(private api: APIService) { }
 
   fetchProjects() {
-    let request = this.http.get(
-      `${API_BASE_URL}/projects`,
-      { headers: this.getApiHeaders() }
-    )
-      .map(res => res.json())
+    let request = this.api.request({
+      uri: '/projects',
+      method: 'GET',
+    })
       .map(res => {
         let projects = res.payload;
         if (!projects) {
@@ -36,11 +33,10 @@ export class ProjectsService {
   }
 
   fetchProject(id) {
-    return this.http.get(
-      `${API_BASE_URL}/projects/${id}`,
-      { headers: this.getApiHeaders() }
-    )
-      .map(res => res.json())
+    return this.api.request({
+      uri: `/projects/${id}`,
+      method: 'GET',
+    })
       .map(res => {
         let project = res.payload;
         if (!project) {
@@ -51,12 +47,11 @@ export class ProjectsService {
   }
 
   createProject(project) {
-    let request = this.http.post(
-      `${API_BASE_URL}/projects`,
-      JSON.stringify(project),
-      { headers: this.getApiHeaders() }
-    )
-      .map(res => res.json())
+    let request = this.api.request({
+      uri: '/projects',
+      method: 'POST',
+      body: JSON.stringify(project),
+    })
       .map(res => {
         let project = res.payload;
         if (!project) {
@@ -75,12 +70,11 @@ export class ProjectsService {
   }
 
   updateProjectKeys(projectId: number, keys) {
-    return this.http.patch(
-      `${API_BASE_URL}/projects/${projectId}/keys`,
-      JSON.stringify(keys),
-      { headers: this.getApiHeaders() }
-    )
-      .map(res => res.json())
+    return this.api.request({
+      uri: `/projects/${projectId}/keys`,
+      method: 'PATCH',
+      body: JSON.stringify(keys),
+    })
       .map(res => {
         let payload = res.payload;
         if (!payload) {
@@ -88,12 +82,5 @@ export class ProjectsService {
         }
         return payload;
       }).share();
-  }
-
-  private getApiHeaders() {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    return headers;
   }
 }

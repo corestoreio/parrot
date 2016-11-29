@@ -1,0 +1,47 @@
+import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import { AppConfig } from './../app.config';
+
+export interface RequestOptions {
+    uri: string;
+    method: string;
+    body?: any;
+    withAuthorization?: boolean;
+}
+
+@Injectable()
+export class APIService {
+    private apiEndpoint;
+
+    constructor(private http: Http) {
+        this.apiEndpoint = AppConfig.apiEndpoint;
+    }
+
+    getHeaders(withAuthorization: boolean) {
+        if (withAuthorization === undefined) {
+            withAuthorization = true;
+        }
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json')
+        headers.append('Accept', 'application/json');
+        if (withAuthorization) {
+            headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`);
+        }
+        return headers;
+    }
+
+    request(options: RequestOptions): any {
+        return this.http.request(
+            `${this.apiEndpoint}${options.uri}`, {
+                method: options.method || 'GET',
+                headers: this.getHeaders(options.withAuthorization),
+                body: options.body,
+            })
+            .map(res => res.json())
+            .catch(err => Observable.throw(err.json().meta.error || 'unkown error'));
+    }
+}

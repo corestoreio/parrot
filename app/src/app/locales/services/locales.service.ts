@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { AuthService } from './../../auth';
-import { API_BASE_URL } from './../../app.constants';
+import { APIService } from './../../shared/api.service';
 
 @Injectable()
 export class LocalesService {
@@ -12,15 +10,14 @@ export class LocalesService {
     private _locales = new BehaviorSubject([]);
     public locales = this._locales.asObservable();
 
-    constructor(private http: Http, private auth: AuthService) { }
+    constructor(private api: APIService) { }
 
     createLocale(projectId: number, locale) {
-        let request = this.http.post(
-            `${API_BASE_URL}/projects/${projectId}/locales`,
-            JSON.stringify(locale),
-            { headers: this.getApiHeaders() }
-        )
-            .map(res => res.json())
+        let request = this.api.request({
+            uri: `/projects/${projectId}/locales`,
+            method: 'POST',
+            body: JSON.stringify(locale),
+        })
             .map(res => {
                 let locale = res.payload;
                 if (!locale) {
@@ -38,12 +35,11 @@ export class LocalesService {
     }
 
     updateLocalePairs(projectId: number, localeIdent: string, pairs) {
-        return this.http.patch(
-            `${API_BASE_URL}/projects/${projectId}/locales/${localeIdent}/pairs`,
-            JSON.stringify(pairs),
-            { headers: this.getApiHeaders() }
-        )
-            .map(res => res.json())
+        return this.api.request({
+            uri: `/projects/${projectId}/locales/${localeIdent}/pairs`,
+            method: 'PATCH',
+            body: JSON.stringify(pairs),
+        })
             .map(res => {
                 let payload = res.payload;
                 if (!payload) {
@@ -54,11 +50,10 @@ export class LocalesService {
     }
 
     fetchLocales(projectId: number) {
-        let request = this.http.get(
-            `${API_BASE_URL}/projects/${projectId}/locales`,
-            { headers: this.getApiHeaders() }
-        )
-            .map(res => res.json())
+        let request = this.api.request({
+            uri: `/projects/${projectId}/locales/`,
+            method: 'GET',
+        })
             .map(res => {
                 let locales = res.payload;
                 if (!locales) {
@@ -75,11 +70,10 @@ export class LocalesService {
     }
 
     fetchLocale(projectId: number, localeIdent: string) {
-        let request = this.http.get(
-            `${API_BASE_URL}/projects/${projectId}/locales/${localeIdent}`,
-            { headers: this.getApiHeaders() }
-        )
-            .map(res => res.json())
+        let request = this.api.request({
+            uri: `/projects/${projectId}/locales/${localeIdent}`,
+            method: 'GET',
+        })
             .map(res => {
                 let locale = res.payload;
                 if (!locale) {
@@ -89,12 +83,5 @@ export class LocalesService {
             }).share();
 
         return request;
-    }
-
-    private getApiHeaders() {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-        return headers;
     }
 }
