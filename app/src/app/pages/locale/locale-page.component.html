@@ -1,6 +1,4 @@
 <section>
     <h1>Locale Pairs</h1>
-    <div *ngIf="!loading">
-        <locale-detail></locale-detail>
-    </div>
+    <locale-detail [locale]="locale" [loading]="loading" [onCommitPairs]="updatePairs"></locale-detail>
 </section>

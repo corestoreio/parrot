@@ -6,5 +6,7 @@ import { Component, Input } from '@angular/core';
 })
 export class LocalesListComponent {
     @Input()
-    locales;
+    private locales;
+    @Input()
+    private loading;
 }

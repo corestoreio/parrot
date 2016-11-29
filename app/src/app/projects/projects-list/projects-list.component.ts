@@ -7,4 +7,6 @@ import { Component, Input } from '@angular/core';
 export class ProjectsListComponent {
   @Input()
   private projects;
+  @Input()
+  private loading;
 }

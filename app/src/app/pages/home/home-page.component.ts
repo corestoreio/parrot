@@ -15,18 +15,18 @@ export class HomePage implements OnInit {
     constructor(private projectsService: ProjectsService, private spinnerService: SpinnerService) { }
 
     ngOnInit() {
-        this.spinnerService.spinnerState
-            .subscribe((state: SpinnerState) => this.loading = state.show);
         this.projectsService.projects
             .subscribe(projects => this.projects = projects);
         this.fetchProjects();
     }
 
     fetchProjects() {
-        this.spinnerService.show();
-        this.projectsService.fetchProjects().subscribe(
+        this.loading = true;
+        this.projectsService.fetchProjects()
+            .subscribe(
             () => { },
-            err => { console.log(err); },
-            () => this.spinnerService.hide());
+            err => console.log(err),
+            () => this.loading = false
+            );
     }
 }

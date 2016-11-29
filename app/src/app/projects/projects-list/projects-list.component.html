@@ -1,17 +1,19 @@
-<div class="spinner" *ngIf="loading"></div>
-<div class="row">
-  <div class="col-xs-12">
-    <a class="card clickable" [routerLink]="['/projects', project.id]" *ngFor="let project of projects">
-      <div class="card-block">
-        <h4 class="card-title">{{project.name}}</h4>
-        <p class="card-text">Lorem ipsum a la prosec lorem matril.</p>
-        <div class="progress-block">
-          <label>Translations</label>
-          <div class="progress-static">
-            <div class="progress-meter" data-value="70"></div>
+<div class="spinner spinner-md centered" *ngIf="loading"></div>
+<div *ngIf="!loading">
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="card clickable" [routerLink]="['/projects', project.id]" *ngFor="let project of projects">
+        <div class="card-block">
+          <h4 class="card-title">{{project.name}}</h4>
+          <p class="card-text">Lorem ipsum a la prosec lorem matril.</p>
+          <div class="progress-block">
+            <label>Translations</label>
+            <div class="progress-static">
+              <div class="progress-meter" data-value="70"></div>
+            </div>
           </div>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ProjectsService } from './../services/projects.service';
@@ -10,8 +10,24 @@ import { RestoreItemService } from './../../shared/restore-item.service';
     templateUrl: 'project-keys.component.html'
 })
 export class ProjectKeysComponent implements OnInit {
+    @Input()
+    private onCommitKeys;
+    @Input()
     private loading = false;
+
+    @Input()
+    set project(value) {
+        if (!value) {
+            return;
+        }
+        this.restoreService.setOriginal(value);
+    }
+
     private editing = false;
+
+    get project() {
+        return this.restoreService.getCurrent();
+    }
 
     constructor(
         private service: ProjectsService,
@@ -19,25 +35,7 @@ export class ProjectKeysComponent implements OnInit {
         private restoreService: RestoreItemService<Object>,
     ) { }
 
-    ngOnInit() {
-        this.fetchProject()
-    }
-
-    private fetchProject() {
-        this.loading = true;
-        let id = this.route.snapshot.params['projectId'];
-        this.service.fetchProject(id).subscribe(
-            res => {
-                this.restoreService.setOriginal(res);
-            },
-            err => { console.log(err); },
-            () => { this.loading = false; }
-        )
-    }
-
-    get project() {
-        return this.restoreService.getCurrent();
-    }
+    ngOnInit() { }
 
     addKey() {
         this.project.keys.push("");
@@ -54,14 +52,7 @@ export class ProjectKeysComponent implements OnInit {
 
     commitKeys() {
         this.editing = false;
-        this.loading = true;
-        this.service.updateProjectKeys(this.project.id, this.project.keys).subscribe(
-            res => {
-                this.restoreService.setOriginal(res);
-            },
-            err => { console.log(err); },
-            () => { this.loading = false; }
-        );
+        this.onCommitKeys(this.project.id, this.project.keys);
     }
 
     trackIndex(index: number, obj: string): number {

@@ -6,5 +6,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ProjectDetailComponent {
 	@Input()
-	project;
+	private project;
+	@Input()
+	private loading;
 }

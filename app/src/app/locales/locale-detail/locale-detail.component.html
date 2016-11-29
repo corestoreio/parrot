@@ -1,23 +1,26 @@
-<div *ngIf="locale">
-    {{locale.ident}} {{locale.language}} {{locale.country}}
+<div class="spinner spinner-md centered" *ngIf="loading"></div>
+<div *ngIf="!loading">
+    <div *ngIf="locale">
+        {{locale.ident}} {{locale.language}} {{locale.country}}
 
-    <br /><br /><strong> Pairs:</strong>
-    <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
-    <button class="btn btn-warning float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
-    <button class="btn btn-success float-right" (click)="commitPairs()" [hidden]="!editing">Commit</button>
+        <br /><br /><strong> Pairs:</strong>
+        <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
+        <button class="btn btn-warning float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
+        <button class="btn btn-success float-right" (click)="commitPairs()" [hidden]="!editing">Commit</button>
 
-    <clr-datagrid [clrDgLoading]="loading">
-        <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
-        <clr-dg-column [clrDgField]="'value'">Value</clr-dg-column>
+        <clr-datagrid [clrDgLoading]="loading">
+            <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
+            <clr-dg-column [clrDgField]="'value'">Value</clr-dg-column>
 
-        <clr-dg-placeholder>No project keys set</clr-dg-placeholder>
+            <clr-dg-placeholder>No project keys set</clr-dg-placeholder>
 
-        <clr-dg-row *ngFor="let pair of locale.pairs | objtopairs">
-            <clr-dg-cell>{{pair.key}}</clr-dg-cell>
-            <clr-dg-cell>
-                <textarea [readonly]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea>
-            </clr-dg-cell>
-        </clr-dg-row>
-        <clr-dg-footer>{{ (locale.pairs | objtopairs).length }} pairs</clr-dg-footer>
-    </clr-datagrid>
+            <clr-dg-row *ngFor="let pair of locale.pairs | objtopairs">
+                <clr-dg-cell>{{pair.key}}</clr-dg-cell>
+                <clr-dg-cell>
+                    <textarea [readonly]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea>
+                </clr-dg-cell>
+            </clr-dg-row>
+            <clr-dg-footer>{{ (locale.pairs | objtopairs).length }} pairs</clr-dg-footer>
+        </clr-datagrid>
+    </div>
 </div>

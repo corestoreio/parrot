@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
 
-import { LocalesService } from './../services/locales.service';
 import { RestoreItemService } from './../../shared/restore-item.service';
 
 @Component({
@@ -10,30 +8,28 @@ import { RestoreItemService } from './../../shared/restore-item.service';
     templateUrl: './locale-detail.component.html'
 })
 export class LocaleDetailComponent {
-    private loading = false;
-    private editing = false;
+    @Input()
+    private loading;
+    @Input()
+    private onCommitPairs;
 
-    constructor(private localesService: LocalesService,
-        private route: ActivatedRoute,
-        private restoreService: RestoreItemService<Object>,
-    ) { }
-
-    ngOnInit() {
-        let projectId = this.route.snapshot.params['projectId'];
-        let localeIdent = this.route.snapshot.params['localeIdent'];
-        this.loading = true;
-        this.localesService.fetchLocale(projectId, localeIdent).subscribe(
-            res => {
-                this.restoreService.setOriginal(res);
-            },
-            err => { console.log(err); },
-            () => { this.loading = false; }
-        );
+    @Input()
+    set locale(value) {
+        if (!value) {
+            return;
+        }
+        this.restoreService.setOriginal(value);
     }
 
     get locale(): any {
         return this.restoreService.getCurrent();
     }
+
+    private editing = false;
+
+    constructor(private restoreService: RestoreItemService<Object>) { }
+
+    ngOnInit() { }
 
     enableEdit() {
         this.editing = true;
@@ -45,19 +41,11 @@ export class LocaleDetailComponent {
     }
 
     commitPairs() {
-        this.loading = true;
         this.editing = false;
-        this.localesService.updateLocalePairs(
+        this.onCommitPairs(
             this.locale.project_id,
             this.locale.ident,
             this.locale.pairs,
-        )
-            .subscribe(
-            result => {
-                this.restoreService.setOriginal(result);
-            },
-            err => { console.log(err); },
-            () => { this.loading = false; },
-        )
+        );
     }
 }

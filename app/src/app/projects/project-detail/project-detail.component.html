@@ -1,5 +1,11 @@
-<div *ngIf="project">
-  <strong>{{project.name}}</strong>
-  <br /><strong> Keys:</strong>
-  <br /> {{project.keys}}
+<div class="spinner spinner-md centered" *ngIf="loading"></div>
+<div *ngIf="!loading">
+  <div *ngIf="project">
+    <strong>{{project.name}}</strong>
+    <br /><strong> Keys:</strong>
+    <br /> {{project.keys}}
+  </div>
+  <div *ngIf="!project">
+    <strong>Project undefined</strong>
+  </div>
 </div>

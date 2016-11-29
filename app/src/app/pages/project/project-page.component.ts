@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
 
 import { ProjectsService } from './../../projects/services/projects.service';
 import { LocalesService } from './../../locales/services/locales.service';
@@ -14,21 +13,44 @@ import { LocalesService } from './../../locales/services/locales.service';
 export class ProjectPage implements OnInit {
     private project;
     private locales;
-    private loading = false;
+    private loadingProject = false;
+    private loadingLocales = false;
 
-    constructor(private router: Router, private route: ActivatedRoute, private projectsService: ProjectsService, private localesService: LocalesService) { }
+    constructor(
+        private route: ActivatedRoute,
+        private projectsService: ProjectsService,
+        private localesService: LocalesService
+    ) { }
 
     ngOnInit() {
-        this.loading = true;
-        this.route.data.subscribe(data => {
-            this.project = data['project'];
-            this.locales = data['locales'];
-            this.loading = false;
-        });
-        this.router.events.subscribe(v => {
-            if (v instanceof NavigationStart) {
-                this.loading = true;
-            }
-        })
+        this.route.params
+            .map(params => params['projectId'])
+            .subscribe(projectId => {
+                this.fetchProject(projectId);
+                this.fetchLocales(projectId);
+            });
+
+        this.localesService.locales
+            .subscribe(locales => this.locales = locales);
+    }
+
+    fetchProject(projectId) {
+        this.loadingProject = true;
+        this.projectsService.fetchProject(projectId)
+            .subscribe(
+            project => this.project = project,
+            err => console.log(err),
+            () => this.loadingProject = false,
+        );
+    }
+
+    fetchLocales(projectId) {
+        this.loadingLocales = true;
+        this.localesService.fetchLocales(projectId)
+            .subscribe(
+            locales => this.locales = locales,
+            err => console.log(err),
+            () => this.loadingLocales = false,
+        );
     }
 }

@@ -1,6 +1,4 @@
 <section>
     <h1>Project Keys</h1>
-    <div *ngIf="!loading">
-        <project-keys></project-keys>
-    </div>
+    <project-keys [project]="project" [loading]="loading" [onCommitKeys]="updateProjectKeys"></project-keys>
 </section>
