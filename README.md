@@ -15,6 +15,11 @@ Backend:
 - Add cache (redis?)
 
 Frontend:
-- Add styles.
+- Restyle with simple custom classes.
+- Refactor api calls.
+- Add error handling service.
+- Add project sidenav.
+- Add contributors feature module.
+- Add API feature module (generate and manage client tokens?).
 - Add tests.
 - Introduce typings.
