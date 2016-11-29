@@ -2,6 +2,12 @@
 
   <h1>Register</h1>
 
+  <div class="alert alert-danger" *ngIf="errors.length > 0">
+    <div class="alert-item" *ngFor="let err of errors">
+      <span class="alert-text">{{err.message}}</span>
+    </div>
+  </div>
+
   <form (ngSubmit)="onSubmit(f.value.email, f.value.password)" #f="ngForm">
     <section class="form-block">
       <div class="form-group">

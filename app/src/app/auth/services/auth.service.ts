@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 import { tokenNotExpired } from 'angular2-jwt';
@@ -56,6 +57,7 @@ export class AuthService {
       .map(res => res.json())
       .map(res => {
         return true;
-      });
+      })
+      .catch(err => Observable.throw(err.json().meta.error || 'server error'));
   }
 }
