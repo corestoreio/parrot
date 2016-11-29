@@ -12,7 +12,8 @@ export class AuthService {
   constructor(private http: Http) { }
 
   isLoggedIn() {
-    return tokenNotExpired('token');
+    let token = this.getToken();
+    return tokenNotExpired(null, token);
   }
 
   getToken() {
