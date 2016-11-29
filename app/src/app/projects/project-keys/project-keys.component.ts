@@ -39,6 +39,7 @@ export class ProjectKeysComponent implements OnInit {
 
     addKey() {
         this.project.keys.push("");
+        this.enableEdit();
     }
 
     enableEdit() {
