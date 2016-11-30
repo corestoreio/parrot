@@ -1,5 +1,6 @@
 # Parrot
-WIP - Project localization system built with Go (backend) and Angular 2 (frontend).
+Project localization system built with Go and Angular 2.
+Currently in heavy development, breaking changes guaranteed :)
 
 TODO:
 
