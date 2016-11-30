@@ -5,7 +5,8 @@ import { AuthService } from './../../auth';
 
 @Component({
     selector: 'appbar',
-    templateUrl: 'appbar.component.html'
+    templateUrl: 'appbar.component.html',
+    styleUrls: ['appbar.component.css']
 })
 export class AppBarComponent implements OnInit {
     @Input()
