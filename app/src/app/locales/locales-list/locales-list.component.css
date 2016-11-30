@@ -1,15 +1,15 @@
-.tile.project {
-    background: #00D1B2;
+.tile.locale {
+    background: #3273dc;
     border-radius: 4px;
     color: white;
     padding: 10px;
 }
-.tile.project:hover {
-    background: #00DBBB;
+.tile.locale:hover {
+    background: #4080f8;
     cursor: pointer;
 }
-.tile.project:active {
-    background: #00CDB0;
+.tile.locale:active {
+    background: #2869d8;
 }
 
 p {

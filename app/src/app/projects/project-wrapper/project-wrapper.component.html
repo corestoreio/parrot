@@ -1,10 +1,9 @@
-<div class="columns">
-    <div class="column is-2">
+<project-detail [project]="project" [loading]="loadingProject"></project-detail>
+<div class="columns is-gapless">
+    <div class="column is-3">
         <parrot-project-menu></parrot-project-menu>
     </div>
     <div class="column">
-        <section>
-            <router-outlet></router-outlet>
-        </section>
+        <router-outlet></router-outlet>
     </div>
 </div>

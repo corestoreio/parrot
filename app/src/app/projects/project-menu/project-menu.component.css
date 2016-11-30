@@ -1,0 +1,9 @@
+.menu.navigation {
+    padding: 20px;
+    background: #EEE;
+}
+@media(min-width: 768px) {
+    .menu.navigation {
+        height: calc(100vh - 50px);
+    }
+}

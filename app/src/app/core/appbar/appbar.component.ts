@@ -12,9 +12,15 @@ export class AppBarComponent implements OnInit {
     @Input()
     title: string;
 
+    private isMenuActive: boolean;
+
     constructor(private auth: AuthService, private router: Router) { }
 
     ngOnInit() { }
+
+    toggleMenu() {
+        this.isMenuActive = !this.isMenuActive;
+    }
 
     logout(): void {
         this.auth.removeToken();

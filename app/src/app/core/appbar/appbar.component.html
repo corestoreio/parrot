@@ -1,11 +1,17 @@
-<nav class="nav">
+<nav class="nav has-shadow">
     <div class="container">
         <div class="nav-left">
             <span class="nav-item is-brand">{{title}}</span>
         </div>
 
-        <div class="nav-right nav-menu">
-            <a class="nav-item" (click)="logout()">Logout</a>
+        <span id="nav-toggle" class="nav-toggle" (click)="toggleMenu()" [class.is-active]="isMenuActive">
+            <span></span>
+        <span></span>
+        <span></span>
+        </span>
+
+        <div id="nav-menu" class="nav-right nav-menu" [class.is-active]="isMenuActive">
+            <a class="nav-item" [class.is-active]="isMenuActive" (click)="logout()">Logout</a>
         </div>
     </div>
 </nav>
