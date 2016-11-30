@@ -19,7 +19,7 @@ export class ProjectKeysPage implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params
+        this.route.parent.params
             .map(params => params['projectId'])
             .subscribe(projectId => {
                 this.fetchProject(projectId);

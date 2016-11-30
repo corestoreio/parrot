@@ -1,7 +1,5 @@
-<section>
-    <h1 *ngIf="project">{{project.name}}</h1>
-    <a class="btn btn-primary" [routerLink]="['keys']">Keys</a>
-    <project-detail [project]="project" [loading]="loadingProject"></project-detail>
-    <create-locale></create-locale>
-    <locales-list [locales]="locales" [loading]="loadingLocales"></locales-list>
-</section>
+<h1 *ngIf="project">{{project.name}}</h1>
+<a class="btn btn-primary" [routerLink]="['keys']">Keys</a>
+<project-detail [project]="project" [loading]="loadingProject"></project-detail>
+<create-locale></create-locale>
+<locales-list [locales]="locales" [loading]="loadingLocales"></locales-list>

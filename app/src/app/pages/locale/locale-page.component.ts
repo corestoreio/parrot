@@ -9,6 +9,8 @@ import { LocalesService } from './../../locales/services/locales.service';
     templateUrl: 'locale-page.component.html'
 })
 export class LocalePage implements OnInit {
+    private projectId: string;
+    private localeIdent: string;
     private locale;
     private loading = false;
     private updatePairsPending = false;
@@ -21,10 +23,14 @@ export class LocalePage implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params
-            .map(params => ({ projectId: params['projectId'], localeIdent: params['localeIdent'] }))
-            .subscribe(data => {
-                this.fetchLocale(data.projectId, data.localeIdent);
+        this.route.parent.params
+            .map(params => params['projectId'])
+            .map(projectId => { this.projectId = projectId; })
+            .switchMapTo(this.route.params)
+            .map(params => params['localeIdent'])
+            .subscribe(localeIdent => {
+                this.localeIdent = localeIdent;
+                this.fetchLocale(this.projectId, this.localeIdent);
             });
     }
 

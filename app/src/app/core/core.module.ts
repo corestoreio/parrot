@@ -1,15 +1,24 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { ClarityModule } from 'clarity-angular';
 
 import { AppBarComponent } from './appbar/appbar.component';
-import { SideNavComponent } from './sidenav/sidenav.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
 
 @NgModule({
-    imports: [ClarityModule],
-    exports: [AppBarComponent, SideNavComponent, SpinnerComponent],
-    declarations: [AppBarComponent, SideNavComponent, SpinnerComponent],
+    imports: [
+        ClarityModule,
+        RouterModule.forChild([])
+    ],
+    exports: [
+        AppBarComponent,
+        SpinnerComponent
+    ],
+    declarations: [
+        AppBarComponent,
+        SpinnerComponent
+    ],
     providers: [SpinnerService],
 })
 export class CoreModule {

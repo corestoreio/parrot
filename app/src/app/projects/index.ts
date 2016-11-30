@@ -11,6 +11,7 @@ import { ProjectsListComponent } from './projects-list/projects-list.component';
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectKeysComponent } from './project-keys/project-keys.component';
+import { ProjectMenuComponent } from './project-menu/project-menu.component';
 
 @NgModule({
     imports: [
@@ -25,13 +26,15 @@ import { ProjectKeysComponent } from './project-keys/project-keys.component';
         ProjectsListComponent,
         ProjectDetailComponent,
         CreateProjectComponent,
-        ProjectKeysComponent
+        ProjectKeysComponent,
+        ProjectMenuComponent
     ],
     declarations: [
         ProjectsListComponent,
         ProjectDetailComponent,
         CreateProjectComponent,
-        ProjectKeysComponent
+        ProjectKeysComponent,
+        ProjectMenuComponent
     ],
     providers: [
         ProjectsService
@@ -44,5 +47,6 @@ export {
     ProjectsListComponent,
     ProjectDetailComponent,
     CreateProjectComponent,
-    ProjectKeysComponent
+    ProjectKeysComponent,
+    ProjectMenuComponent
 };
