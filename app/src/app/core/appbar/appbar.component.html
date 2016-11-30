@@ -1,6 +1,11 @@
-<header>
-    <div>{{title}}</div>
-    <div>
-        <a (click)="logout()">Log out</a>
+<nav class="nav">
+    <div class="container">
+        <div class="nav-left">
+            <span class="nav-item is-brand">{{title}}</span>
+        </div>
+
+        <div class="nav-right nav-menu">
+            <a class="nav-item" (click)="logout()">Logout</a>
+        </div>
     </div>
-</header>
+</nav>
