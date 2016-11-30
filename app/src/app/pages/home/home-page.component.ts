@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ProjectsService } from './../../projects/services/projects.service';
-import { SpinnerService, SpinnerState } from './../../core/spinner/spinner.service';
 
 @Component({
     selector: 'home-page',
@@ -12,7 +11,7 @@ export class HomePage implements OnInit {
     private projects;
     private loading = false;
 
-    constructor(private projectsService: ProjectsService, private spinnerService: SpinnerService) { }
+    constructor(private projectsService: ProjectsService) { }
 
     ngOnInit() {
         this.projectsService.projects

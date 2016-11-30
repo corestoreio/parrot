@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
-import { ClarityModule } from 'clarity-angular';
 
 import { CoreModule } from './../core/core.module';
 import { ProjectsService } from './services/projects.service';
@@ -20,7 +19,6 @@ import { ProjectWrapperComponent } from './project-wrapper/project-wrapper.compo
         CommonModule,
         RouterModule.forChild([]),
         HttpModule,
-        ClarityModule,
         CoreModule
     ],
     exports: [
