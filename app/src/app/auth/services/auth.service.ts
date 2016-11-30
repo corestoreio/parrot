@@ -37,7 +37,8 @@ export class AuthService {
       .map(res => {
         let token = res.payload.token;
         if (!token) {
-          throw new Error("no token in response");
+          console.error("no token in response");
+          return false;
         }
         localStorage.setItem('token', token);
         return true;
