@@ -1,0 +1,21 @@
+.tile.project {
+    background: #00D1B2;
+    border-radius: 4px;
+    color: white;
+    padding: 10px;
+}
+.tile.project:hover {
+    background: #00b398;
+    cursor: pointer;
+}
+.tile.project:active {
+    background: #009982;
+}
+
+p {
+    color: white;
+}
+
+p strong {
+    color: white;
+}

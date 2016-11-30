@@ -5,6 +5,7 @@ import { ProjectsService } from './../../projects/services/projects.service';
 @Component({
     selector: 'home-page',
     templateUrl: 'home-page.component.html',
+    styleUrls: ['home-page.component.css'],
     providers: [ProjectsService]
 })
 export class HomePage implements OnInit {

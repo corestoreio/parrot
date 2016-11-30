@@ -1,3 +1,7 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+}
+
 .spinner {
   height: 40px;
   width: 40px;
@@ -34,4 +38,3 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-
