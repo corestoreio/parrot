@@ -1,8 +1,9 @@
 <nav>
+    <a class="btn btn-primary btn-sm btn-block" [routerLink]="['/projects']">All Projects </a>
     <ul class="list-unstyled">
-        <li> <a class="btn btn-primary" [routerLink]="['/projects', projectId, 'keys']">Keys</a></li>
-        <li> <a class="btn btn-primary" [routerLink]="['/projects', projectId, 'locales']">Locales</a></li>
-        <li> <a class="btn btn-primary" [routerLink]="['/projects', projectId, 'contributors']">Contributors</a></li>
-        <li> <a class="btn btn-primary" [routerLink]="['/projects', projectId, 'api']">API</a></li>
+        <li> <a class="btn btn-block" [routerLink]="['/projects', projectId, 'keys']">Keys</a></li>
+        <li> <a class="btn btn-block" [routerLink]="['/projects', projectId, 'locales']">Locales</a></li>
+        <li> <a class="btn btn-block" [routerLink]="['/projects', projectId, 'contributors']">Contributors</a></li>
+        <li> <a class="btn btn-block" [routerLink]="['/projects', projectId, 'api']">API</a></li>
     </ul>
 </nav>
