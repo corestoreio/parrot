@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
     selector: 'parrot-project-wrapper',
     templateUrl: 'project-wrapper.component.html'
 })
-export class ProjectWrapper implements OnInit {
+export class ProjectWrapperComponent implements OnInit {
     constructor() { }
 
     ngOnInit() { }
