@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map';
 
 import { LocalesService } from './../../locales/services/locales.service';
+import { Locale } from './../../locales/model/locale';
 
 @Component({
     providers: [LocalesService],
@@ -12,9 +13,10 @@ import { LocalesService } from './../../locales/services/locales.service';
 })
 export class ProjectPage implements OnInit {
     private project;
-    private locales;
+    private locales: Locale[];
     private loadingProject = false;
     private loadingLocales = false;
+    private searchString: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -32,11 +34,15 @@ export class ProjectPage implements OnInit {
             .subscribe(locales => this.locales = locales);
     }
 
+    onSearch(event: any) {
+        this.searchString = event.target.value;
+    }
+
     fetchLocales(projectId) {
         this.loadingLocales = true;
         this.localesService.fetchLocales(projectId)
             .subscribe(
-            locales => this.locales = locales,
+            locales => { this.locales = locales; },
             err => console.log(err),
             () => this.loadingLocales = false,
         );

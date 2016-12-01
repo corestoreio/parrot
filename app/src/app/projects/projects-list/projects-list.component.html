@@ -3,11 +3,13 @@
 
   <div class="tile is-ancestor">
     <div class="tile is-parent is-vertical">
+
       <article class="tile is-child project" [routerLink]="['/projects', project.id]" *ngFor="let project of projects">
         <p class="title"><strong>{{project.name}}</strong></p>
         <p class="subtitle"><strong>{{project.keys.length}}</strong> keys</p>
         <p>Last updated: <small>11:09 PM - 1 Jan 2016</small></p>
       </article>
+
     </div>
   </div>
 

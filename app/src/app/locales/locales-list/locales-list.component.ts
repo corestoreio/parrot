@@ -9,7 +9,20 @@ import { Locale } from './../model/locale';
 })
 export class LocalesListComponent {
     @Input()
-    private locales: Locale;
-    @Input()
     private loading: boolean;
+    @Input()
+    private searchString: string;
+    @Input()
+    private locales: Locale[];
+
+    constructor() {
+        this.locales = [];
+    }
+
+    filterLocales(str: string) {
+        return this.locales.filter(locale => {
+            let v = `${locale.ident} ${locale.country} ${locale.language}`.toLowerCase();
+            return v.includes(str.toLowerCase());
+        });
+    }
 }
