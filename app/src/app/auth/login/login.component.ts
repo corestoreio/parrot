@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/projects']);
       },
       err => {
-        console.log(err)
         this.errors = err;
       });
   }

@@ -1,10 +1,16 @@
-<button class="button is-dark" (click)="openModal()">Add locale</button>
+<button class="button is-success" (click)="openModal()">Add locale</button>
 <div class="modal" [class.is-active]="modalOpen">
     <div class="modal-background" (click)="closeModal()"></div>
     <div class="modal-content">
         <div class="box">
 
             <h1 class="title">Add a new locale for this project</h1>
+
+            <div class="message is-danger" *ngIf="errors && errors.length > 0">
+                <div *ngFor="let err of errors">
+                    <div class="message-body">{{err}}</div>
+                </div>
+            </div>
 
             <form (ngSubmit)="createLocale()" #createLocaleForm="ngForm">
                 <div class="control">

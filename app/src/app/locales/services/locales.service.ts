@@ -32,7 +32,7 @@ export class LocalesService {
 
         request.subscribe(locale => {
             this._locales.next(this._locales.getValue().concat(locale));
-        });
+        }, () => { });
 
         return request;
     }
@@ -67,7 +67,7 @@ export class LocalesService {
 
         request.subscribe(locales => {
             this._locales.next(locales);
-        });
+        }, () => { });
 
         return request;
     }
