@@ -13,12 +13,7 @@
                 </p>
             </div>
             <div class="level-item">
-                <div class="control has-addons has-addons-right">
-                    <!-- TODO: cache keyValid, move create key into own component, add tooltip? -->
-                    <input class="input" type="text" placeholder="Add a new key" [(ngModel)]="newKey" [class.is-disabled]="createKeyPending"
-                        [class.is-danger]="!keyValid() && newKey?.length > 0">
-                    <a class="button is-success" (click)="commitKey()" [class.is-disabled]="!keyValid()" [class.is-loading]="createKeyPending">Add</a>
-                </div>
+                <create-project-key [updateProjectKeys]="updateProjectKeys" [createKeyPending]="createKeyPending" [project]="project"></create-project-key>
             </div>
         </div>
     </nav>

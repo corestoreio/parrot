@@ -73,7 +73,7 @@ export class ProjectsService {
   }
 
   updateProjectKeys(projectId: string, keys): Observable<Project> {
-    return this.api.request({
+    let request = this.api.request({
       uri: `/projects/${projectId}/keys`,
       method: 'PATCH',
       body: JSON.stringify(keys),
@@ -85,5 +85,13 @@ export class ProjectsService {
         }
         return payload;
       }).share();
+
+    request.subscribe(
+      project => {
+        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
+        this._projects.next(projects);
+      });
+
+    return request;
   }
 }

@@ -10,10 +10,8 @@ import { Project } from './../../projects/model/project';
 })
 export class ProjectKeysPage implements OnInit {
     private project: Project;
-    private loading = false;
-    private createKeyPending = false;
-    private newKeyError: string;
-    private newKey: string;
+    private loading: boolean = false;
+    private createKeyPending: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -41,35 +39,13 @@ export class ProjectKeysPage implements OnInit {
         );
     }
 
-    keyValid() {
-        let key = this.newKey;
-        if (!key) {
-            return false;
-        }
-        if (key.trim().length == 0) {
-            this.newKeyError = "Cannot create empty key.";
-            return false;
-        }
-        let exists = this.project.keys.find(pkey => pkey === key);
-        if (exists) {
-            this.newKeyError = "Key already exists.";
-            return false;
-        }
-        return true;
-    }
-
-    commitKey() {
-        let keys = this.project.keys.concat(this.newKey);
-        this.updateProjectKeys(this.project.id, keys);
-    }
-
     updateProjectKeys(projectId, keys) {
         this.createKeyPending = true;
         this.projectsService.updateProjectKeys(projectId, keys)
             .subscribe(
-            project => { this.project = project; this.newKey = ''; },
+            project => this.project = project,
             err => console.log(err),
-            () => this.createKeyPending = false,
-        );
+            () => this.createKeyPending = false
+            );
     }
 }
