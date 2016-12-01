@@ -9,12 +9,7 @@
         <div class="level-right">
             <div class="level-item">
                 <p class="subtitle is-5">
-                    <strong>{{locales.length}}</strong> locales
-                </p>
-            </div>
-            <div class="level-item">
-                <p class="control">
-                    <input class="input" type="text" placeholder="Search locales" (keyup)="onSearch($event)">
+                    <strong>{{locales ? locales.length : 0}}</strong> locales
                 </p>
             </div>
             <p class="level-item">
@@ -22,6 +17,10 @@
             </p>
         </div>
     </nav>
+
+    <p class="control is-expanded">
+        <input class="input" type="text" placeholder="Search locales" (keyup)="onSearch($event)">
+    </p>
 
     <locales-list [locales]="locales" [searchString]="searchString" [loading]="loadingLocales"></locales-list>
 </section>
