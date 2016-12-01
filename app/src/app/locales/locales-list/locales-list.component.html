@@ -1,14 +1,23 @@
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
 
-    <div class="tile is-ancestor">
-        <div class="tile is-parent is-vertical">
-            <article class="tile is-child is-info locale" [routerLink]="['locales', locale.ident]" *ngFor="let locale of locales">
-                <p class="title"><strong>{{locale.ident}}</strong></p>
-                <p class="subtitle">Subtitle</p>
-                <p>Last updated: <small>11:09 PM - 1 Jan 2016</small></p>
-            </article>
+    <article class="media locale center-align" [routerLink]="['locales', locale.ident]" *ngFor="let locale of locales">
+        <figure class="media-left">
+            <span class="icon is-medium">
+                <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i>
+            </span>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p class="title">{{locale.language}} ({{locale.country}})</p>
+                <p>Ident: {{locale.ident}}</p>
+            </div>
         </div>
-    </div>
+        <div class="media-right bottom-align">
+            <div class="content ">
+                <p>Last updated: 11:09 PM - 1 Jan 2016</p>
+            </div>
+        </div>
+    </article>
 
 </div>

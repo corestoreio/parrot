@@ -1,21 +1,31 @@
-.tile.locale {
-    background: #3273dc;
-    border-radius: 4px;
-    color: white;
+.media.locale {
+    background: white;
+    border-radius: 2px;
     padding: 10px;
+    box-shadow: 0 2px 4px 0 #D6D6D6;
 }
-.tile.locale:hover {
-    background: #4080f8;
+.media.locale:hover {
+    background: #DCDCDC;
     cursor: pointer;
 }
-.tile.locale:active {
-    background: #2869d8;
+.media.locale:active {
+    background: #DADADA;
 }
 
-p {
-    color: white;
+.center-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-p strong {
-    color: white;
+.media-left {
+    margin-right: 20px;
+}
+
+.content .title {
+    margin-bottom: 7px;
+}
+
+.bottom-align {
+    align-self: flex-end;
 }
