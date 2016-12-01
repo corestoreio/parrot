@@ -17,9 +17,7 @@ Backend:
 - Add cache (redis?)
 
 Frontend:
-- Add current project sidenav.
 - Add contributors feature module.
-- Restyle with simple custom classes?.
 - Add Client API feature module (generate and manage client tokens?).
 - Add API error-message map.
 - Add tests.
