@@ -1,12 +1,12 @@
 <aside class="menu navigation">
-    <p class="menu-label">
-        Project
-    </p>
+    <p class="menu-label">Project</p>
     <ul class="menu-list">
-        <li><a [routerLink]="['/projects']">All Projects</a></li>
         <li><a [routerLink]="['/projects', projectId, 'keys']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Keys</a></li>
         <li><a [routerLink]="['/projects', projectId]" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Locales</a></li>
-        <li><a [routerLink]="['/projects', projectId, 'contributors']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Contributors</a></li>
-        <li><a [routerLink]="['/projects', projectId, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API</a></li>
+    </ul>
+    <p class="menu-label">Administration</p>
+    <ul class="menu-list">
+        <li><a [routerLink]="['/projects', projectId, 'contributors']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Project Team</a></li>
+        <li><a [routerLink]="['/projects', projectId, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API Access</a></li>
     </ul>
 </aside>
