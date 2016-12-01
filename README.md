@@ -6,6 +6,7 @@ TODO:
 
 Backend:
 - Add snapshots feature
+- Add ability to 'refactor' project keys. Propagate changes on all locales instead of removing related pairs.
 - Add API retrieve snapshots groupped by locale or key
 - Move docker compose into sub folder
 - Add support for client access token and role
