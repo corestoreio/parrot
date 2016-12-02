@@ -9,6 +9,10 @@ import (
 	"github.com/pressly/chi"
 )
 
+type projectKey struct {
+	Key string `json:"key"`
+}
+
 func createProject(w http.ResponseWriter, r *http.Request) {
 	project := model.Project{}
 	errs := decodeAndValidate(r.Body, &project)
@@ -22,6 +26,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: use a transaction for this
 	result, err := store.CreateProject(project)
 	if err != nil {
 		handleError(w, err)
@@ -35,6 +40,63 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.JSON(w, http.StatusCreated, result)
+}
+
+func addProjectKey(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	var data = projectKey{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		handleError(w, err)
+		return
+	}
+
+	if data.Key == "" {
+		handleError(w, ErrUnprocessable)
+		return
+	}
+
+	result, err := store.AddProjectKey(projectID, data.Key)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	render.JSON(w, http.StatusOK, result)
+}
+
+func updateProjectKey(w http.ResponseWriter, r *http.Request) {
+}
+
+func deleteProjectKey(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	var data = projectKey{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		handleError(w, err)
+		return
+	}
+
+	if data.Key == "" {
+		handleError(w, ErrUnprocessable)
+		return
+	}
+
+	result, err := store.DeleteProjectKey(projectID, data.Key)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	render.JSON(w, http.StatusOK, result)
 }
 
 func updateProjectKeys(w http.ResponseWriter, r *http.Request) {

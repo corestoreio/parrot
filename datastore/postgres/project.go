@@ -54,6 +54,78 @@ func (db *PostgresDB) CreateProject(project model.Project) (*model.Project, erro
 	return &result, nil
 }
 
+func (db *PostgresDB) AddProjectKey(projectID, key string) (*model.Project, error) {
+	// TODO optimize this
+	project, err := db.GetProject(projectID)
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range project.Keys {
+		if v == key {
+			return nil, parseError(errors.ErrAlreadyExists)
+		}
+	}
+
+	row := db.QueryRow("UPDATE projects SET keys = keys || array[$1] WHERE id = $2 AND NOT(keys @> array[$1]) RETURNING *", key, projectID)
+	keys := pq.StringArray{}
+	result := model.Project{}
+	err = row.Scan(&result.ID, &result.Name, &keys)
+	if err != nil {
+		return nil, parseError(err)
+	}
+
+	result.Keys = make([]string, len(keys))
+	for i, v := range keys {
+		result.Keys[i] = v
+	}
+
+	return &result, nil
+}
+
+func (db *PostgresDB) UpdateProjectKey(projectID, oldKey, newKey string) (*model.Project, error) {
+
+	return nil, nil
+}
+
+func (db *PostgresDB) DeleteProjectKey(projectID, key string) (*model.Project, error) {
+	project, err := db.GetProject(projectID)
+	if err != nil {
+		return nil, err
+	}
+
+	keys := make(pq.StringArray, 0)
+	found := false
+	for _, v := range project.Keys {
+		if v == key {
+			found = true
+			continue
+		}
+		keys = append(keys, v)
+	}
+
+	if !found {
+		return nil, parseError(errors.ErrNotFound)
+	}
+
+	values, err := keys.Value()
+	if err != nil {
+		return nil, parseError(err)
+	}
+
+	row := db.QueryRow("UPDATE projects SET keys = $1 WHERE id = $2 RETURNING *", values, projectID)
+	err = row.Scan(&project.ID, &project.Name, &keys)
+	if err != nil {
+		return nil, parseError(err)
+	}
+
+	project.Keys = make([]string, len(keys))
+	for i, v := range keys {
+		project.Keys[i] = v
+	}
+
+	return project, nil
+}
+
 func (db *PostgresDB) UpdateProject(project model.Project) (*model.Project, error) {
 	keys := make(pq.StringArray, len(project.Keys))
 	for i, v := range project.Keys {
