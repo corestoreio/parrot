@@ -1,27 +1,41 @@
-<button class="btn btn-primary" (click)="openModal()">Create locale</button>
-<clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'md'">
-    <h3 class="modal-title">Create a locale</h3>
-    <div class="modal-body">
-        <div class="spinner spinner-md" *ngIf="loading"></div>
-        <form class="compact" (ngSubmit)="createLocale()" #createLocaleForm="ngForm">
-            <section class="form-block">
-                <div class="form-group">
-                    <label for="ident">Ident</label>
-                    <input type="text" id="ident" name="name" placeholder="The locale's ident" [(ngModel)]="locale.ident" autofocus required>
+<button class="button is-success" (click)="openModal()">Add locale</button>
+<div class="modal" [class.is-active]="modalOpen">
+    <div class="modal-background" (click)="closeModal()"></div>
+    <div class="modal-content">
+        <div class="box">
+
+            <h1 class="title">Create a new locale for this project</h1>
+
+            <br>
+
+            <div class="message is-danger" *ngIf="errors && errors.length > 0">
+                <div *ngFor="let err of errors">
+                    <div class="message-body">{{err}}</div>
                 </div>
-                <div class="form-group">
-                    <label for="ident">Country</label>
-                    <input type="text" id="country" name="country" placeholder="The locale's country" [(ngModel)]="locale.country" required>
+            </div>
+
+            <form (ngSubmit)="createLocale()" #createLocaleForm="ngForm">
+                <div class="control">
+                    <label class="label" for="name">Ident</label>
+                    <input type="text" class="input" name="ident" placeholder="The locale's ident" [disabled]="loading" [(ngModel)]="locale.ident"
+                        autofocus required>
                 </div>
-                <div class="form-group">
-                    <label for="ident">Language</label>
-                    <input type="text" id="language" name="language" placeholder="The locale's language" [(ngModel)]="locale.language" required>
+                <div class="control">
+                    <label class="label" for="country">Country</label>
+                    <input type="text" class="input" name="country" placeholder="The locale's country" [disabled]="loading" [(ngModel)]="locale.country"
+                        required>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="!createLocaleForm.form.valid || loading">Create</button>
+                <div class="control">
+                    <label class="label" for="language">Language</label>
+                    <input type="text" class="input" name="language" placeholder="The locale's language" [disabled]="loading" [(ngModel)]="locale.language"
+                        required>
                 </div>
-            </section>
-        </form>
+                <div class="control">
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!createLocaleForm.form.valid || loading">Create</button>
+                </div>
+            </form>
+
+        </div>
     </div>
-</clr-modal>
+</div>

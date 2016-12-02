@@ -1,33 +1,44 @@
-body {
-  margin: 0;
+html, body {
   font-family: 'Roboto', sans-serif;
 }
 
-.login-wrap {
-  width: 440px;
-  display: table;
+.spinner {
+  height: 40px;
+  width: 40px;
   margin: 0 auto;
-}
+  background-color: #00D1B2;
+  -webkit-animation: animate-spinner 0.8s infinite ease-in-out;
+          animation: animate-spinner 0.8s infinite ease-in-out; }
+
+@-webkit-keyframes animate-spinner {
+  0% {
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg); }
+  50% {
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); }
+  100% {
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+@keyframes animate-spinner {
+  0% {
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg); }
+  50% {
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg); }
+  100% {
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
 
 .spinner.centered {
-  margin: 0;
   position: absolute;
-  top: 50%;
   left: 50%;
-  margin-right: -50%;
+  top: 50%;
   transform: translate(-50%, -50%);
 }
 
-textarea[readonly="readonly"], textarea[readonly] {
-  border: none;
-  background: transparent;
-  cursor: default !important;
-}
-
-.float-left {
-  float: left;
-}
-
-.float-right {
-  float: right;
+.section.no-background {
+  background: #F5F5F5;
 }

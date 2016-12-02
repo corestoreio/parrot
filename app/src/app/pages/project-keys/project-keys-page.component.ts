@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ProjectsService } from './../../projects/services/projects.service';
+import { Project } from './../../projects/model/project';
 
 @Component({
     selector: 'project-keys-page',
     templateUrl: 'project-keys-page.component.html'
 })
 export class ProjectKeysPage implements OnInit {
-    private project;
-    private loading = false;
+    private project: Project;
+    private loading: boolean = false;
+    private createKeyPending: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -38,12 +40,12 @@ export class ProjectKeysPage implements OnInit {
     }
 
     updateProjectKeys(projectId, keys) {
-        this.loading = true;
+        this.createKeyPending = true;
         this.projectsService.updateProjectKeys(projectId, keys)
             .subscribe(
-            project => { this.project = project },
+            project => this.project = project,
             err => console.log(err),
-            () => this.loading = false,
-        );
+            () => this.createKeyPending = false
+            );
     }
 }

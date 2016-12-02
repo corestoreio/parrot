@@ -1,21 +1,12 @@
-<div *ngIf="project">
-    {{project.name}}
+<div class="spinner centered" *ngIf="loading"></div>
+<div *ngIf="!loading">
 
-    <br /><br /><strong> Keys:</strong>
-    <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
-    <button class="btn btn-warning float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
-    <button class="btn btn-success float-right" (click)="commitKeys()" [hidden]="!editing">Commit</button>
-    <button class="btn btn-primary float-right" (click)="addKey()">Add key</button>
-    <br />
-
-    <clr-datagrid [clrDgLoading]="loading">
-        <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
-        <clr-dg-row *ngFor="let key of project.keys; let i=index; trackBy: trackIndex">
-            <clr-dg-cell>
-                <input type="text" [readonly]="!editing" [(ngModel)]="project.keys[i]">
-            </clr-dg-cell>
-        </clr-dg-row>
-        <clr-dg-footer>{{ project.keys.length }} keys</clr-dg-footer>
-    </clr-datagrid>
+    <table class="table is-bordered is-striped is-narrow">
+        <tbody>
+            <tr *ngFor="let key of project.keys; let i=index; trackBy: trackIndex">
+                <td>{{key}}</td>
+            </tr>
+        </tbody>
+    </table>
 
 </div>

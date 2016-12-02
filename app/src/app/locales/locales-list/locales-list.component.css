@@ -1,0 +1,31 @@
+.media.locale {
+    background: white;
+    border-radius: 2px;
+    padding: 10px;
+    box-shadow: 0 2px 4px 0 #D6D6D6;
+}
+.media.locale:hover {
+    background: #DCDCDC;
+    cursor: pointer;
+}
+.media.locale:active {
+    background: #DADADA;
+}
+
+.center-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.media-left {
+    margin-right: 20px;
+}
+
+.content .title {
+    margin-bottom: 7px;
+}
+
+.bottom-align {
+    align-self: flex-end;
+}

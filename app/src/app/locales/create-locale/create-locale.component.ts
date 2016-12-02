@@ -12,6 +12,7 @@ export class CreateLocaleComponent {
     private locale: Locale;
     private modalOpen: boolean;
     private loading: boolean;
+    private errors: string[];
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
         this.resetFormModel();
@@ -43,12 +44,12 @@ export class CreateLocaleComponent {
         let projectId = this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, this.locale).subscribe(
             () => { },
-            err => { console.log(err); },
+            err => { this.errors = err; this.loading = false; },
             () => {
                 this.loading = false;
                 this.closeModal();
                 this.resetFormModel();
             }
-        )
+        );
     }
 }

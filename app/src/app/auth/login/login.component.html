@@ -1,26 +1,35 @@
-<section class="login-wrap">
+<section class="section login">
+  <div class="columns">
+    <div class="column is-4 is-offset-4">
+      <div class="box">
 
-  <h1>Login</h1>
+        <h1 class="title">Login</h1>
 
-  <div class="alert alert-danger" *ngIf="errors && errors.length > 0">
-    <div class="alert-item" *ngFor="let err of errors">
-      <span class="alert-text">{{err}}</span>
+        <div class="message is-danger" *ngIf="errors && errors.length > 0">
+          <div *ngFor="let err of errors">
+            <div class="message-body">{{err}}</div>
+          </div>
+        </div>
+
+        <form (ngSubmit)="onSubmit(f.value.email, f.value.password)" #f="ngForm">
+          <div class="control">
+            <label class="label">Email</label>
+            <input class="input" type="email" name="email" placeholder="Your email address" required ngModel>
+          </div>
+          <div class="control">
+            <label class="label">Password</label>
+            <input class="input" type="password" name="password" placeholder="Your password" required ngModel>
+          </div>
+          <div class="control">
+            <button class="button is-primary is-fullwidth" type="submit">Submit</button>
+          </div>
+        </form>
+
+        <div class="container">
+          <button class="button is-fullwidth is-link is-unselectable" (click)="navigateToRegister()">Not registered yet? Signup here</button>
+        </div>
+
+      </div>
     </div>
   </div>
-
-  <form (ngSubmit)="onSubmit(f.value.email, f.value.password)" #f="ngForm">
-    <section class="form-block">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" size="35" required ngModel>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" size="35" required ngModel>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </section>
-  </form>
-
-  <a class="btn btn-link" (click)="navigateToRegister()">Not registered yet? Signup here</a>
 </section>

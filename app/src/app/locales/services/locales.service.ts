@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
 import { Locale } from './../model/locale';
@@ -31,7 +32,7 @@ export class LocalesService {
 
         request.subscribe(locale => {
             this._locales.next(this._locales.getValue().concat(locale));
-        });
+        }, () => { });
 
         return request;
     }
@@ -66,7 +67,7 @@ export class LocalesService {
 
         request.subscribe(locales => {
             this._locales.next(locales);
-        });
+        }, () => { });
 
         return request;
     }

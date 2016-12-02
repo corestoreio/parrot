@@ -1,11 +1,10 @@
-<div class="spinner spinner-md centered" *ngIf="loading"></div>
-<div *ngIf="!loading">
-  <div *ngIf="project">
-    <strong>{{project.name}}</strong>
-    <br /><strong> Keys:</strong>
-    <br /> {{project.keys}}
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container" *ngIf="project">
+      <h1 class="title"><strong>{{project.name}}</strong></h1>
+      <h2 class="subtitle">
+        <strong>{{project.keys.length}}</strong> keys
+      </h2>
+    </div>
   </div>
-  <div *ngIf="!project">
-    <strong>Project undefined</strong>
-  </div>
-</div>
+</section>

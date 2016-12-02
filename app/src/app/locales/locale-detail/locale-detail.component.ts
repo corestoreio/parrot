@@ -6,7 +6,8 @@ import { Locale } from './../model/locale';
 @Component({
     providers: [RestoreItemService],
     selector: 'locale-detail',
-    templateUrl: './locale-detail.component.html'
+    templateUrl: './locale-detail.component.html',
+    styleUrls: ['locale-detail.component.css']
 })
 export class LocaleDetailComponent {
     @Input()
@@ -26,7 +27,24 @@ export class LocaleDetailComponent {
         return this.restoreService.getCurrent();
     }
 
-    private editing = false;
+    get percentTranslated(): number {
+        let percent = 0;
+        if (this.locale) {
+            let filled = 0;
+            let pairs = this.locale.pairs;
+            let keys = Object.keys(pairs);
+            keys.forEach(key => {
+                let v = pairs[key];
+                if (v && v.length > 0) {
+                    filled++;
+                }
+            });
+            percent = Math.round((filled / keys.length) * 100);
+        }
+        return percent;
+    }
+
+    private editing: boolean = false;
 
     constructor(private restoreService: RestoreItemService<Locale>) { }
 

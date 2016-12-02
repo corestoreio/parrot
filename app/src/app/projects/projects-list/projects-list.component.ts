@@ -4,7 +4,8 @@ import { Project } from './../model/project';
 
 @Component({
   selector: 'projects-list',
-  templateUrl: './projects-list.component.html'
+  templateUrl: './projects-list.component.html',
+  styleUrls: ['projects-list.component.css']
 })
 export class ProjectsListComponent {
   @Input()

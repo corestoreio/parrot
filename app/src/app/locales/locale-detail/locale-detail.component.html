@@ -1,26 +1,56 @@
-<div class="spinner spinner-md centered" *ngIf="loading"></div>
+<div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
-    <div *ngIf="locale">
-        {{locale.ident}} {{locale.language}} {{locale.country}}
 
-        <br /><br /><strong> Pairs:</strong>
-        <button class="btn btn-primary float-right" (click)="enableEdit()" [hidden]="editing">Edit</button>
-        <button class="btn btn-warning float-right" (click)="cancelEdit()" [hidden]="!editing">Cancel Edit</button>
-        <button class="btn btn-success float-right" (click)="commitPairs()" [hidden]="!editing">Commit</button>
+    <nav class="level is-mobile">
+        <div class="level-left">
+            <div class="level-item">
+                <h1 class="title">Locale: {{locale?.language}} {{locale?.country}} {{locale?.ident}}</h1>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <p class="subtitle is-5">
+                    <strong>{{percentTranslated}}%</strong> translated
+                </p>
+            </div>
+            <div class="level-item">
+                <div class="progress-container">
+                    <progress class="progress is-primary is-fullwidth" value="{{percentTranslated}}" max="100"></progress>
+                </div>
+            </div>
+            <div class="level-item">
+                <button class="button is-success" (click)="enableEdit()" [class.is-hidden]="editing">Edit</button>
+                <button class="button is-success" (click)="commitPairs()" [class.is-hidden]="!editing">Commit</button>
+                <button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">Cancel Edit</button>
+            </div>
+        </div>
+    </nav>
 
-        <clr-datagrid [clrDgLoading]="loading">
-            <clr-dg-column [clrDgField]="'key'">Key</clr-dg-column>
-            <clr-dg-column [clrDgField]="'value'">Value</clr-dg-column>
+    <table class="table is-bordered is-striped is-narrow">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let pair of locale.pairs | objtopairs">
+                <td>{{pair.key}}</td>
+                <td><textarea class="textarea" (click)="enableEdit()" [class.is-disabled]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea></td>
+            </tr>
+        </tbody>
+    </table>
 
-            <clr-dg-placeholder>No project keys set</clr-dg-placeholder>
+    <nav class="level is-mobile">
+        <div class="level-left">
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <button class="button is-success" (click)="enableEdit()" [class.is-hidden]="editing">Edit</button>
+                <button class="button is-success" (click)="commitPairs()" [class.is-hidden]="!editing">Commit</button>
+                <button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">Cancel Edit</button>
+            </div>
+        </div>
+    </nav>
 
-            <clr-dg-row *ngFor="let pair of locale.pairs | objtopairs">
-                <clr-dg-cell>{{pair.key}}</clr-dg-cell>
-                <clr-dg-cell>
-                    <textarea [readonly]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea>
-                </clr-dg-cell>
-            </clr-dg-row>
-            <clr-dg-footer>{{ (locale.pairs | objtopairs).length }} pairs</clr-dg-footer>
-        </clr-datagrid>
-    </div>
 </div>

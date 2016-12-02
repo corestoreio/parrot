@@ -1,18 +1,18 @@
-<header class="header header-1">
-    <div class="branding">
-        <span class="title">
-        {{title}}
-      </span>
+<nav class="nav has-shadow">
+    <div class="container">
+        <div class="nav-left">
+            <span class="nav-item is-brand">{{title}}</span>
+        </div>
+
+        <span id="nav-toggle" class="nav-toggle" (click)="toggleMenu()" [class.is-active]="isMenuActive">
+            <span></span>
+        <span></span>
+        <span></span>
+        </span>
+
+        <div id="nav-menu" class="nav-right nav-menu" [class.is-active]="isMenuActive">
+            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/projects']">Projects</a>
+            <a class="nav-item" (click)="closeMenu()" [class.is-active]="isMenuActive" (click)="logout()" [class.is-hidden]="!logoutVisible">Logout</a>
+        </div>
     </div>
-    <div class="header-actions">
-        <clr-dropdown class="dropdown bottom-right">
-            <button class="nav-icon" clrDropdownToggle>
-          <clr-icon shape="user"></clr-icon>
-          <clr-icon shape="caret" class="icon-orient-down"></clr-icon>
-        </button>
-            <div class="dropdown-menu">
-                <a (click)="logout()" clrDropdownItem>Log out</a>
-            </div>
-        </clr-dropdown>
-    </div>
-</header>
+</nav>

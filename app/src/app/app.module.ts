@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ClarityModule } from 'clarity-angular';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
@@ -16,6 +16,7 @@ import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
         // Core
         BrowserModule,
         CoreModule,
+        FormsModule,
 
         // Routing
         AppRoutingModule,
@@ -24,9 +25,6 @@ import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
         AuthModule,
         ProjectsModule,
         LocalesModule,
-
-        // UI module
-        ClarityModule
     ],
     declarations: [
         AppComponent,
