@@ -1,5 +1,4 @@
 <div class="control has-addons has-addons-right">
-    <input class="input" type="text" placeholder="Add a new key" [(ngModel)]="newKey" [class.is-disabled]="createKeyPending"
-        [class.is-danger]="!keyValid() && newKey?.length > 0">
-    <a class="button is-success" (click)="commitKey()" [class.is-disabled]="!keyValid() || !project" [class.is-loading]="createKeyPending">Add</a>
+    <input class="input" type="text" placeholder="Add a new key" [(ngModel)]="newKey" [class.is-disabled]="addKeyPending" [class.is-danger]="!keyValid() && newKey?.length > 0">
+    <a class="button is-success" (click)="commit()" [class.is-disabled]="!keyValid() || !project" [class.is-loading]="createKeyPending">Add</a>
 </div>

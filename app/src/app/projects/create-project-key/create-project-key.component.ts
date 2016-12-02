@@ -12,9 +12,9 @@ export class CreateProjectKeyComponent {
     @Input()
     private project: Project;
     @Input()
-    private updateProjectKeys;
+    private commitKey;
     @Input()
-    private createKeyPending: boolean;
+    private addKeyPending: boolean;
 
     private error: string;
     private newKey: string;
@@ -24,7 +24,8 @@ export class CreateProjectKeyComponent {
         if (!key) {
             return false;
         }
-        if (key.trim().length == 0) {
+        key = key.trim();
+        if (key.length == 0) {
             this.error = "Cannot create empty key.";
             return false;
         }
@@ -36,8 +37,7 @@ export class CreateProjectKeyComponent {
         return true;
     }
 
-    commitKey() {
-        let keys = this.project.keys.concat(this.newKey);
-        this.updateProjectKeys(this.project.id, keys);
+    commit() {
+        this.commitKey(this.project.id, this.newKey);
     }
 }

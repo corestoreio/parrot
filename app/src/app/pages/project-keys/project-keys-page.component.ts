@@ -11,13 +11,13 @@ import { Project } from './../../projects/model/project';
 export class ProjectKeysPage implements OnInit {
     private project: Project;
     private loading: boolean = false;
-    private createKeyPending: boolean = false;
+    private addKeyPending: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private projectsService: ProjectsService,
     ) {
-        this.updateProjectKeys = this.updateProjectKeys.bind(this);
+        this.addProjectKey = this.addProjectKey.bind(this);
     }
 
     ngOnInit() {
@@ -39,13 +39,13 @@ export class ProjectKeysPage implements OnInit {
         );
     }
 
-    updateProjectKeys(projectId, keys) {
-        this.createKeyPending = true;
-        this.projectsService.updateProjectKeys(projectId, keys)
+    addProjectKey(projectId: string, key: string) {
+        this.addKeyPending = true;
+        this.projectsService.addProjectKey(projectId, key)
             .subscribe(
             project => this.project = project,
             err => console.log(err),
-            () => this.createKeyPending = false
+            () => this.addKeyPending = false
             );
     }
 }

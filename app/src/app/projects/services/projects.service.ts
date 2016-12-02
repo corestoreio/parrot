@@ -72,6 +72,75 @@ export class ProjectsService {
     return request;
   }
 
+  addProjectKey(projectId: string, key: string): Observable<Project> {
+    let request = this.api.request({
+      uri: `/projects/${projectId}/keys`,
+      method: 'POST',
+      body: JSON.stringify({ key: key }),
+    })
+      .map(res => {
+        let payload = res.payload;
+        if (!payload) {
+          throw new Error("no payload in response");
+        }
+        return payload;
+      }).share();
+
+    request.subscribe(
+      project => {
+        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
+        this._projects.next(projects);
+      });
+
+    return request;
+  }
+
+  deleteProjectKey(projectId: string, key: string): Observable<Project> {
+    let request = this.api.request({
+      uri: `/projects/${projectId}/keys`,
+      method: 'DELETE',
+      body: JSON.stringify({ key: key }),
+    })
+      .map(res => {
+        let payload = res.payload;
+        if (!payload) {
+          throw new Error("no payload in response");
+        }
+        return payload;
+      }).share();
+
+    request.subscribe(
+      project => {
+        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
+        this._projects.next(projects);
+      });
+
+    return request;
+  }
+
+  updateProjectKey(projectId: string, oldKey: string, newKey: string): Observable<Project> {
+    let request = this.api.request({
+      uri: `/projects/${projectId}/keys`,
+      method: 'PATCH',
+      body: JSON.stringify({ oldKey: oldKey, newKey: newKey }),
+    })
+      .map(res => {
+        let payload = res.payload;
+        if (!payload) {
+          throw new Error("no payload in response");
+        }
+        return payload;
+      }).share();
+
+    request.subscribe(
+      project => {
+        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
+        this._projects.next(projects);
+      });
+
+    return request;
+  }
+
   updateProjectKeys(projectId: string, keys): Observable<Project> {
     let request = this.api.request({
       uri: `/projects/${projectId}/keys`,
