@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"strings"
+
 	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	"github.com/pressly/chi"
@@ -65,6 +67,8 @@ func addProjectKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	data.Key = strings.Trim(data.Key, " ")
+
 	result, err := store.AddProjectKey(projectID, data.Key)
 	if err != nil {
 		handleError(w, err)
@@ -91,6 +95,8 @@ func updateProjectKey(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrUnprocessable)
 		return
 	}
+
+	data.NewKey = strings.Trim(data.NewKey, "")
 
 	project, localesAffected, err := store.UpdateProjectKey(projectID, data.OldKey, data.NewKey)
 	if err != nil {
