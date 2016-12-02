@@ -16,7 +16,6 @@ type ProjectStorer interface {
 }
 
 type ProjectLocaleStorer interface {
-	RefactorProjectKey(projID, oldKey, newKey string) (int, error)
 	UpdateLocalePairs(projID string, localeIdent string, pairs map[string]string) (*Locale, error)
 	GetProjectLocaleByIdent(projID string, localeIdent string) (*Locale, error)
 	GetProjectLocales(projID string, localeIdents ...string) ([]Locale, error)

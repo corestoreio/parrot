@@ -2,10 +2,8 @@ package postgres
 
 import (
 	"database/sql"
-	goerrors "errors"
 
 	"github.com/anthonynsimon/parrot/model"
-	"github.com/lib/pq"
 	"github.com/lib/pq/hstore"
 )
 
@@ -24,52 +22,6 @@ func (db *PostgresDB) CreateLocale(loc model.Locale) (*model.Locale, error) {
 		loc.Ident, loc.Language, loc.Country, values, loc.ProjectID)
 	err = row.Scan(&loc.ID)
 	return &loc, parseError(err)
-}
-
-func (db *PostgresDB) RefactorProjectKey(projID, oldKey, newKey string) (int, error) {
-	tx, err := db.Begin()
-	if err != nil {
-		return -1, parseError(err)
-	}
-	defer tx.Commit()
-
-	// Step 1, get project keys and update
-	row := tx.QueryRow("SELECT * from projects WHERE id = $1", projID)
-	keys := pq.StringArray{}
-	project := model.Project{}
-	err = row.Scan(&project.ID, &project.Name, &keys)
-	if err != nil {
-		return -1, parseError(err)
-	}
-
-	project.Keys = make([]string, len(keys))
-	for i, v := range keys {
-		if v == oldKey {
-			project.Keys[i] = newKey
-		} else {
-			project.Keys[i] = v
-		}
-	}
-
-	newKeys := make(pq.StringArray, len(project.Keys))
-	for i, v := range project.Keys {
-		newKeys[i] = v
-	}
-
-	values, err := keys.Value()
-	if err != nil {
-		return -1, parseError(err)
-	}
-
-	_, err = tx.Exec("UPDATE projects SET keys = $1 WHERE id = $2", values, project.ID)
-	if err != nil {
-		return -1, parseError(err)
-	}
-
-	// Step 2, find all project locales and update pairs
-	// TODO
-
-	return -1, goerrors.New("not implemented")
 }
 
 func (db *PostgresDB) UpdateLocalePairs(projID string, localeIdent string, pairs map[string]string) (*model.Locale, error) {
