@@ -1,0 +1,24 @@
+<button class="button " (click)="openModal()">Edit</button>
+<div class="modal" [class.is-active]="modalOpen">
+    <div class="modal-background" (click)="closeModal()"></div>
+    <div class="modal-content">
+        <div class="box">
+
+            <h1 class="title">Edit a project key</h1>
+
+            <p>Changes will be reflected on all project locales.</p>
+
+            <form (ngSubmit)="updateKey()" #updateKeyForm="ngForm">
+                <div class="control">
+                    <label class="label" for="key">Key</label>
+                    <input type="text" class="input" name="key" placeholder="Project key" [disabled]="loading" [(ngModel)]="_key" autofocus required>
+                </div>
+                <div class="control">
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!updateKeyForm.form.valid || loading">Save changes</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

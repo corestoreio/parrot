@@ -12,12 +12,15 @@ export class ProjectKeysPage implements OnInit {
     private project: Project;
     private loading: boolean = false;
     private addKeyPending: boolean = false;
+    private deleteKeyPending: boolean = false;
+    private updateKeyPending: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private projectsService: ProjectsService,
     ) {
         this.addProjectKey = this.addProjectKey.bind(this);
+        this.deleteProjectKey = this.deleteProjectKey.bind(this);
     }
 
     ngOnInit() {
@@ -46,6 +49,26 @@ export class ProjectKeysPage implements OnInit {
             project => this.project = project,
             err => console.log(err),
             () => this.addKeyPending = false
+            );
+    }
+
+    deleteProjectKey(projectId: string, key: string) {
+        this.deleteKeyPending = true;
+        this.projectsService.deleteProjectKey(this.project.id, key)
+            .subscribe(
+            project => this.project = project,
+            err => console.log(err),
+            () => this.deleteKeyPending = false
+            );
+    }
+
+    updateProjectKey(projectId: string, oldKey: string, newKey: string) {
+        this.updateKeyPending = true;
+        this.projectsService.updateProjectKey(this.project.id, oldKey, newKey)
+            .subscribe(
+            project => this.project = project,
+            err => console.log(err),
+            () => this.updateKeyPending = false
             );
     }
 }

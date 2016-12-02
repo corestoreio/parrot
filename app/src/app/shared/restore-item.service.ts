@@ -14,6 +14,10 @@ export class RestoreItemService<T> {
         return this.current;
     }
 
+    getOriginal(): T {
+        return this.original;
+    }
+
     restoreOriginal(): T {
         this.current = this.clone(this.original);
         return this.getCurrent();
@@ -21,6 +25,9 @@ export class RestoreItemService<T> {
 
     clone(item: T): T {
         // Super poor clone implementation
+        if (!item) {
+            return null;
+        }
         return JSON.parse(JSON.stringify(item));
     }
 }

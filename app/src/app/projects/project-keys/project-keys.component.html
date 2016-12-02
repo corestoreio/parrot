@@ -5,6 +5,10 @@
         <tbody>
             <tr *ngFor="let key of project.keys; let i=index; trackBy: trackIndex">
                 <td>{{key}}</td>
+                <td>
+                    <edit-project-key [key]="key" [updateKey]="updateKey"></edit-project-key>
+                    <button class="button is-danger is-small" (click)="deleteKey(project.id, key)">Delete</button>
+                </td>
             </tr>
         </tbody>
     </table>

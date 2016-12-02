@@ -35,7 +35,9 @@ export class ProjectsService {
     return request;
   }
 
-  fetchProject(id): Observable<Project> {
+  // TODO: return project from store?
+  // Problem when deleting project keys and other subscribers are using another fetchProject call
+  fetchProject(id: string): Observable<Project> {
     return this.api.request({
       uri: `/projects/${id}`,
       method: 'GET',
