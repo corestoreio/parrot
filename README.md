@@ -17,6 +17,7 @@ Backend:
 - Add cache (redis?)
 
 Frontend:
+- Extract locale detail into locale pairs and editable text box component
 - Add contributors feature module.
 - Add Client API feature module (generate and manage client tokens?).
 - Add API error-message map.
