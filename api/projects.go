@@ -13,6 +13,11 @@ type projectKey struct {
 	Key string `json:"key"`
 }
 
+type projectKeyUpdate struct {
+	OldKey string `json:"oldKey"`
+	NewKey string `json:"newKey"`
+}
+
 func createProject(w http.ResponseWriter, r *http.Request) {
 	project := model.Project{}
 	errs := decodeAndValidate(r.Body, &project)
@@ -70,6 +75,35 @@ func addProjectKey(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateProjectKey(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	var data = projectKeyUpdate{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		handleError(w, err)
+		return
+	}
+
+	if data.OldKey == "" || data.NewKey == "" {
+		handleError(w, ErrUnprocessable)
+		return
+	}
+
+	project, localesAffected, err := store.UpdateProjectKey(projectID, data.OldKey, data.NewKey)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	result := map[string]interface{}{
+		"localesAffected": localesAffected,
+		"project":         project,
+	}
+
+	render.JSON(w, http.StatusOK, result)
 }
 
 func deleteProjectKey(w http.ResponseWriter, r *http.Request) {

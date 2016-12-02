@@ -14,7 +14,7 @@ type ProjectStorer interface {
 	UpdateProject(Project) (*Project, error)
 	DeleteProject(string) error
 	AddProjectKey(projectID, key string) (*Project, error)
-	UpdateProjectKey(projectID, oldKey, newKey string) (*Project, error)
+	UpdateProjectKey(projectID, oldKey, newKey string) (*Project, int, error)
 	DeleteProjectKey(projectID, key string) (*Project, error)
 }
 

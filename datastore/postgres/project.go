@@ -82,9 +82,107 @@ func (db *PostgresDB) AddProjectKey(projectID, key string) (*model.Project, erro
 	return &result, nil
 }
 
-func (db *PostgresDB) UpdateProjectKey(projectID, oldKey, newKey string) (*model.Project, error) {
+func (db *PostgresDB) UpdateProjectKey(projectID, oldKey, newKey string) (*model.Project, int, error) {
+	// TODO: optimize this
+	// Before transaction begin, check if project key is present and newKey is not present
+	project, err := db.GetProject(projectID)
+	if err != nil {
+		return nil, -1, err
+	}
 
-	return nil, nil
+	oldKeyPresent := false
+	newKeyPresent := false
+	for _, v := range project.Keys {
+		if v == oldKey {
+			oldKeyPresent = true
+		} else if v == newKey {
+			newKeyPresent = true
+		}
+	}
+	if !oldKeyPresent {
+		return nil, -1, parseError(errors.ErrNotFound)
+	}
+	if newKeyPresent {
+		return nil, -1, parseError(errors.ErrAlreadyExists)
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, -1, err
+	}
+	defer tx.Rollback()
+
+	// Step 1, get project keys and update
+	row := tx.QueryRow("UPDATE projects SET keys = array_replace(keys, $1, $2) WHERE id = $3 RETURNING *", oldKey, newKey, projectID)
+	keys := pq.StringArray{}
+	result := model.Project{}
+	err = row.Scan(&result.ID, &result.Name, &keys)
+	if err != nil {
+		return nil, -1, parseError(err)
+	}
+
+	result.Keys = make([]string, len(keys))
+	for i, v := range keys {
+		result.Keys[i] = v
+	}
+
+	// Step 2, find all project locales and update pairs
+	rows, err := tx.Query("SELECT * FROM locales WHERE project_id = $1", projectID)
+	if err != nil {
+		return nil, -1, parseError(err)
+	}
+	defer rows.Close()
+
+	locales := make([]model.Locale, 0)
+	for rows.Next() {
+		loc := model.Locale{}
+		pairs := hstore.Hstore{}
+
+		err := rows.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &pairs, &loc.ProjectID)
+		if err != nil {
+			return nil, -1, parseError(err)
+		}
+
+		loc.Pairs = make(map[string]string)
+		for k, v := range pairs.Map {
+			if v.Valid {
+				loc.Pairs[k] = v.String
+			}
+		}
+
+		locales = append(locales, loc)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, -1, parseError(err)
+	}
+
+	for _, locale := range locales {
+		h := hstore.Hstore{}
+		h.Map = make(map[string]sql.NullString)
+		for k, v := range locale.Pairs {
+			// replace old key with new one when found, keep value
+			if k == oldKey {
+				k = newKey
+			}
+			h.Map[k] = sql.NullString{String: v, Valid: true}
+		}
+
+		values, err := h.Value()
+		if err != nil {
+			return nil, -1, err
+		}
+
+		_, err = tx.Exec("UPDATE locales SET pairs = $1 WHERE project_id = $2 AND id = $3", values, projectID, locale.ID)
+		if err != nil {
+			return nil, -1, parseError(err)
+		}
+
+	}
+
+	tx.Commit()
+
+	return &result, len(locales), nil
 }
 
 func (db *PostgresDB) DeleteProjectKey(projectID, key string) (*model.Project, error) {
