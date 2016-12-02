@@ -13,6 +13,9 @@ type ProjectStorer interface {
 	CreateProject(Project) (*Project, error)
 	UpdateProject(Project) (*Project, error)
 	DeleteProject(string) error
+	AddProjectKey(projectID, key string) (*Project, error)
+	UpdateProjectKey(projectID, oldKey, newKey string) (*Project, int, error)
+	DeleteProjectKey(projectID, key string) (*Project, error)
 }
 
 type ProjectLocaleStorer interface {
@@ -33,10 +36,22 @@ func (p *Project) SanitizeKeys() {
 		if key == "" {
 			continue
 		}
+		if contains(sk, key) {
+			continue
+		}
 		sk = append(sk, key)
 	}
 
 	p.Keys = sk
+}
+
+func contains(a []string, s string) bool {
+	for _, v := range a {
+		if v == s {
+			return true
+		}
+	}
+	return false
 }
 
 func (p *Project) Validate() error {
