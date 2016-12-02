@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/switchMapTo';
 
 import { LocalesService } from './../../locales/services/locales.service';
+import { Locale } from './../../locales/model/locale';
 
 @Component({
     providers: [LocalesService],
@@ -12,7 +13,7 @@ import { LocalesService } from './../../locales/services/locales.service';
 export class LocalePage implements OnInit {
     private projectId: string;
     private localeIdent: string;
-    private locale;
+    private locale: Locale;
     private loading = false;
     private updatePairsPending = false;
 
