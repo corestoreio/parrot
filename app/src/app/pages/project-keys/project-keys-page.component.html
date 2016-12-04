@@ -1,22 +1,3 @@
 <section class="section no-background">
-
-    <nav class="level is-mobile">
-        <div class="level-left">
-            <div class="level-item">
-                <h1 class="title">Project Keys</h1>
-            </div>
-        </div>
-        <div class="level-right">
-            <div class="level-item">
-                <p class="subtitle is-5">
-                    <strong>{{project ? project.keys.length : 0}}</strong> keys
-                </p>
-            </div>
-            <div class="level-item">
-                <create-project-key [commitKey]="addProjectKey" [addKeyPending]="addKeyPending" [project]="project"></create-project-key>
-            </div>
-        </div>
-    </nav>
-
-    <project-keys [project]="project" [loading]="loading" [updateProjectKey]="updateProjectKey" [deleteKey]="deleteProjectKey"></project-keys>
+    <project-keys [project]="project" [loading]="loading"></project-keys>
 </section>

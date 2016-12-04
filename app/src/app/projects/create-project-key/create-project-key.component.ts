@@ -12,7 +12,7 @@ export class CreateProjectKeyComponent {
     @Input()
     private project: Project;
     @Input()
-    private commitKey;
+    private submit;
     @Input()
     private addKeyPending: boolean;
 
@@ -38,6 +38,6 @@ export class CreateProjectKeyComponent {
     }
 
     commit() {
-        this.commitKey(this.project.id, this.newKey);
+        this.submit(this.newKey);
     }
 }

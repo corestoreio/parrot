@@ -11,7 +11,7 @@ import { RestoreItemService } from './../../shared/restore-item.service';
 })
 export class EditProjectKeyComponent {
     @Input()
-    private updateKey;
+    private submit;
     @Input()
     private pending: boolean;
     @Input()
@@ -20,14 +20,28 @@ export class EditProjectKeyComponent {
             return;
         }
         this.restoreService.setOriginal(value);
-        this._key = value;
     }
 
-    private _key: string;
+    set _key(value: string) {
+        this.restoreService.setCurrent(value);
+    }
+    get _key(): string {
+        return this.restoreService.getCurrent();
+    }
 
     private modalOpen: boolean;
 
-    constructor(private restoreService: RestoreItemService<string>) { }
+    constructor(
+        private restoreService: RestoreItemService<string>,
+    ) {
+        this.commitChanges = this.commitChanges.bind(this);
+    }
+
+    commitChanges() {
+        this.submit(this.restoreService.getOriginal(), this.restoreService.getCurrent())
+        this.closeModal();
+        // TODO handle failed case?
+    }
 
     openModal() {
         this.modalOpen = true;
@@ -36,10 +50,5 @@ export class EditProjectKeyComponent {
     closeModal() {
         this.modalOpen = false;
         this.restoreService.restoreOriginal();
-        this._key = this.restoreService.getCurrent();
-    }
-
-    commit() {
-        this.updateKey(this.restoreService.getOriginal(), this._key);
     }
 }

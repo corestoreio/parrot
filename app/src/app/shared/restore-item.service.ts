@@ -14,6 +14,10 @@ export class RestoreItemService<T> {
         return this.current;
     }
 
+    setCurrent(value: T) {
+        this.current = value;
+    }
+
     getOriginal(): T {
         return this.original;
     }

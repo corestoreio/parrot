@@ -8,7 +8,7 @@
 
             <p>Changes will be reflected on all project locales.</p>
 
-            <form (ngSubmit)="updateKey()" #updateKeyForm="ngForm">
+            <form (ngSubmit)="commitChanges()" #updateKeyForm="ngForm">
                 <div class="control">
                     <label class="label" for="key">Key</label>
                     <input type="text" class="input" name="key" placeholder="Project key" [disabled]="loading" [(ngModel)]="_key" autofocus required>

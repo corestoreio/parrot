@@ -127,7 +127,7 @@ export class ProjectsService {
       body: JSON.stringify({ oldKey: oldKey, newKey: newKey }),
     })
       .map(res => {
-        let payload = res.payload;
+        let payload = res.payload.project;
         if (!payload) {
           throw new Error("no payload in response");
         }
