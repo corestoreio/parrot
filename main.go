@@ -53,7 +53,7 @@ func main() {
 	})
 
 	// init routers and middleware
-	// CORS, Rate-limiting, etc... is handled in nginx
+	// CORS, Rate-limiting, etc... is handled by the server (for e.g. nginx)
 	// Here we only care about application level middleware
 	mainRouter := chi.NewRouter()
 	mainRouter.Use(
