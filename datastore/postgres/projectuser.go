@@ -40,8 +40,8 @@ func (db *PostgresDB) GetUserProjects(userID string) ([]model.Project, error) {
 	return projects, nil
 }
 
-func (db *PostgresDB) GetProjectUsers(projID string) ([]model.User, error) {
-	rows, err := db.Query(`SELECT users.*
+func (db *PostgresDB) GetProjectUsers(projID string) ([]model.ProjectUser, error) {
+	rows, err := db.Query(`SELECT user_id, project_id, email, role
 							FROM users
 							JOIN projects_users ON users.id = projects_users.user_id
 							WHERE projects_users.project_id = $1`, projID)
@@ -50,15 +50,14 @@ func (db *PostgresDB) GetProjectUsers(projID string) ([]model.User, error) {
 	}
 	defer rows.Close()
 
-	users := make([]model.User, 0)
+	users := make([]model.ProjectUser, 0)
 	for rows.Next() {
-		u := model.User{}
+		u := model.ProjectUser{}
 
-		err := rows.Scan(&u.ID, &u.Email, &u.Password)
+		err := rows.Scan(&u.UserID, &u.ProjectID, &u.Email, &u.Role)
 		if err != nil {
 			return nil, parseError(err)
 		}
-		u.Password = ""
 		users = append(users, u)
 	}
 
@@ -69,30 +68,14 @@ func (db *PostgresDB) GetProjectUsers(projID string) ([]model.User, error) {
 	return users, nil
 }
 
-func (db *PostgresDB) GetProjectUserRoles(projID string) ([]model.ProjectUser, error) {
-	rows, err := db.Query(`SELECT * from projects_users WHERE project_id = $1`, projID)
+func (db *PostgresDB) GetProjectUser(projID, userID string) (*model.ProjectUser, error) {
+	u := model.ProjectUser{}
+	row := db.QueryRow(`SELECT user_id, project_id, role from projects_users WHERE project_id = $1 AND user_id = $2`, projID, userID)
+	err := row.Scan(&u.UserID, &u.ProjectID, &u.Role)
 	if err != nil {
 		return nil, parseError(err)
 	}
-	defer rows.Close()
-
-	pUsers := make([]model.ProjectUser, 0)
-	for rows.Next() {
-		u := model.ProjectUser{}
-
-		err := rows.Scan(&u.UserID, &u.ProjectID, &u.Role)
-		if err != nil {
-			return nil, parseError(err)
-		}
-
-		pUsers = append(pUsers, u)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, parseError(err)
-	}
-
-	return pUsers, nil
+	return &u, nil
 }
 
 func (db *PostgresDB) AssignProjectUser(pu model.ProjectUser) error {

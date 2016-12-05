@@ -83,16 +83,11 @@ func isAllowed(r Role, a RoleGrant) bool {
 }
 
 func getProjectUserRole(userID, projID string) (string, error) {
-	users, err := store.GetProjectUserRoles(projID)
+	user, err := store.GetProjectUser(projID, userID)
 	if err != nil {
 		return "", err
 	}
-	for _, u := range users {
-		if u.UserID == userID {
-			return u.Role, nil
-		}
-	}
-	return "", ErrNotFound
+	return user.Role, nil
 }
 
 func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
