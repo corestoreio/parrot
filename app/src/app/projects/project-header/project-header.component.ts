@@ -3,10 +3,10 @@ import { Component, Input } from '@angular/core';
 import { Project } from './../model/project';
 
 @Component({
-	selector: 'project-detail',
-	templateUrl: './project-detail.component.html'
+	selector: 'project-header',
+	templateUrl: './project-header.component.html'
 })
-export class ProjectDetailComponent {
+export class ProjectHeaderComponent {
 	@Input()
 	private project: Project;
 	@Input()
