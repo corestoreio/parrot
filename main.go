@@ -57,6 +57,8 @@ func main() {
 	// Here we only care about application level middleware
 	mainRouter := chi.NewRouter()
 	mainRouter.Use(
+		middleware.RequestID,
+		middleware.RealIP,
 		logger.Request,
 		middleware.StripSlashes,
 	)

@@ -18,6 +18,7 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 	router := chi.NewRouter()
 	// Enforce use of Content-Type header for POST, PUT and PATCH methods and validate it's JSON
 	router.Use(
+		recoverMiddleware,
 		enforceContentTypeJSON,
 	)
 
