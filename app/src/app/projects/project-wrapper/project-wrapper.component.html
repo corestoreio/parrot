@@ -1,7 +1,7 @@
-<project-header [project]="project" [loading]="loadingProject"></project-header>
+<project-header [project]="project"></project-header>
 <div class="columns is-gapless">
     <div class="column is-3">
-        <parrot-project-menu></parrot-project-menu>
+        <parrot-project-menu [project]="project"></parrot-project-menu>
     </div>
     <div class="column">
         <router-outlet></router-outlet>

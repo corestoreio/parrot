@@ -7,11 +7,11 @@ import { Locale } from './../../locales/model/locale';
 
 @Component({
     providers: [LocalesService],
-    selector: 'project-page',
-    templateUrl: 'project-page.component.html',
-    styleUrls: ['project-page.component.css']
+    selector: 'project-locales-page',
+    templateUrl: 'project-locales-page.component.html',
+    styleUrls: ['project-locales-page.component.css']
 })
-export class ProjectPage implements OnInit {
+export class ProjectLocalesPage implements OnInit {
     private project;
     private locales: Locale[];
     private loadingProject = false;

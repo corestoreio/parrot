@@ -9,7 +9,7 @@ import { APIService } from './shared/api.service';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
 import { LocalesModule } from './locales';
-import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
+import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage } from './pages';
 
 @NgModule({
     imports: [
@@ -29,7 +29,7 @@ import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
     declarations: [
         AppComponent,
         HomePage,
-        ProjectPage,
+        ProjectLocalesPage,
         LocalePage,
         ProjectKeysPage,
     ],

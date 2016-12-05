@@ -6,11 +6,12 @@ import { Project } from './../model/project';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
+    providers: [ProjectsService],
     selector: 'parrot-project-wrapper',
     templateUrl: 'project-wrapper.component.html'
 })
 export class ProjectWrapperComponent implements OnInit {
-    private loadingProject: boolean;
+    private loading: boolean;
     private project: Project;
 
     constructor(private projectsService: ProjectsService, private route: ActivatedRoute) { }
@@ -19,15 +20,18 @@ export class ProjectWrapperComponent implements OnInit {
         this.route.params
             .map(params => params['projectId'])
             .subscribe(projectId => this.fetchProject(projectId));
+
+        this.projectsService.activeProject
+            .subscribe(project => this.project = project);
     }
 
     fetchProject(projectId) {
-        this.loadingProject = true;
+        this.loading = true;
         this.projectsService.fetchProject(projectId)
             .subscribe(
-            project => this.project = project,
+            () => { },
             err => console.log(err),
-            () => this.loadingProject = false,
+            () => this.loading = false,
         );
     }
 }

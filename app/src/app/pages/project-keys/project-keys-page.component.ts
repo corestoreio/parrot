@@ -11,8 +11,6 @@ import { ProjectsService } from './../../projects/services/projects.service';
 export class ProjectKeysPage implements OnInit {
     private project: Project;
     private loading: boolean = false;
-    private addKeyPending: boolean = false;
-    private deleteKeyPending: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -26,7 +24,6 @@ export class ProjectKeysPage implements OnInit {
             .subscribe(projectId => {
                 this.fetchProject(projectId);
             });
-
     }
 
     fetchProject(projectId) {

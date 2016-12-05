@@ -9,6 +9,4 @@ import { Project } from './../model/project';
 export class ProjectHeaderComponent {
 	@Input()
 	private project: Project;
-	@Input()
-	private loading: boolean;
 }

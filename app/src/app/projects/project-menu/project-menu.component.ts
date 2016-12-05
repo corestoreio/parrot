@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { Project } from './../model/project';
 
 @Component({
     selector: 'parrot-project-menu',
@@ -7,13 +9,10 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['project-menu.component.css']
 })
 export class ProjectMenuComponent implements OnInit {
-    private projectId: string;
+    @Input()
+    private project: Project;
 
-    constructor(private route: ActivatedRoute) { }
+    constructor() { }
 
-    ngOnInit() {
-        this.route.params
-            .map(params => params['projectId'])
-            .subscribe(projectId => this.projectId = projectId);
-    }
+    ngOnInit() { }
 }

@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { UnauthGuard } from './auth/guards/unauth.guard';
 
-import { HomePage, ProjectPage, LocalePage, ProjectKeysPage } from './pages';
+import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage } from './pages';
 import { ProjectWrapperComponent } from './projects';
 import { LoginComponent, RegisterComponent } from './auth';
 
@@ -14,7 +14,7 @@ const appRoutes: Routes = [
     { path: 'projects', component: HomePage, canActivate: [AuthGuard] },
     {
         path: 'projects/:projectId', component: ProjectWrapperComponent, canActivate: [AuthGuard], children: [
-            { path: '', component: ProjectPage },
+            { path: '', component: ProjectLocalesPage },
             { path: 'keys', component: ProjectKeysPage },
             { path: 'locales', redirectTo: '', pathMatch: 'full' },
             { path: 'locales/:localeIdent', component: LocalePage },

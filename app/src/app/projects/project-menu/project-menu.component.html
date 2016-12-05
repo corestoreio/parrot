@@ -1,12 +1,17 @@
 <aside class="menu navigation">
-    <p class="menu-label">Project</p>
-    <ul class="menu-list">
-        <li><a [routerLink]="['/projects', projectId, 'keys']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Keys</a></li>
-        <li><a [routerLink]="['/projects', projectId]" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Locales</a></li>
-    </ul>
-    <p class="menu-label">Administration</p>
-    <ul class="menu-list">
-        <li><a [routerLink]="['/projects', projectId, 'contributors']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Project Team</a></li>
-        <li><a [routerLink]="['/projects', projectId, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API Access</a></li>
-    </ul>
+    <div *ngIf="project">
+        <p class="menu-label">Project</p>
+        <ul class="menu-list">
+            <li><a [routerLink]="['/projects', project.id, 'keys']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Keys</a></li>
+            <li><a [routerLink]="['/projects', project.id]" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Locales</a></li>
+        </ul>
+        <p class="menu-label">Administration</p>
+        <ul class="menu-list">
+            <li><a [routerLink]="['/projects', project.id, 'contributors']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Project Team</a></li>
+            <li><a [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API Access</a></li>
+        </ul>
+    </div>
+    <div *ngIf="!project">
+        <p class="menu-label">No project found</p>
+    </div>
 </aside>

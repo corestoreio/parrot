@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/scan';
 
 import { APIService } from './../../shared/api.service';
 import { Project } from './../model/project';
@@ -10,8 +11,11 @@ import { Project } from './../model/project';
 @Injectable()
 export class ProjectsService {
 
-  private _projects = new BehaviorSubject([]);
+  private _projects = new BehaviorSubject<Project[]>([]);
   public projects = this._projects.asObservable();
+
+  private _activeProject = new BehaviorSubject<Project>(null);
+  public activeProject = this._activeProject.asObservable();
 
   constructor(private api: APIService) { }
 
@@ -35,10 +39,8 @@ export class ProjectsService {
     return request;
   }
 
-  // TODO: return project from store?
-  // Problem when deleting project keys and other subscribers are using another fetchProject call
   fetchProject(id: string): Observable<Project> {
-    return this.api.request({
+    let request = this.api.request({
       uri: `/projects/${id}`,
       method: 'GET',
     })
@@ -49,6 +51,10 @@ export class ProjectsService {
         }
         return project;
       }).share();
+
+    request.subscribe(project => this._activeProject.next(project));
+
+    return request;
   }
 
   createProject(project): Observable<Project> {
@@ -90,8 +96,9 @@ export class ProjectsService {
 
     request.subscribe(
       project => {
-        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
+        let projects = this._projects.getValue().map(current => (current.id === project.id) ? project : current);
         this._projects.next(projects);
+        this._activeProject.next(project);
       });
 
     return request;
@@ -115,6 +122,7 @@ export class ProjectsService {
       project => {
         let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
         this._projects.next(projects);
+        this._activeProject.next(project);
       });
 
     return request;
@@ -138,29 +146,7 @@ export class ProjectsService {
       project => {
         let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
         this._projects.next(projects);
-      });
-
-    return request;
-  }
-
-  updateProjectKeys(projectId: string, keys): Observable<Project> {
-    let request = this.api.request({
-      uri: `/projects/${projectId}/keys`,
-      method: 'PATCH',
-      body: JSON.stringify(keys),
-    })
-      .map(res => {
-        let payload = res.payload;
-        if (!payload) {
-          throw new Error("no payload in response");
-        }
-        return payload;
-      }).share();
-
-    request.subscribe(
-      project => {
-        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
-        this._projects.next(projects);
+        this._activeProject.next(project);
       });
 
     return request;
