@@ -5,7 +5,6 @@ Currently in heavy development, breaking changes guaranteed :)
 TODO:
 
 Backend:
-- Add ability to 'refactor' project keys. Propagate changes on all locales instead of removing related pairs.
 - Add snapshots feature
 - Add API retrieve snapshots groupped by locale or key
 - Pass project user role on GET /projects/:id/users
@@ -17,7 +16,6 @@ Backend:
 - Add cache (redis?)
 
 Frontend:
-- Extract locale detail into locale pairs and editable text box component
 - Add contributors feature module.
 - Add Client API feature module (generate and manage client tokens?).
 - Add API error-message map.
