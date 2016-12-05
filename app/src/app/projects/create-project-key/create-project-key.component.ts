@@ -14,8 +14,18 @@ export class CreateProjectKeyComponent {
     @Input()
     private submit;
     @Input()
-    private pending: boolean;
+    set pending(value: boolean) {
+        if (this._pending && value === false) {
+            this.reset();
+        }
+        this._pending = value;
+    }
 
+    get pending(): boolean {
+        return this._pending;
+    }
+
+    private _pending: boolean;
     private error: string;
     private newKey: string;
 
@@ -35,6 +45,11 @@ export class CreateProjectKeyComponent {
             return false;
         }
         return true;
+    }
+
+    reset() {
+        this.newKey = '';
+        this.error = '';
     }
 
     commit() {
