@@ -13,6 +13,8 @@ export class ProjectKeysComponent implements OnInit {
     @Input()
     private loading: boolean;
 
+    private deleteKeyPending: boolean = false;
+
     constructor(
         private projectsService: ProjectsService
     ) {
@@ -41,10 +43,12 @@ export class ProjectKeysComponent implements OnInit {
     }
 
     deleteKey(key: string) {
+        this.deleteKeyPending = true;
         this.projectsService.deleteProjectKey(this.project.id, key)
             .subscribe(
             project => this.project = project,
             err => console.log(err),
+            () => this.deleteKeyPending = false,
         );
     }
 

@@ -14,6 +14,7 @@ import { ProjectMenuComponent } from './project-menu/project-menu.component';
 import { ProjectWrapperComponent } from './project-wrapper/project-wrapper.component';
 import { CreateProjectKeyComponent } from './create-project-key/create-project-key.component';
 import { EditProjectKeyComponent } from './edit-project-key/edit-project-key.component';
+import { DeleteKeyComponent } from './delete-key/delete-key.component';
 
 @NgModule({
     imports: [
@@ -31,7 +32,8 @@ import { EditProjectKeyComponent } from './edit-project-key/edit-project-key.com
         ProjectMenuComponent,
         ProjectWrapperComponent,
         CreateProjectKeyComponent,
-        EditProjectKeyComponent
+        EditProjectKeyComponent,
+        DeleteKeyComponent
     ],
     declarations: [
         ProjectsListComponent,
@@ -41,7 +43,8 @@ import { EditProjectKeyComponent } from './edit-project-key/edit-project-key.com
         ProjectMenuComponent,
         ProjectWrapperComponent,
         CreateProjectKeyComponent,
-        EditProjectKeyComponent
+        EditProjectKeyComponent,
+        DeleteKeyComponent
     ],
     providers: [
         ProjectsService
@@ -58,5 +61,6 @@ export {
     ProjectMenuComponent,
     ProjectWrapperComponent,
     CreateProjectKeyComponent,
-    EditProjectKeyComponent
+    EditProjectKeyComponent,
+    DeleteKeyComponent
 };

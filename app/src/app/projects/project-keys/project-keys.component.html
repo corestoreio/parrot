@@ -25,7 +25,7 @@
                 <td>{{key}}</td>
                 <td>
                     <edit-project-key [key]="key" [submit]="updateKey"></edit-project-key>
-                    <button class="button is-danger is-small" (click)="deleteKey(key)">Delete</button>
+                    <parrot-delete-key [key]="key" [pending]="deleteKeyPending" [submit]="deleteKey"></parrot-delete-key>
                 </td>
             </tr>
         </tbody>
