@@ -14,7 +14,7 @@ export class CreateProjectKeyComponent {
     @Input()
     private submit;
     @Input()
-    private addKeyPending: boolean;
+    private pending: boolean;
 
     private error: string;
     private newKey: string;

@@ -13,6 +13,7 @@ export class ProjectKeysComponent implements OnInit {
     @Input()
     private loading: boolean;
 
+    private addKeyPending: boolean = false;
     private deleteKeyPending: boolean = false;
 
     constructor(
@@ -26,15 +27,16 @@ export class ProjectKeysComponent implements OnInit {
     ngOnInit() { }
 
     addKey(key: string) {
+        this.addKeyPending = true;
         this.projectsService.addProjectKey(this.project.id, key)
             .subscribe(
             project => this.project = project,
-            err => console.log(err)
-            );
+            err => console.log(err),
+            () => this.addKeyPending = false,
+        );
     }
 
     updateKey(oldKey: string, newKey: string) {
-        console.log(oldKey, newKey);
         this.projectsService.updateProjectKey(this.project.id, oldKey, newKey)
             .subscribe(
             project => this.project = project,
