@@ -31,7 +31,7 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-
+	
 	users, err := store.GetProjectUsers(projectID)
 	if err != nil {
 		handleError(w, err)
