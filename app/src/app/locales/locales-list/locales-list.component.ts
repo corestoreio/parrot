@@ -13,10 +13,12 @@ export class LocalesListComponent {
     @Input()
     private searchString: string;
     @Input()
-    private locales: Locale[];
+    private locales: Locale[] = [];
 
-    constructor() {
-        this.locales = [];
+    constructor() { }
+
+    onSearch(event: any) {
+        this.searchString = event.target.value;
     }
 
     filterLocales(str: string) {

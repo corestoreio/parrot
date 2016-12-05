@@ -12,11 +12,8 @@ import { Locale } from './../../locales/model/locale';
     styleUrls: ['project-locales-page.component.css']
 })
 export class ProjectLocalesPage implements OnInit {
-    private project;
     private locales: Locale[];
-    private loadingProject = false;
-    private loadingLocales = false;
-    private searchString: string;
+    private loading = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -34,17 +31,13 @@ export class ProjectLocalesPage implements OnInit {
             .subscribe(locales => this.locales = locales);
     }
 
-    onSearch(event: any) {
-        this.searchString = event.target.value;
-    }
-
     fetchLocales(projectId) {
-        this.loadingLocales = true;
+        this.loading = true;
         this.localesService.fetchLocales(projectId)
             .subscribe(
-            locales => { this.locales = locales; },
+            () => { },
             err => console.log(err),
-            () => this.loadingLocales = false,
+            () => this.loading = false,
         );
     }
 }
