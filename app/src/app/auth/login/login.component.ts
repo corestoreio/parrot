@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from './../services/auth.service';
+import { User } from './../model/user';
 
 @Component({
   selector: 'login',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(email: string, password: string) {
-    this.auth.login(email, password).subscribe(
+    let user = new User("", email, password);
+    this.auth.login(user).subscribe(
       result => {
         this.router.navigate(['/projects']);
       },

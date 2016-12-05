@@ -11,7 +11,11 @@
           </div>
         </div>
 
-        <form (ngSubmit)="onSubmit(f.value.email, f.value.password)" #f="ngForm">
+        <form (ngSubmit)="onSubmit(f.value.name, f.value.email, f.value.password)" #f="ngForm">
+          <div class="control">
+            <label class="label">Name</label>
+            <input class="input" type="text" name="name" placeholder="Your name" required ngModel>
+          </div>
           <div class="control">
             <label class="label">Email</label>
             <input class="input" type="email" name="email" placeholder="Your email address" required ngModel>

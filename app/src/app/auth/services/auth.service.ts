@@ -5,6 +5,7 @@ import { tokenNotExpired } from 'angular2-jwt';
 import 'rxjs/add/operator/map';
 
 import { APIService } from './../../shared/api.service';
+import { User } from './../model/user';
 
 @Injectable()
 export class AuthService {
@@ -24,14 +25,14 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  login(email: string, password: string): Observable<boolean> {
+  login(user: User): Observable<boolean> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     return this.api.request({
       uri: '/authenticate',
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: user.email, password: user.password }),
       withAuthorization: false,
     })
       .map(res => {
@@ -45,11 +46,11 @@ export class AuthService {
       });
   }
 
-  register(email: string, password: string): Observable<boolean> {
+  register(user: User): Observable<boolean> {
     return this.api.request({
       uri: '/users',
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name: user.name, email: user.email, password: user.password }),
       withAuthorization: false,
     })
       .map(res => {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from './../services/auth.service';
+import { User } from './../model/user';
 
 @Component({
   selector: 'register',
@@ -21,10 +22,11 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  onSubmit(email: string, password: string) {
-    this.auth.register(email, password).subscribe(
+  onSubmit(name: string, email: string, password: string) {
+    let user = new User(name, email, password);
+    this.auth.register(user).subscribe(
       () => {
-        this.auth.login(email, password).subscribe(
+        this.auth.login(user).subscribe(
           () => {
             this.router.navigate(['/projects']);
           },

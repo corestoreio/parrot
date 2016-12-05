@@ -41,7 +41,7 @@ func (db *PostgresDB) GetUserProjects(userID string) ([]model.Project, error) {
 }
 
 func (db *PostgresDB) GetProjectUsers(projID string) ([]model.ProjectUser, error) {
-	rows, err := db.Query(`SELECT user_id, project_id, email, role
+	rows, err := db.Query(`SELECT user_id, project_id, users.email, users.name, role
 							FROM users
 							JOIN projects_users ON users.id = projects_users.user_id
 							WHERE projects_users.project_id = $1`, projID)
@@ -54,7 +54,7 @@ func (db *PostgresDB) GetProjectUsers(projID string) ([]model.ProjectUser, error
 	for rows.Next() {
 		u := model.ProjectUser{}
 
-		err := rows.Scan(&u.UserID, &u.ProjectID, &u.Email, &u.Role)
+		err := rows.Scan(&u.UserID, &u.ProjectID, &u.Email, &u.Name, &u.Role)
 		if err != nil {
 			return nil, parseError(err)
 		}
@@ -70,8 +70,11 @@ func (db *PostgresDB) GetProjectUsers(projID string) ([]model.ProjectUser, error
 
 func (db *PostgresDB) GetProjectUser(projID, userID string) (*model.ProjectUser, error) {
 	u := model.ProjectUser{}
-	row := db.QueryRow(`SELECT user_id, project_id, role from projects_users WHERE project_id = $1 AND user_id = $2`, projID, userID)
-	err := row.Scan(&u.UserID, &u.ProjectID, &u.Role)
+	row := db.QueryRow(`SELECT user_id, project_id, users.email, users.name, role
+							FROM users
+							JOIN projects_users ON users.id = projects_users.user_id
+							WHERE projects_users.project_id = $1 AND user_id = $2`, projID, userID)
+	err := row.Scan(&u.UserID, &u.ProjectID, &u.Email, &u.Name, &u.Role)
 	if err != nil {
 		return nil, parseError(err)
 	}

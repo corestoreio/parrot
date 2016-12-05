@@ -59,6 +59,9 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 func authenticate(authProvider auth.Provider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := model.User{}
+		// TODO: add optional skip fields to validator
+		// User name is required by validator, but it's unnecesary for login
+		user.Name = "unkown"
 		if errs := decodeAndValidate(r.Body, &user); errs != nil {
 			render.Error(w, http.StatusUnprocessableEntity, errs)
 			return
