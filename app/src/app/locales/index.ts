@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { LocalesService } from './services/locales.service';
 import { LocalesListComponent } from './locales-list/locales-list.component';
 import { CreateLocaleComponent } from './create-locale/create-locale.component';
-import { LocaleDetailComponent } from './locale-detail/locale-detail.component';
+import { LocalePairsComponent } from './locale-pairs/locale-pairs.component';
 
 import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
 
@@ -21,13 +21,13 @@ import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
     declarations: [
         LocalesListComponent,
         CreateLocaleComponent,
-        LocaleDetailComponent,
+        LocalePairsComponent,
         ObjectToPairsPipe
     ],
     exports: [
         LocalesListComponent,
         CreateLocaleComponent,
-        LocaleDetailComponent
+        LocalePairsComponent
     ],
     providers: [
         LocalesService
@@ -39,5 +39,5 @@ export {
     LocalesService,
     LocalesListComponent,
     CreateLocaleComponent,
-    LocaleDetailComponent
+    LocalePairsComponent
 };

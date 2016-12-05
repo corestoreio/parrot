@@ -2,18 +2,17 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { RestoreItemService } from './../../shared/restore-item.service';
 import { Locale } from './../model/locale';
+import { LocalesService } from './../services/locales.service';
 
 @Component({
     providers: [RestoreItemService],
-    selector: 'locale-detail',
-    templateUrl: './locale-detail.component.html',
-    styleUrls: ['locale-detail.component.css']
+    selector: 'locale-pairs',
+    templateUrl: './locale-pairs.component.html',
+    styleUrls: ['locale-pairs.component.css']
 })
-export class LocaleDetailComponent {
+export class LocalePairsComponent {
     @Input()
-    private loading: boolean;
-    @Input()
-    private onCommitPairs: Function;
+    private loading: boolean = false;
 
     @Input()
     set locale(value: Locale) {
@@ -45,8 +44,12 @@ export class LocaleDetailComponent {
     }
 
     private editing: boolean = false;
+    private updatePending: boolean = false;
 
-    constructor(private restoreService: RestoreItemService<Locale>) { }
+    constructor(
+        private restoreService: RestoreItemService<Locale>,
+        private localesService: LocalesService
+    ) { }
 
     ngOnInit() { }
 
@@ -59,12 +62,13 @@ export class LocaleDetailComponent {
         this.restoreService.restoreOriginal();
     }
 
-    commitPairs() {
-        this.editing = false;
-        this.onCommitPairs(
-            this.locale.project_id,
-            this.locale.ident,
-            this.locale.pairs,
-        );
+    commitPairs(projectId, localeIdent, pairs) {
+        this.updatePending = true;
+        this.localesService.updateLocalePairs(this.locale.project_id, this.locale.ident, this.locale.pairs)
+            .subscribe(
+            locale => { this.locale = locale; this.editing = false; },
+            err => console.log(err),
+            () => { this.updatePending = false }
+            );
     }
 }

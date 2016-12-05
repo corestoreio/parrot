@@ -12,16 +12,13 @@ import { Locale } from './../../locales/model/locale';
 })
 export class LocalePage implements OnInit {
     private projectId: string;
-    private localeIdent: string;
     private locale: Locale;
     private loading = false;
-    private updatePairsPending = false;
 
     constructor(
         private route: ActivatedRoute,
         private localesService: LocalesService
     ) {
-        this.updatePairs = this.updatePairs.bind(this);
     }
 
     ngOnInit() {
@@ -31,8 +28,7 @@ export class LocalePage implements OnInit {
             .switchMapTo(this.route.params)
             .map(params => params['localeIdent'])
             .subscribe(localeIdent => {
-                this.localeIdent = localeIdent;
-                this.fetchLocale(this.projectId, this.localeIdent);
+                this.fetchLocale(this.projectId, localeIdent);
             });
     }
 
@@ -43,16 +39,6 @@ export class LocalePage implements OnInit {
             locale => { this.locale = locale },
             err => console.log(err),
             () => this.loading = false,
-        );
-    }
-
-    updatePairs(projectId, localeIdent, pairs) {
-        this.updatePairsPending = true;
-        this.localesService.updateLocalePairs(projectId, localeIdent, pairs)
-            .subscribe(
-            locale => { this.locale = locale },
-            err => console.log(err),
-            () => this.updatePairsPending = false,
         );
     }
 }
