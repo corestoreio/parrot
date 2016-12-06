@@ -4,12 +4,18 @@
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Edit project user</h1>
-            <br>
-
-            <p>{{user?.name}} {{user?.email}}</p>
-
-            <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [class.is-disabled]="loading">Revoke all rights</button>
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Edit project user</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [class.is-disabled]="loading">Revoke all rights</button>
+                    </div>
+                </div>
+            </div>
 
             <div class="message is-danger" *ngIf="errors && errors.length > 0">
                 <div *ngFor="let err of errors">
@@ -19,12 +25,23 @@
 
             <form (ngSubmit)="commitChanges()" #editUserForm="ngForm">
                 <div class="control">
-                    <span class="select">
-                        <select name="role" [(ngModel)]="selectedRole" required>
-                            <option value="" disabled selected>Select a role</option>
-                            <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
-                        </select>
-                    </span>
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <strong>{{user?.name}}</strong> <em>{{user?.email}}</em> <strong><span class="tag is-info is-small">{{user?.role}}</span></strong>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item">
+                                <span class="select">
+                                    <select name="role" [(ngModel)]="selectedRole" required>
+                                        <option value="" disabled selected>Select a new role</option>
+                                        <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="control">
                     <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
