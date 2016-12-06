@@ -13,10 +13,10 @@
                 </p>
             </div>
             <p class="level-item">
-                <add-project-user [projectId]="projectId"></add-project-user>
+                <add-project-user></add-project-user>
             </p>
         </div>
     </nav>
 
-    <project-users-list [users]="projectUsers" [projectId]="projectId"></project-users-list>
+    <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading"></project-users-list>
 </section>

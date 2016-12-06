@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { ProjectUser } from './../model';
 import { ProjectUsersService } from './../services/project-users.service';
@@ -9,9 +10,6 @@ import { ProjectUsersService } from './../services/project-users.service';
     styleUrls: ['add-project-user.component.css']
 })
 export class AddProjectUserComponent implements OnInit {
-    @Input()
-    private projectId: string;
-
     get roles(): string[] {
         return ['owner', 'editor', 'viewer'];
     }
@@ -22,7 +20,10 @@ export class AddProjectUserComponent implements OnInit {
     private loading: boolean = false;
     private errors: string[];
 
-    constructor(private service: ProjectUsersService) { }
+    constructor(
+        private route: ActivatedRoute,
+        private service: ProjectUsersService,
+    ) { }
 
     ngOnInit() { }
 
@@ -46,7 +47,8 @@ export class AddProjectUserComponent implements OnInit {
 
     submit() {
         this.loading = true;
-        let user: ProjectUser = { email: this.email, project_id: this.projectId, role: this.selectedRole }
+        let projectId = this.route.snapshot.params['projectId'];
+        let user: ProjectUser = { email: this.email, project_id: projectId, role: this.selectedRole };
         this.service.createProjectUser(user)
             .subscribe(
             res => console.log(res),
