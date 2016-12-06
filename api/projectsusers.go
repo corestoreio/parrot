@@ -58,12 +58,15 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrForbiden)
 		return
 	}
+	// If neither email nor user id is provided, there's nothing we can do
 	if pu.Email == "" && pu.UserID == "" {
 		handleError(w, ErrBadRequest)
 		return
 	}
 
-	if pu.Email != "" {
+	// If email is provided, but no user id, find the user by email
+	// Otherwise we already have the id, and no need to fetch data before the grant operation
+	if pu.Email != "" && pu.UserID == "" {
 		user, err := store.GetUserByEmail(pu.Email)
 		if err != nil {
 			handleError(w, err)
