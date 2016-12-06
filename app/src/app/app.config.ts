@@ -2,6 +2,12 @@ export const AppConfig = {
     apiEndpoint: 'https://localhost/api',
 };
 
+export const UserRoles = [
+    'owner',
+    'editor',
+    'viewer'
+];
+
 export const LocalesList = [
     { ident: "sq_AL", language: "Albanian", country: "Albania" },
     { ident: "ar_DZ", language: "Arabic", country: "Algeria" },

@@ -7,6 +7,7 @@ import 'rxjs/add/operator/scan';
 
 import { APIService } from './../../shared/api.service';
 import { ProjectUser } from './../model';
+import { UserRoles } from './../../app.config';
 
 @Injectable()
 export class ProjectUsersService {
@@ -15,6 +16,10 @@ export class ProjectUsersService {
     public projectUsers = this._projectUsers.asObservable();
 
     constructor(private api: APIService) { }
+
+    get availableRoles(): string[] {
+        return UserRoles;
+    }
 
     fetchProjectUsers(projectId: string): Observable<ProjectUser[]> {
         let request = this.api.request({

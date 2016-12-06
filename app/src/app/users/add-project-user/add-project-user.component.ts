@@ -10,8 +10,9 @@ import { ProjectUsersService } from './../services/project-users.service';
     styleUrls: ['add-project-user.component.css']
 })
 export class AddProjectUserComponent implements OnInit {
+
     get roles(): string[] {
-        return ['owner', 'editor', 'viewer'];
+        return this.service.availableRoles;
     }
 
     private email: string = '';
