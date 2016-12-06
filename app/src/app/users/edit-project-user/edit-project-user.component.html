@@ -1,0 +1,37 @@
+<button class="button is-success" (click)="openModal()">Edit</button>
+<div class="modal" [class.is-active]="modalOpen">
+    <div class="modal-background" (click)="closeModal()"></div>
+    <div class="modal-content">
+        <div class="box">
+
+            <h1 class="title">Edit project user</h1>
+            <br>
+
+            <p>{{user?.name}} {{user?.email}}</p>
+
+            <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [class.is-disabled]="loading">Revoke all rights</button>
+
+            <div class="message is-danger" *ngIf="errors && errors.length > 0">
+                <div *ngFor="let err of errors">
+                    <div class="message-body">{{err}}</div>
+                </div>
+            </div>
+
+            <form (ngSubmit)="commitChanges()" #editUserForm="ngForm">
+                <div class="control">
+                    <span class="select">
+                        <select name="role" [(ngModel)]="selectedRole" required>
+                            <option value="" disabled selected>Select a role</option>
+                            <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="control">
+                    <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [class.is-disabled]="!editUserForm.form.valid || loading">Save changes</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

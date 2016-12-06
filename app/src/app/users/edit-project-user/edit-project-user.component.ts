@@ -5,17 +5,19 @@ import { ProjectUser } from './../model';
 import { ProjectUsersService } from './../services/project-users.service';
 
 @Component({
-    selector: 'add-project-user',
-    templateUrl: 'add-project-user.component.html',
-    styleUrls: ['add-project-user.component.css']
+    selector: 'edit-project-user',
+    templateUrl: 'edit-project-user.component.html',
+    styleUrls: ['edit-project-user.component.css']
 })
-export class AddProjectUserComponent implements OnInit {
+export class EditProjectUserComponent implements OnInit {
+
+    @Input()
+    private user: ProjectUser;
 
     get roles(): string[] {
         return this.service.availableRoles;
     }
 
-    private email: string = '';
     private selectedRole: string = '';
     private modalOpen: boolean = false;
     private loading: boolean = false;
@@ -38,17 +40,23 @@ export class AddProjectUserComponent implements OnInit {
     }
 
     reset() {
-        this.email = '';
         this.selectedRole = '';
         this.loading = false;
         this.errors = [];
     }
 
-    submit() {
+    commitChanges() {
         this.loading = true;
-        let projectId = this.route.parent.snapshot.params['projectId'];
-        let user: ProjectUser = { email: this.email, project_id: projectId, role: this.selectedRole };
-        this.service.createProjectUser(user)
+        this.service.updateProjectUser(Object.assign(this.user, { role: this.selectedRole }))
+            .subscribe(
+            res => this.closeModal(),
+            err => { this.errors = err; this.loading = false },
+        )
+    }
+
+    revokeUser() {
+        this.loading = true;
+        this.service.revokeProjectUser(this.user)
             .subscribe(
             res => this.closeModal(),
             err => { this.errors = err; this.loading = false },

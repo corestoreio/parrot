@@ -65,4 +65,46 @@ export class ProjectUsersService {
 
         return request;
     }
+
+    updateProjectUser(projectUser: ProjectUser): Observable<ProjectUser> {
+        let request = this.api.request({
+            uri: `/projects/${projectUser.project_id}/users/${projectUser.user_id}/role`,
+            method: 'PATCH',
+            body: JSON.stringify(projectUser)
+        })
+            .map(res => {
+                let result = res.payload;
+                if (!result) {
+                    throw new Error("no result in response");
+                }
+                return result;
+            }).share();
+
+        request.subscribe(
+            updatedUser => {
+                let users = this._projectUsers.getValue().map(user => user.user_id === updatedUser.user_id ? updatedUser : user);
+                this._projectUsers.next(users);
+            },
+            err => console.log(err)
+        );
+
+        return request;
+    }
+
+    revokeProjectUser(projectUser: ProjectUser): Observable<ProjectUser> {
+        let request = this.api.request({
+            uri: `/projects/${projectUser.project_id}/users/${projectUser.user_id}`,
+            method: 'DELETE'
+        }).share();
+
+        request.subscribe(
+            () => {
+                let users = this._projectUsers.getValue().filter(user => user.user_id !== projectUser.user_id);
+                this._projectUsers.next(users);
+            },
+            err => console.log(err)
+        );
+
+        return request;
+    }
 }
