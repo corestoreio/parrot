@@ -7,16 +7,16 @@ TODO:
 Backend:
 - Add snapshots feature
 - Add API retrieve snapshots groupped by locale or key
-- Pass project user role on GET /projects/:id/users
+- Add export as JSON, csv, xml (android resources), strings (apple strings),  Excel sheet?
 - Add support for client access token and role
-- Move docker compose into sub folder
 - Refactor main to cli and make configurable, migrate command, serve command etc...
 - Separate auth issuing service from authenticator, conform to oauth2?
 - Add tests once features have been settled.
 - Add cache (redis?)
+- Move docker compose into sub folder
 
 Frontend:
-- Add contributors feature module.
 - Add Client API feature module (generate and manage client tokens?).
 - Add API error-message map.
+- Add app localization.
 - Add tests.
