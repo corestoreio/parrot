@@ -9,7 +9,8 @@ import { APIService } from './shared/api.service';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
 import { LocalesModule } from './locales';
-import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage } from './pages';
+import { UsersModule } from './users';
+import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage } from './pages';
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage } from './pag
         AuthModule,
         ProjectsModule,
         LocalesModule,
+        UsersModule,
     ],
     declarations: [
         AppComponent,
@@ -32,6 +34,7 @@ import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage } from './pag
         ProjectLocalesPage,
         LocalePage,
         ProjectKeysPage,
+        ProjectTeamPage
     ],
     providers: [APIService, AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]

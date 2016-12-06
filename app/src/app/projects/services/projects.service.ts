@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/scan';
 
 import { APIService } from './../../shared/api.service';
 import { Project } from './../model/project';

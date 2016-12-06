@@ -20,7 +20,8 @@
       "styles": [
         "styles.css",
         "../node_modules/bulma/css/bulma.css",
-        "../node_modules/flag-icon-css/css/flag-icon.min.css"
+        "../node_modules/flag-icon-css/css/flag-icon.min.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css"
       ],
       "scripts": [],
       "environments": {

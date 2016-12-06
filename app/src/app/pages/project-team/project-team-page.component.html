@@ -1,0 +1,23 @@
+<section class="section no-background">
+
+    <nav class="level is-mobile">
+        <div class="level-left">
+            <div class="level-item">
+                <h1 class="title">Project Team</h1>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <p class="subtitle is-5">
+                    <strong>{{projectUsers ? projectUsers.length : 0}}</strong> members
+                </p>
+            </div>
+            <p class="level-item">
+                <button class="button is-success">Add a new member</button>
+            </p>
+        </div>
+    </nav>
+
+    <project-users-list [users]="projectUsers" [loading]="loading"></project-users-list>
+
+</section>
