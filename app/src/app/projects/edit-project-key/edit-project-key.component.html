@@ -11,7 +11,8 @@
             <form (ngSubmit)="commitChanges()" #updateKeyForm="ngForm">
                 <div class="control">
                     <label class="label" for="key">Key</label>
-                    <input type="text" class="input" name="key" placeholder="Project key" [disabled]="loading" [(ngModel)]="_key" autofocus required>
+                    <input type="text" class="input" name="key" placeholder="Project key" [disabled]="loading" [(ngModel)]="_key" autofocus required
+                        autocomplete="off">
                 </div>
                 <div class="control">
                     <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>

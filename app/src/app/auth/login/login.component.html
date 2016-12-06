@@ -14,11 +14,11 @@
         <form (ngSubmit)="onSubmit(f.value.email, f.value.password)" #f="ngForm">
           <div class="control">
             <label class="label">Email</label>
-            <input class="input" type="email" name="email" placeholder="Your email address" required ngModel>
+            <input class="input" type="email" name="email" placeholder="Your email address" required ngModel autocomplete="off">
           </div>
           <div class="control">
             <label class="label">Password</label>
-            <input class="input" type="password" name="password" placeholder="Your password" required ngModel>
+            <input class="input" type="password" name="password" placeholder="Your password" required ngModel autocomplete="off">
           </div>
           <div class="control">
             <button class="button is-primary is-fullwidth" type="submit">Submit</button>

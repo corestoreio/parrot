@@ -10,7 +10,7 @@
                 <div class="control">
                     <label class="label" for="name">Name</label>
                     <input type="text" class="input" name="name" placeholder="The project's name" [disabled]="loading" [(ngModel)]="project.name"
-                        autofocus required>
+                        autofocus required autocomplete="off">
                 </div>
                 <div class="control">
                     <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
