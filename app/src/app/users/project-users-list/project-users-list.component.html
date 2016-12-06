@@ -1,7 +1,7 @@
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
 
-    <article class="media" *ngFor="let user of users">
+    <article class="media center-align" *ngFor="let user of users">
         <figure class="media-left">
             <span class="icon is-medium">
                 <i class="fa fa-user" aria-hidden="true"></i>
@@ -10,8 +10,7 @@
         <div class="media-content">
             <div class="content">
                 <p>
-                    <strong>{{user.name}}</strong> <small>{{user.email}}</small>
-                    <br> {{user.role}}
+                    <strong>{{user.name}}</strong> <em>{{user.email}}</em> <strong><span class="tag is-info is-small">{{user.role}}</span></strong>
                 </p>
             </div>
         </div>
