@@ -31,7 +31,7 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	
+
 	users, err := store.GetProjectUsers(projectID)
 	if err != nil {
 		handleError(w, err)
@@ -53,9 +53,23 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		handleError(w, ErrBadRequest)
 		return
 	}
+	// Validate that the url of the request matches the body data
 	if projectID != pu.ProjectID {
 		handleError(w, ErrForbiden)
 		return
+	}
+	if pu.Email == "" && pu.UserID == "" {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	if pu.Email != "" {
+		user, err := store.GetUserByEmail(pu.Email)
+		if err != nil {
+			handleError(w, err)
+			return
+		}
+		pu.UserID = user.ID
 	}
 
 	err := store.AssignProjectUser(pu)
