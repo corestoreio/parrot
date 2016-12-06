@@ -10,7 +10,7 @@ import { Locale, LocaleInfo } from './../model';
     styleUrls: ['create-locale.component.css']
 })
 export class CreateLocaleComponent {
-    private locale: Locale;
+    private selectedLocale: Locale;
     private availableLocales: LocaleInfo[] = [];
 
     private searchString: string;
@@ -19,14 +19,9 @@ export class CreateLocaleComponent {
     private errors: string[];
 
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
-        this.resetFormModel();
-        this.createLocale = this.createLocale.bind(this);
+        this.reset();
         this.localesService.locales
             .subscribe(existingLocales => this.availableLocales = this.computeAvailableLocales(existingLocales));
-    }
-
-    onSearch(event: any) {
-        this.searchString = event.target.value;
     }
 
     filteredLocales() {
@@ -38,7 +33,11 @@ export class CreateLocaleComponent {
     }
 
     select(locale: Locale) {
-        console.log("SELECTED: ", locale.ident);
+        this.selectedLocale = locale;
+    }
+
+    deselect() {
+        this.selectedLocale = null;
     }
 
     openModal() {
@@ -47,18 +46,12 @@ export class CreateLocaleComponent {
 
     closeModal() {
         this.modalOpen = false;
-        this.resetFormModel();
+        this.reset();
     }
 
-    resetFormModel() {
-        this.locale = {
-            id: '',
-            ident: '',
-            country: '',
-            language: '',
-            project_id: '',
-            pairs: {},
-        };
+    reset() {
+        this.deselect();
+        this.searchString = '';
     }
 
     computeAvailableLocales(existingLocales: Locale[]): LocaleInfo[] {
@@ -66,16 +59,15 @@ export class CreateLocaleComponent {
             .filter(localeInfo => !existingLocales.find(locale => locale.ident === localeInfo.ident));
     }
 
-    createLocale() {
+    submit() {
         this.loading = true;
         let projectId = this.route.snapshot.params['projectId'];
-        this.localesService.createLocale(projectId, this.locale).subscribe(
+        this.localesService.createLocale(projectId, this.selectedLocale).subscribe(
             () => { },
             err => { this.errors = err; this.loading = false; },
             () => {
                 this.loading = false;
                 this.closeModal();
-                this.resetFormModel();
             }
         );
     }

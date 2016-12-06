@@ -15,19 +15,49 @@
             </div>
 
             <div class="container">
-                <p class="control is-expanded">
-                    <input class="input" type="text" placeholder="Search available locales" (keyup)="onSearch($event)">
-                </p>
-                <div class="control">
-                    <div class="suggestions ">
-                        <ul>
-                            <li *ngFor="let locale of filteredLocales()"><a (click)="select(locale)">{{locale.ident}} {{locale.country}} {{locale.language}}</a></li>
-                        </ul>
+
+                <div class="columns">
+                    <div class="column" *ngIf="!!selectedLocale">
+                        <p class="notification is-info title is-5">
+                            <span class="icon is-small media-left">
+                            <i class="flag-icon flag-icon-{{selectedLocale.ident.slice(-2).toLowerCase()}}"></i>
+                            </span> {{selectedLocale.language}} ({{selectedLocale.country}})
+                            ({{selectedLocale.ident}})
+                            <button class="delete" (click)="deselect()"></button></p>
+                    </div>
+                    <div class="column" *ngIf="!selectedLocale">
+                        <p class="notification is-danger">
+                            No locale selected
+                        </p>
                     </div>
                 </div>
+
+                <p class="control is-expanded">
+                    <input class="input" type="text" placeholder="Search by Country, Language or Identifier..." [(ngModel)]="searchString">
+                </p>
+
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="loading">Create</button>
+                    <div class="suggestions ">
+
+                        <article class="media locale center-align" (click)="select(locale)" *ngFor="let locale of filteredLocales()">
+                            <figure class="media-left">
+                                <span class="icon is-small">
+                                        <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i>
+                                    </span>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>{{locale.language}} ({{locale.country}}) ({{locale.ident}})</p>
+                                </div>
+                            </div>
+                        </article>
+
+                    </div>
+                </div>
+
+                <div class="control">
+                    <button class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
+                    <button class="button is-primary" (click)="submit()" [class.is-loading]="loading" [class.is-disabled]="loading || !selectedLocale">Create</button>
                 </div>
             </div>
 

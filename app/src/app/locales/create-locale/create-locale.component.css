@@ -3,32 +3,45 @@
 }
 
 .suggestions{
-	border:solid 1px #eee;
-	width:100%;
-	background: white;
-    z-index: 2050;
-    height: 120px;
+    border: solid 1px #eee;
+	width: 100%;
+    position: relative;
+	background: #F1F1F1;
+    z-index: 2000;
+    height: 240px;
     overflow-y: scroll !important;
+    padding: 10px;
+}
+@media (min-height: 768px) {
+    .suggestions {
+        height: 380px;
+    }
 }
 
-.suggestions ul{
-	padding: 0px;
-	margin: 0px;
+.media.locale {
+    background: white;
+    border-radius: 2px;
+    padding: 5px;
+    box-shadow: 0 2px 4px 0 #D6D6D6;
+}
+.media.locale:hover {
+    background: #f1f1f1;
+    cursor: pointer;
+}
+.media.locale:active {
+    background: #DADADA;
 }
 
-.suggestions ul li{
-	list-style: none;
-	padding: 0px;
-	margin: 0px;
+.center-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.suggestions ul li a{
-	padding:5px;
-	display: block;
-	text-decoration: none;
-	color:#7E7E7E;
+.media-left {
+    margin-right: 20px;
 }
 
-.suggestions ul li a:hover{
-	background-color: #f1f1f1;
+.selection-tag {
+    margin-left: 10px;
 }
