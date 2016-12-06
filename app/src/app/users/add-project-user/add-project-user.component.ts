@@ -16,11 +16,11 @@ export class AddProjectUserComponent implements OnInit {
         return ['owner', 'editor', 'viewer'];
     }
 
-    private email: string;
+    private email: string = '';
     private selectedRole: string = '';
-    private modalOpen: boolean;
+    private modalOpen: boolean = false;
+    private loading: boolean = false;
     private errors: string[];
-    private loading: boolean;
 
     constructor(private service: ProjectUsersService) { }
 
@@ -37,6 +37,7 @@ export class AddProjectUserComponent implements OnInit {
 
     reset() {
         this.email = '';
+        this.selectedRole = '';
     }
 
     valid(): boolean {
