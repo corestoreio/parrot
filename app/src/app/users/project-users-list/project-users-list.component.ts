@@ -12,6 +12,8 @@ export class ProjectUsersListComponent implements OnInit {
     private users: ProjectUser[];
     @Input()
     private loading: boolean;
+    @Input()
+    private projectId: string;
 
     constructor() { }
 

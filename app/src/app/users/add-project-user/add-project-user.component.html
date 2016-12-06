@@ -1,0 +1,41 @@
+<button class="button is-success" (click)="openModal()">Add a new member</button>
+<div class="modal" [class.is-active]="modalOpen">
+    <div class="modal-background" (click)="closeModal()"></div>
+    <div class="modal-content">
+        <div class="box">
+
+            <h1 class="title">Add a new team member</h1>
+            <br>
+
+            <div class="message is-danger" *ngIf="errors && errors.length > 0">
+                <div *ngFor="let err of errors">
+                    <div class="message-body">{{err}}</div>
+                </div>
+            </div>
+
+            <p class="control">Type in the user's email address below. The user <em>must already be registered</em> in the platform.</p>
+
+            <form (ngSubmit)="submit()" #addUserForm="ngForm">
+                <div class="control">
+                    <div class="control is-grouped">
+                        <p class="control is-expanded">
+                            <input type="email" class="input" name="email" placeholder="The user's email" [class.is-disabled]="loading" [(ngModel)]="email"
+                                autofocus required autocomplete="off">
+                        </p>
+                        <span class="select">
+                            <select name="role" [(ngModel)]="selectedRole" required>
+                                <option value="" disabled selected>Select a role</option>
+                                <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+                <div class="control">
+                    <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [class.is-disabled]="!addUserForm.form.valid || loading">Add</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -15,6 +15,7 @@ import { ProjectUser } from './../../users/model';
 export class ProjectTeamPage implements OnInit {
     private loading = false;
     private projectUsers: ProjectUser[];
+    private projectId: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -25,6 +26,7 @@ export class ProjectTeamPage implements OnInit {
         this.route.parent.params
             .map(params => params['projectId'])
             .subscribe(projectId => {
+                this.projectId = projectId;
                 this.fetchUsers(projectId);
             });
 

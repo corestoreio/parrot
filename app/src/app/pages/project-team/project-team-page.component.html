@@ -13,11 +13,10 @@
                 </p>
             </div>
             <p class="level-item">
-                <button class="button is-success">Add a new member</button>
+                <add-project-user [projectId]="projectId"></add-project-user>
             </p>
         </div>
     </nav>
 
-    <project-users-list [users]="projectUsers" [loading]="loading"></project-users-list>
-
+    <project-users-list [users]="projectUsers" [projectId]="projectId"></project-users-list>
 </section>

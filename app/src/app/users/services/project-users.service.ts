@@ -35,4 +35,29 @@ export class ProjectUsersService {
 
         return request;
     }
+
+    createProjectUser(projectUser: ProjectUser): Observable<ProjectUser> {
+        let request = this.api.request({
+            uri: `/projects/${projectUser.project_id}/users`,
+            method: 'POST',
+            body: JSON.stringify(projectUser)
+        })
+            .map(res => {
+                let result = res.payload;
+                if (!result) {
+                    throw new Error("no result in response");
+                }
+                return result;
+            }).share();
+
+        request.subscribe(
+            user => {
+                let users = this._projectUsers.getValue().concat(user);
+                this._projectUsers.next(users);
+            },
+            err => console.log(err)
+        );
+
+        return request;
+    }
 }
