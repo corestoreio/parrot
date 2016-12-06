@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { LocalesService } from './../services/locales.service';
-import { Locale } from './../model/locale';
+import { Locale, LocaleInfo } from './../model';
 
 @Component({
     selector: 'create-locale',
@@ -10,6 +10,9 @@ import { Locale } from './../model/locale';
 })
 export class CreateLocaleComponent {
     private locale: Locale;
+    private availableLocales: LocaleInfo[] = [];
+
+    private searchString: string;
     private modalOpen: boolean;
     private loading: boolean;
     private errors: string[];
@@ -17,6 +20,24 @@ export class CreateLocaleComponent {
     constructor(private localesService: LocalesService, private route: ActivatedRoute) {
         this.resetFormModel();
         this.createLocale = this.createLocale.bind(this);
+        this.localesService.locales
+            .subscribe(locales => this.availableLocales = this.computeAvailableLocales(locales));
+    }
+
+    onSearch(event: any) {
+        this.searchString = event.target.value;
+    }
+
+    filteredLocales() {
+        let str = this.searchString || '';
+        return this.availableLocales.filter(locale => {
+            let v = `${locale.ident} ${locale.country} ${locale.language}`.toLowerCase();
+            return v.includes(str.toLowerCase());
+        });
+    }
+
+    select(locale: Locale) {
+        console.log("SELECTED: ", locale.ident);
     }
 
     openModal() {
@@ -37,6 +58,13 @@ export class CreateLocaleComponent {
             project_id: '',
             pairs: {},
         };
+    }
+
+    computeAvailableLocales(locales: Locale[]): LocaleInfo[] {
+        const contains = (list: Locale[], ident: string): boolean => !!list.find(locale => locale.ident === ident);
+
+        return this.localesService.localeInfoList
+            .filter(localeInfo => !contains(locales, localeInfo.ident));
     }
 
     createLocale() {

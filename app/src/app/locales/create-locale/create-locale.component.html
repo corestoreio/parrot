@@ -14,27 +14,25 @@
                 </div>
             </div>
 
-            <form (ngSubmit)="createLocale()" #createLocaleForm="ngForm">
+            <div class="container">
+
+                <p class="control is-expanded">
+                    <input class="input" type="text" placeholder="Search available locales" (keyup)="onSearch($event)">
+                </p>
                 <div class="control">
-                    <label class="label" for="name">Ident</label>
-                    <input type="text" class="input" name="ident" placeholder="The locale's ident" [disabled]="loading" [(ngModel)]="locale.ident"
-                        autofocus required>
+                    <div class="select is-fullwidth">
+                        <select>
+                            <option *ngFor="let locale of filteredLocales()"><a (click)="select(locale)">{{locale.ident}} {{locale.country}} {{locale.language}}</a></option>
+                        </select>
+                    </div>
                 </div>
-                <div class="control">
-                    <label class="label" for="country">Country</label>
-                    <input type="text" class="input" name="country" placeholder="The locale's country" [disabled]="loading" [(ngModel)]="locale.country"
-                        required>
-                </div>
-                <div class="control">
-                    <label class="label" for="language">Language</label>
-                    <input type="text" class="input" name="language" placeholder="The locale's language" [disabled]="loading" [(ngModel)]="locale.language"
-                        required>
-                </div>
-                <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!createLocaleForm.form.valid || loading">Create</button>
-                </div>
-            </form>
+
+            </div>
+
+            <div class="control">
+                <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="loading">Create</button>
+            </div>
 
         </div>
     </div>

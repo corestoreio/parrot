@@ -5,13 +5,18 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
-import { Locale } from './../model/locale';
+import { Locale, LocaleInfo } from './../model';
+import { LocalesList } from './../../app.config';
 
 @Injectable()
 export class LocalesService {
 
     private _locales = new BehaviorSubject<Locale[]>([]);
     public locales: Observable<Locale[]> = this._locales.asObservable();
+
+    public get localeInfoList(): LocaleInfo[] {
+        return LocalesList;
+    }
 
     constructor(private api: APIService) { }
 
