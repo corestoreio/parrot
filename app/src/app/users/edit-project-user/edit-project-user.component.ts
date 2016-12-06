@@ -55,6 +55,10 @@ export class EditProjectUserComponent implements OnInit {
     }
 
     revokeUser() {
+        var c = confirm(`Revoke all rights for user: ${this.user.email}?`);
+        if (!c) {
+            return;
+        }
         this.loading = true;
         this.service.revokeProjectUser(this.user)
             .subscribe(
