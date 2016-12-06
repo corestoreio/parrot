@@ -6,7 +6,8 @@ import { Locale, LocaleInfo } from './../model';
 
 @Component({
     selector: 'create-locale',
-    templateUrl: 'create-locale.component.html'
+    templateUrl: 'create-locale.component.html',
+    styleUrls: ['create-locale.component.css']
 })
 export class CreateLocaleComponent {
     private locale: Locale;
@@ -21,7 +22,7 @@ export class CreateLocaleComponent {
         this.resetFormModel();
         this.createLocale = this.createLocale.bind(this);
         this.localesService.locales
-            .subscribe(locales => this.availableLocales = this.computeAvailableLocales(locales));
+            .subscribe(existingLocales => this.availableLocales = this.computeAvailableLocales(existingLocales));
     }
 
     onSearch(event: any) {
@@ -60,11 +61,9 @@ export class CreateLocaleComponent {
         };
     }
 
-    computeAvailableLocales(locales: Locale[]): LocaleInfo[] {
-        const contains = (list: Locale[], ident: string): boolean => !!list.find(locale => locale.ident === ident);
-
+    computeAvailableLocales(existingLocales: Locale[]): LocaleInfo[] {
         return this.localesService.localeInfoList
-            .filter(localeInfo => !contains(locales, localeInfo.ident));
+            .filter(localeInfo => !existingLocales.find(locale => locale.ident === localeInfo.ident));
     }
 
     createLocale() {

@@ -1,7 +1,7 @@
 <button class="button is-success" (click)="openModal()">Add locale</button>
 <div class="modal" [class.is-active]="modalOpen">
     <div class="modal-background" (click)="closeModal()"></div>
-    <div class="modal-content">
+    <div class="modal-content fix-overlay">
         <div class="box">
 
             <h1 class="title">Create a new locale for this project</h1>
@@ -15,23 +15,20 @@
             </div>
 
             <div class="container">
-
                 <p class="control is-expanded">
                     <input class="input" type="text" placeholder="Search available locales" (keyup)="onSearch($event)">
                 </p>
                 <div class="control">
-                    <div class="select is-fullwidth">
-                        <select>
-                            <option *ngFor="let locale of filteredLocales()"><a (click)="select(locale)">{{locale.ident}} {{locale.country}} {{locale.language}}</a></option>
-                        </select>
+                    <div class="suggestions ">
+                        <ul>
+                            <li *ngFor="let locale of filteredLocales()"><a (click)="select(locale)">{{locale.ident}} {{locale.country}} {{locale.language}}</a></li>
+                        </ul>
                     </div>
                 </div>
-
-            </div>
-
-            <div class="control">
-                <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="loading">Create</button>
+                <div class="control">
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="loading">Create</button>
+                </div>
             </div>
 
         </div>
