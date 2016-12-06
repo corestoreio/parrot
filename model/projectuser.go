@@ -4,7 +4,7 @@ type ProjectUserStorer interface {
 	GetProjectUsers(projID string) ([]ProjectUser, error)
 	GetUserProjects(userID string) ([]Project, error)
 	GetProjectUser(projID, userID string) (*ProjectUser, error)
-	AssignProjectUser(ProjectUser) error
+	AssignProjectUser(ProjectUser) (*ProjectUser, error)
 	RevokeProjectUser(ProjectUser) error
 	UpdateProjectUser(ProjectUser) (*ProjectUser, error)
 }

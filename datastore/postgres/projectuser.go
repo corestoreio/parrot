@@ -81,10 +81,13 @@ func (db *PostgresDB) GetProjectUser(projID, userID string) (*model.ProjectUser,
 	return &u, nil
 }
 
-func (db *PostgresDB) AssignProjectUser(pu model.ProjectUser) error {
+func (db *PostgresDB) AssignProjectUser(pu model.ProjectUser) (*model.ProjectUser, error) {
 	_, err := db.Exec("INSERT INTO projects_users (project_id, user_id, role) VALUES($1, $2, $3)",
 		pu.ProjectID, pu.UserID, pu.Role)
-	return parseError(err)
+	if err != nil {
+		return nil, parseError(err)
+	}
+	return db.GetProjectUser(pu.ProjectID, pu.UserID)
 }
 
 func (db *PostgresDB) RevokeProjectUser(pu model.ProjectUser) error {
@@ -94,12 +97,10 @@ func (db *PostgresDB) RevokeProjectUser(pu model.ProjectUser) error {
 }
 
 func (db *PostgresDB) UpdateProjectUser(pu model.ProjectUser) (*model.ProjectUser, error) {
-	var result model.ProjectUser
-	row := db.QueryRow("UPDATE projects_users SET role = $1 WHERE project_id = $2 AND user_id = $3 RETURNING *",
+	_, err := db.Exec("UPDATE projects_users SET role = $1 WHERE project_id = $2 AND user_id = $3",
 		pu.Role, pu.ProjectID, pu.UserID)
-	err := row.Scan(&result.ProjectID, &result.UserID, &result.Role)
 	if err != nil {
 		return nil, parseError(err)
 	}
-	return &result, nil
+	return db.GetProjectUser(pu.ProjectID, pu.UserID)
 }

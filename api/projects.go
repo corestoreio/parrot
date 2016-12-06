@@ -40,7 +40,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	pu := model.ProjectUser{ProjectID: result.ID, UserID: userID, Role: OwnerRole}
-	err = store.AssignProjectUser(pu)
+	_, err = store.AssignProjectUser(pu)
 	if err != nil {
 		handleError(w, err)
 		return

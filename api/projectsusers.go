@@ -75,13 +75,13 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 		pu.UserID = user.ID
 	}
 
-	err := store.AssignProjectUser(pu)
+	result, err := store.AssignProjectUser(pu)
 	if err != nil {
 		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, pu)
+	render.JSON(w, http.StatusOK, result)
 }
 
 func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
