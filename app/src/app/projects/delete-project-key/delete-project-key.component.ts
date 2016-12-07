@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    selector: 'parrot-delete-key',
-    templateUrl: 'delete-key.component.html'
+    selector: 'delete-project-key',
+    templateUrl: 'delete-project-key.component.html'
 })
-export class DeleteKeyComponent implements OnInit {
+export class DeleteProjectKeyComponent implements OnInit {
     @Input()
     private pending: boolean = false;
     @Input()
