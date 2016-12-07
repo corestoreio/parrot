@@ -10,9 +10,10 @@
         <span></span>
         </span>
 
-        <div id="nav-menu" class="nav-right nav-menu" [class.is-active]="isMenuActive">
-            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/projects']">Projects</a>
-            <a class="nav-item" (click)="closeMenu()" [class.is-active]="isMenuActive" (click)="logout()" [class.is-hidden]="!logoutVisible">Logout</a>
+        <div id="nav-menu" class="nav-right nav-menu">
+            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/projects']" [class.is-hidden]="!isAuth">Projects</a>
+            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/me']" [class.is-hidden]="!isAuth">My Account</a>
+            <a class="nav-item" (click)="closeMenu()" (click)="logout()" [class.is-hidden]="!isAuth">Logout</a>
         </div>
     </div>
 </nav>

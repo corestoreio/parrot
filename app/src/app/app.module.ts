@@ -7,11 +7,7 @@ import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { APIService } from './shared/api.service';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
-import { ProjectsModule } from './projects';
-import { LocalesModule } from './locales';
-import { UsersModule } from './users';
-import { APIAccessModule } from './api-access';
-import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage, APIAppPage, APIAccessPage } from './pages';
+import { PagesModule } from './pages';
 
 @NgModule({
     imports: [
@@ -25,20 +21,10 @@ import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamP
 
         // App level modules
         AuthModule,
-        ProjectsModule,
-        LocalesModule,
-        UsersModule,
-        APIAccessModule,
+        PagesModule
     ],
     declarations: [
         AppComponent,
-        HomePage,
-        ProjectLocalesPage,
-        LocalePage,
-        ProjectKeysPage,
-        ProjectTeamPage,
-        APIAppPage,
-        APIAccessPage,
     ],
     providers: [APIService, AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]

@@ -21,6 +21,22 @@ export class ProjectUsersService {
         return UserRoles;
     }
 
+    getUserSelf(): Observable<ProjectUser[]> {
+        let request = this.api.request({
+            uri: `/users/self`,
+            method: 'GET',
+        })
+            .map(res => {
+                let user = res.payload;
+                if (!user) {
+                    throw new Error("no user in response");
+                }
+                return user;
+            }).share();
+
+        return request;
+    }
+
     fetchProjectUsers(projectId: string): Observable<ProjectUser[]> {
         let request = this.api.request({
             uri: `/projects/${projectId}/users`,

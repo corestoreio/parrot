@@ -26,7 +26,7 @@ export class AppBarComponent implements OnInit {
         this.isMenuActive = false;
     }
 
-    get logoutVisible() {
+    get isAuth(): boolean {
         return this.auth.isLoggedIn();
     }
 
