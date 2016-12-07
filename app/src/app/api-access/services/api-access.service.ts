@@ -5,30 +5,21 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
-import { Application } from './../model/app';
-
-let mockApps = [
-    { clientId: '123123123123', name: 'My application', secret: 'MY_SUPER_SECRET' },
-    { clientId: '456456456465', name: 'My other application', secret: 'MY_OTHER_SUPER_SECRET' },
-];
+import { ProjectClient } from './../model/app';
 
 @Injectable()
 export class APIAccessService {
 
-    private _apps = new BehaviorSubject<Application[]>(mockApps);
-    public apps: Observable<Application[]> = this._apps.asObservable();
+    private _clients = new BehaviorSubject<ProjectClient[]>([]);
+    public projectClients: Observable<ProjectClient[]> = this._clients.asObservable();
 
     constructor(private api: APIService) { }
 
-    registerApp(projectId: string, appName: string): Observable<Application> {
-        let mockApp: Application = { clientId: Math.random().toString(36).substring(7), name: appName, secret: Math.random().toString(36).substring(7) };
-        this._apps.next(this._apps.getValue().concat(mockApp));
-        return new BehaviorSubject<Application>(mockApp).asObservable();
-
+    registerProjectClient(projectId: string, clientName: string): Observable<ProjectClient> {
         let request = this.api.request({
-            uri: `/projects/${projectId}/apps`,
+            uri: `/projects/${projectId}/clients`,
             method: 'POST',
-            body: JSON.stringify({ name: appName })
+            body: JSON.stringify({ name: clientName })
         })
             .map(res => {
                 let app = res.payload;
@@ -38,23 +29,22 @@ export class APIAccessService {
                 return app;
             }).share();
 
-        request.subscribe(app => {
-            let newApps = this._apps.getValue().concat(app);
-            this._apps.next(newApps);
-        }, () => { });
+        request.subscribe(
+            client => {
+                let result = this._clients.getValue().concat(client);
+                this._clients.next(result);
+            },
+            err => console.log(err),
+        );
 
         return request;
     }
 
-    updateAppName(projectId: string, app: Application): Observable<Application> {
-        let after = this._apps.getValue().map(current => current.clientId === app.clientId ? app : current);
-        this._apps.next(after);
-        return new BehaviorSubject<Application>(app).asObservable();
-
+    updateProjectClientName(projectId: string, client: ProjectClient): Observable<ProjectClient> {
         let request = this.api.request({
-            uri: `/projects/${projectId}/apps/${app.clientId}/name`,
+            uri: `/projects/${projectId}/clients/${client.client_id}/name`,
             method: 'PATCH',
-            body: JSON.stringify({ name: app.name })
+            body: JSON.stringify({ name: client.name })
         })
             .map(res => {
                 let app = res.payload;
@@ -64,74 +54,67 @@ export class APIAccessService {
                 return app;
             }).share();
 
-        request.subscribe(result => {
-            let newApps = this._apps.getValue().map(current => current.clientId === result.clientId ? result : current);
-            this._apps.next(newApps);
-        }, () => { });
+        request.subscribe(
+            result => {
+                let newApps = this._clients.getValue().map(current => current.client_id === result.clientId ? result : current);
+                this._clients.next(newApps);
+            },
+            err => console.log(err),
+        );
 
         return request;
     }
 
-    resetAppSecret(projectId: string, clientId: string): Observable<Application> {
-        let app;
-        let after = this._apps.getValue().map(current => {
-            if (current.clientId === clientId) {
-                app = current;
-                current.secret = Math.random().toString(36).substring(7);
-            }
-            return current;
-        });
-        this._apps.next(after);
-        return new BehaviorSubject<Application>(app).asObservable();
-
+    resetProjectClientSecret(projectId: string, clientId: string): Observable<ProjectClient> {
         let request = this.api.request({
-            uri: `/projects/${projectId}/apps/${app.clientId}/resetSecret`,
-            method: 'POST'
+            uri: `/projects/${projectId}/clients/${clientId}/resetSecret`,
+            method: 'PATCH'
         })
             .map(res => {
-                let app = res.payload;
-                if (!app) {
+                let client = res.payload;
+                if (!client) {
                     throw new Error("no app in response");
                 }
-                return app;
+                return client;
             }).share();
 
-        request.subscribe(result => {
-            let newApps = this._apps.getValue().map(current => current.clientId === result.clientId ? result : current);
-            this._apps.next(newApps);
-        }, () => { });
+        request.subscribe(
+            result => {
+                let newApps = this._clients.getValue().map(current => current.client_id === result.clientId ? result : current);
+                this._clients.next(newApps);
+            },
+            err => console.log(err),
+        );
 
         return request;
     }
 
-    fetchApps(projectId: string): Observable<Application[]> {
-        this._apps.next(mockApps);
-        return new BehaviorSubject<Application[]>(mockApps).asObservable();
-
+    fetchProjectClients(projectId: string): Observable<ProjectClient[]> {
         let request = this.api.request({
-            uri: `/projects/${projectId}/apps`,
+            uri: `/projects/${projectId}/clients`,
             method: 'GET',
         })
             .map(res => {
-                let apps = res.payload;
-                if (!apps) {
-                    throw new Error("no apps in response");
+                let clients = res.payload;
+                if (!clients) {
+                    throw new Error("no clients in response");
                 }
-                return apps;
+                return clients;
             }).share();
 
-        request.subscribe(apps => {
-            this._apps.next(apps);
-        }, () => { });
+        request.subscribe(
+            clients => {
+                this._clients.next(clients);
+            },
+            err => console.log(err),
+        );
 
         return request;
     }
 
-    fetchApp(projectId: string, clientId: string): Observable<Application> {
-        return new BehaviorSubject<Application>(mockApps.find(app => app.clientId === clientId)).asObservable();
-
+    fetchProjectClient(projectId: string, clientId: string): Observable<ProjectClient> {
         let request = this.api.request({
-            uri: `/projects/${projectId}/apps/${clientId}`,
+            uri: `/projects/${projectId}/clients/${clientId}`,
             method: 'GET',
         })
             .map(res => {
@@ -145,12 +128,9 @@ export class APIAccessService {
         return request;
     }
 
-    deleteApp(projectId: string, clientId: string): Observable<any> {
-        this._apps.next(this._apps.getValue().filter(app => app.clientId !== clientId));
-        return new BehaviorSubject<any>(null).asObservable();
-
+    deleteProjectClient(projectId: string, clientId: string): Observable<any> {
         let request = this.api.request({
-            uri: `/projects/${projectId}/apps/${clientId}`,
+            uri: `/projects/${projectId}/clients/${clientId}`,
             method: 'DELETE',
         }).share();
 

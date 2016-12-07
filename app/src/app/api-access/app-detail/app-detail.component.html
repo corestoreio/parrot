@@ -1,11 +1,11 @@
 <div class="spinner centered" *ngIf="loading"></div>
-<div *ngIf="!loading && _app">
+<div *ngIf="!loading && _projectClient">
 
     <div class="box">
         <form class="control">
-            <label class="label">Application Name</label>
+            <label class="label">Client Name</label>
             <p class="control has-icon has-icon-right">
-                <input class="input" type="text" placeholder="The application's name" [(ngModel)]="_app.name" name="appName">
+                <input class="input" type="text" placeholder="The client's name" [(ngModel)]="_projectClient.name" name="clientName">
             </p>
             <p class="control">
                 <button (click)="saveChanges()" class="button is-primary">Save changes</button>
@@ -14,11 +14,11 @@
         </form>
         <label class="label">Client ID</label>
         <p class="control has-icon">
-            {{_app?.clientId}}
+            {{_projectClient?.client_id}}
         </p>
         <label class="label">Client Secret</label>
         <p class="control has-icon">
-            {{_app?.secret}}
+            {{_projectClient?.secret}}
         </p>
         <p class="control">
             <button (click)="resetSecretPrompt()" class="button is-warning">Reset secret</button>

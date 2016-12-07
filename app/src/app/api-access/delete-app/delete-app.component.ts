@@ -8,11 +8,11 @@ export class DeleteAppComponent implements OnInit {
     @Input()
     private pending: boolean = false;
     @Input()
-    private appName: string;
+    private clientName: string;
     @Input()
     private submit;
 
-    private repeatAppName: string;
+    private repeatName: string;
     private modalOpen: boolean;
 
     constructor() { }
@@ -33,16 +33,16 @@ export class DeleteAppComponent implements OnInit {
     }
 
     valid(): boolean {
-        if (!this.repeatAppName) {
+        if (!this.repeatName) {
             return false;
         }
-        if (this.repeatAppName.length <= 0) {
+        if (this.repeatName.length <= 0) {
             return false;
         }
-        return this.repeatAppName === this.appName;
+        return this.repeatName === this.clientName;
     }
 
     reset() {
-        this.repeatAppName = '';
+        this.repeatName = '';
     }
 }

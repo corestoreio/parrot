@@ -28,6 +28,7 @@ const (
 	CanUpdateLocales
 	CanDeleteLocales
 	CanViewLocales
+	CanManageAPIClients
 )
 
 var permissions = map[Role][]RoleGrant{
@@ -43,6 +44,7 @@ var permissions = map[Role][]RoleGrant{
 		CanUpdateLocales,
 		CanDeleteLocales,
 		CanViewLocales,
+		CanManageAPIClients,
 	},
 	EditorRole: []RoleGrant{
 		CanViewProjectRoles,

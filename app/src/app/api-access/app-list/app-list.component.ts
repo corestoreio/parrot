@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Application } from './../model/app';
+import { ProjectClient } from './../model/app';
 
 @Component({
     selector: 'app-list',
@@ -11,7 +11,7 @@ export class AppListComponent implements OnInit {
     @Input()
     private loading: boolean = false;
     @Input()
-    private apps: Application[] = [];
+    private projectClients: ProjectClient[] = [];
 
     constructor() { }
 

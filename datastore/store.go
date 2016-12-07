@@ -14,6 +14,7 @@ type Store interface {
 	model.ProjectLocaleStorer
 	model.UserStorer
 	model.ProjectUserStorer
+	model.ProjectClientStorer
 	Ping() error
 	Close() error
 }

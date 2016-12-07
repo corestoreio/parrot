@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
-import { Application } from './../../api-access/model/app';
+import { ProjectClient } from './../../api-access/model/app';
 import { APIAccessService } from './../../api-access/services/api-access.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { APIAccessService } from './../../api-access/services/api-access.service
     templateUrl: 'api-access-page.component.html'
 })
 export class APIAccessPage implements OnInit {
-    private apps: Application[];
+    private projectClients: ProjectClient[];
     private loading: boolean = false;
     private projectId: string;
 
@@ -21,8 +21,8 @@ export class APIAccessPage implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.apiAccess.apps
-            .subscribe(apps => this.apps = apps);
+        this.apiAccess.projectClients
+            .subscribe(clients => this.projectClients = clients);
 
         this.route.parent.params
             .map(params => params['projectId'])
@@ -34,7 +34,7 @@ export class APIAccessPage implements OnInit {
 
     fetchApps(projectId: string) {
         this.loading = true;
-        this.apiAccess.fetchApps(projectId)
+        this.apiAccess.fetchProjectClients(projectId)
             .subscribe(
             () => { },
             err => console.log(err),

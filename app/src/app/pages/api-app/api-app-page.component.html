@@ -3,15 +3,15 @@
     <nav class="level is-mobile">
         <div class="level-left">
             <div class="level-item">
-                <h1 class="title">API Access for {{app?.name}}</h1>
+                <h1 class="title">API Access for {{projectClient?.name}}</h1>
             </div>
         </div>
         <div class="level-right">
             <p class="level-item">
-                <delete-app [appName]="app?.name" [submit]="deleteApp"></delete-app>
+                <delete-app [clientName]="projectClient?.name" [submit]="deleteProjectClient"></delete-app>
             </p>
         </div>
     </nav>
 
-    <app-detail [app]="app" [updateApp]="updateApp" [resetSecret]='resetSecret'></app-detail>
+    <app-detail [projectClient]="projectClient" [updateProjectClient]="updateProjectClient" [resetSecret]='resetSecret'></app-detail>
 </section>

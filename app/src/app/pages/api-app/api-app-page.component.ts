@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/do';
 
-import { Application } from './../../api-access/model/app';
+import { ProjectClient } from './../../api-access/model/app';
 import { APIAccessService } from './../../api-access/services/api-access.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { APIAccessService } from './../../api-access/services/api-access.service
     templateUrl: 'api-app-page.component.html'
 })
 export class APIAppPage implements OnInit {
-    private app: Application;
+    private projectClient: ProjectClient;
     private projectId: string;
     private clientId: string;
     private loading: boolean = false;
@@ -21,8 +21,8 @@ export class APIAppPage implements OnInit {
         private route: ActivatedRoute,
         private apiAccess: APIAccessService,
     ) {
-        this.deleteApp = this.deleteApp.bind(this);
-        this.updateApp = this.updateApp.bind(this);
+        this.deleteProjectClient = this.deleteProjectClient.bind(this);
+        this.updateProjectClient = this.updateProjectClient.bind(this);
         this.resetSecret = this.resetSecret.bind(this);
     }
 
@@ -40,17 +40,17 @@ export class APIAppPage implements OnInit {
 
     fetchApp() {
         this.loading = true;
-        this.apiAccess.fetchApp(this.projectId, this.clientId)
+        this.apiAccess.fetchProjectClient(this.projectId, this.clientId)
             .subscribe(
-            app => this.app = app,
+            app => this.projectClient = app,
             err => console.log(err),
             () => this.loading = false,
         );
     }
 
-    deleteApp() {
+    deleteProjectClient() {
         this.loading = true;
-        this.apiAccess.deleteApp(this.projectId, this.clientId)
+        this.apiAccess.deleteProjectClient(this.projectId, this.clientId)
             .subscribe(
             () => this.router.navigate(['/projects', this.projectId, 'api']),
             err => console.log(err),
@@ -60,19 +60,19 @@ export class APIAppPage implements OnInit {
 
     resetSecret() {
         this.loading = true;
-        this.apiAccess.resetAppSecret(this.projectId, this.clientId)
+        this.apiAccess.resetProjectClientSecret(this.projectId, this.clientId)
             .subscribe(
-            app => this.app = app,
+            app => this.projectClient = app,
             err => console.log(err),
             () => this.loading = false,
         );
     }
 
-    updateApp(app: Application) {
+    updateProjectClient(app: ProjectClient) {
         this.loading = true;
-        this.apiAccess.updateAppName(this.projectId, app)
+        this.apiAccess.updateProjectClientName(this.projectId, app)
             .subscribe(
-            (app) => this.app = app,
+            (app) => this.projectClient = app,
             err => console.log(err),
             () => this.loading = false,
         );

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Application } from './../model/app';
+import { ProjectClient } from './../model/app';
 import { RestoreItemService } from './../../shared/restore-item.service';
 
 @Component({
@@ -11,28 +11,28 @@ import { RestoreItemService } from './../../shared/restore-item.service';
 })
 export class AppDetailComponent implements OnInit {
     @Input()
-    updateApp;
+    updateProjectClient;
     @Input()
     resetSecret;
     @Input()
-    set app(value: Application) {
+    set projectClient(value: ProjectClient) {
         if (!value) {
             return;
         }
         // TODO: find a better solution for the restore service to coordinate with changes detection
         this.restoreService.setOriginal(value);
-        this._app = value;
+        this._projectClient = this.restoreService.getCurrent();
     }
 
-    set _app(value: Application) {
+    set _projectClient(value: ProjectClient) {
         this.restoreService.setCurrent(value);
     }
 
-    get _app(): Application {
+    get _projectClient(): ProjectClient {
         return this.restoreService.getCurrent();
     }
 
-    constructor(private restoreService: RestoreItemService<Application>) { }
+    constructor(private restoreService: RestoreItemService<ProjectClient>) { }
 
     ngOnInit() { }
 
@@ -41,11 +41,11 @@ export class AppDetailComponent implements OnInit {
     }
 
     saveChanges() {
-        this.updateApp(this.restoreService.getCurrent())
+        this.updateProjectClient(this.restoreService.getCurrent())
     }
 
     resetSecretPrompt() {
-        let c = confirm('Reset app secret?');
+        let c = confirm('Reset client secret?');
         if (!c) {
             return;
         }

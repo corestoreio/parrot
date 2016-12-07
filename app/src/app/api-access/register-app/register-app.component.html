@@ -1,15 +1,15 @@
-<button class="button is-success" (click)="openModal()">Register a new application</button>
+<button class="button is-success" (click)="openModal()">Register a new client</button>
 <div class="modal" [class.is-active]="modalOpen">
   <div class="modal-background" (click)="closeModal()"></div>
   <div class="modal-content">
     <div class="box">
 
-      <h1 class="title">Register a new application</h1>
+      <h1 class="title">Register a new client</h1>
 
       <form (ngSubmit)="registerApp()" #registerAppForm="ngForm">
         <div class="control">
           <label class="label" for="name">Name</label>
-          <input type="text" class="input" name="name" placeholder="The application's name" [disabled]="loading" [(ngModel)]="appName"
+          <input type="text" class="input" name="name" placeholder="The client's name" [disabled]="loading" [(ngModel)]="clientName"
             autofocus required autocomplete="off">
         </div>
         <div class="control">

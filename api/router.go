@@ -55,6 +55,15 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 				r3.Delete("/:userID", mustAuthorize(CanRevokeRoles, revokeProjectUser))
 			})
 
+			r2.Route("/clients", func(r3 chi.Router) {
+				r3.Get("/", mustAuthorize(CanManageAPIClients, getProjectClients))
+				r3.Get("/:clientID", mustAuthorize(CanManageAPIClients, getProjectClient))
+				r3.Post("/", mustAuthorize(CanManageAPIClients, createProjectClient))
+				r3.Patch("/:clientID/resetSecret", mustAuthorize(CanManageAPIClients, resetProjectClientSecret))
+				r3.Patch("/:clientID/name", mustAuthorize(CanManageAPIClients, updateProjectClientName))
+				r3.Delete("/:clientID", mustAuthorize(CanManageAPIClients, deleteProjectClient))
+			})
+
 			r2.Route("/locales", func(r3 chi.Router) {
 				r3.Get("/", mustAuthorize(CanViewLocales, findLocales))
 				r3.Post("/", mustAuthorize(CanCreateLocales, createLocale))
