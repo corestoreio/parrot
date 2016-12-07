@@ -1,26 +1,24 @@
 <div class="spinner centered" *ngIf="loading"></div>
-<div *ngIf="!loading">
+<div *ngIf="!loading && _app">
 
     <div class="box">
         <form class="control">
             <label class="label">Application Name</label>
             <p class="control has-icon has-icon-right">
-                <input class="input is-success" type="text" placeholder="The application's name" value="{{app?.name}}">
-                <i class="fa fa-check"></i>
-                <span class="help is-success">This name is available</span>
+                <input class="input" type="text" placeholder="The application's name" [(ngModel)]="_app.name" name="appName">
             </p>
             <p class="control">
                 <button class="button is-primary">Save changes</button>
-                <button class="button">Cancel</button>
+                <button (click)="cancelChanges()" class="button">Cancel</button>
             </p>
         </form>
         <label class="label">Client ID</label>
         <p class="control has-icon">
-            {{app?.clientId}}
+            {{_app?.clientId}}
         </p>
         <label class="label">Client Secret</label>
         <p class="control has-icon">
-            {{app?.secret}}
+            {{_app?.secret}}
         </p>
         <p class="control">
             <button class="button is-warning">Reset secret</button>
