@@ -1,12 +1,10 @@
 package api
 
 import (
+	"context"
 	"net/http"
-	"runtime/debug"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/render"
-	"github.com/pressly/chi/middleware"
 )
 
 var (
@@ -14,21 +12,6 @@ var (
 		"application/json",
 		"application/json; charset=utf-8"}
 )
-
-func enforceContentTypeJSON(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case "POST", "PUT", "PATCH":
-			ct := r.Header.Get("Content-Type")
-			if !isValidContentType(ct) {
-				handleError(w, ErrUnsupportedMediaType)
-				return
-			}
-		}
-
-		next.ServeHTTP(w, r)
-	})
-}
 
 func isValidContentType(ct string) bool {
 	if ct == "" {
@@ -48,20 +31,14 @@ func ping(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func recoverMiddleware(next http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if err := recover(); err != nil {
-				reqID := middleware.GetReqID(r.Context())
-				logrus.Errorf("runtime panic for request id: %s", reqID)
-				debug.PrintStack()
-				handleError(w, ErrInternal)
-				return
-			}
-		}()
-
-		next.ServeHTTP(w, r)
+func getScopes(ctx context.Context) ([]string, error) {
+	v := ctx.Value("scopes")
+	if v == nil {
+		return nil, ErrBadRequest
 	}
-
-	return http.HandlerFunc(fn)
+	scopes, ok := v.([]string)
+	if !ok {
+		return nil, ErrInternal
+	}
+	return scopes, nil
 }
