@@ -18,8 +18,8 @@ Backend:
 - Move docker compose into sub folder
 
 Frontend:
-- Add Client API feature module (generate and manage client tokens?).
 - Add API error-message map.
 - Add app localization.
-- Add edit user pages (self)
+- Add edit user pages (self).
+- Add snapshots feature UI.
 - Add tests.
