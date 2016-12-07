@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/scan';
 
 import { APIService } from './../../shared/api.service';
 import { ProjectUser } from './../model';
@@ -19,22 +18,6 @@ export class ProjectUsersService {
 
     get availableRoles(): string[] {
         return UserRoles;
-    }
-
-    getUserSelf(): Observable<ProjectUser[]> {
-        let request = this.api.request({
-            uri: `/users/self`,
-            method: 'GET',
-        })
-            .map(res => {
-                let user = res.payload;
-                if (!user) {
-                    throw new Error("no user in response");
-                }
-                return user;
-            }).share();
-
-        return request;
     }
 
     fetchProjectUsers(projectId: string): Observable<ProjectUser[]> {

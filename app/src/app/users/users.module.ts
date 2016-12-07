@@ -7,8 +7,10 @@ import { HttpModule } from '@angular/http';
 import { AddProjectUserComponent } from './add-project-user/add-project-user.component';
 import { EditProjectUserComponent } from './edit-project-user/edit-project-user.component';
 import { ProjectUsersListComponent } from './project-users-list/project-users-list.component';
-import { ProjectUsersService } from './services/project-users.service';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
+
+import { ProjectUsersService } from './services/project-users.service';
+import { UserService } from './services/user.service';
 
 @NgModule({
     imports: [
@@ -30,7 +32,8 @@ import { AccountDetailComponent } from './account-detail/account-detail.componen
         AccountDetailComponent,
     ],
     providers: [
-        ProjectUsersService
+        ProjectUsersService,
+        UserService
     ]
 })
 export class UsersModule { }
