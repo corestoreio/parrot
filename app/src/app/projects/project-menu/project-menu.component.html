@@ -13,6 +13,10 @@
         <ul class="menu-list">
             <li><a [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API Access</a></li>
         </ul>
+        <p class="menu-label">Settings</p>
+        <ul class="menu-list">
+            <li><a [routerLink]="['/me']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Account</a></li>
+        </ul>
     </div>
     <div *ngIf="!project">
         <p class="menu-label">No project found</p>
