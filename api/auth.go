@@ -7,12 +7,19 @@ import (
 	"strings"
 	"time"
 
+	"encoding/json"
+
 	"github.com/anthonynsimon/parrot/auth"
-	"github.com/anthonynsimon/parrot/model"
 	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type AuthRequestPayload struct {
+	GrantType string `json:"grant_type"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+}
 
 type tokenClaims struct {
 	jwt.StandardClaims
@@ -58,27 +65,29 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 
 func authenticate(authProvider auth.Provider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		user := model.User{}
-		// TODO: add optional skip fields to validator
-		// User name is required by validator, but it's unnecesary for login
-		user.Name = "unkown"
-		if errs := decodeAndValidate(r.Body, &user); errs != nil {
-			render.Error(w, http.StatusUnprocessableEntity, errs)
+		payload := AuthRequestPayload{}
+		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+			handleError(w, ErrUnprocessable)
 			return
 		}
 
-		if user.Email == "" || user.Password == "" {
+		if payload.GrantType != "password" {
 			handleError(w, ErrBadRequest)
 			return
 		}
 
-		claimedUser, err := store.GetUserByEmail(user.Email)
+		if payload.Username == "" || payload.Password == "" {
+			handleError(w, ErrBadRequest)
+			return
+		}
+
+		claimedUser, err := store.GetUserByEmail(payload.Username)
 		if err != nil {
 			handleError(w, err)
 			return
 		}
 
-		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(user.Password)); err != nil {
+		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.Password)); err != nil {
 			handleError(w, ErrUnauthorized)
 			return
 		}
@@ -100,10 +109,11 @@ func authenticate(authProvider auth.Provider) http.HandlerFunc {
 			return
 		}
 
+		// TODO: add refresh token and a handler for refreshing
 		data := map[string]string{
-			"token":      tokenString,
-			"token_type": "bearer",
-			"expires_in": fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
+			"access_token": tokenString,
+			"token_type":   "Bearer",
+			"expires_in":   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 		}
 		headers := map[string]string{
 			"Cache-Control": "no-store",

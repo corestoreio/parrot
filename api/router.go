@@ -23,7 +23,7 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 	)
 
 	router.Get("/ping", ping)
-	router.Post("/authenticate", authenticate(authProvider))
+	router.Post("/auth/token", authenticate(authProvider))
 
 	router.Route("/users", func(r1 chi.Router) {
 		r1.Post("/", createUser)
