@@ -16,6 +16,7 @@ var (
 )
 
 type UserStorer interface {
+	GetUserByID(string) (*User, error)
 	GetUserByEmail(string) (*User, error)
 	CreateUser(User) (*User, error)
 }

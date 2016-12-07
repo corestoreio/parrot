@@ -11,6 +11,24 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func getUserSelf(w http.ResponseWriter, r *http.Request) {
+	id, err := getUserID(r.Context())
+	if err != nil {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	user, err := store.GetUserByID(id)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	// Hide password
+	user.Password = ""
+	render.JSON(w, http.StatusOK, user)
+}
+
 func createUser(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
