@@ -22,6 +22,8 @@ export class APIAppPage implements OnInit {
         private apiAccess: APIAccessService,
     ) {
         this.deleteApp = this.deleteApp.bind(this);
+        this.updateApp = this.updateApp.bind(this);
+        this.resetSecret = this.resetSecret.bind(this);
     }
 
     ngOnInit() {
@@ -51,6 +53,26 @@ export class APIAppPage implements OnInit {
         this.apiAccess.deleteApp(this.projectId, this.clientId)
             .subscribe(
             () => this.router.navigate(['/projects', this.projectId, 'api']),
+            err => console.log(err),
+            () => this.loading = false,
+        );
+    }
+
+    resetSecret() {
+        this.loading = true;
+        this.apiAccess.resetAppSecret(this.projectId, this.clientId)
+            .subscribe(
+            app => this.app = app,
+            err => console.log(err),
+            () => this.loading = false,
+        );
+    }
+
+    updateApp(app: Application) {
+        this.loading = true;
+        this.apiAccess.updateAppName(this.projectId, app)
+            .subscribe(
+            (app) => this.app = app,
             err => console.log(err),
             () => this.loading = false,
         );

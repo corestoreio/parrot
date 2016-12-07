@@ -46,6 +46,64 @@ export class APIAccessService {
         return request;
     }
 
+    updateAppName(projectId: string, app: Application): Observable<Application> {
+        let after = this._apps.getValue().map(current => current.clientId === app.clientId ? app : current);
+        this._apps.next(after);
+        return new BehaviorSubject<Application>(app).asObservable();
+
+        let request = this.api.request({
+            uri: `/projects/${projectId}/apps/${app.clientId}/name`,
+            method: 'PATCH',
+            body: JSON.stringify({ name: app.name })
+        })
+            .map(res => {
+                let app = res.payload;
+                if (!app) {
+                    throw new Error("no app in response");
+                }
+                return app;
+            }).share();
+
+        request.subscribe(result => {
+            let newApps = this._apps.getValue().map(current => current.clientId === result.clientId ? result : current);
+            this._apps.next(newApps);
+        }, () => { });
+
+        return request;
+    }
+
+    resetAppSecret(projectId: string, clientId: string): Observable<Application> {
+        let app;
+        let after = this._apps.getValue().map(current => {
+            if (current.clientId === clientId) {
+                app = current;
+                current.secret = Math.random().toString(36).substring(7);
+            }
+            return current;
+        });
+        this._apps.next(after);
+        return new BehaviorSubject<Application>(app).asObservable();
+
+        let request = this.api.request({
+            uri: `/projects/${projectId}/apps/${app.clientId}/resetSecret`,
+            method: 'POST'
+        })
+            .map(res => {
+                let app = res.payload;
+                if (!app) {
+                    throw new Error("no app in response");
+                }
+                return app;
+            }).share();
+
+        request.subscribe(result => {
+            let newApps = this._apps.getValue().map(current => current.clientId === result.clientId ? result : current);
+            this._apps.next(newApps);
+        }, () => { });
+
+        return request;
+    }
+
     fetchApps(projectId: string): Observable<Application[]> {
         this._apps.next(mockApps);
         return new BehaviorSubject<Application[]>(mockApps).asObservable();

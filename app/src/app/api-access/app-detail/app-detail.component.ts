@@ -11,8 +11,17 @@ import { RestoreItemService } from './../../shared/restore-item.service';
 })
 export class AppDetailComponent implements OnInit {
     @Input()
+    updateApp;
+    @Input()
+    resetSecret;
+    @Input()
     set app(value: Application) {
+        if (!value) {
+            return;
+        }
+        // TODO: find a better solution for the restore service to coordinate with changes detection
         this.restoreService.setOriginal(value);
+        this._app = value;
     }
 
     set _app(value: Application) {
@@ -32,5 +41,14 @@ export class AppDetailComponent implements OnInit {
     }
 
     saveChanges() {
+        this.updateApp(this.restoreService.getCurrent())
+    }
+
+    resetSecretPrompt() {
+        let c = confirm('Reset app secret?');
+        if (!c) {
+            return;
+        }
+        this.resetSecret();
     }
 }

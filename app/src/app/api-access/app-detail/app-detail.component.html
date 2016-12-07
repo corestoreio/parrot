@@ -8,7 +8,7 @@
                 <input class="input" type="text" placeholder="The application's name" [(ngModel)]="_app.name" name="appName">
             </p>
             <p class="control">
-                <button class="button is-primary">Save changes</button>
+                <button (click)="saveChanges()" class="button is-primary">Save changes</button>
                 <button (click)="cancelChanges()" class="button">Cancel</button>
             </p>
         </form>
@@ -21,7 +21,7 @@
             {{_app?.secret}}
         </p>
         <p class="control">
-            <button class="button is-warning">Reset secret</button>
+            <button (click)="resetSecretPrompt()" class="button is-warning">Reset secret</button>
             <span class="help is-danger">Only reset the secret if you know what you are doing!</span>
         </p>
     </div>
