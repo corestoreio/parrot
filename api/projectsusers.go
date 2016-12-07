@@ -32,27 +32,55 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	users, err := store.GetProjectUsers(projectID)
+	projectUsers, err := store.GetProjectUsers(projectID)
 	if err != nil {
 		handleError(w, err)
 		return
 	}
 
-	render.JSON(w, http.StatusOK, users)
+	// Remove self user from slice
+	id, err := getUserID(r.Context())
+	if err != nil {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	result := make([]model.ProjectUser, 0)
+	for _, pu := range projectUsers {
+		if pu.UserID == id {
+			continue
+		}
+		result = append(result, pu)
+	}
+
+	render.JSON(w, http.StatusOK, result)
 }
 
 func assignProjectUser(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
 	// TODO: decode and validate only required fields. Whitelisting?
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
 		handleError(w, ErrBadRequest)
 		return
 	}
-	projectID := chi.URLParam(r, "projectID")
-	if projectID == "" {
+
+	// Don't allow self editing
+	id, err := getUserID(r.Context())
+	if err != nil {
 		handleError(w, ErrBadRequest)
 		return
 	}
+	if id == pu.UserID {
+		handleError(w, ErrForbiden)
+		return
+	}
+
 	// Validate that the url of the request matches the body data
 	if projectID != pu.ProjectID {
 		handleError(w, ErrForbiden)
