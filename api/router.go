@@ -30,7 +30,7 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 		// Past this point, all routes will require a valid token
 		r1.Use(handleToken)
 
-		r1.Get("/me", getUserSelf)
+		r1.Get("/self", getUserSelf)
 	})
 
 	router.Route("/projects", func(r1 chi.Router) {
