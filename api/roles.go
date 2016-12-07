@@ -97,7 +97,11 @@ func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 			handleError(w, ErrBadRequest)
 			return
 		}
-		requesterID, err := getUserIDFromContext(r.Context())
+		// TODO:
+		// 2 options, it's a user or an application
+		// If user proceed as normal
+		// If application, validate project application claim
+		requesterID, err := getUserID(r.Context())
 		if err != nil {
 			handleError(w, ErrBadRequest)
 			return

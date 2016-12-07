@@ -10,9 +10,9 @@ import (
 )
 
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
-	id, err := getUserIDFromContext(r.Context())
+	id, err := getUserID(r.Context())
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, ErrBadRequest)
 		return
 	}
 

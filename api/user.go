@@ -44,13 +44,13 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
-func getUserIDFromContext(ctx context.Context) (string, error) {
+func getUserID(ctx context.Context) (string, error) {
 	v := ctx.Value("userID")
 	if v == nil {
-		return "", ErrInternal
+		return "", ErrBadRequest
 	}
-	id := v.(string)
-	if v == "" {
+	id, ok := v.(string)
+	if id == "" || !ok {
 		return "", ErrInternal
 	}
 	return id, nil
