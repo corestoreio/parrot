@@ -48,7 +48,7 @@ export class AuthService {
 
     register(user: User): Observable<boolean> {
         return this.api.request({
-            uri: '/users',
+            uri: '/auth/register',
             method: 'POST',
             body: JSON.stringify({ name: user.name, email: user.email, password: user.password }),
             withAuthorization: false,
