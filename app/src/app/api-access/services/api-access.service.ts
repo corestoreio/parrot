@@ -15,10 +15,36 @@ let mockApps = [
 @Injectable()
 export class APIAccessService {
 
-    private _apps = new BehaviorSubject<Application[]>([]);
+    private _apps = new BehaviorSubject<Application[]>(mockApps);
     public apps: Observable<Application[]> = this._apps.asObservable();
 
     constructor(private api: APIService) { }
+
+    registerApp(projectId: string, appName: string): Observable<Application> {
+        let mockApp: Application = { clientId: Math.random().toString(36).substring(7), name: appName, secret: Math.random().toString(36).substring(7) };
+        this._apps.next(this._apps.getValue().concat(mockApp));
+        return new BehaviorSubject<Application>(mockApp).asObservable();
+
+        let request = this.api.request({
+            uri: `/projects/${projectId}/apps`,
+            method: 'POST',
+            body: JSON.stringify({ name: appName })
+        })
+            .map(res => {
+                let app = res.payload;
+                if (!app) {
+                    throw new Error("no app in response");
+                }
+                return app;
+            }).share();
+
+        request.subscribe(app => {
+            let newApps = this._apps.getValue().concat(app);
+            this._apps.next(newApps);
+        }, () => { });
+
+        return request;
+    }
 
     fetchApps(projectId: string): Observable<Application[]> {
         this._apps.next(mockApps);

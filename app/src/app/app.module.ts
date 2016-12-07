@@ -38,7 +38,7 @@ import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamP
         ProjectKeysPage,
         ProjectTeamPage,
         APIAppPage,
-        APIAccessPage
+        APIAccessPage,
     ],
     providers: [APIService, AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]

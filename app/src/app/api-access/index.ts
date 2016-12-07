@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { AppDetailComponent } from './app-detail/app-detail.component';
 import { AppListComponent } from './app-list/app-list.component';
 import { APIAccessService } from './services/api-access.service';
+import { RegisterAppComponent } from './register-app/register-app.component';
 
 @NgModule({
     imports: [
@@ -18,10 +19,12 @@ import { APIAccessService } from './services/api-access.service';
     exports: [
         AppDetailComponent,
         AppListComponent,
+        RegisterAppComponent,
     ],
     declarations: [
         AppDetailComponent,
         AppListComponent,
+        RegisterAppComponent,
     ],
     providers: [
         APIAccessService
@@ -32,5 +35,6 @@ export class APIAccessModule { }
 export {
     AppDetailComponent,
     AppListComponent,
+    RegisterAppComponent,
     APIAccessService
 };
