@@ -8,6 +8,7 @@ import { AppDetailComponent } from './app-detail/app-detail.component';
 import { AppListComponent } from './app-list/app-list.component';
 import { APIAccessService } from './services/api-access.service';
 import { RegisterAppComponent } from './register-app/register-app.component';
+import { DeleteAppComponent } from './delete-app/delete-app.component';
 
 @NgModule({
     imports: [
@@ -20,11 +21,13 @@ import { RegisterAppComponent } from './register-app/register-app.component';
         AppDetailComponent,
         AppListComponent,
         RegisterAppComponent,
+        DeleteAppComponent,
     ],
     declarations: [
         AppDetailComponent,
         AppListComponent,
         RegisterAppComponent,
+        DeleteAppComponent,
     ],
     providers: [
         APIAccessService
@@ -36,5 +39,6 @@ export {
     AppDetailComponent,
     AppListComponent,
     RegisterAppComponent,
+    DeleteAppComponent,
     APIAccessService
 };

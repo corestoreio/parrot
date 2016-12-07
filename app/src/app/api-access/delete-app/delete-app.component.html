@@ -1,0 +1,25 @@
+<button class="button is-danger" (click)="openModal()">Delete this application</button>
+<div class="modal" [class.is-active]="modalOpen">
+    <div class="modal-background" (click)="closeModal()"></div>
+    <div class="modal-content">
+        <div class="box">
+
+            <h1 class="title">Delete application and revoke all of its rights?</h1>
+
+            <p>This action cannot be undone.</p>
+
+            <form>
+                <div class="control">
+                    <label class="label" for="name">Type the name of the app to confirm this action:</label>
+                    <input type="text" class="input" name="name" placeholder="{{appName}}" [class.is-disabled]="pending" [(ngModel)]="repeatAppName"
+                        autofocus required autocomplete="off">
+                </div>
+                <div class="control">
+                    <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="pending">Cancel</button>
+                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">Delete</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

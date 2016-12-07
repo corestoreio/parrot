@@ -87,4 +87,16 @@ export class APIAccessService {
         return request;
     }
 
+    deleteApp(projectId: string, clientId: string): Observable<any> {
+        this._apps.next(this._apps.getValue().filter(app => app.clientId !== clientId));
+        return new BehaviorSubject<any>(null).asObservable();
+
+        let request = this.api.request({
+            uri: `/projects/${projectId}/apps/${clientId}`,
+            method: 'DELETE',
+        }).share();
+
+        return request;
+    }
+
 }
