@@ -8,6 +8,9 @@
         <p class="menu-label">Administration</p>
         <ul class="menu-list">
             <li><a [routerLink]="['/projects', project.id, 'team']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Project Team</a></li>
+        </ul>
+        <p class="menu-label">Developer</p>
+        <ul class="menu-list">
             <li><a [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API Access</a></li>
         </ul>
     </div>

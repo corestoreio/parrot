@@ -10,7 +10,8 @@ import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { ProjectsModule } from './projects';
 import { LocalesModule } from './locales';
 import { UsersModule } from './users';
-import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage } from './pages';
+import { APIAccessModule } from './api-access';
+import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage, APIAppPage, APIAccessPage } from './pages';
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamP
         ProjectsModule,
         LocalesModule,
         UsersModule,
+        APIAccessModule,
     ],
     declarations: [
         AppComponent,
@@ -34,7 +36,9 @@ import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamP
         ProjectLocalesPage,
         LocalePage,
         ProjectKeysPage,
-        ProjectTeamPage
+        ProjectTeamPage,
+        APIAppPage,
+        APIAccessPage
     ],
     providers: [APIService, AuthService, AuthGuard, UnauthGuard],
     bootstrap: [AppComponent]

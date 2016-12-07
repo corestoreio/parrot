@@ -1,0 +1,18 @@
+<div class="spinner centered" *ngIf="loading"></div>
+<div *ngIf="!loading">
+
+    <article class="media center-align" [routerLink]="[app.clientId]" *ngFor="let app of apps">
+        <figure class="media-left">
+            <span class="icon is-medium">
+                <i class="fa fa-mobile"></i>
+            </span>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p class="title is-4">Application Name</p>
+                <p>Client-ID: my_client_id</p>
+            </div>
+        </div>
+    </article>
+
+</div>

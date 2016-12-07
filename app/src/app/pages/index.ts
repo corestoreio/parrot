@@ -3,3 +3,5 @@ export * from './project-locales/project-locales-page.component';
 export * from './project-keys/project-keys-page.component';
 export * from './project-locale/locale-page.component';
 export * from './project-team/project-team-page.component';
+export * from './api-access/api-access-page.component';
+export * from './api-app/api-app-page.component';

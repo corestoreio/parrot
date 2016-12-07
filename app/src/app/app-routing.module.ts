@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { UnauthGuard } from './auth/guards/unauth.guard';
 
-import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage } from './pages';
+import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage, APIAccessPage, APIAppPage } from './pages';
 import { ProjectWrapperComponent } from './projects';
 import { LoginComponent, RegisterComponent } from './auth';
 
@@ -17,6 +17,8 @@ const appRoutes: Routes = [
             { path: '', component: ProjectLocalesPage },
             { path: 'keys', component: ProjectKeysPage },
             { path: 'team', component: ProjectTeamPage },
+            { path: 'api', component: APIAccessPage },
+            { path: 'api/:clientId', component: APIAppPage },
             { path: 'locales', redirectTo: '', pathMatch: 'full' },
             { path: 'locales/:localeIdent', component: LocalePage },
         ]
