@@ -19,8 +19,8 @@
                 <div class="control">
                     <div class="control is-grouped">
                         <p class="control is-expanded">
-                            <input type="email" class="input" name="email" placeholder="The user's email" [class.is-disabled]="loading" [(ngModel)]="email"
-                                autofocus required autocomplete="off">
+                            <input type="email" class="input" name="email" placeholder="The user's email" [disabled]="loading" [(ngModel)]="email" autofocus
+                                required autocomplete="off">
                         </p>
                         <span class="select">
                             <select name="role" [(ngModel)]="selectedRole" required>
@@ -31,8 +31,8 @@
                     </div>
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [class.is-disabled]="!addUserForm.form.valid || loading">Add</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!addUserForm.form.valid || loading">Add</button>
                 </div>
             </form>
 

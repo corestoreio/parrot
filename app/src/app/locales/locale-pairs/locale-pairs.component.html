@@ -39,7 +39,7 @@
         <tbody>
             <tr *ngFor="let pair of locale.pairs | objtopairs">
                 <td>{{pair.key}}</td>
-                <td><textarea class="textarea" (click)="enableEdit()" [class.is-disabled]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea></td>
+                <td><textarea class="textarea" (click)="enableEdit()" [disabled]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea></td>
             </tr>
         </tbody>
     </table>

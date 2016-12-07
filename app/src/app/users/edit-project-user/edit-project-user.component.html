@@ -12,7 +12,7 @@
                 </div>
                 <div class="level-right">
                     <div class="level-item">
-                        <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [class.is-disabled]="loading">Revoke all rights</button>
+                        <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [disabled]="loading">Revoke all rights</button>
                     </div>
                 </div>
             </div>
@@ -44,8 +44,8 @@
                     </div>
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [class.is-disabled]="!editUserForm.form.valid || loading">Save changes</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!editUserForm.form.valid || loading">Save changes</button>
                 </div>
             </form>
 

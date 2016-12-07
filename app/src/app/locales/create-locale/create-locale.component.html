@@ -56,8 +56,8 @@
                 </div>
 
                 <div class="control">
-                    <button class="button" (click)="closeModal()" [class.is-disabled]="loading">Cancel</button>
-                    <button class="button is-primary" (click)="submit()" [class.is-loading]="loading" [class.is-disabled]="loading || !selectedLocale">Create</button>
+                    <button class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                    <button class="button is-primary" (click)="submit()" [class.is-loading]="loading" [disabled]="loading || !selectedLocale">Create</button>
                 </div>
             </div>
 

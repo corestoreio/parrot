@@ -11,12 +11,12 @@
             <form>
                 <div class="control">
                     <label class="label" for="name">Type the name of the key to confirm this action:</label>
-                    <input type="text" class="input" name="name" placeholder="{{key}}" [class.is-disabled]="pending" [(ngModel)]="repeatKey"
-                        autofocus required autocomplete="off">
+                    <input type="text" class="input" name="name" placeholder="{{key}}" [disabled]="pending" [(ngModel)]="repeatKey" autofocus
+                        required autocomplete="off">
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [class.is-disabled]="pending">Cancel</button>
-                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [class.is-disabled]="!valid() || pending">Delete</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">Cancel</button>
+                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">Delete</button>
                 </div>
             </form>
 
