@@ -6,28 +6,38 @@
     height: 60px !important;
     background-color: #00D1B2;
     display: flex;
-    justify-content: space-between;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
-    z-index: 20;
+    z-index: 150;
 }
 
 .appbar-item {
-    flex-basis: 100px;
+    /*flex-basis: 100px;*/
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.nav-menu {
+.appbar-fill-center {
+    flex: 1;
+}
+
+.appbar-items-right {
+    display: flex;
+    flex-flow: row;
+    flex-basis: 180px;
+    justify-content: space-between;
+}
+
+.menu {
     display: flex;
     flex-flow: row;
 }
 
-a.nav-item {
+a.appbar-link {
     color: #AFF0E6;
 }
 
-a.nav-item.is-active {
+a.appbar-link.is-active {
     color: #FFF;
 }
 
@@ -43,15 +53,4 @@ a.nav-item.is-active {
 .title {
     color: white;
     font-size: 1.4em;
-}
-
-@media (max-width: 768px) {
-    .nav-menu {
-        background-color: #40B9AA;
-        visibility: hidden;
-        flex-flow: column;
-    }
-    .nav-menu.is-active {
-        visibility: visible;
-    }
 }

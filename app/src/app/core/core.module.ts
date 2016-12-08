@@ -2,18 +2,19 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AppBarComponent } from './appbar/appbar.component';
+import { ProjectMenuService } from './services/project-menu.service';
 
 @NgModule({
     imports: [
         RouterModule.forChild([])
     ],
     exports: [
-        AppBarComponent,
+        AppBarComponent
     ],
     declarations: [
         AppBarComponent,
     ],
-    providers: [],
+    providers: [ProjectMenuService],
 })
 export class CoreModule {
     // Prevent reimport of core module

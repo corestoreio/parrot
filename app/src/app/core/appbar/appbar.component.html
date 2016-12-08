@@ -1,23 +1,24 @@
 <nav class="appbar">
+    <div class="appbar-item">
+        <span id="nav-toggle" class="nav-toggle" (click)="openMenu()" [class.is-active]="isMenuActive">
+                                <span></span>
+        <span></span>
+        <span></span>
+        </span>
+    </div>
 
     <div class="appbar-item">
         <h1 class="title">{{title}}</h1>
     </div>
 
-    <div class="appbar-item">
-        <span id="nav-toggle" class="nav-toggle" (click)="toggleMenu()" [class.is-active]="isMenuActive">
-                                <span></span>
-        <span></span>
-        <span></span>
-        </span>
+    <div class="appbar-fill-center"></div>
 
-        <div id="nav-menu" class="nav-menu" [class.is-active]="isMenuActive">
-            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/projects']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
-                [class.is-hidden]="!isAuth">Projects</a>
-            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/me']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
-                [class.is-hidden]="!isAuth">Account</a>
-            <a class="nav-item" (click)="closeMenu()" (click)="logout()" [class.is-hidden]="!isAuth">Logout</a>
-        </div>
+    <div class="appbar-items-right">
+        <a class="appbar-item appbar-link" [routerLink]="['/projects']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
+            [class.is-hidden]="!isAuth">Projects</a>
+        <a class="appbar-item appbar-link" [routerLink]="['/me']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
+            [class.is-hidden]="!isAuth">Account</a>
+        <a class="appbar-item appbar-link" (click)="logout()" [class.is-hidden]="!isAuth">Logout</a>
     </div>
 
 </nav>

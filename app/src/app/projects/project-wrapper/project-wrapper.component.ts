@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { ProjectsService } from './../../projects/services/projects.service';
 import { Project } from './../model/project';
 import { ActivatedRoute } from '@angular/router';
+import { ProjectMenuService } from './../../core/services/project-menu.service';
 
 @Component({
     providers: [ProjectsService],
@@ -14,8 +15,9 @@ import { ActivatedRoute } from '@angular/router';
 export class ProjectWrapperComponent implements OnInit {
     private loading: boolean;
     private project: Project;
+    private menuActive: boolean;
 
-    constructor(private projectsService: ProjectsService, private route: ActivatedRoute) { }
+    constructor(private projectsService: ProjectsService, private route: ActivatedRoute, private projectMenuService: ProjectMenuService) { }
 
     ngOnInit() {
         this.route.params
@@ -24,6 +26,13 @@ export class ProjectWrapperComponent implements OnInit {
 
         this.projectsService.activeProject
             .subscribe(project => this.project = project);
+
+        this.projectMenuService.menuActive
+            .subscribe(active => this.menuActive = active);
+    }
+
+    closeMenu() {
+        this.projectMenuService.setInactive();
     }
 
     fetchProject(projectId) {

@@ -1,5 +1,6 @@
 <section class="flex">
-    <div class="sidenav">
+    <div class="sidenav-overlay" [class.is-active]="menuActive" (click)="closeMenu()"></div>
+    <div class="sidenav" [class.is-active]="menuActive">
         <parrot-project-menu [project]="project"></parrot-project-menu>
     </div>
     <div class="content">

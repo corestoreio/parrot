@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from './../../auth';
+import { ProjectMenuService } from './../services/project-menu.service';
 
 @Component({
     selector: 'appbar',
@@ -14,16 +15,15 @@ export class AppBarComponent implements OnInit {
 
     private isMenuActive: boolean;
 
-    constructor(private auth: AuthService, private router: Router) { }
+    constructor(private auth: AuthService, private router: Router, private projectMenu: ProjectMenuService) { }
 
-    ngOnInit() { }
-
-    toggleMenu() {
-        this.isMenuActive = !this.isMenuActive;
+    ngOnInit() {
+        this.projectMenu.menuActive
+            .subscribe(active => this.isMenuActive = active);
     }
 
-    closeMenu() {
-        this.isMenuActive = false;
+    openMenu() {
+        this.projectMenu.setActive();
     }
 
     get isAuth(): boolean {

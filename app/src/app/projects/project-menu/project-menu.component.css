@@ -4,12 +4,6 @@
     width: 100%;
     height: 100%;
 }
-/*@media screen and (min-width: 769px) {
-    .menu.navigation {
-        position: fixed;
-        height: calc(100vh - 60px);
-    }
-}*/
 
 .menu-label {
     color: #999A9F;
