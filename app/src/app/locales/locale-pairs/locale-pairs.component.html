@@ -1,10 +1,10 @@
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
 
-    <nav class="level is-mobile">
+    <nav class="level">
         <div class="level-left">
             <div class="level-item">
-                <h1 class="title">
+                <h1 class="title is-5">
                     <span class="icon is-medium title-icon">
                         <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i></span>                    {{locale?.language}} ({{locale?.country}}) ({{locale?.ident}})
                 </h1>
@@ -12,7 +12,7 @@
         </div>
         <div class="level-right">
             <div class="level-item">
-                <p class="subtitle is-5">
+                <p>
                     <strong>{{percentTranslated}}%</strong> translated
                 </p>
             </div>
@@ -43,17 +43,4 @@
             </tr>
         </tbody>
     </table>
-
-    <nav class="level is-mobile">
-        <div class="level-left">
-        </div>
-        <div class="level-right">
-            <div class="level-item">
-                <button class="button is-success" (click)="enableEdit()" [class.is-hidden]="editing">Edit</button>
-                <button class="button is-success" (click)="commitPairs()" [class.is-hidden]="!editing">Commit</button>
-                <button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">Cancel Edit</button>
-            </div>
-        </div>
-    </nav>
-
 </div>
