@@ -9,8 +9,49 @@
     flex-basis: 569px;
 }
 
+.router-content {
+    margin-top: 60px;
+}
+
 @media screen and (min-width: 769px) {
     .content {
         margin-left: 200px;
     }
+    .project-header {
+        width: calc(100% - 200px) !important;
+    }
+}
+
+.project-header {
+    position: fixed;
+    padding: 0 20px;
+    width: 100%;
+    height: 60px !important;
+    background-color: #007E6B;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+    z-index: 99;
+}
+
+.project-header .branding {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.project-header .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+p {
+    color: #F6F6F6;
+}
+
+p strong {
+    font-weight: bold;
+    color: #F6F6F6;
 }
