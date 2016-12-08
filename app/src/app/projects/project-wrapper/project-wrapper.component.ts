@@ -8,7 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
     providers: [ProjectsService],
     selector: 'parrot-project-wrapper',
-    templateUrl: 'project-wrapper.component.html'
+    templateUrl: 'project-wrapper.component.html',
+    styleUrls: ['project-wrapper.component.css']
 })
 export class ProjectWrapperComponent implements OnInit {
     private loading: boolean;

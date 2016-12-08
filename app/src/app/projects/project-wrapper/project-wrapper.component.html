@@ -1,9 +1,8 @@
-<project-header [project]="project"></project-header>
-<div class="columns is-gapless">
-    <div class="column is-3">
+<section class="flex">
+    <div class="sidenav">
         <parrot-project-menu [project]="project"></parrot-project-menu>
     </div>
-    <div class="column">
+    <div class="content">
         <router-outlet></router-outlet>
     </div>
-</div>
+</section>

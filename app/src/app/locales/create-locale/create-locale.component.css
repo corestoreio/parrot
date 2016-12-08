@@ -22,7 +22,7 @@
     background: white;
     border-radius: 2px;
     padding: 5px;
-    box-shadow: 0 2px 4px 0 #D6D6D6;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
 }
 .media.locale:hover {
     background: #f1f1f1;

@@ -1,19 +1,23 @@
-<nav class="nav has-shadow">
-    <div class="container">
-        <div class="nav-left">
-            <span class="nav-item is-brand">{{title}}</span>
-        </div>
+<nav class="appbar">
 
+    <div class="appbar-item">
+        <h1 class="title">{{title}}</h1>
+    </div>
+
+    <div class="appbar-item">
         <span id="nav-toggle" class="nav-toggle" (click)="toggleMenu()" [class.is-active]="isMenuActive">
-            <span></span>
+                                <span></span>
         <span></span>
         <span></span>
         </span>
 
-        <div id="nav-menu" class="nav-right nav-menu" [class.is-active]="isMenuActive">
-            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/projects']" [class.is-hidden]="!isAuth">Projects</a>
-            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/me']" [class.is-hidden]="!isAuth">Account</a>
+        <div id="nav-menu" class="nav-menu" [class.is-active]="isMenuActive">
+            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/projects']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
+                [class.is-hidden]="!isAuth">Projects</a>
+            <a class="nav-item" (click)="closeMenu()" [routerLink]="['/me']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
+                [class.is-hidden]="!isAuth">Account</a>
             <a class="nav-item" (click)="closeMenu()" (click)="logout()" [class.is-hidden]="!isAuth">Logout</a>
         </div>
     </div>
+
 </nav>

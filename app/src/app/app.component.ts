@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['app.component.css']
 })
 export class AppComponent implements OnInit {
   title = 'Parrot';
@@ -11,9 +12,4 @@ export class AppComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() { }
-
-  sidenavVisible() {
-    // Match nested routes of /projects/*
-    return this.router.url.match(/projects\/[\w\d].*/);
-  }
 }

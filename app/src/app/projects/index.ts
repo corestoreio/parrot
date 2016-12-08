@@ -7,7 +7,6 @@ import { HttpModule } from '@angular/http';
 import { CoreModule } from './../core/core.module';
 import { ProjectsService } from './services/projects.service';
 import { ProjectsListComponent } from './projects-list/projects-list.component';
-import { ProjectHeaderComponent } from './project-header/project-header.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectKeysComponent } from './project-keys/project-keys.component';
 import { ProjectMenuComponent } from './project-menu/project-menu.component';
@@ -26,7 +25,6 @@ import { DeleteProjectKeyComponent } from './delete-project-key/delete-project-k
     ],
     exports: [
         ProjectsListComponent,
-        ProjectHeaderComponent,
         CreateProjectComponent,
         ProjectKeysComponent,
         ProjectMenuComponent,
@@ -37,7 +35,6 @@ import { DeleteProjectKeyComponent } from './delete-project-key/delete-project-k
     ],
     declarations: [
         ProjectsListComponent,
-        ProjectHeaderComponent,
         CreateProjectComponent,
         ProjectKeysComponent,
         ProjectMenuComponent,
@@ -55,7 +52,6 @@ export class ProjectsModule { }
 export {
     ProjectsService,
     ProjectsListComponent,
-    ProjectHeaderComponent,
     CreateProjectComponent,
     ProjectKeysComponent,
     ProjectMenuComponent,

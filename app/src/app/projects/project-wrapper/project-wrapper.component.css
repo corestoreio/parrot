@@ -1,0 +1,29 @@
+.flex {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+}
+
+.sidenav {
+    flex-grow: 1;
+    flex-basis: 200px;
+    visibility: hidden;
+    left: -200px;
+}
+
+.content {
+    flex-grow: 1;
+    flex-basis: 569px;
+}
+
+@media screen and (min-width: 769px) {
+    .sidenav {
+        width: 200px;
+        position: fixed;
+        height: calc(100vh - 60px);
+        visibility: visible;
+    }
+    .content {
+        margin-left: 200px;
+    }
+}

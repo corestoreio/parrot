@@ -1,8 +1,57 @@
-.nav.appbar {
-    background: #0288D1;
-    color: white;
+.appbar {
+    top: 0;
+    position: fixed;
+    padding: 0 20px;
+    width: 100% !important;
+    height: 60px !important;
+    background-color: #00D1B2;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+    z-index: 20;
 }
 
-.is-brand {
+.appbar-item {
+    flex-basis: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-menu {
+    display: flex;
+    flex-flow: row;
+}
+
+a.nav-item {
+    color: #AFF0E6;
+}
+
+a.nav-item.is-active {
+    color: #FFF;
+}
+
+.nav-toggle {
+    background-color: #00D1B2;
+}
+
+.nav-toggle span {
+    background: white;
+    height: 2px;
+}
+
+.title {
+    color: white;
     font-size: 1.4em;
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        background-color: #40B9AA;
+        visibility: hidden;
+        flex-flow: column;
+    }
+    .nav-menu.is-active {
+        visibility: visible;
+    }
 }

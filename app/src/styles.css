@@ -1,5 +1,6 @@
 html, body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif !important;
+  background: #F6F6F6;
 }
 
 .spinner {
@@ -40,5 +41,5 @@ html, body {
 }
 
 .section.no-background {
-  background: #F5F5F5;
+  background: none;
 }
