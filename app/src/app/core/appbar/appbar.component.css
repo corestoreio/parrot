@@ -11,10 +11,13 @@
 }
 
 .appbar-item {
-    /*flex-basis: 100px;*/
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.menu-toggle.hidden {
+    visibility: hidden;
 }
 
 .appbar-fill-center {

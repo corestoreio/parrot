@@ -1,6 +1,6 @@
 <nav class="appbar">
-    <div class="appbar-item">
-        <span id="nav-toggle" class="nav-toggle" (click)="openMenu()" [class.is-active]="isMenuActive">
+    <div class="appbar-item menu-toggle" [class.hidden]="menuToggleHidden()">
+        <span id="nav-toggle" class="nav-toggle" (click)="toggleMenu()" [class.is-active]="isMenuActive">
                                 <span></span>
         <span></span>
         <span></span>

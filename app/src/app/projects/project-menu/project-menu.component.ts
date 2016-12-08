@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Project } from './../model/project';
+import { ProjectMenuService } from './../../core/services/project-menu.service';
 
 @Component({
     selector: 'parrot-project-menu',
@@ -12,7 +13,16 @@ export class ProjectMenuComponent implements OnInit {
     @Input()
     private project: Project;
 
-    constructor() { }
+    private menuActive: boolean;
 
-    ngOnInit() { }
+    constructor(private projectMenuService: ProjectMenuService) { }
+
+    ngOnInit() {
+        this.projectMenuService.menuActive
+            .subscribe(active => this.menuActive = active);
+    }
+
+    closeMenu() {
+        this.projectMenuService.setInactive();
+    }
 }

@@ -22,8 +22,17 @@ export class AppBarComponent implements OnInit {
             .subscribe(active => this.isMenuActive = active);
     }
 
-    openMenu() {
-        this.projectMenu.setActive();
+    toggleMenu() {
+        if (this.isMenuActive) {
+            this.projectMenu.setInactive();
+        } else {
+            this.projectMenu.setActive();
+        }
+    }
+
+    menuToggleHidden() {
+        // Match nested routes of /projects/*
+        return !this.router.url.match(/projects\/[\w\d].*/);
     }
 
     get isAuth(): boolean {

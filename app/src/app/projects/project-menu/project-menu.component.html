@@ -1,20 +1,22 @@
-<aside class="menu navigation">
+<aside class="menu navigation" [class.is-active]="menuActive">
     <div *ngIf="project">
         <p class="menu-label">Project</p>
         <ul class="menu-list">
-            <li><a [routerLink]="['/projects', project.id, 'keys']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Keys</a></li>
-            <li><a [routerLink]="['/projects', project.id]" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Locales</a></li>
+            <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'keys']" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="is-active">Keys</a></li>
+            <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id]" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="is-active">Locales</a></li>
         </ul>
         <p class="menu-label">Administration</p>
         <ul class="menu-list">
-            <li><a [routerLink]="['/projects', project.id, 'team']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">Project Team</a></li>
+            <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'team']" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="is-active">Project Team</a></li>
         </ul>
         <p class="menu-label">Developer</p>
         <ul class="menu-list">
-            <li><a [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active">API Access</a></li>
+            <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="is-active">API Access</a></li>
         </ul>
     </div>
-    <div *ngIf="!project">
-        <p class="menu-label">No project found</p>
-    </div>
 </aside>
+<div class="sidenav-overlay" [class.is-active]="menuActive" (click)="closeMenu()"></div>
