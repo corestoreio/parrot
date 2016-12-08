@@ -37,11 +37,12 @@
 }
 
 a.appbar-link {
-    color: #AFF0E6;
+    color: white;
 }
 
 a.appbar-link.is-active {
-    color: #FFF;
+    border-top: solid transparent;
+    border-bottom: solid white;
 }
 
 .nav-toggle {
