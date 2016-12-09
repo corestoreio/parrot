@@ -28,6 +28,7 @@ gin-bin.*
 *.bin
 lingo.*
 .vscode
+.idea
 
 # JS
 node_modules
