@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/common/datastore"
 	"github.com/pressly/chi"
 )
 

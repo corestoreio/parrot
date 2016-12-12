@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/anthonynsimon/parrot/model"
+	"github.com/anthonynsimon/parrot/common/model"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 

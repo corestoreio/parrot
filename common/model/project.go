@@ -1,6 +1,6 @@
 package model
 
-import "github.com/anthonynsimon/parrot/errors"
+import "github.com/anthonynsimon/parrot/common/errors"
 
 var (
 	ErrInvalidProjectName = &errors.Error{

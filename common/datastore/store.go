@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/anthonynsimon/parrot/datastore/postgres"
-	"github.com/anthonynsimon/parrot/model"
+	"github.com/anthonynsimon/parrot/common/datastore/postgres"
+	"github.com/anthonynsimon/parrot/common/model"
 )
 
 type Store interface {

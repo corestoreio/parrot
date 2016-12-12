@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/anthonynsimon/parrot/datastore"
+	"github.com/anthonynsimon/parrot/common/datastore"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/schema"
 	"golang.org/x/crypto/bcrypt"

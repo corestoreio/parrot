@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"github.com/anthonynsimon/parrot/model"
+	"github.com/anthonynsimon/parrot/common/model"
 	"github.com/lib/pq"
 )
 

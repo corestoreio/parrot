@@ -1,6 +1,6 @@
 package postgres
 
-import "github.com/anthonynsimon/parrot/model"
+import "github.com/anthonynsimon/parrot/common/model"
 
 func (db *PostgresDB) GetUserByEmail(email string) (*model.User, error) {
 	u := model.User{}

@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
+	"os"
+
 	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/api"
-	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/anthonynsimon/parrot/logger"
+	"github.com/anthonynsimon/parrot/common/datastore"
+	"github.com/anthonynsimon/parrot/common/logger"
 	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
@@ -30,10 +30,10 @@ func main() {
 	}
 
 	// init and ping datastore
-	dbName := os.Getenv("PARROT_API_DB_NAME")
-	dbURL := os.Getenv("PARROT_API_DB_URL")
+	dbName := os.Getenv("PARROT_AUTH_DB_NAME")
+	dbURL := os.Getenv("PARROT_AUTH_DB_URL")
 	if dbName == "" || dbURL == "" {
-		logrus.Fatal("no db set in env")
+		logrus.Fatal("no db set")
 	}
 
 	ds, err := datastore.NewDatastore(dbName, dbURL)
@@ -54,26 +54,31 @@ func main() {
 	// init routers and middleware
 	// CORS, Rate-limiting, etc... is handled by the server (e.g. nginx)
 	// Here we only care about application level middleware
-	mainRouter := chi.NewRouter()
-	mainRouter.Use(
+	router := chi.NewRouter()
+	router.Use(
 		middleware.RequestID,
 		middleware.RealIP,
 		logger.Request,
 		middleware.StripSlashes,
 	)
 
-	authURL := os.Getenv("PARROT_AUTH_URL")
-	if authURL == "" {
-		logrus.Fatal("auth url not set")
+	signingKey := os.Getenv("PARROT_AUTH_SIGNING_KEY")
+	if signingKey == "" {
+		logrus.Fatal("no auth signing key set")
+	}
+	issuerName := os.Getenv("PARROT_AUTH_ISSUER_NAME")
+	if signingKey == "" {
+		logrus.Warn("no auth issuer name set, resorting to default")
+		issuerName = "parrot-default"
 	}
 
-	tokenIntrospectionEndpoint := authURL + "/auth/introspect"
+	tp := TokenProvider{Name: issuerName, SigningKey: []byte(signingKey)}
 
-	apiRouter := api.NewRouter(ds, tokenIntrospectionEndpoint)
-	mainRouter.Mount("/api", apiRouter)
+	router.Post("/auth/token", issueToken(tp, ds))
+	router.Post("/auth/introspect", instrospectToken(tp, ds))
 
 	// config server
-	addr := os.Getenv("PARROT_API_SERVER_PORT")
+	addr := os.Getenv("PARROT_AUTH_SERVER_PORT")
 	if addr == "" {
 		addr = ":8080"
 	}
@@ -81,7 +86,7 @@ func main() {
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        mainRouter,
+		Handler:        router,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/model"
-	"github.com/anthonynsimon/parrot/render"
+	"github.com/anthonynsimon/parrot/common/model"
+	"github.com/anthonynsimon/parrot/common/render"
 	"golang.org/x/crypto/bcrypt"
 )
 

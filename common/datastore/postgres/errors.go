@@ -3,7 +3,7 @@ package postgres
 import (
 	"database/sql"
 
-	"github.com/anthonynsimon/parrot/datastore/errors"
+	"github.com/anthonynsimon/parrot/common/datastore/errors"
 	"github.com/lib/pq"
 )
 

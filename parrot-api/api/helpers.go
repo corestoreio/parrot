@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/render"
+	"github.com/anthonynsimon/parrot/common/render"
 )
 
 var (

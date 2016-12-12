@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/model"
-	"github.com/anthonynsimon/parrot/render"
+	"github.com/anthonynsimon/parrot/common/model"
+	"github.com/anthonynsimon/parrot/common/render"
 	"github.com/pressly/chi"
 )
 

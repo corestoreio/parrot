@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/Sirupsen/logrus"
-	datastoreErrors "github.com/anthonynsimon/parrot/datastore/errors"
-	"github.com/anthonynsimon/parrot/errors"
-	"github.com/anthonynsimon/parrot/render"
+	datastoreErrors "github.com/anthonynsimon/parrot/common/datastore/errors"
+	"github.com/anthonynsimon/parrot/common/errors"
+	"github.com/anthonynsimon/parrot/common/render"
 )
 
 var (

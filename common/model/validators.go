@@ -3,7 +3,7 @@ package model
 import (
 	"regexp"
 
-	"github.com/anthonynsimon/parrot/errors"
+	"github.com/anthonynsimon/parrot/common/errors"
 )
 
 var (
