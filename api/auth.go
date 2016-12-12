@@ -1,29 +1,16 @@
 package api
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
-
-	"encoding/json"
 
 	"github.com/anthonynsimon/parrot/auth"
-	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
 )
-
-type AuthRequestPayload struct {
-	GrantType string `json:"grant_type"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-}
-
-type tokenClaims struct {
-	jwt.StandardClaims
-}
 
 func getTokenString(r *http.Request) (string, error) {
 	token := r.Header.Get("Authorization")
@@ -46,13 +33,31 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 				handleError(w, ErrUnauthorized)
 				return
 			}
-			claims, err := ap.ParseAndVerifyToken(tokenString)
+
+			body := map[string]string{
+				"token": tokenString,
+			}
+
+			bt, err := json.Marshal(body)
 			if err != nil {
+				handleError(w, ErrInternal)
+				return
+			}
+			response, err := http.Post("http://auth:8080/auth/introspect", "application/json", bytes.NewBuffer(bt))
+			if err != nil {
+				fmt.Println(err)
 				handleError(w, ErrUnauthorized)
 				return
 			}
 
-			sub := claims["sub"]
+			var claims jwt.StandardClaims
+			json.NewDecoder(response.Body).Decode(&claims)
+			if err != nil {
+				handleError(w, ErrInternal)
+				return
+			}
+
+			sub := claims.Subject
 
 			ctx := r.Context()
 			ctx = context.WithValue(ctx, "userID", sub)
@@ -60,66 +65,5 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 
 			next.ServeHTTP(w, newR)
 		})
-	}
-}
-
-func authenticate(authProvider auth.Provider) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		payload := AuthRequestPayload{}
-		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-			handleError(w, ErrUnprocessable)
-			return
-		}
-
-		if payload.GrantType != "password" {
-			handleError(w, ErrBadRequest)
-			return
-		}
-
-		if payload.Username == "" || payload.Password == "" {
-			handleError(w, ErrBadRequest)
-			return
-		}
-
-		claimedUser, err := store.GetUserByEmail(payload.Username)
-		if err != nil {
-			handleError(w, err)
-			return
-		}
-
-		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.Password)); err != nil {
-			handleError(w, ErrUnauthorized)
-			return
-		}
-
-		// Create the Claims
-		now := time.Now()
-		claims := tokenClaims{
-			jwt.StandardClaims{
-				Issuer:    authProvider.Name,
-				IssuedAt:  now.Unix(),
-				ExpiresAt: now.Add(time.Hour * 24).Unix(),
-				Subject:   fmt.Sprintf("%s", claimedUser.ID),
-			},
-		}
-
-		tokenString, err := authProvider.CreateToken(claims)
-		if err != nil {
-			handleError(w, ErrInternal)
-			return
-		}
-
-		// TODO: add refresh token and a handler for refreshing
-		data := map[string]string{
-			"access_token": tokenString,
-			"token_type":   "Bearer",
-			"expires_in":   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
-		}
-		headers := map[string]string{
-			"Cache-Control": "no-store",
-			"Pragma":        "no-cache",
-		}
-
-		render.JSONWithHeaders(w, http.StatusOK, headers, data)
 	}
 }

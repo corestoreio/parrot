@@ -63,7 +63,7 @@ func main() {
 		middleware.StripSlashes,
 	)
 
-	apiKey := os.Getenv("PARROT_API_SIGNING_KEY")
+	apiKey := os.Getenv("PARROT_AUTH_SIGNING_KEY")
 	if apiKey == "" {
 		logrus.Fatal("no api key set in env")
 	}

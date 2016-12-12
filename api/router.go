@@ -24,7 +24,6 @@ func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
 
 	router.Get("/ping", ping)
 	router.Post("/auth/register", createUser)
-	router.Post("/auth/token", authenticate(authProvider))
 
 	router.Route("/users", func(r1 chi.Router) {
 		// Past this point, all routes will require a valid token
