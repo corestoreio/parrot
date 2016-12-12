@@ -217,7 +217,7 @@ func authenticate(authProvider auth.Provider, store AuthStore) http.HandlerFunc 
 		// TODO: add refresh token and a handler for refreshing
 		data := map[string]string{
 			"access_token": tokenString,
-			"token_type":   "bearer",
+			"token_type":   "Bearer",
 			"expires_in":   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 			"scope":        "",
 		}
