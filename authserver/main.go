@@ -8,9 +8,9 @@ import (
 	"os"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
+	"github.com/joho/godotenv"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
 )
@@ -23,11 +23,17 @@ func init() {
 }
 
 func main() {
+	// init environment variables
+	err := godotenv.Load()
+	if err != nil {
+		logrus.Info(err)
+	}
+
 	// init and ping datastore
-	dbName := os.Getenv("PARROT_DB_NAME")
-	dbURL := os.Getenv("PARROT_DB_URL")
+	dbName := os.Getenv("PARROT_AUTH_DB_NAME")
+	dbURL := os.Getenv("PARROT_AUTH_DB_URL")
 	if dbName == "" || dbURL == "" {
-		logrus.Fatal("no db set in env")
+		logrus.Fatal("no db set")
 	}
 
 	ds, err := datastore.NewDatastore(dbName, dbURL)
@@ -58,13 +64,18 @@ func main() {
 
 	signingKey := os.Getenv("PARROT_AUTH_SIGNING_KEY")
 	if signingKey == "" {
-		logrus.Fatal("no auth signing key set in env")
+		logrus.Fatal("no auth signing key set")
+	}
+	issuerName := os.Getenv("PARROT_AUTH_ISSUER_NAME")
+	if signingKey == "" {
+		logrus.Warn("no auth issuer name set, resorting to default")
+		issuerName = "parrot-default"
 	}
 
-	ap := auth.Provider{Name: "LOCAL_DEV", SigningKey: []byte(signingKey)}
+	tp := TokenProvider{Name: issuerName, SigningKey: []byte(signingKey)}
 
-	router.Post("/auth/authenticate", authenticate(ap, ds))
-	router.Post("/auth/introspect", instrospectToken(ap, ds))
+	router.Post("/auth/token", issueToken(tp, ds))
+	router.Post("/auth/introspect", instrospectToken(tp, ds))
 
 	// config server
 	addr := os.Getenv("PARROT_AUTH_SERVER_PORT")

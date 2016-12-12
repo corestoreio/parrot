@@ -6,26 +6,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
 
-	"github.com/anthonynsimon/parrot/auth"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func getTokenString(r *http.Request) (string, error) {
-	token := r.Header.Get("Authorization")
-	if token == "" {
-		return "", fmt.Errorf("no auth header")
-	}
-
-	if len(token) > 6 && strings.ToUpper(token[0:7]) == "BEARER " {
-		token = token[7:]
-	}
-
-	return token, nil
-}
-
-func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
+func tokenMiddleware(tokenInstrospectionEndpoint string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
@@ -34,18 +22,29 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 				return
 			}
 
-			body := map[string]string{
-				"token": tokenString,
-			}
+			data := url.Values{}
+			data.Set("token", tokenString)
+			data.Set("token_type_hint", "access_token")
+			encodedData := data.Encode()
 
-			bt, err := json.Marshal(body)
+			client := &http.Client{}
+			req, err := http.NewRequest("POST", tokenInstrospectionEndpoint, bytes.NewBufferString(encodedData))
 			if err != nil {
 				handleError(w, ErrInternal)
 				return
 			}
-			response, err := http.Post("http://auth:8080/auth/introspect", "application/json", bytes.NewBuffer(bt))
+
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+			req.Header.Add("Content-Length", strconv.Itoa(len(encodedData)))
+			// req.Header.Add("Authorization", "") // TODO: handle app client auth
+
+			response, err := client.Do(req)
 			if err != nil {
-				fmt.Println(err)
+				handleError(w, ErrInternal)
+				return
+			}
+
+			if response.StatusCode < 200 || response.StatusCode >= 300 {
 				handleError(w, ErrUnauthorized)
 				return
 			}
@@ -58,6 +57,10 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 			}
 
 			sub := claims.Subject
+			if sub == "" {
+				handleError(w, ErrInternal)
+				return
+			}
 
 			ctx := r.Context()
 			ctx = context.WithValue(ctx, "userID", sub)
@@ -66,4 +69,17 @@ func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
 			next.ServeHTTP(w, newR)
 		})
 	}
+}
+
+func getTokenString(r *http.Request) (string, error) {
+	token := r.Header.Get("Authorization")
+	if token == "" {
+		return "", fmt.Errorf("no auth header")
+	}
+
+	if len(token) > 6 && strings.ToUpper(token[0:7]) == "BEARER " {
+		token = token[7:]
+	}
+
+	return token, nil
 }

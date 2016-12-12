@@ -1,24 +1,30 @@
-package auth
+package main
 
 import (
 	"fmt"
 
+	"github.com/anthonynsimon/parrot/model"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-// TODO: refactor into auth provider package with its own handlers
-
-type Provider struct {
+type TokenProvider struct {
 	Name       string
 	SigningKey []byte
 }
 
-func (p *Provider) CreateToken(claims jwt.Claims) (string, error) {
+type AuthStore interface {
+	model.UserStorer
+	model.ProjectClientStorer
+	Ping() error
+	Close() error
+}
+
+func (p *TokenProvider) CreateToken(claims jwt.Claims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(p.SigningKey)
 }
 
-func (p *Provider) ParseAndVerifyToken(tokenString string) (jwt.MapClaims, error) {
+func (p *TokenProvider) ParseAndVerifyToken(tokenString string) (jwt.MapClaims, error) {
 	return parseAndVerify(tokenString, p.SigningKey)
 }
 
@@ -38,5 +44,6 @@ func parseAndVerify(tokenString string, signingKey []byte) (jwt.MapClaims, error
 	if !ok || claims.Valid() != nil {
 		return nil, fmt.Errorf("invalid token")
 	}
+
 	return claims, nil
 }

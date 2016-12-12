@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/pressly/chi"
 )
@@ -11,9 +10,9 @@ import (
 // TODO: inject store via closures instead of keeping global var
 var store datastore.Store
 
-func NewRouter(ds datastore.Store, authProvider auth.Provider) http.Handler {
+func NewRouter(ds datastore.Store, tokenIntrospectionEndpoint string) http.Handler {
 	store = ds
-	handleToken := tokenMiddleware(authProvider)
+	handleToken := tokenMiddleware(tokenIntrospectionEndpoint)
 
 	router := chi.NewRouter()
 	// Enforce use of Content-Type header for POST, PUT and PATCH methods and validate it's JSON

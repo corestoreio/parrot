@@ -1,27 +1,15 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
-	"github.com/anthonynsimon/parrot/model"
-	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/schema"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type AuthStore interface {
-	model.UserStorer
-	model.ProjectClientStorer
-	Ping() error
-	Close() error
-}
 
 type AuthRequestPayload struct {
 	ClientId     string `json:"client_id" schema:"client_id"`
@@ -31,14 +19,32 @@ type AuthRequestPayload struct {
 	Password     string `json:"password" schema:"password"`
 }
 
+type IntrospectRequest struct {
+	Token         string `json:"token" schema:"token"`
+	TokenTypeHint string `json:"token_type_hint" schema:"token_type_hint"`
+	ClientId      string `json:"client_id" schema:"client_id"`
+	ClientSecret  string `json:"client_secret" schema:"client_secret"`
+}
+
+type TokenResponse struct {
+	AccessToken string `json:"access_token" `
+	TokenType   string `json:"token_type" `
+	ExpiresIn   string `json:"expires_in" `
+}
+
+var (
+	TokenResponseHeaders = map[string]string{
+		"Cache-Control": "no-store",
+		"Pragma":        "no-cache",
+	}
+)
+
 type tokenClaims struct {
 	jwt.StandardClaims
 }
 
-func authenticate(authProvider auth.Provider, store AuthStore) http.HandlerFunc {
+func issueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// payload := AuthRequestPayload{}
-
 		err := r.ParseForm()
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
@@ -49,90 +55,98 @@ func authenticate(authProvider auth.Provider, store AuthStore) http.HandlerFunc 
 
 		err = decoder.Decode(payload, r.Form)
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 			return
 		}
 
-		// if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-		// 	http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
-		// 	return
-
-		if payload.GrantType != "password" {
+		switch payload.GrantType {
+		case "password":
+			handlePasswordAuth(w, *payload, tp, store)
+		default:
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
-
-		if payload.Username == "" || payload.Password == "" {
-			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-			return
-		}
-
-		claimedUser, err := store.GetUserByEmail(payload.Username)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-			return
-		}
-
-		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.Password)); err != nil {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-			return
-		}
-
-		// Create the Claims
-		now := time.Now()
-		claims := tokenClaims{
-			jwt.StandardClaims{
-				Issuer:    authProvider.Name,
-				IssuedAt:  now.Unix(),
-				ExpiresAt: now.Add(time.Hour * 24).Unix(),
-				Subject:   fmt.Sprintf("%s", claimedUser.ID),
-			},
-		}
-
-		tokenString, err := authProvider.CreateToken(claims)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
-
-		// TODO: add refresh token and a handler for refreshing
-		data := map[string]string{
-			"access_token": tokenString,
-			"token_type":   "Bearer",
-			"expires_in":   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
-			"scope":        "",
-		}
-		headers := map[string]string{
-			"Cache-Control": "no-store",
-			"Pragma":        "no-cache",
-		}
-
-		render.JSONWithHeaders(w, http.StatusOK, headers, data)
 	}
 }
 
-func instrospectToken(authProvider auth.Provider, store datastore.Store) http.HandlerFunc {
+func handlePasswordAuth(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
+	if payload.Username == "" || payload.Password == "" {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+
+	claimedUser, err := store.GetUserByEmail(payload.Username)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.Password)); err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	// Create the Claims
+	now := time.Now()
+	claims := tokenClaims{
+		jwt.StandardClaims{
+			Issuer:    tp.Name,
+			IssuedAt:  now.Unix(),
+			ExpiresAt: now.Add(time.Hour * 24).Unix(),
+			Subject:   fmt.Sprintf("%s", claimedUser.ID),
+		},
+	}
+
+	tokenString, err := tp.CreateToken(claims)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusInternalServerError)
+		return
+	}
+
+	data := TokenResponse{
+		AccessToken: tokenString,
+		TokenType:   "Bearer",
+		ExpiresIn:   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
+	}
+
+	RenderJSON(w, http.StatusOK, TokenResponseHeaders, data)
+}
+
+func instrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tokenString, err := getJSONBodyToken(r)
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
+		payload := new(IntrospectRequest)
+		decoder := schema.NewDecoder()
+
+		err = decoder.Decode(payload, r.Form)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
+
+		if payload.Token == "" {
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
+		claims, err := tp.ParseAndVerifyToken(payload.Token)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
-		claims, err := authProvider.ParseAndVerifyToken(tokenString)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-			return
+
+		data := make(map[string]interface{})
+
+		for k, v := range claims {
+			data[k] = v
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
+		data["active"] = true
 
-		encoded, err := json.MarshalIndent(claims, "", "    ")
-		if err != nil {
-			logrus.Error(err)
-		}
-
-		w.Write(encoded)
+		RenderJSON(w, http.StatusOK, nil, data)
 	}
 }

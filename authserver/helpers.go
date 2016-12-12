@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/Sirupsen/logrus"
 )
 
 func getAuthHeaderToken(r *http.Request) (string, error) {
@@ -38,4 +40,20 @@ func sanitizeBearerToken(token string) string {
 		return token[7:]
 	}
 	return token
+}
+
+func RenderJSON(w http.ResponseWriter, status int, headers map[string]string, payload interface{}) {
+	h := w.Header()
+	h.Set("Content-Type", "application/json")
+	for k, v := range headers {
+		h.Set(k, v)
+	}
+	w.WriteHeader(status)
+
+	encoded, err := json.MarshalIndent(payload, "", "    ")
+	if err != nil {
+		logrus.Error(err)
+	}
+
+	w.Write(encoded)
 }

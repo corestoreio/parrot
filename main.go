@@ -8,7 +8,6 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/anthonynsimon/parrot/api"
-	"github.com/anthonynsimon/parrot/auth"
 	"github.com/anthonynsimon/parrot/datastore"
 	"github.com/anthonynsimon/parrot/logger"
 	"github.com/joho/godotenv"
@@ -27,12 +26,12 @@ func main() {
 	// init environment variables
 	err := godotenv.Load()
 	if err != nil {
-		logrus.Fatal(err)
+		logrus.Info(err)
 	}
 
 	// init and ping datastore
-	dbName := os.Getenv("PARROT_DB_NAME")
-	dbURL := os.Getenv("PARROT_DB_URL")
+	dbName := os.Getenv("PARROT_API_DB_NAME")
+	dbURL := os.Getenv("PARROT_API_DB_URL")
 	if dbName == "" || dbURL == "" {
 		logrus.Fatal("no db set in env")
 	}
@@ -63,24 +62,21 @@ func main() {
 		middleware.StripSlashes,
 	)
 
-	apiKey := os.Getenv("PARROT_AUTH_SIGNING_KEY")
-	if apiKey == "" {
-		logrus.Fatal("no api key set in env")
-	}
-	domain := os.Getenv("PARROT_DOMAIN")
-	if apiKey == "" {
-		logrus.Fatal("no domain set in env")
+	authURL := os.Getenv("PARROT_AUTH_URL")
+	if authURL == "" {
+		logrus.Fatal("auth url not set")
 	}
 
-	ap := auth.Provider{
-		Name:       string([]byte(domain)),
-		SigningKey: []byte(apiKey)}
+	tokenIntrospectionEndpoint := authURL + "/auth/introspect"
 
-	apiRouter := api.NewRouter(ds, ap)
+	apiRouter := api.NewRouter(ds, tokenIntrospectionEndpoint)
 	mainRouter.Mount("/api", apiRouter)
 
 	// config server
-	addr := ":8080"
+	addr := os.Getenv("PARROT_API_SERVER_PORT")
+	if addr == "" {
+		addr = ":8080"
+	}
 
 	// init server
 	s := &http.Server{
