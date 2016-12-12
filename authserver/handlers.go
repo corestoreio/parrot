@@ -133,7 +133,7 @@ func instrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc 
 			return
 		}
 
-		claims, err := tp.ParseAndVerifyToken(payload.Token)
+		claims, err := tp.ParseAndExtractClaims(payload.Token)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
@@ -146,6 +146,9 @@ func instrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc 
 		}
 
 		data["active"] = true
+		if err := claims.Valid(); err != nil {
+			data["active"] = false
+		}
 
 		RenderJSON(w, http.StatusOK, nil, data)
 	}

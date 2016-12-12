@@ -25,25 +25,51 @@ func (p *TokenProvider) CreateToken(claims jwt.Claims) (string, error) {
 }
 
 func (p *TokenProvider) ParseAndVerifyToken(tokenString string) (jwt.MapClaims, error) {
-	return parseAndVerify(tokenString, p.SigningKey)
+	claims, err := p.ParseAndExtractClaims(tokenString)
+	if err != nil {
+		return nil, err
+	}
+	if err := claims.Valid(); err != nil {
+		return nil, err
+	}
+
+	return claims, nil
 }
 
-func parseAndVerify(tokenString string, signingKey []byte) (jwt.MapClaims, error) {
+func (p *TokenProvider) ParseAndExtractClaims(tokenString string) (jwt.MapClaims, error) {
+	token, err := parseToken(tokenString, p.SigningKey)
+	if err != nil {
+		return nil, err
+	}
+
+	claims, err := extractClaims(token)
+	if err != nil {
+		return nil, err
+	}
+
+	return claims, nil
+}
+
+func parseToken(tokenString string, signingKey []byte) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method")
 		}
 		return signingKey, nil
 	})
-
-	if err != nil || !token.Valid {
+	if err != nil {
 		return nil, err
 	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || claims.Valid() != nil {
+	if !token.Valid {
 		return nil, fmt.Errorf("invalid token")
 	}
+	return token, nil
+}
 
+func extractClaims(token *jwt.Token) (jwt.MapClaims, error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, fmt.Errorf("invalid token")
+	}
 	return claims, nil
 }
