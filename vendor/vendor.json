@@ -15,6 +15,12 @@
 			"revisionTime": "2016-08-31T18:35:34Z"
 		},
 		{
+			"checksumSHA1": "aeNt5+WZd7yhD1Di2Rkojj2SUFk=",
+			"path": "github.com/gorilla/schema",
+			"revision": "0164a00ab4cd01d814d8cd5bf63fd9fcea30e23b",
+			"revisionTime": "2016-08-17T19:01:22Z"
+		},
+		{
 			"checksumSHA1": "ljZrmD7pmMXAkGNfp6IEzj31fY8=",
 			"path": "github.com/joho/godotenv",
 			"revision": "4ed13390c0acd2ff4e371e64d8b97c8954138243",

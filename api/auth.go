@@ -1,28 +1,74 @@
 package api
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
-	"time"
 
-	"encoding/json"
-
-	"github.com/anthonynsimon/parrot/auth"
-	"github.com/anthonynsimon/parrot/render"
 	jwt "github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthRequestPayload struct {
-	GrantType string `json:"grant_type"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-}
+func tokenMiddleware(tokenInstrospectionEndpoint string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			tokenString, err := getTokenString(r)
+			if err != nil {
+				handleError(w, ErrUnauthorized)
+				return
+			}
 
-type tokenClaims struct {
-	jwt.StandardClaims
+			data := url.Values{}
+			data.Set("token", tokenString)
+			data.Set("token_type_hint", "access_token")
+			encodedData := data.Encode()
+
+			client := &http.Client{}
+			req, err := http.NewRequest("POST", tokenInstrospectionEndpoint, bytes.NewBufferString(encodedData))
+			if err != nil {
+				handleError(w, ErrInternal)
+				return
+			}
+
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+			req.Header.Add("Content-Length", strconv.Itoa(len(encodedData)))
+			// req.Header.Add("Authorization", "") // TODO: handle app client auth
+
+			response, err := client.Do(req)
+			if err != nil {
+				handleError(w, ErrInternal)
+				return
+			}
+
+			if response.StatusCode < 200 || response.StatusCode >= 300 {
+				handleError(w, ErrUnauthorized)
+				return
+			}
+
+			var claims jwt.StandardClaims
+			json.NewDecoder(response.Body).Decode(&claims)
+			if err != nil {
+				handleError(w, ErrInternal)
+				return
+			}
+
+			sub := claims.Subject
+			if sub == "" {
+				handleError(w, ErrInternal)
+				return
+			}
+
+			ctx := r.Context()
+			ctx = context.WithValue(ctx, "userID", sub)
+			newR := r.WithContext(ctx)
+
+			next.ServeHTTP(w, newR)
+		})
+	}
 }
 
 func getTokenString(r *http.Request) (string, error) {
@@ -36,90 +82,4 @@ func getTokenString(r *http.Request) (string, error) {
 	}
 
 	return token, nil
-}
-
-func tokenMiddleware(ap auth.Provider) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			tokenString, err := getTokenString(r)
-			if err != nil {
-				handleError(w, ErrUnauthorized)
-				return
-			}
-			claims, err := ap.ParseAndVerifyToken(tokenString)
-			if err != nil {
-				handleError(w, ErrUnauthorized)
-				return
-			}
-
-			sub := claims["sub"]
-
-			ctx := r.Context()
-			ctx = context.WithValue(ctx, "userID", sub)
-			newR := r.WithContext(ctx)
-
-			next.ServeHTTP(w, newR)
-		})
-	}
-}
-
-func authenticate(authProvider auth.Provider) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		payload := AuthRequestPayload{}
-		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-			handleError(w, ErrUnprocessable)
-			return
-		}
-
-		if payload.GrantType != "password" {
-			handleError(w, ErrBadRequest)
-			return
-		}
-
-		if payload.Username == "" || payload.Password == "" {
-			handleError(w, ErrBadRequest)
-			return
-		}
-
-		claimedUser, err := store.GetUserByEmail(payload.Username)
-		if err != nil {
-			handleError(w, err)
-			return
-		}
-
-		if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.Password)); err != nil {
-			handleError(w, ErrUnauthorized)
-			return
-		}
-
-		// Create the Claims
-		now := time.Now()
-		claims := tokenClaims{
-			jwt.StandardClaims{
-				Issuer:    authProvider.Name,
-				IssuedAt:  now.Unix(),
-				ExpiresAt: now.Add(time.Hour * 24).Unix(),
-				Subject:   fmt.Sprintf("%s", claimedUser.ID),
-			},
-		}
-
-		tokenString, err := authProvider.CreateToken(claims)
-		if err != nil {
-			handleError(w, ErrInternal)
-			return
-		}
-
-		// TODO: add refresh token and a handler for refreshing
-		data := map[string]string{
-			"access_token": tokenString,
-			"token_type":   "Bearer",
-			"expires_in":   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
-		}
-		headers := map[string]string{
-			"Cache-Control": "no-store",
-			"Pragma":        "no-cache",
-		}
-
-		render.JSONWithHeaders(w, http.StatusOK, headers, data)
-	}
 }

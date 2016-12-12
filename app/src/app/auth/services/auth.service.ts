@@ -26,17 +26,18 @@ export class AuthService {
     }
 
     login(user: User): Observable<boolean> {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
+        let headers: Headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
         return this.api.request({
-            uri: '/auth/token',
+            uri: '/token',
             method: 'POST',
-            body: JSON.stringify({ username: user.email, password: user.password, grant_type: 'password' }),
+            headers: headers,
+            body: `grant_type=password&username=${user.email}&password=${user.password}`,
             withAuthorization: false,
-        })
+        }, 'http://localhost:9090/auth')
             .map(res => {
-                let token = res.payload['access_token'];
+                let token = res['access_token'];
                 if (!token) {
                     console.error("no token in response");
                     return false;

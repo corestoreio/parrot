@@ -11,15 +11,16 @@ export interface RequestOptions {
     uri: string;
     method: string;
     body?: any;
+    headers?: Headers;
     withAuthorization?: boolean;
 }
 
 @Injectable()
 export class APIService {
-    private apiEndpoint: string;
+    private apiUrl: string;
 
     constructor(private http: Http) {
-        this.apiEndpoint = AppConfig.apiEndpoint;
+        this.apiUrl = AppConfig.apiUrl;
     }
 
     getHeaders(withAuthorization: boolean) {
@@ -36,11 +37,11 @@ export class APIService {
         return headers;
     }
 
-    request(options: RequestOptions): Observable<any> {
+    request(options: RequestOptions, overrideBaseUrl?: string): Observable<any> {
         return this.http.request(
-            `${this.apiEndpoint}${options.uri}`, {
+            `${overrideBaseUrl || this.apiUrl}${options.uri}`, {
                 method: options.method || 'GET',
-                headers: this.getHeaders(options.withAuthorization),
+                headers: options.headers || this.getHeaders(options.withAuthorization),
                 body: options.body,
             })
             .map(res => res.json())
