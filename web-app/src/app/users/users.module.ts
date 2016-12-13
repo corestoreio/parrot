@@ -9,6 +9,7 @@ import { EditProjectUserComponent } from './edit-project-user/edit-project-user.
 import { ProjectUsersListComponent } from './project-users-list/project-users-list.component';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
 import { EditUserPasswordComponent } from './edit-user-password/edit-user-password.component';
+import { EditUserNameComponent } from './edit-user-name/edit-user-name.component';
 
 import { ProjectUsersService } from './services/project-users.service';
 import { UserService } from './services/user.service';
@@ -26,6 +27,7 @@ import { UserService } from './services/user.service';
         EditProjectUserComponent,
         AccountDetailComponent,
         EditUserPasswordComponent,
+        EditUserNameComponent,
     ],
     declarations: [
         ProjectUsersListComponent,
@@ -33,6 +35,7 @@ import { UserService } from './services/user.service';
         EditProjectUserComponent,
         AccountDetailComponent,
         EditUserPasswordComponent,
+        EditUserNameComponent,
     ],
     providers: [
         ProjectUsersService,
