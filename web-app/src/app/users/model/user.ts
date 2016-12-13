@@ -4,3 +4,10 @@ export interface User {
     email: string;
     role: string;
 }
+
+export interface UpdateUserPasswordPayload {
+    userId: string;
+    oldPassword: string;
+    newPassword: string;
+    repeatNewPassword?: string;
+}
