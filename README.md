@@ -8,6 +8,7 @@ General:
 - Add copy web app build to nginx as a static server
 
 Backend:
+- Add timestamps to DB tables
 - Add monitoring, edge Server, API Gateway and ELK Stack for logging ?
 - Add project client authorization handlers
 - Handle project client roles and developer roles

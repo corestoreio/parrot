@@ -35,7 +35,10 @@ func NewRouter(ds datastore.Store, tokenIntrospectionEndpoint string) http.Handl
 			// Past this point, all routes will require a valid token
 			r1.Use(handleToken)
 
-			r1.Get("/self", getUserSelf)
+			r1.Route("/self", func(r2 chi.Router) {
+				r2.Get("/", getUserSelf)
+				r2.Patch("/password", updateUserPassword)
+			})
 		})
 
 		r0.Route("/projects", func(r1 chi.Router) {

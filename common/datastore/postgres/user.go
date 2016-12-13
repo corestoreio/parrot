@@ -31,3 +31,9 @@ func (db *PostgresDB) CreateUser(u model.User) (*model.User, error) {
 	err := row.Scan(&u.ID, &u.Name, &u.Email)
 	return &u, parseError(err)
 }
+
+func (db *PostgresDB) UpdateUserPassword(u model.User) (*model.User, error) {
+	row := db.QueryRow("UPDATE users SET password = $1 WHERE id = $2 RETURNING id, name, email", u.Password, u.ID)
+	err := row.Scan(&u.ID, &u.Name, &u.Email)
+	return &u, parseError(err)
+}

@@ -19,6 +19,7 @@ type UserStorer interface {
 	GetUserByID(string) (*User, error)
 	GetUserByEmail(string) (*User, error)
 	CreateUser(User) (*User, error)
+	UpdateUserPassword(User) (*User, error)
 }
 
 type User struct {

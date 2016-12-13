@@ -11,6 +11,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type updatePasswordPayload struct {
+	UserID      string `json:"userId`
+	OldPassword string `json:"oldPassword"`
+	NewPassword string `json:"newPassword`
+}
+
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getUserID(r.Context())
 	if err != nil {
@@ -52,6 +58,68 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	user.Password = string(hashed)
 
 	result, err := store.CreateUser(user)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	// Hide password
+	result.Password = ""
+	render.JSON(w, http.StatusCreated, result)
+}
+
+func updateUserPassword(w http.ResponseWriter, r *http.Request) {
+	payload := updatePasswordPayload{}
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		handleError(w, ErrUnprocessable)
+		return
+	}
+
+	if payload.NewPassword == "" || payload.OldPassword == "" || payload.UserID == "" {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	userID, err := getUserID(r.Context())
+	if err != nil {
+		handleError(w, ErrBadRequest)
+		return
+	}
+
+	// Validate requesting user matches requested user to be updated
+	if payload.UserID != userID {
+		handleError(w, ErrForbiden)
+		return
+	}
+
+	claimedUser, err := store.GetUserByID(userID)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.OldPassword)); err != nil {
+		handleError(w, ErrForbiden)
+		return
+	}
+
+	claimedUser.Password = payload.NewPassword
+	errs := claimedUser.Validate()
+	if errs != nil {
+		render.Error(w, http.StatusUnprocessableEntity, errs)
+		return
+	}
+
+	newPasswordHash, err := bcrypt.GenerateFromPassword([]byte(claimedUser.Password), bcrypt.DefaultCost)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	claimedUser.Password = string(newPasswordHash)
+
+	result, err := store.UpdateUserPassword(*claimedUser)
 	if err != nil {
 		handleError(w, err)
 		return
