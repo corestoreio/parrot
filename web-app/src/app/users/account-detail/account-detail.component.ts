@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { User } from './../model';
-import { UserService } from './../services/user.service';
 
 @Component({
   selector: 'account-detail',
@@ -11,15 +10,11 @@ import { UserService } from './../services/user.service';
 export class AccountDetailComponent implements OnInit {
   @Input()
   private user: User;
+  @Input()
+  private loading: boolean = false;
 
-  constructor(private service: UserService) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.service.getUserSelf()
-      .subscribe(
-      user => this.user = user,
-      err => console.log(err)
-      )
-  }
+  ngOnInit() { }
 
 }

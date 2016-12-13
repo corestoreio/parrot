@@ -1,3 +1,27 @@
-<p>
-  {{user?.name}} {{user?.role}}
-</p>
+<div class="spinner centered" *ngIf="loading"></div>
+<div *ngIf="!loading && user">
+
+  <section class="section account-detail">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <div class="box">
+
+          <h1 class="title is-5">Your Account</h1>
+
+          <label class="label">Name:</label>
+          <p class="control has-icon">
+            {{user.name}}
+          </p>
+          <label class="label">Email:</label>
+          <p class="control has-icon">
+            {{user.email}}
+          </p>
+
+          <button class="button is-warning">Change password</button>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
