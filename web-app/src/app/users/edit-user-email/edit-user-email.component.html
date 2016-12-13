@@ -1,5 +1,5 @@
 <form class="control">
-    <label class="label">Name</label>
+    <label class="label">Email</label>
 
     <div class="message is-danger" *ngIf="errors && errors.length > 0">
         <div *ngFor="let err of errors">
@@ -8,7 +8,7 @@
     </div>
 
     <p class="control">
-        <input class="input" type="text" placeholder="Your name" [(ngModel)]="formData.name" name="userName" [class.is-disabled]="loading"
+        <input class="input" type="email" placeholder="Your email" [(ngModel)]="formData.email" name="userEmail" [class.is-disabled]="loading"
             required>
     </p>
     <p class="control">

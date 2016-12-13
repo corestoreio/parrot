@@ -12,16 +12,7 @@
 
           <br>
 
-          <form class="control">
-            <label class="label">Email</label>
-            <p class="control">
-              <input class="input" type="email" placeholder="Your email" [(ngModel)]="user.email" name="userEmail">
-            </p>
-            <p class="control">
-              <button (click)="saveChanges()" class="button is-primary">Save changes</button>
-              <button (click)="cancelChanges()" class="button">Cancel</button>
-            </p>
-          </form>
+          <edit-user-email [user]="user"></edit-user-email>
 
           <br>
 

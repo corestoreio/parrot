@@ -10,6 +10,7 @@ import { ProjectUsersListComponent } from './project-users-list/project-users-li
 import { AccountDetailComponent } from './account-detail/account-detail.component';
 import { EditUserPasswordComponent } from './edit-user-password/edit-user-password.component';
 import { EditUserNameComponent } from './edit-user-name/edit-user-name.component';
+import { EditUserEmailComponent } from './edit-user-email/edit-user-email.component';
 
 import { ProjectUsersService } from './services/project-users.service';
 import { UserService } from './services/user.service';
@@ -28,6 +29,7 @@ import { UserService } from './services/user.service';
         AccountDetailComponent,
         EditUserPasswordComponent,
         EditUserNameComponent,
+        EditUserEmailComponent,
     ],
     declarations: [
         ProjectUsersListComponent,
@@ -36,6 +38,7 @@ import { UserService } from './services/user.service';
         AccountDetailComponent,
         EditUserPasswordComponent,
         EditUserNameComponent,
+        EditUserEmailComponent,
     ],
     providers: [
         ProjectUsersService,
