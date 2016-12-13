@@ -10,7 +10,6 @@ Backend:
 - Add update user password, name
 - Add export as JSON, csv, xml (android resources), strings (apple strings), Excel sheet?
 - Refactor main to cli and make configurable, migrate command, serve command etc...
-- Move docker compose into sub folder
 - Add snapshots feature
 - Add API retrieve snapshots groupped by locale or key
 - Add tests
