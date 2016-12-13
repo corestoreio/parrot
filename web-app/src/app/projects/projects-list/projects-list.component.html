@@ -1,16 +1,13 @@
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
 
-  <div class="tile is-ancestor">
-    <div class="tile is-parent is-vertical">
-
-      <article class="tile is-child project" [routerLink]="['/projects', project.id]" *ngFor="let project of projects">
-        <p class="title is-4"><strong>{{project.name}}</strong></p>
-        <p><strong>{{project.keys.length}}</strong> keys</p>
-        <p>Last updated: <small>11:09 PM - 1 Jan 2016</small></p>
-      </article>
-
+  <article class="media project center-align" [routerLink]="['/projects', project.id]" *ngFor="let project of projects">
+    <div class="media-content">
+      <div class="content">
+        <p class="title is-5">{{project.name}}</p>
+        <p><strong>{{project.keys?.length}}</strong> keys</p>
+      </div>
     </div>
-  </div>
+  </article>
 
 </div>

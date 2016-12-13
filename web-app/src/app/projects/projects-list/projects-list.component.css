@@ -1,21 +1,29 @@
-.tile.project {
-    background: #00D1B2;
-    border-radius: 4px;
-    color: white;
+.media.project {
+    background: white;
+    border-radius: 2px;
     padding: 10px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+    height: 140px;
 }
-.tile.project:hover {
-    background: #00DBBB;
+.media.project:hover {
+    background-color: #E0E0E0;
+    transition:  background-color .4s cubic-bezier(0.25,0.8,0.25,1);
     cursor: pointer;
 }
-.tile.project:active {
-    background: #00CDB0;
+.media.project:active {
+    background: #DADADA;
 }
 
-p {
-    color: white;
+.center-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-p strong {
-    color: white;
+.media-left {
+    margin-right: 20px;
+}
+
+.content .title {
+    margin-bottom: 7px;
 }

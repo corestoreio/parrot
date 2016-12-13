@@ -1,22 +1,25 @@
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
 
-    <article class="media center-align" *ngFor="let user of users">
-        <figure class="media-left">
-            <span class="icon is-medium">
-                <i class="fa fa-user" aria-hidden="true"></i>
-            </span>
-        </figure>
-        <div class="media-content">
-            <div class="content">
-                <p>
-                    <strong>{{user.name}}</strong> <em>{{user.email}}</em> <strong><span class="tag is-info is-small">{{user.role}}</span></strong>
-                </p>
-            </div>
-        </div>
-        <figure class="media-right">
-            <edit-project-user [user]="user"></edit-project-user>
-        </figure>
-    </article>
+    <table class="table is-bordered is-striped is-narrow">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td class="center-align">{{user.name}}</td>
+                <td class="center-align">{{user.email}}</td>
+                <td class="center-align"><strong><span class="tag is-info is-small">{{user.role}}</span></strong></td>
+                <td class="center-align">
+                    <edit-project-user [user]="user"></edit-project-user>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
 </div>

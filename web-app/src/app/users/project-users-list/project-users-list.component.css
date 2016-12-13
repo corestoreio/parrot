@@ -1,20 +1,6 @@
-.media {
-    background: white;
-    border-radius: 2px;
-    padding: 10px;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
-}
-
 .center-align {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    display: table-cell;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
 }
-
-.media-left {
-    margin-right: 20px;
-}
-
-.content .title {
-    margin-bottom: 7px;
-} 

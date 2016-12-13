@@ -5,7 +5,8 @@
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
 }
 .media:hover {
-    background: #DCDCDC;
+    background-color: #E0E0E0;
+    transition:  background-color .4s cubic-bezier(0.25,0.8,0.25,1);
     cursor: pointer;
 }
 .media:active {

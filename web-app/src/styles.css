@@ -1,6 +1,11 @@
 html, body {
   font-family: 'Roboto', sans-serif !important;
-  background: #F6F6F6;
+  background-color: #EEEEEE;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .spinner {
