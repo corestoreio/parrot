@@ -4,6 +4,9 @@ Currently in heavy development, breaking changes guaranteed :)
 
 TODO:
 
+General:
+- Add copy web app build to nginx as a static server
+
 Backend:
 - Add monitoring, edge Server, API Gateway and ELK Stack for logging ?
 - Add project client authorization handlers
