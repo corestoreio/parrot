@@ -1,0 +1,115 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "2avCvSn0XonfApKKuTMyiQmk7s0=",
+			"path": "github.com/Sirupsen/logrus",
+			"revision": "3ec0642a7fb6488f65b06f9040adc67e3990296a",
+			"revisionTime": "2016-08-29T20:23:21Z"
+		},
+		{
+			"checksumSHA1": "NZ4NrBHf/xe9ww+L13Nh9oqvDkE=",
+			"path": "github.com/anthonynsimon/parrot/common/datastore",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "sN7rHI9mPt1Ko5UveXjdJVkKtrQ=",
+			"path": "github.com/anthonynsimon/parrot/common/datastore/errors",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "ExqMy7faWpbZZYnvee4Wgm4kRX4=",
+			"path": "github.com/anthonynsimon/parrot/common/datastore/postgres",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "dIA2ot0DaThuenMgecq378Yd41w=",
+			"path": "github.com/anthonynsimon/parrot/common/errors",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "uweWDhLpBWPzuD7ERsn/aSuP//U=",
+			"path": "github.com/anthonynsimon/parrot/common/logger",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "cqnzxqGWSKUQLHjKUvabZvgRpkU=",
+			"path": "github.com/anthonynsimon/parrot/common/model",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "aKtMuvJNsOapZ3+jPcHuSxw064E=",
+			"path": "github.com/anthonynsimon/parrot/common/render",
+			"revision": "79ed32a6afc8baa10763ff8b7baf001119df59f7",
+			"revisionTime": "2016-12-12T23:23:12Z"
+		},
+		{
+			"checksumSHA1": "EsJksAKyY2+r3mY+rdNocSCe1wg=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "24c63f56522a87ec5339cc3567883f1039378fdb",
+			"revisionTime": "2016-08-31T18:35:34Z"
+		},
+		{
+			"checksumSHA1": "aeNt5+WZd7yhD1Di2Rkojj2SUFk=",
+			"path": "github.com/gorilla/schema",
+			"revision": "0164a00ab4cd01d814d8cd5bf63fd9fcea30e23b",
+			"revisionTime": "2016-08-17T19:01:22Z"
+		},
+		{
+			"checksumSHA1": "ljZrmD7pmMXAkGNfp6IEzj31fY8=",
+			"path": "github.com/joho/godotenv",
+			"revision": "4ed13390c0acd2ff4e371e64d8b97c8954138243",
+			"revisionTime": "2015-09-07T01:02:28Z"
+		},
+		{
+			"checksumSHA1": "dNYxHiBLalTqluak2/Z8c3RsSEM=",
+			"path": "github.com/lib/pq",
+			"revision": "50761b0867bd1d9d069276790bcd4a3bccf2324a",
+			"revisionTime": "2016-08-31T22:25:20Z"
+		},
+		{
+			"checksumSHA1": "jaCQF1par6Jl8g+V2Cgp0n/0wSc=",
+			"path": "github.com/lib/pq/hstore",
+			"revision": "50761b0867bd1d9d069276790bcd4a3bccf2324a",
+			"revisionTime": "2016-08-31T22:25:20Z"
+		},
+		{
+			"checksumSHA1": "xppHi82MLqVx1eyQmbhTesAEjx8=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "50761b0867bd1d9d069276790bcd4a3bccf2324a",
+			"revisionTime": "2016-08-31T22:25:20Z"
+		},
+		{
+			"checksumSHA1": "wkNAtji7Kmgj2in3mM/p9bueRBs=",
+			"path": "github.com/pressly/chi",
+			"revision": "f1a5099f0f1da61a5c2d5c75b0376608df0e00bd",
+			"revisionTime": "2016-10-21T14:27:51Z"
+		},
+		{
+			"checksumSHA1": "5GrWdfMYfdK+48EfMNw1oW4oLjE=",
+			"path": "github.com/pressly/chi/middleware",
+			"revision": "f1a5099f0f1da61a5c2d5c75b0376608df0e00bd",
+			"revisionTime": "2016-10-21T14:27:51Z"
+		},
+		{
+			"checksumSHA1": "vE43s37+4CJ2CDU6TlOUOYE0K9c=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "ca7e7f10cb9fd9c1a6ff7f60436c086d73714180",
+			"revisionTime": "2016-10-25T12:52:55Z"
+		},
+		{
+			"checksumSHA1": "JsJdKXhz87gWenMwBeejTOeNE7k=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "ca7e7f10cb9fd9c1a6ff7f60436c086d73714180",
+			"revisionTime": "2016-10-25T12:52:55Z"
+		}
+	],
+	"rootPath": "github.com/anthonynsimon/parrot/parrot-api"
+}

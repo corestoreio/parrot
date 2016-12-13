@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Starting Parrot containers..."
-docker-compose up -d
+docker-compose up --build -d
 
 echo "Waiting for db to launch..."
 while ! nc -z localhost 5432; do   
