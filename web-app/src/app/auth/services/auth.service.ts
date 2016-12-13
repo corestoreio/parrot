@@ -35,7 +35,7 @@ export class AuthService {
             headers: headers,
             body: `grant_type=password&username=${user.email}&password=${user.password}`,
             withAuthorization: false,
-        }, 'http://localhost:9090/auth')
+        }, 'https://localhost/auth')
             .map(res => {
                 let token = res['access_token'];
                 if (!token) {

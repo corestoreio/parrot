@@ -1,5 +1,5 @@
 export const AppConfig = {
-    apiUrl: 'http://localhost:8080/api',
+    apiUrl: 'https://localhost/api',
 };
 
 export const UserRoles = [

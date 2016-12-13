@@ -5,12 +5,10 @@ MAINTAINER Anthony Najjar Simon
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git
 
-WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-api"
+WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-auth"
 COPY . .
 RUN go build
 
-RUN go get -u github.com/rnubel/pgmgr
-
 EXPOSE 8080
 
-CMD ./parrot-api
+CMD ./parrot-auth

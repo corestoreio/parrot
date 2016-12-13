@@ -7,21 +7,29 @@ volumes:
 services:
     proxy:
         build:
-            context: ./docker/nginx 
+            context: ./nginx 
         depends_on:
             - api
         ports: 
             - "443:443"
-    api:
-        build: .
-        env_file: ./.env
+    auth:
+        build:
+            context: ./parrot-auth
+        env_file: ./parrot-auth/.env
         depends_on:
             - db
+    api:
+        build:
+            context: ./parrot-api
+        env_file: ./parrot-api/.env
+        depends_on:
+            - db
+            - auth
     db:
         ports:
             - "5432:5432"
         build:
-            context: ./docker/postgres
+            context: ./postgres
         volumes:
             # Use the pgdata volume to persist this db
             - pgdata:/var/lib/postgresql/data/pgdata
