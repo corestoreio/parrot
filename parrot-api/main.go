@@ -7,12 +7,8 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/parrot-api/api"
 	"github.com/anthonynsimon/parrot/common/datastore"
-	"github.com/anthonynsimon/parrot/common/logger"
 	"github.com/joho/godotenv"
-	"github.com/pressly/chi"
-	"github.com/pressly/chi/middleware"
 )
 
 func init() {
@@ -51,17 +47,6 @@ func main() {
 		return true
 	})
 
-	// init routers and middleware
-	// CORS, Rate-limiting, etc... is handled by the server (e.g. nginx)
-	// Here we only care about application level middleware
-	mainRouter := chi.NewRouter()
-	mainRouter.Use(
-		middleware.RequestID,
-		middleware.RealIP,
-		logger.Request,
-		middleware.StripSlashes,
-	)
-
 	authURL := os.Getenv("PARROT_AUTH_URL")
 	if authURL == "" {
 		logrus.Fatal("auth url not set")
@@ -69,8 +54,7 @@ func main() {
 
 	tokenIntrospectionEndpoint := authURL + "/auth/introspect"
 
-	apiRouter := api.NewRouter(ds, tokenIntrospectionEndpoint)
-	mainRouter.Mount("/api", apiRouter)
+	apiRouter := NewRouter(ds, tokenIntrospectionEndpoint)
 
 	// config server
 	addr := os.Getenv("PARROT_API_SERVER_PORT")
@@ -81,7 +65,7 @@ func main() {
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        mainRouter,
+		Handler:        apiRouter,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
