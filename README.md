@@ -5,13 +5,12 @@ Currently in heavy development, breaking changes guaranteed :)
 TODO:
 
 General:
-- Add update user's name/email feature
-- Add forgotten password feature
-- Add snapshots feature
 - Add exports feature (JSON, csv, xml (android resources), strings (apple strings), Excel sheet)
+- Add snapshots feature
+- Add forgotten password feature
 
 Backend:
-- Add monitoring, edge Server, API Gateway, service discovery and ELK Stack for logging ?
+- Add monitoring, edge Server, API Gateway, service discovery?
 - Communicate only via SSL within the microservices network
 - Add project client authorization handlers
 - Handle project client roles and developer roles
