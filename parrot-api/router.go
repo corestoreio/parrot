@@ -37,6 +37,8 @@ func NewRouter(ds datastore.Store, tokenIntrospectionEndpoint string) http.Handl
 
 			r1.Route("/self", func(r2 chi.Router) {
 				r2.Get("/", getUserSelf)
+				r2.Patch("/name", updateUserName)
+				r2.Patch("/email", updateUserEmail)
 				r2.Patch("/password", updateUserPassword)
 			})
 		})

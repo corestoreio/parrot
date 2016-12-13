@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 
@@ -10,12 +11,6 @@ import (
 	"github.com/anthonynsimon/parrot/common/render"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type updatePasswordPayload struct {
-	UserID      string `json:"userId`
-	OldPassword string `json:"oldPassword"`
-	NewPassword string `json:"newPassword`
-}
 
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getUserID(r.Context())
@@ -70,30 +65,20 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 func updateUserPassword(w http.ResponseWriter, r *http.Request) {
 	payload := updatePasswordPayload{}
-	err := json.NewDecoder(r.Body).Decode(&payload)
+	err := decodePayloadAndValidate(r, &payload)
 	if err != nil {
 		handleError(w, ErrUnprocessable)
 		return
 	}
 
-	if payload.NewPassword == "" || payload.OldPassword == "" || payload.UserID == "" {
-		handleError(w, ErrBadRequest)
-		return
-	}
-
-	userID, err := getUserID(r.Context())
-	if err != nil {
-		handleError(w, ErrBadRequest)
-		return
-	}
-
 	// Validate requesting user matches requested user to be updated
-	if payload.UserID != userID {
+	err = mustMatchContextUser(r, payload.UserID)
+	if err != nil {
 		handleError(w, ErrForbiden)
 		return
 	}
 
-	claimedUser, err := store.GetUserByID(userID)
+	claimedUser, err := store.GetUserByID(payload.UserID)
 	if err != nil {
 		handleError(w, err)
 		return
@@ -127,7 +112,83 @@ func updateUserPassword(w http.ResponseWriter, r *http.Request) {
 
 	// Hide password
 	result.Password = ""
-	render.JSON(w, http.StatusCreated, result)
+	render.JSON(w, http.StatusOK, result)
+}
+
+func updateUserName(w http.ResponseWriter, r *http.Request) {
+	payload := updateUserNamePayload{}
+	err := decodePayloadAndValidate(r, &payload)
+	if err != nil {
+		handleError(w, ErrUnprocessable)
+		return
+	}
+
+	err = mustMatchContextUser(r, payload.UserID)
+	if err != nil {
+		handleError(w, ErrForbiden)
+		return
+	}
+
+	claimedUser, err := store.GetUserByID(payload.UserID)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	claimedUser.Name = payload.Name
+	errs := claimedUser.Validate()
+	if errs != nil {
+		render.Error(w, http.StatusUnprocessableEntity, errs)
+		return
+	}
+
+	result, err := store.UpdateUserName(*claimedUser)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	// Hide password
+	result.Password = ""
+	render.JSON(w, http.StatusOK, result)
+}
+
+func updateUserEmail(w http.ResponseWriter, r *http.Request) {
+	payload := updateUserEmailPayload{}
+	err := decodePayloadAndValidate(r, &payload)
+	if err != nil {
+		handleError(w, ErrUnprocessable)
+		return
+	}
+
+	err = mustMatchContextUser(r, payload.UserID)
+	if err != nil {
+		handleError(w, ErrForbiden)
+		return
+	}
+
+	claimedUser, err := store.GetUserByID(payload.UserID)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	claimedUser.Email = payload.Email
+	errs := claimedUser.Validate()
+	if errs != nil {
+		render.Error(w, http.StatusUnprocessableEntity, errs)
+		return
+	}
+
+	result, err := store.UpdateUserEmail(*claimedUser)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	// Hide password
+	result.Password = ""
+	render.JSON(w, http.StatusOK, result)
 }
 
 func getUserID(ctx context.Context) (string, error) {
@@ -147,4 +208,18 @@ func decodeAndValidate(r io.Reader, m model.Validatable) error {
 		return ErrBadRequest
 	}
 	return m.Validate()
+}
+
+func mustMatchContextUser(r *http.Request, userID string) error {
+	id, err := getUserID(r.Context())
+	if err != nil {
+		return err
+	}
+
+	// Validate requesting user matches requested user to be updated
+	if userID != id {
+		return errors.New("context user does not match request user id")
+	}
+
+	return nil
 }

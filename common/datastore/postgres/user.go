@@ -37,3 +37,15 @@ func (db *PostgresDB) UpdateUserPassword(u model.User) (*model.User, error) {
 	err := row.Scan(&u.ID, &u.Name, &u.Email)
 	return &u, parseError(err)
 }
+
+func (db *PostgresDB) UpdateUserName(u model.User) (*model.User, error) {
+	row := db.QueryRow("UPDATE users SET name = $1 WHERE id = $2 RETURNING id, name, email", u.Name, u.ID)
+	err := row.Scan(&u.ID, &u.Name, &u.Email)
+	return &u, parseError(err)
+}
+
+func (db *PostgresDB) UpdateUserEmail(u model.User) (*model.User, error) {
+	row := db.QueryRow("UPDATE users SET email = $1 WHERE id = $2 RETURNING id, name, email", u.Email, u.ID)
+	err := row.Scan(&u.ID, &u.Name, &u.Email)
+	return &u, parseError(err)
+}

@@ -11,44 +11,44 @@
 		{
 			"checksumSHA1": "KLXqnlb69aRNGazUy+bEd5eKWAg=",
 			"path": "github.com/anthonynsimon/parrot/common/datastore",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
 			"checksumSHA1": "W1+AqQGWhPOkG/4sHGlS6jilwgU=",
 			"path": "github.com/anthonynsimon/parrot/common/datastore/errors",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
-			"checksumSHA1": "o+T4lqHE4uBPibBiVaIqF6wbF18=",
+			"checksumSHA1": "hr9w7mQKCYyW+EQnAKpE9Ns8PBc=",
 			"path": "github.com/anthonynsimon/parrot/common/datastore/postgres",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
 			"checksumSHA1": "LBnCUXARNkmoSnWHIf3fImHjiso=",
 			"path": "github.com/anthonynsimon/parrot/common/errors",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
 			"checksumSHA1": "L2QYbew3oUa7HOPgSx8zplKH39Q=",
 			"path": "github.com/anthonynsimon/parrot/common/logger",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
-			"checksumSHA1": "WD9GfVqHIF917h00N3Mz1EutTUI=",
+			"checksumSHA1": "h1LLumh/PmSHg0NNIEyD3a7/A7A=",
 			"path": "github.com/anthonynsimon/parrot/common/model",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
 			"checksumSHA1": "DhOVBryCYu8wEG+4fN/nn1s4Vh4=",
 			"path": "github.com/anthonynsimon/parrot/common/render",
-			"revision": "99a5a0735b4aa6e5156874de89a11417929273ed",
-			"revisionTime": "2016-12-13T09:40:58Z"
+			"revision": "1f94eb50682313da24111233c8866dd05ea57311",
+			"revisionTime": "2016-12-13T11:21:09Z"
 		},
 		{
 			"checksumSHA1": "A50uGjK2/E8w+Q7uWyfzHca2jH4=",
