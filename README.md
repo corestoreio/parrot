@@ -12,6 +12,7 @@ Backend:
 - Refactor main to cli and make configurable, migrate command, serve command etc...
 - Add snapshots feature
 - Add API retrieve snapshots groupped by locale or key
+- Add monitoring / logging services
 - Add tests
 
 Frontend:
