@@ -7,8 +7,13 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/common/datastore"
+	"github.com/anthonynsimon/parrot/parrot-api/api"
+	"github.com/anthonynsimon/parrot/parrot-api/auth"
+	"github.com/anthonynsimon/parrot/parrot-api/datastore"
+	"github.com/anthonynsimon/parrot/parrot-api/logger"
 	"github.com/joho/godotenv"
+	"github.com/pressly/chi"
+	"github.com/pressly/chi/middleware"
 )
 
 func init() {
@@ -47,14 +52,28 @@ func main() {
 		return true
 	})
 
-	authURL := os.Getenv("PARROT_AUTH_URL")
-	if authURL == "" {
-		logrus.Fatal("auth url not set")
+	router := chi.NewRouter()
+	router.Use(
+		middleware.Recoverer,
+		middleware.RequestID,
+		middleware.RealIP,
+		logger.Request,
+		middleware.StripSlashes,
+	)
+
+	signingKey := os.Getenv("PARROT_AUTH_SIGNING_KEY")
+	if signingKey == "" {
+		logrus.Fatal("no auth signing key set")
+	}
+	issuerName := os.Getenv("PARROT_AUTH_ISSUER_NAME")
+	if signingKey == "" {
+		logrus.Warn("no auth issuer name set, resorting to default")
+		issuerName = "parrot-default"
 	}
 
-	tokenIntrospectionEndpoint := authURL + "/auth/introspect"
-
-	apiRouter := NewRouter(ds, tokenIntrospectionEndpoint)
+	tp := auth.TokenProvider{Name: issuerName, SigningKey: []byte(signingKey)}
+	router.Mount("/api/auth", auth.NewRouter(ds, tp))
+	router.Mount("/api", api.NewRouter(ds, tp))
 
 	// config server
 	addr := os.Getenv("PARROT_API_SERVER_PORT")
@@ -65,7 +84,7 @@ func main() {
 	// init server
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        apiRouter,
+		Handler:        router,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

@@ -12,19 +12,12 @@ services:
             - api
         ports: 
             - "443:443"
-    auth:
-        build:
-            context: ./parrot-auth
-        env_file: ./parrot-auth/.env
-        depends_on:
-            - db
     api:
         build:
             context: ./parrot-api
         env_file: ./parrot-api/.env
         depends_on:
             - db
-            - auth
     db:
         ports:
             - "5432:5432"

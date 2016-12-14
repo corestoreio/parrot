@@ -37,9 +37,9 @@ export class APIService {
         return headers;
     }
 
-    request(options: RequestOptions, overrideBaseUrl?: string): Observable<any> {
+    request(options: RequestOptions): Observable<any> {
         return this.http.request(
-            `${overrideBaseUrl || this.apiUrl}${options.uri}`, {
+            `${this.apiUrl}${options.uri}`, {
                 method: options.method || 'GET',
                 headers: options.headers || this.getHeaders(options.withAuthorization),
                 body: options.body,

@@ -30,12 +30,12 @@ export class AuthService {
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
         return this.api.request({
-            uri: '/token',
+            uri: '/auth/token',
             method: 'POST',
             headers: headers,
             body: `grant_type=password&username=${user.email}&password=${user.password}`,
             withAuthorization: false,
-        }, 'https://localhost/auth')
+        })
             .map(res => {
                 let token = res['access_token'];
                 if (!token) {
@@ -49,7 +49,7 @@ export class AuthService {
 
     register(user: User): Observable<boolean> {
         return this.api.request({
-            uri: '/auth/register',
+            uri: '/users/register',
             method: 'POST',
             body: JSON.stringify({ name: user.name, email: user.email, password: user.password }),
             withAuthorization: false,

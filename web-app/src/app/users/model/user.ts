@@ -20,5 +20,4 @@ export interface UpdateUserNamePayload {
 export interface UpdateUserEmailPayload {
     userId: string;
     email: string;
-    password: string;
 }

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-echo "Starting Parrot containers..."
+echo "Stopping existing containers..."
+docker-compose down
+
+echo "Building and starting parrot containers..."
 docker-compose up --build -d
 
 echo "Waiting for db to launch..."
