@@ -23,4 +23,5 @@ Frontend:
 - Handle api errors presentation
 - Add API error-message map
 - Add app localization
+- Cleanup CSS and switch to using SASS
 - Add tests
