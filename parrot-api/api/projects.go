@@ -27,7 +27,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 		render.Error(w, http.StatusUnprocessableEntity, errs)
 		return
 	}
-	userID, err := getUserID(r.Context())
+	userID, err := getSubjectID(r.Context())
 	if err != nil {
 		handleError(w, ErrBadRequest)
 		return

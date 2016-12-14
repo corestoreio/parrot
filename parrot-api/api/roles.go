@@ -14,6 +14,7 @@ const (
 	OwnerRole  = "owner"
 	EditorRole = "editor"
 	ViewerRole = "viewer"
+	ClientRole = "client"
 )
 
 const (
@@ -29,6 +30,7 @@ const (
 	CanDeleteLocales
 	CanViewLocales
 	CanManageAPIClients
+	CanExportLocales
 )
 
 var permissions = map[Role][]RoleGrant{
@@ -45,6 +47,7 @@ var permissions = map[Role][]RoleGrant{
 		CanDeleteLocales,
 		CanViewLocales,
 		CanManageAPIClients,
+		CanExportLocales,
 	},
 	EditorRole: []RoleGrant{
 		CanViewProjectRoles,
@@ -54,11 +57,16 @@ var permissions = map[Role][]RoleGrant{
 		CanUpdateLocales,
 		CanDeleteLocales,
 		CanViewLocales,
+		CanExportLocales,
 	},
 	ViewerRole: []RoleGrant{
 		CanViewProjectRoles,
 		CanViewProject,
 		CanViewLocales,
+		CanExportLocales,
+	},
+	ClientRole: []RoleGrant{
+		CanExportLocales,
 	},
 }
 
@@ -84,12 +92,20 @@ func isAllowed(r Role, a RoleGrant) bool {
 	return false
 }
 
-func getProjectUserRole(userID, projID string) (string, error) {
+func getProjectUserRole(projID, userID string) (string, error) {
 	user, err := store.GetProjectUser(projID, userID)
 	if err != nil {
 		return "", err
 	}
 	return user.Role, nil
+}
+
+func mustBeProjectClient(projID, clientID string) error {
+	client, err := store.GetProjectClient(projID, clientID)
+	if err != nil || client == nil {
+		return err
+	}
+	return nil
 }
 
 func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
@@ -99,24 +115,45 @@ func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 			handleError(w, ErrBadRequest)
 			return
 		}
-		// TODO:
-		// 2 options, it's a user or an application
-		// If user proceed as normal
-		// If application, validate project application claim
-		requesterID, err := getUserID(r.Context())
+
+		ctx := r.Context()
+		subType, err := getSubjectType(ctx)
 		if err != nil {
 			handleError(w, ErrBadRequest)
 			return
 		}
-		requesterRole, err := getProjectUserRole(requesterID, projectID)
+		requesterID, err := getSubjectID(ctx)
 		if err != nil {
-			handleError(w, err)
+			handleError(w, ErrBadRequest)
 			return
 		}
+
+		var requesterRole string
+
+		switch subType {
+		case UserSubject:
+			requesterRole, err = getProjectUserRole(projectID, requesterID)
+			if err != nil {
+				handleError(w, err)
+				return
+			}
+		case ClientSubject:
+			err := mustBeProjectClient(projectID, requesterID)
+			if err != nil {
+				handleError(w, err)
+				return
+			}
+			requesterRole = ClientRole
+		default:
+			handleError(w, ErrBadRequest)
+			return
+		}
+
 		if !isAllowed(Role(requesterRole), action) {
 			handleError(w, ErrForbiden)
 			return
 		}
+
 		next.ServeHTTP(w, r)
 	}
 }

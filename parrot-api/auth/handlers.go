@@ -40,6 +40,7 @@ var (
 )
 
 type tokenClaims struct {
+	SubjectType string `json:"subType"`
 	jwt.StandardClaims
 }
 
@@ -61,7 +62,9 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 
 		switch payload.GrantType {
 		case "password":
-			handlePasswordAuth(w, *payload, tp, store)
+			handlePasswordGrant(w, *payload, tp, store)
+		case "client_credentials":
+			handleClientCredentialsGrant(w, *payload, tp, store)
 		default:
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
@@ -69,7 +72,7 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 	}
 }
 
-func handlePasswordAuth(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
+func handlePasswordGrant(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
 	if payload.Username == "" || payload.Password == "" {
 		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 		return
@@ -89,11 +92,57 @@ func handlePasswordAuth(w http.ResponseWriter, payload AuthRequestPayload, tp To
 	// Create the Claims
 	now := time.Now()
 	claims := tokenClaims{
-		jwt.StandardClaims{
+		SubjectType: "user",
+		StandardClaims: jwt.StandardClaims{
 			Issuer:    tp.Name,
 			IssuedAt:  now.Unix(),
 			ExpiresAt: now.Add(time.Hour * 24).Unix(),
 			Subject:   fmt.Sprintf("%s", claimedUser.ID),
+		},
+	}
+
+	tokenString, err := tp.CreateToken(claims)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusInternalServerError)
+		return
+	}
+
+	data := TokenResponse{
+		AccessToken: tokenString,
+		TokenType:   "Bearer",
+		ExpiresIn:   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
+	}
+
+	RenderJSON(w, http.StatusOK, TokenResponseHeaders, data)
+}
+
+func handleClientCredentialsGrant(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
+	if payload.ClientId == "" || payload.ClientSecret == "" {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+
+	claimedClient, err := store.FindOneClient(payload.ClientId)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	// Can't use bcrypt, client secret must be visible in web app. Can be regenerated at any time.
+	if claimedClient.Secret != payload.ClientSecret {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	// Create the Claims
+	now := time.Now()
+	claims := tokenClaims{
+		SubjectType: "client",
+		StandardClaims: jwt.StandardClaims{
+			Issuer:    tp.Name,
+			IssuedAt:  now.Unix(),
+			ExpiresAt: now.Add(time.Hour * 24).Unix(),
+			Subject:   fmt.Sprintf("%s", claimedClient.ClientID),
 		},
 	}
 

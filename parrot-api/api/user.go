@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -13,7 +12,7 @@ import (
 )
 
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
-	id, err := getUserID(r.Context())
+	id, err := getSubjectID(r.Context())
 	if err != nil {
 		handleError(w, ErrBadRequest)
 		return
@@ -191,18 +190,6 @@ func updateUserEmail(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
-func getUserID(ctx context.Context) (string, error) {
-	v := ctx.Value("userID")
-	if v == nil {
-		return "", ErrBadRequest
-	}
-	id, ok := v.(string)
-	if id == "" || !ok {
-		return "", ErrInternal
-	}
-	return id, nil
-}
-
 func decodeAndValidate(r io.Reader, m model.Validatable) error {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
 		return ErrBadRequest
@@ -211,7 +198,7 @@ func decodeAndValidate(r io.Reader, m model.Validatable) error {
 }
 
 func mustMatchContextUser(r *http.Request, userID string) error {
-	id, err := getUserID(r.Context())
+	id, err := getSubjectID(r.Context())
 	if err != nil {
 		return err
 	}

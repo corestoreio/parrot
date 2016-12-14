@@ -10,7 +10,7 @@ import (
 )
 
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
-	id, err := getUserID(r.Context())
+	id, err := getSubjectID(r.Context())
 	if err != nil {
 		handleError(w, ErrBadRequest)
 		return
@@ -39,7 +39,7 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Remove self user from slice
-	id, err := getUserID(r.Context())
+	id, err := getSubjectID(r.Context())
 	if err != nil {
 		handleError(w, ErrBadRequest)
 		return
@@ -71,7 +71,7 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Don't allow self editing
-	id, err := getUserID(r.Context())
+	id, err := getSubjectID(r.Context())
 	if err != nil {
 		handleError(w, ErrBadRequest)
 		return

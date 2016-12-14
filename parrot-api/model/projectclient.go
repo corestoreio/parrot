@@ -19,6 +19,7 @@ type ProjectClient struct {
 }
 
 type ProjectClientStorer interface {
+	FindOneClient(string) (*ProjectClient, error)
 	GetProjectClients(string) ([]ProjectClient, error)
 	GetProjectClient(projectID, clientID string) (*ProjectClient, error)
 	CreateProjectClient(ProjectClient) (*ProjectClient, error)

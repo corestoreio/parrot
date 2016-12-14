@@ -21,6 +21,16 @@ func (db *PostgresDB) GetProjectClients(projectID string) ([]model.ProjectClient
 	return result, nil
 }
 
+func (db *PostgresDB) FindOneClient(clientID string) (*model.ProjectClient, error) {
+	row := db.QueryRow("SELECT client_id, project_id, name, secret FROM project_clients WHERE client_id = $1", clientID)
+	result := model.ProjectClient{}
+	err := row.Scan(&result.ClientID, &result.ProjectID, &result.Name, &result.Secret)
+	if err != nil {
+		return nil, parseError(err)
+	}
+	return &result, nil
+}
+
 func (db *PostgresDB) GetProjectClient(projectID, clientID string) (*model.ProjectClient, error) {
 	row := db.QueryRow("SELECT client_id, project_id, name, secret FROM project_clients WHERE project_id = $1 AND client_id = $2",
 		projectID, clientID)

@@ -41,7 +41,7 @@ func mustAllowScope(scope string, next http.HandlerFunc) http.HandlerFunc {
 
 func onlyUsers(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := getUserID(r.Context())
+		id, err := getSubjectID(r.Context())
 		if err != nil || id == "" {
 			handleError(w, ErrForbiden)
 			return

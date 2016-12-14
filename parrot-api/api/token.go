@@ -9,6 +9,13 @@ import (
 	"github.com/anthonynsimon/parrot/parrot-api/auth"
 )
 
+type Subject string
+
+const (
+	UserSubject   = "user"
+	ClientSubject = "client"
+)
+
 func tokenMiddleware(tp auth.TokenProvider) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -24,14 +31,21 @@ func tokenMiddleware(tp auth.TokenProvider) func(http.Handler) http.Handler {
 				return
 			}
 
-			sub := claims["sub"]
-			if sub == "" {
+			subID := claims["sub"]
+			if subID == nil || subID == "" {
+				handleError(w, ErrInternal)
+				return
+			}
+
+			subType := claims["subType"]
+			if subType == nil || subType == "" {
 				handleError(w, ErrInternal)
 				return
 			}
 
 			ctx := r.Context()
-			ctx = context.WithValue(ctx, "userID", sub)
+			ctx = context.WithValue(ctx, "subjectID", subID)
+			ctx = context.WithValue(ctx, "subjectType", subType)
 			newR := r.WithContext(ctx)
 
 			next.ServeHTTP(w, newR)
@@ -50,4 +64,33 @@ func getTokenString(r *http.Request) (string, error) {
 	}
 
 	return token, nil
+}
+
+func getSubjectID(ctx context.Context) (string, error) {
+	v := ctx.Value("subjectID")
+	if v == nil {
+		return "", ErrBadRequest
+	}
+	id, ok := v.(string)
+	if id == "" || !ok {
+		return "", ErrInternal
+	}
+	return id, nil
+}
+
+func getSubjectType(ctx context.Context) (Subject, error) {
+	subType := ctx.Value("subjectType")
+	if subType == nil {
+		fmt.Println(subType, "HERE 1")
+		return "", ErrBadRequest
+	}
+	fmt.Println(subType)
+
+	casted, ok := subType.(string)
+	if !ok || casted == "" {
+		fmt.Println(casted, "HERE 2")
+		return "", ErrBadRequest
+	}
+
+	return Subject(casted), nil
 }
