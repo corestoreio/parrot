@@ -1,66 +1,68 @@
-<button class="button is-success" (click)="openModal()">Add locale</button>
-<div class="modal" [class.is-active]="modalOpen">
-    <div class="modal-background" (click)="closeModal()"></div>
-    <div class="modal-content fix-overlay">
-        <div class="box">
+<div *ngIf="visible">
+    <button class="button is-success" (click)="openModal()">Add locale</button>
+    <div class="modal" [class.is-active]="modalOpen">
+        <div class="modal-background" (click)="closeModal()"></div>
+        <div class="modal-content fix-overlay">
+            <div class="box">
 
-            <h1 class="title">Create a new locale for this project</h1>
+                <h1 class="title">Create a new locale for this project</h1>
 
-            <br>
+                <br>
 
-            <div class="message is-danger" *ngIf="errors && errors.length > 0">
-                <div *ngFor="let err of errors">
-                    <div class="message-body">{{err}}</div>
+                <div class="message is-danger" *ngIf="errors && errors.length > 0">
+                    <div *ngFor="let err of errors">
+                        <div class="message-body">{{err}}</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="container">
+                <div class="container">
 
-                <div class="columns">
-                    <div class="column" *ngIf="!!selectedLocale">
-                        <p class="notification is-info title is-5">
-                            <span class="icon is-small media-left">
+                    <div class="columns">
+                        <div class="column" *ngIf="!!selectedLocale">
+                            <p class="notification is-info title is-5">
+                                <span class="icon is-small media-left">
                             <i class="flag-icon flag-icon-{{selectedLocale.ident.slice(-2).toLowerCase()}}"></i>
                             </span> {{selectedLocale.language}} ({{selectedLocale.country}})
-                            ({{selectedLocale.ident}})
-                            <button class="delete" (click)="deselect()"></button></p>
+                                ({{selectedLocale.ident}})
+                                <button class="delete" (click)="deselect()"></button></p>
+                        </div>
+                        <div class="column" *ngIf="!selectedLocale">
+                            <p class="notification is-danger">
+                                No locale selected
+                            </p>
+                        </div>
                     </div>
-                    <div class="column" *ngIf="!selectedLocale">
-                        <p class="notification is-danger">
-                            No locale selected
-                        </p>
-                    </div>
-                </div>
 
-                <p class="control is-expanded">
-                    <input class="input" type="text" placeholder="Search by Country, Language or Identifier..." [(ngModel)]="searchString" autocomplete="off">
-                </p>
+                    <p class="control is-expanded">
+                        <input class="input" type="text" placeholder="Search by Country, Language or Identifier..." [(ngModel)]="searchString" autocomplete="off">
+                    </p>
 
-                <div class="control">
-                    <div class="suggestions ">
+                    <div class="control">
+                        <div class="suggestions ">
 
-                        <article class="media locale center-align" (click)="select(locale)" *ngFor="let locale of filteredLocales()">
-                            <figure class="media-left">
-                                <span class="icon is-small">
+                            <article class="media locale center-align" (click)="select(locale)" *ngFor="let locale of filteredLocales()">
+                                <figure class="media-left">
+                                    <span class="icon is-small">
                                         <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i>
                                     </span>
-                            </figure>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p>{{locale.language}} ({{locale.country}}) ({{locale.ident}})</p>
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>{{locale.language}} ({{locale.country}}) ({{locale.ident}})</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
+                            </article>
 
+                        </div>
+                    </div>
+
+                    <div class="control">
+                        <button class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
+                        <button class="button is-primary" (click)="submit()" [class.is-loading]="loading" [disabled]="loading || !selectedLocale">Create</button>
                     </div>
                 </div>
 
-                <div class="control">
-                    <button class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button class="button is-primary" (click)="submit()" [class.is-loading]="loading" [disabled]="loading || !selectedLocale">Create</button>
-                </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { UserService } from './../../users/services/user.service';
 import { LocalesService } from './../services/locales.service';
 import { Locale, LocaleInfo } from './../model';
 
@@ -13,12 +14,20 @@ export class CreateLocaleComponent {
     private selectedLocale: Locale;
     private availableLocales: LocaleInfo[] = [];
 
+    private visible: boolean = false;
     private searchString: string;
     private modalOpen: boolean;
     private loading: boolean;
     private errors: string[];
 
-    constructor(private localesService: LocalesService, private route: ActivatedRoute) {
+    constructor(
+        private localesService: LocalesService,
+        private route: ActivatedRoute,
+        private userService: UserService,
+    ) {
+        userService.isAuthorized('CreateLocale')
+            .subscribe(visible => this.visible = visible);
+
         this.reset();
         this.localesService.locales
             .subscribe(existingLocales => this.availableLocales = this.computeAvailableLocales(existingLocales));

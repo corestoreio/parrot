@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { UserService } from './../../users/services/user.service';
 import { Project } from './../model/project';
 import { ProjectsService } from './../../projects/services/projects.service';
 
@@ -15,10 +16,15 @@ export class ProjectKeysComponent implements OnInit {
 
     private addKeyPending: boolean = false;
     private deleteKeyPending: boolean = false;
+    private protectedVisible: boolean = false;
 
     constructor(
-        private projectsService: ProjectsService
+        private projectsService: ProjectsService,
+        private userService: UserService,
     ) {
+        userService.isAuthorized('EditProjectKeys')
+            .subscribe(visible => this.protectedVisible = visible);
+
         this.addKey = this.addKey.bind(this);
         this.deleteKey = this.deleteKey.bind(this);
         this.updateKey = this.updateKey.bind(this);

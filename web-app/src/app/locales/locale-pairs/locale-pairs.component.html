@@ -21,7 +21,7 @@
                     <progress class="progress is-primary is-fullwidth" value="{{percentTranslated}}" max="100"></progress>
                 </div>
             </div>
-            <div class="level-item">
+            <div *ngIf="protectedVisible" class="level-item">
                 <button class="button is-success" (click)="enableEdit()" [class.is-hidden]="editing">Edit</button>
                 <button class="button is-success" (click)="commitPairs()" [class.is-hidden]="!editing">Commit</button>
                 <button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">Cancel Edit</button>

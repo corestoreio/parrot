@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
@@ -10,6 +11,16 @@ import { User, UpdateUserPasswordPayload, UpdateUserNamePayload, UpdateUserEmail
 export class UserService {
 
     constructor(private api: APIService) { }
+
+    isAuthorized(action: string): Observable<boolean> {
+        let sub = new BehaviorSubject<boolean>(false);
+        this.getUserSelf()
+            .subscribe(user => {
+                // TODO
+                sub.next(false);
+            });
+        return sub.asObservable();
+    }
 
     getUserSelf(): Observable<User> {
         let request = this.api.request({

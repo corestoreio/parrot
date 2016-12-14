@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { UserService } from './../../users/services/user.service';
 import { RestoreItemService } from './../../shared/restore-item.service';
 import { Locale } from './../model/locale';
 import { LocalesService } from './../services/locales.service';
+
 
 @Component({
     providers: [RestoreItemService],
@@ -45,11 +47,16 @@ export class LocalePairsComponent {
 
     private editing: boolean = false;
     private updatePending: boolean = false;
+    private protectedVisible: boolean = false;
 
     constructor(
         private restoreService: RestoreItemService<Locale>,
-        private localesService: LocalesService
-    ) { }
+        private localesService: LocalesService,
+        private userService: UserService,
+    ) {
+        userService.isAuthorized('EditLocale')
+            .subscribe(visible => this.protectedVisible = visible);
+    }
 
     ngOnInit() { }
 
