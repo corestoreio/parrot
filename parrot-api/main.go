@@ -133,7 +133,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	logrus.Info(fmt.Sprintf("Listening on %s", addr))
+	logrus.Info(fmt.Sprintf("server listening on %s", addr))
 
 	logrus.Fatal(s.ListenAndServe())
 }
