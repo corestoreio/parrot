@@ -30,6 +30,7 @@ export class RegisterAppComponent implements OnInit {
 
     reset() {
         this.clientName = '';
+        this.loading = false;
     }
 
     registerApp() {
