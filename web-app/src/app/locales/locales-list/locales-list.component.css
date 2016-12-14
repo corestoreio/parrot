@@ -4,10 +4,31 @@
     padding: 10px;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
 }
+
 .media.locale:hover {
-    cursor: pointer;
-    background-color: #E0E0E0;
+    background-color: #2394d1;
     transition:  background-color .4s cubic-bezier(0.25,0.8,0.25,1);
+    cursor: pointer;
+}
+
+.media.locale:active {
+    background: #2394d1;
+}
+
+.media.locale:hover p { 
+    color: #FFF;
+}
+
+.media.locale:hover p strong { 
+    color: #FFF;
+}
+
+.media.locale:active p {
+    color: #FFF;
+}
+
+.media.locale:active p strong {
+    color: #FFF;
 }
 
 .center-align {

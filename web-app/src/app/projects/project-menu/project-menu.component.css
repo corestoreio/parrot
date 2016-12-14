@@ -1,13 +1,13 @@
 .menu.navigation {
     padding-top: 20px;
-    background: #333645;
+    background: #1e202c;
     flex-grow: 1;
     flex-basis: 200px;
     margin-left: -200px;
     width: 200px;
     position: fixed;
     height: calc(100vh - 60px);
-    z-index: 200;
+    z-index: 125;
 }
 
 @media screen and (min-width: 769px) {
@@ -29,25 +29,25 @@
 }
 
 .menu-list a {
-    padding: 10px 20px;
-    color: #999A9F;
+    padding: 6px 20px;
+    color: #DCDCDC;
     border-radius: 0;
+    font-weight: bold;
 }
 
 .menu-list a:hover {
     color: #FFF;
-    background: #1E202C;
+    background: rgba(23, 147, 211, 0.8);;
     transition:  background-color .4s cubic-bezier(0.25,0.8,0.25,1);
 }
 
 li a.is-active:hover {
-    background: #1E202C;
-    font-weight: bold;
+    background: #1793d3;
     color: #FFF;
 }
 
 li a.is-active {
-    background: #1E202C;
+    background: #1793d3;
     font-weight: bold;
     color: #FFF;
 }

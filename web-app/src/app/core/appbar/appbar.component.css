@@ -4,9 +4,9 @@
     padding: 0 20px;
     width: 100% !important;
     height: 60px !important;
-    background-color: #00D1B2;
+    background-color: #FFF;
     display: flex;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+    /*box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);*/
     z-index: 150;
 }
 
@@ -37,24 +37,25 @@
 }
 
 a.appbar-link {
-    color: white;
+    color: #1793d3;
+    font-weight: bold;
 }
 
 a.appbar-link.is-active {
     border-top: solid transparent;
-    border-bottom: solid white;
+    border-bottom: solid #1793d3;
 }
 
 .nav-toggle {
-    background-color: #00D1B2;
+    background-color: #FFF;
 }
 
 .nav-toggle span {
-    background: white;
+    background: #1793d3;
     height: 2px;
 }
 
-.title {
-    color: white;
-    font-size: 1.4em;
+.parrot-title {
+    color: #1b314c;
+    font-weight: bold;
 }

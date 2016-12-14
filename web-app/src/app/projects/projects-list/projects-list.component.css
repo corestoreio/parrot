@@ -5,13 +5,31 @@
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
     height: 140px;
 }
+
 .media.project:hover {
-    background-color: #E0E0E0;
+    background-color: #2394d1;
     transition:  background-color .4s cubic-bezier(0.25,0.8,0.25,1);
     cursor: pointer;
 }
+
 .media.project:active {
-    background: #DADADA;
+    background: #2394d1;
+}
+
+.media.project:hover p { 
+    color: #FFF;
+}
+
+.media.project:hover p strong { 
+    color: #FFF;
+}
+
+.media.project:active p {
+    color: #FFF;
+}
+
+.media.project:active p strong {
+    color: #FFF;
 }
 
 .center-align {

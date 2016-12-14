@@ -1,6 +1,6 @@
 html, body {
-  font-family: 'Roboto', sans-serif !important;
-  background-color: #EEEEEE;
+  font-family: 'Lato', 'Helvetica', 'Arial', sans-serif !important;
+  background-color: #f6f9fc;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -12,7 +12,7 @@ html, body {
   height: 40px;
   width: 40px;
   margin: 0 auto;
-  background-color: #00D1B2;
+  background-color: #2394d1;
   -webkit-animation: animate-spinner 0.8s infinite ease-in-out;
           animation: animate-spinner 0.8s infinite ease-in-out; }
 
@@ -47,4 +47,9 @@ html, body {
 
 .section.no-background {
   background: none;
+}
+
+.title.is-5 {
+  color: #1b314c;
+  font-weight: bold;
 }
