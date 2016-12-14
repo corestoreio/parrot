@@ -11,10 +11,11 @@ type RoleGrant int
 type Authorizer func(string) bool
 
 const (
-	OwnerRole  = "owner"
-	EditorRole = "editor"
-	ViewerRole = "viewer"
-	ClientRole = "client"
+	OwnerRole     = "owner"
+	EditorRole    = "editor"
+	ViewerRole    = "viewer"
+	ClientRole    = "client"
+	DeveloperRole = "developer"
 )
 
 const (
@@ -67,6 +68,13 @@ var permissions = map[Role][]RoleGrant{
 	},
 	ClientRole: []RoleGrant{
 		CanExportLocales,
+	},
+	DeveloperRole: []RoleGrant{
+		CanViewProjectRoles,
+		CanViewProject,
+		CanViewLocales,
+		CanExportLocales,
+		CanManageAPIClients,
 	},
 }
 

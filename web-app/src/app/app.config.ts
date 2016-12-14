@@ -5,7 +5,8 @@ export const AppConfig = {
 export const UserRoles = [
     'owner',
     'editor',
-    'viewer'
+    'viewer',
+    'developer'
 ];
 
 export const LocalesList = [
