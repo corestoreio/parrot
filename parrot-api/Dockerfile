@@ -9,8 +9,6 @@ WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-api"
 COPY . .
 RUN go build
 
-RUN go get -u github.com/rnubel/pgmgr
-
 EXPOSE 8080
 
 CMD ./parrot-api

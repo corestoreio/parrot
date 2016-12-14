@@ -52,6 +52,49 @@ func main() {
 		return true
 	})
 
+	migrationStrategy := os.Getenv("PARROT_DB_MIGRATION_STRATEGY")
+	if migrationStrategy != "" {
+		logrus.Infof("migration strategy is set to '%s'", migrationStrategy)
+
+		dirPath := os.Getenv("PARROT_DB_MIGRATIONS_DIR")
+		if dirPath == "" {
+			logrus.Fatal("could not apply migrations, migrations directory not set")
+		}
+
+		var fn func(string) error
+
+		switch migrationStrategy {
+		// Case when we want to start clean each time
+		case "down,up":
+			fn = func(path string) error {
+				err := ds.MigrateDown(path)
+				if err != nil {
+					return err
+				}
+				err = ds.MigrateUp(path)
+				if err != nil {
+					return err
+				}
+				return nil
+			}
+		// Case when we want to apply migrations if needed
+		case "up":
+			fn = ds.MigrateUp
+		// Case when we want to simply drop everything
+		case "down":
+			fn = ds.MigrateDown
+		default:
+			logrus.Fatalf("could not recognize migration strategy '%s'", migrationStrategy)
+		}
+
+		logrus.Info("migrating...")
+		err := fn(dirPath)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		logrus.Info("migration completed successfully")
+	}
+
 	router := chi.NewRouter()
 	router.Use(
 		middleware.Recoverer,
@@ -97,7 +140,7 @@ func main() {
 
 func blockAndRetry(d time.Duration, fn func() bool) {
 	for !fn() {
-		fmt.Printf("retrying in %s...\n", d.String())
+		logrus.Infof("retrying in %s...\n", d.String())
 		time.Sleep(d)
 	}
 }

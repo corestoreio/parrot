@@ -17,6 +17,8 @@ type Store interface {
 	model.ProjectClientStorer
 	Ping() error
 	Close() error
+	MigrateUp(string) error
+	MigrateDown(string) error
 }
 
 var (
