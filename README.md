@@ -11,7 +11,6 @@ General:
 
 Backend:
 - Communicate only via SSL within the microservices network
-- Support migrations via .env files (e.g. db.migrations.strategy="create/drop" or "up")
 - Add copy web app build to nginx as a static server
 - Add timestamps to DB tables
 - Add tests
