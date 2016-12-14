@@ -81,14 +81,11 @@ func getSubjectID(ctx context.Context) (string, error) {
 func getSubjectType(ctx context.Context) (Subject, error) {
 	subType := ctx.Value("subjectType")
 	if subType == nil {
-		fmt.Println(subType, "HERE 1")
 		return "", ErrBadRequest
 	}
-	fmt.Println(subType)
 
 	casted, ok := subType.(string)
 	if !ok || casted == "" {
-		fmt.Println(casted, "HERE 2")
 		return "", ErrBadRequest
 	}
 
