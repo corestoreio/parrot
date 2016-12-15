@@ -11,6 +11,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type userSelfPayload struct {
+	*model.User
+	ProjectRoles  []model.ProjectUser `json:"project_roles,omitempty"`
+	ProjectGrants projectGrants       `json:"project_grants,omitempty"`
+}
+
+type projectGrants map[string][]RoleGrant
+
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
@@ -23,10 +31,40 @@ func getUserSelf(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err)
 		return
 	}
-
 	// Hide password
 	user.Password = ""
-	render.JSON(w, http.StatusOK, user)
+
+	payload := userSelfPayload{user, nil, nil}
+
+	include := r.URL.Query().Get("include")
+	if include != "" {
+		switch include {
+		case "projectRoles":
+			roles, err := store.GetUserProjectRoles(user.ID)
+			if err != nil {
+				handleError(w, err)
+				return
+			}
+
+			payload.ProjectRoles = roles
+
+		case "projectGrants":
+			roles, err := store.GetUserProjectRoles(user.ID)
+			if err != nil {
+				handleError(w, err)
+				return
+			}
+
+			grants := make(projectGrants)
+			for _, pu := range roles {
+				role := Role(pu.Role)
+				grants[pu.ProjectID] = permissions[role]
+			}
+			payload.ProjectGrants = grants
+		}
+	}
+
+	render.JSON(w, http.StatusOK, payload)
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {

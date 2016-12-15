@@ -68,6 +68,33 @@ func (db *PostgresDB) GetProjectUsers(projID string) ([]model.ProjectUser, error
 	return users, nil
 }
 
+func (db *PostgresDB) GetUserProjectRoles(userID string) ([]model.ProjectUser, error) {
+	rows, err := db.Query(`SELECT user_id, project_id, role
+							FROM projects_users
+							WHERE projects_users.user_id = $1`, userID)
+	if err != nil {
+		return nil, parseError(err)
+	}
+	defer rows.Close()
+
+	roles := make([]model.ProjectUser, 0)
+	for rows.Next() {
+		u := model.ProjectUser{}
+
+		err := rows.Scan(&u.UserID, &u.ProjectID, &u.Role)
+		if err != nil {
+			return nil, parseError(err)
+		}
+		roles = append(roles, u)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, parseError(err)
+	}
+
+	return roles, nil
+}
+
 func (db *PostgresDB) GetProjectUser(projID, userID string) (*model.ProjectUser, error) {
 	u := model.ProjectUser{}
 	row := db.QueryRow(`SELECT user_id, project_id, users.email, users.name, role

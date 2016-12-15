@@ -26,8 +26,8 @@ type UserStorer interface {
 
 type User struct {
 	ID       string `db:"id" json:"id"`
-	Name     string `db:"name" json:"name"`
-	Email    string `db:"email" json:"email"`
+	Name     string `db:"name" json:"name,omitempty"`
+	Email    string `db:"email" json:"email,omitempty"`
 	Password string `db:"password" json:"password,omitempty"`
 }
 
