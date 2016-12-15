@@ -12,14 +12,8 @@ export class UserService {
 
     constructor(private api: APIService) { }
 
-    isAuthorized(action: string): Observable<boolean> {
-        let sub = new BehaviorSubject<boolean>(false);
-        this.getUserSelf()
-            .subscribe(user => {
-                // TODO
-                sub.next(false);
-            });
-        return sub.asObservable();
+    isAuthorized(action: string): boolean {
+        return false;
     }
 
     getUserSelf(): Observable<User> {

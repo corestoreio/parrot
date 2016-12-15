@@ -7,16 +7,20 @@
             <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id]" [routerLinkActiveOptions]="{ exact: true }"
                     routerLinkActive="is-active">Locales</a></li>
         </ul>
-        <p class="menu-label">Administration</p>
-        <ul class="menu-list">
-            <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'team']" [routerLinkActiveOptions]="{ exact: true }"
-                    routerLinkActive="is-active">Project Team</a></li>
-        </ul>
-        <p class="menu-label">Developer</p>
-        <ul class="menu-list">
-            <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }"
-                    routerLinkActive="is-active">API Access</a></li>
-        </ul>
+        <div *ngIf="adminSectionVisible">
+            <p class="menu-label">Administration</p>
+            <ul class="menu-list">
+                <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'team']" [routerLinkActiveOptions]="{ exact: true }"
+                        routerLinkActive="is-active">Project Team</a></li>
+            </ul>
+        </div>
+        <div *ngIf="developerSectionVisible">
+            <p class="menu-label">Developer</p>
+            <ul class="menu-list">
+                <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'api']" [routerLinkActiveOptions]="{ exact: true }"
+                        routerLinkActive="is-active">API Access</a></li>
+            </ul>
+        </div>
     </div>
 </aside>
 <div class="sidenav-overlay" [class.is-active]="menuActive" (click)="closeMenu()"></div>

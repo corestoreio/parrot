@@ -25,8 +25,7 @@ export class CreateLocaleComponent {
         private route: ActivatedRoute,
         private userService: UserService,
     ) {
-        userService.isAuthorized('CreateLocale')
-            .subscribe(visible => this.visible = visible);
+        this.visible = userService.isAuthorized('CreateLocale');
 
         this.reset();
         this.localesService.locales
