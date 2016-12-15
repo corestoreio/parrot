@@ -22,7 +22,10 @@ export class ProjectMenuComponent implements OnInit {
         private projectMenuService: ProjectMenuService,
         private userService: UserService,
     ) {
-        this.adminSectionVisible = userService.isAuthorized('');
+        this.userService.isAuthorized('')
+            .subscribe(ok => this.adminSectionVisible = ok);
+        this.userService.isAuthorized('')
+            .subscribe(ok => this.developerSectionVisible = ok);
     }
 
     ngOnInit() {

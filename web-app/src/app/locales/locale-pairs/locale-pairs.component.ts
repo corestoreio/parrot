@@ -54,7 +54,8 @@ export class LocalePairsComponent {
         private localesService: LocalesService,
         private userService: UserService,
     ) {
-        this.protectedVisible = userService.isAuthorized('EditLocale');
+        this.userService.isAuthorized('')
+            .subscribe(ok => this.protectedVisible = ok);
     }
 
     ngOnInit() { }

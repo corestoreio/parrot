@@ -22,7 +22,8 @@ export class ProjectKeysComponent implements OnInit {
         private projectsService: ProjectsService,
         private userService: UserService,
     ) {
-        this.protectedVisible = userService.isAuthorized('EditProjectKeys');
+        this.userService.isAuthorized('')
+            .subscribe(ok => this.protectedVisible = ok);
 
         this.addKey = this.addKey.bind(this);
         this.deleteKey = this.deleteKey.bind(this);

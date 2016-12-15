@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
@@ -10,10 +11,19 @@ import { User, UpdateUserPasswordPayload, UpdateUserNamePayload, UpdateUserEmail
 @Injectable()
 export class UserService {
 
-    constructor(private api: APIService) { }
+    private _userSelf = new BehaviorSubject<User>(null);
+    public userSelf = this._userSelf.asObservable();
 
-    isAuthorized(action: string): boolean {
-        return false;
+    constructor(private api: APIService) {
+        this.getUserSelf().subscribe();
+    }
+
+    isAuthorized(action: string): Observable<boolean> {
+        let sub = new BehaviorSubject<boolean>(false);
+        this.userSelf
+            // TODO
+            .subscribe(user => sub.next(false));
+        return sub.asObservable();
     }
 
     getUserSelf(): Observable<User> {
@@ -26,6 +36,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
@@ -43,6 +56,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
@@ -60,6 +76,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
@@ -77,6 +96,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
