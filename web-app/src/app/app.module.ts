@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { APIService } from './shared/api.service';
 import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { AuthorizedGuard } from './users/guards/authorized.guard';
+import { UserService } from './users/services/user.service';
 import { PagesModule } from './pages';
 
 @NgModule({
@@ -27,7 +28,7 @@ import { PagesModule } from './pages';
     declarations: [
         AppComponent,
     ],
-    providers: [APIService, AuthService, AuthGuard, UnauthGuard, AuthorizedGuard],
+    providers: [APIService, AuthService, AuthGuard, UnauthGuard, AuthorizedGuard, UserService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
