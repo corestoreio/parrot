@@ -13,11 +13,12 @@ import (
 
 type userSelfPayload struct {
 	*model.User
-	ProjectRoles  []model.ProjectUser `json:"project_roles,omitempty"`
-	ProjectGrants projectGrants       `json:"project_grants,omitempty"`
+	ProjectRoles  projectRoles  `json:"project_roles,omitempty"`
+	ProjectGrants projectGrants `json:"project_grants,omitempty"`
 }
 
 type projectGrants map[string][]RoleGrant
+type projectRoles map[string]string
 
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
@@ -40,23 +41,28 @@ func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	if include != "" {
 		switch include {
 		case "projectRoles":
-			roles, err := store.GetUserProjectRoles(user.ID)
+			projectUsers, err := store.GetUserProjectRoles(user.ID)
 			if err != nil {
 				handleError(w, err)
 				return
 			}
 
-			payload.ProjectRoles = roles
+			result := make(projectRoles)
+			for _, pu := range projectUsers {
+				result[pu.ProjectID] = pu.Role
+			}
+
+			payload.ProjectRoles = result
 
 		case "projectGrants":
-			roles, err := store.GetUserProjectRoles(user.ID)
+			projectUsers, err := store.GetUserProjectRoles(user.ID)
 			if err != nil {
 				handleError(w, err)
 				return
 			}
 
 			grants := make(projectGrants)
-			for _, pu := range roles {
+			for _, pu := range projectUsers {
 				role := Role(pu.Role)
 				grants[pu.ProjectID] = permissions[role]
 			}
