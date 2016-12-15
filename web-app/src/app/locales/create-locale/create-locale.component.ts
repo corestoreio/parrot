@@ -14,7 +14,6 @@ export class CreateLocaleComponent {
     private selectedLocale: Locale;
     private availableLocales: LocaleInfo[] = [];
 
-    private visible: boolean = false;
     private searchString: string;
     private modalOpen: boolean;
     private loading: boolean;
@@ -23,11 +22,7 @@ export class CreateLocaleComponent {
     constructor(
         private localesService: LocalesService,
         private route: ActivatedRoute,
-        private userService: UserService,
     ) {
-        this.userService.isAuthorized('CreateLocale')
-            .subscribe(ok => this.visible = ok);
-
         this.reset();
         this.localesService.locales
             .subscribe(existingLocales => this.availableLocales = this.computeAvailableLocales(existingLocales));
