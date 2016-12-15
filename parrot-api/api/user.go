@@ -13,8 +13,8 @@ import (
 
 type userSelfPayload struct {
 	*model.User
-	ProjectRoles  projectRoles  `json:"project_roles,omitempty"`
-	ProjectGrants projectGrants `json:"project_grants,omitempty"`
+	ProjectRoles  projectRoles  `json:"projectRoles,omitempty"`
+	ProjectGrants projectGrants `json:"projectGrants,omitempty"`
 }
 
 type projectGrants map[string][]RoleGrant
