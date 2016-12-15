@@ -1,8 +1,12 @@
+import { ProjectUser } from './projectuser';
+
 export interface User {
     id: string;
     name: string;
     email: string;
     role: string;
+    projectRoles?: Map<string, string>;
+    projectGrants?: Map<string, Array<string>>;
 }
 
 export interface UpdateUserPasswordPayload {
