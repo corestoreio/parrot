@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
+import { ProjectsService } from './../../projects/services/projects.service';
 import { User, UpdateUserPasswordPayload, UpdateUserNamePayload, UpdateUserEmailPayload } from './../model';
 
 @Injectable()
@@ -14,21 +15,37 @@ export class UserService {
     private _userSelf = new BehaviorSubject<User>(null);
     public userSelf = this._userSelf.asObservable();
 
-    constructor(private api: APIService) {
+    constructor(
+        private api: APIService,
+        private route: ActivatedRoute,
+    ) {
         this.getUserSelf().subscribe();
     }
 
-    isAuthorized(action: string): Observable<boolean> {
+    isAuthorized(grant: string): Observable<boolean> {
         let sub = new BehaviorSubject<boolean>(false);
         this.userSelf
-            // TODO
-            .subscribe(user => sub.next(false));
+            .subscribe(user => {
+                if (!user) {
+                    return;
+                }
+                console.log("isAuthorized not fully implemented");
+                return;
+                let projectId; // TODO
+                let projectGrants: string[] = user.projectGrants[projectId];
+                if (!projectGrants) {
+                    sub.next(false);
+                    return;
+                }
+                let allowed: boolean = !!projectGrants.find(current => current === grant);
+                sub.next(allowed);
+            });
         return sub.asObservable();
     }
 
     getUserSelf(): Observable<User> {
         let request = this.api.request({
-            uri: `/users/self`,
+            uri: `/users/self?include=projectGrants`,
             method: 'GET',
         })
             .map(res => {
