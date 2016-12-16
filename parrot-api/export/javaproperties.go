@@ -17,10 +17,6 @@ func (e *JavaProperties) FileExtension() string {
 	return "properties"
 }
 
-func (e *JavaProperties) ContentType() string {
-	return "text/plain; charset=UTF-16"
-}
-
 func (e *JavaProperties) Export(locale *model.Locale) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 

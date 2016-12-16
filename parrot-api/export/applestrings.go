@@ -14,10 +14,6 @@ func (e *AppleStrings) FileExtension() string {
 	return "strings"
 }
 
-func (e *AppleStrings) ContentType() string {
-	return "text/plain; charset=UTF-16"
-}
-
 func (e *AppleStrings) Export(locale *model.Locale) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 

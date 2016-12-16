@@ -14,10 +14,6 @@ func (e *Gettext) FileExtension() string {
 	return "po"
 }
 
-func (e *Gettext) ContentType() string {
-	return "text/plainl charset=UTF-8"
-}
-
 func (e *Gettext) Export(locale *model.Locale) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 

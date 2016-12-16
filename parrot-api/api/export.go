@@ -55,7 +55,7 @@ func exportLocale(w http.ResponseWriter, r *http.Request) {
 	filename := fmt.Sprintf("%s.%s", localeIdent, exporter.FileExtension())
 
 	header := w.Header()
-	header.Set("Content-Type", exporter.ContentType())
+	header.Set("Content-Type", "application/octet-stream")
 	header.Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
 	header.Set("Content-Length", fmt.Sprintf("%d", len(result)))
 
