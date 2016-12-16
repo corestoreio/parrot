@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
 import { ProjectsModule } from './../projects';
-import { LocalesModule } from './../locales';
+import { LocalesModule } from './../locales/locales.module';
 import { UsersModule } from './../users';
 import { APIAccessModule } from './../api-access';
 
