@@ -5,7 +5,6 @@ Currently in heavy development, breaking changes guaranteed :)
 TODO:
 
 General:
-- Add exports feature (JSON, csv, xml (android resources), strings (apple strings), Excel sheet)
 - Add snapshots feature
 - Add forgotten password feature
 
@@ -16,7 +15,6 @@ Backend:
 - Add tests
 
 Frontend:
-- Handle role based menu display
 - Handle api errors presentation
 - Add API error-message map
 - Add app localization

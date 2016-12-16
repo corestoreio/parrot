@@ -75,6 +75,8 @@ func NewRouter(ds datastore.Store, tp auth.TokenProvider) http.Handler {
 					r4.Get("/", mustAuthorize(CanViewLocales, showLocale))
 					r4.Patch("/pairs", mustAuthorize(CanUpdateLocales, updateLocalePairs))
 					r4.Delete("/", mustAuthorize(CanDeleteLocales, deleteLocale))
+
+					r4.Get("/export/:type", mustAuthorize(CanExportLocales, exportLocale))
 				})
 			})
 		})
