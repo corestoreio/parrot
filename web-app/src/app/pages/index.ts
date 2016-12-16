@@ -6,4 +6,5 @@ export * from './project-team/project-team-page.component';
 export * from './api-access/api-access-page.component';
 export * from './api-app/api-app-page.component';
 export * from './account/account-page.component';
+export * from './error/error-page.component';
 export * from './pages.module';

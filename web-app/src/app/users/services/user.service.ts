@@ -1,19 +1,55 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/switchMap';
 
 import { APIService } from './../../shared/api.service';
+import { ProjectsService } from './../../projects/services/projects.service';
 import { User, UpdateUserPasswordPayload, UpdateUserNamePayload, UpdateUserEmailPayload } from './../model';
 
 @Injectable()
 export class UserService {
 
-    constructor(private api: APIService) { }
+    private _userSelf = new BehaviorSubject<User>(null);
+    public userSelf = this._userSelf.asObservable();
+
+    constructor(
+        private api: APIService,
+        private route: ActivatedRoute,
+        private projects: ProjectsService,
+    ) {
+        this.getUserSelf().subscribe();
+    }
+
+    isAuthorized(projectId: string, grant: string): Observable<boolean> {
+        return this.userSelf
+            .filter(user => {
+                return !!user;
+            })
+            .map(user => {
+                let projectGrants: string[] = user.projectGrants[projectId];
+                if (!projectGrants) {
+                    return false;
+                }
+
+                let allowed: boolean = !!projectGrants.find(current => current === grant);
+
+                return allowed;
+            })
+            .take(1);
+    }
 
     getUserSelf(): Observable<User> {
         let request = this.api.request({
-            uri: `/users/self`,
+            uri: `/users/self?include=projectGrants`,
             method: 'GET',
         })
             .map(res => {
@@ -21,6 +57,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
@@ -38,6 +77,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
@@ -55,6 +97,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 
@@ -72,6 +117,9 @@ export class UserService {
                 if (!user) {
                     throw new Error("no user in response");
                 }
+
+                this._userSelf.next(user);
+
                 return user;
             }).share();
 

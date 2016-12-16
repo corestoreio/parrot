@@ -11,6 +11,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type userSelfPayload struct {
+	*model.User
+	ProjectRoles  projectRoles  `json:"projectRoles,omitempty"`
+	ProjectGrants projectGrants `json:"projectGrants,omitempty"`
+}
+
+type projectGrants map[string][]RoleGrant
+type projectRoles map[string]string
+
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
@@ -23,10 +32,45 @@ func getUserSelf(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err)
 		return
 	}
-
 	// Hide password
 	user.Password = ""
-	render.JSON(w, http.StatusOK, user)
+
+	payload := userSelfPayload{user, nil, nil}
+
+	include := r.URL.Query().Get("include")
+	if include != "" {
+		switch include {
+		case "projectRoles":
+			projectUsers, err := store.GetUserProjectRoles(user.ID)
+			if err != nil {
+				handleError(w, err)
+				return
+			}
+
+			result := make(projectRoles)
+			for _, pu := range projectUsers {
+				result[pu.ProjectID] = pu.Role
+			}
+
+			payload.ProjectRoles = result
+
+		case "projectGrants":
+			projectUsers, err := store.GetUserProjectRoles(user.ID)
+			if err != nil {
+				handleError(w, err)
+				return
+			}
+
+			grants := make(projectGrants)
+			for _, pu := range projectUsers {
+				role := Role(pu.Role)
+				grants[pu.ProjectID] = permissions[role]
+			}
+			payload.ProjectGrants = grants
+		}
+	}
+
+	render.JSON(w, http.StatusOK, payload)
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {

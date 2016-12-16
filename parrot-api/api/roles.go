@@ -7,7 +7,7 @@ import (
 )
 
 type Role string
-type RoleGrant int
+type RoleGrant string
 type Authorizer func(string) bool
 
 const (
@@ -19,26 +19,26 @@ const (
 )
 
 const (
-	CanAssignRoles = iota
-	CanRevokeRoles
-	CanUpdateRoles
-	CanViewProjectRoles
-	CanUpdateProject
-	CanDeleteProject
-	CanViewProject
-	CanCreateLocales
-	CanUpdateLocales
-	CanDeleteLocales
-	CanViewLocales
-	CanManageAPIClients
-	CanExportLocales
+	CanAssignProjectRoles = "CanAssignProjectRoles"
+	CanRevokeProjectRoles = "CanRevokeProjectRoles"
+	CanUpdateProjectRoles = "CanUpdateProjectRoles"
+	CanViewProjectRoles   = "CanViewProjectRoles"
+	CanUpdateProject      = "CanUpdateProject"
+	CanDeleteProject      = "CanDeleteProject"
+	CanViewProject        = "CanViewProject"
+	CanCreateLocales      = "CanCreateLocales"
+	CanUpdateLocales      = "CanUpdateLocales"
+	CanDeleteLocales      = "CanDeleteLocales"
+	CanViewLocales        = "CanViewLocales"
+	CanManageAPIClients   = "CanManageAPIClients"
+	CanExportLocales      = "CanExportLocales"
 )
 
 var permissions = map[Role][]RoleGrant{
 	OwnerRole: []RoleGrant{
-		CanAssignRoles,
-		CanRevokeRoles,
-		CanUpdateRoles,
+		CanAssignProjectRoles,
+		CanRevokeProjectRoles,
+		CanUpdateProjectRoles,
 		CanViewProjectRoles,
 		CanUpdateProject,
 		CanDeleteProject,

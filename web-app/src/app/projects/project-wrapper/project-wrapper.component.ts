@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { ProjectsService } from './../../projects/services/projects.service';
+import { UserService } from './../../users/services/user.service';
+import { ProjectsService } from './../services/projects.service';
 import { Project } from './../model/project';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    providers: [ProjectsService],
+    providers: [ProjectsService, UserService],
     selector: 'parrot-project-wrapper',
     templateUrl: 'project-wrapper.component.html',
     styleUrls: ['project-wrapper.component.css']

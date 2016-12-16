@@ -10,7 +10,7 @@ General:
 - Add forgotten password feature
 
 Backend:
-- Communicate only via SSL within the microservices network
+- Give option to retrieve more info on project locales with query string
 - Add copy web app build to nginx as a static server
 - Add timestamps to DB tables
 - Add tests

@@ -4,6 +4,7 @@ import { RestoreItemService } from './../../shared/restore-item.service';
 import { Locale } from './../model/locale';
 import { LocalesService } from './../services/locales.service';
 
+
 @Component({
     providers: [RestoreItemService],
     selector: 'locale-pairs',
@@ -13,6 +14,8 @@ import { LocalesService } from './../services/locales.service';
 export class LocalePairsComponent {
     @Input()
     private loading: boolean = false;
+    @Input()
+    private editable: boolean = false;
 
     @Input()
     set locale(value: Locale) {
@@ -48,8 +51,9 @@ export class LocalePairsComponent {
 
     constructor(
         private restoreService: RestoreItemService<Locale>,
-        private localesService: LocalesService
-    ) { }
+        private localesService: LocalesService,
+    ) {
+    }
 
     ngOnInit() { }
 

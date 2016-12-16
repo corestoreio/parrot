@@ -7,6 +7,7 @@ type ProjectUserStorer interface {
 	AssignProjectUser(ProjectUser) (*ProjectUser, error)
 	RevokeProjectUser(ProjectUser) error
 	UpdateProjectUser(ProjectUser) (*ProjectUser, error)
+	GetUserProjectRoles(projID string) ([]ProjectUser, error)
 }
 
 type ProjectUser struct {

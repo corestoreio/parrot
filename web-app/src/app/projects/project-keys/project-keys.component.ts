@@ -12,12 +12,14 @@ export class ProjectKeysComponent implements OnInit {
     project: Project;
     @Input()
     private loading: boolean;
+    @Input()
+    private editable: boolean;
 
     private addKeyPending: boolean = false;
     private deleteKeyPending: boolean = false;
 
     constructor(
-        private projectsService: ProjectsService
+        private projectsService: ProjectsService,
     ) {
         this.addKey = this.addKey.bind(this);
         this.deleteKey = this.deleteKey.bind(this);

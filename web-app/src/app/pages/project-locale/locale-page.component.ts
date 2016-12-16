@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/switchMapTo';
 
+import { UserService } from './../../users/services/user.service';
 import { LocalesService } from './../../locales/services/locales.service';
 import { Locale } from './../../locales/model/locale';
 
@@ -14,10 +15,12 @@ export class LocalePage implements OnInit {
     private projectId: string;
     private locale: Locale;
     private loading = false;
+    private canEditLocales = false;
 
     constructor(
         private route: ActivatedRoute,
-        private localesService: LocalesService
+        private localesService: LocalesService,
+        private userService: UserService,
     ) {
     }
 
@@ -29,6 +32,8 @@ export class LocalePage implements OnInit {
             .map(params => params['localeIdent'])
             .subscribe(localeIdent => {
                 this.fetchLocale(this.projectId, localeIdent);
+                this.userService.isAuthorized(this.projectId, 'CanUpdateLocales')
+                    .subscribe(ok => { console.log(ok); this.canEditLocales = ok });
             });
     }
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { UserService } from './../../users/services/user.service';
 import { LocalesService } from './../services/locales.service';
 import { Locale, LocaleInfo } from './../model';
 
@@ -18,7 +19,10 @@ export class CreateLocaleComponent {
     private loading: boolean;
     private errors: string[];
 
-    constructor(private localesService: LocalesService, private route: ActivatedRoute) {
+    constructor(
+        private localesService: LocalesService,
+        private route: ActivatedRoute,
+    ) {
         this.reset();
         this.localesService.locales
             .subscribe(existingLocales => this.availableLocales = this.computeAvailableLocales(existingLocales));

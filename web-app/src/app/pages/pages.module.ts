@@ -16,6 +16,7 @@ import { LocalePage } from './project-locale/locale-page.component';
 import { ProjectTeamPage } from './project-team/project-team-page.component';
 import { APIAccessPage } from './api-access/api-access-page.component';
 import { APIAppPage } from './api-app/api-app-page.component';
+import { ErrorPage } from './error/error-page.component';
 import { AccountPage } from './account/account-page.component';
 
 @NgModule({
@@ -39,6 +40,7 @@ import { AccountPage } from './account/account-page.component';
         APIAppPage,
         APIAccessPage,
         AccountPage,
+        ErrorPage,
     ],
     declarations: [
         HomePage,
@@ -49,6 +51,7 @@ import { AccountPage } from './account/account-page.component';
         APIAppPage,
         APIAccessPage,
         AccountPage,
+        ErrorPage,
     ],
     providers: [],
 })

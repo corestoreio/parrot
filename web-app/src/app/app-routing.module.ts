@@ -1,33 +1,39 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { CanActivateAPI } from './users/guards/can-activate-api.guard';
+import { CanActivateTeam } from './users/guards/can-activate-team.guard';
+import { CanActivateProject } from './users/guards/can-activate-project.guard';
+import { CanActivateLocale } from './users/guards/can-activate-locale.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { UnauthGuard } from './auth/guards/unauth.guard';
 
-import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage, APIAccessPage, APIAppPage, AccountPage } from './pages';
+import { HomePage, ProjectLocalesPage, LocalePage, ProjectKeysPage, ProjectTeamPage, APIAccessPage, APIAppPage, AccountPage, ErrorPage } from './pages';
 import { ProjectWrapperComponent } from './projects';
 import { LoginComponent, RegisterComponent } from './auth';
 
 const appRoutes: Routes = [
     { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
     { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
+    { path: 'error', component: ErrorPage },
     { path: 'me', component: AccountPage, canActivate: [AuthGuard] },
     { path: 'projects', component: HomePage, canActivate: [AuthGuard] },
     {
         path: 'projects/:projectId', component: ProjectWrapperComponent, canActivate: [AuthGuard], children: [
-            { path: '', component: ProjectLocalesPage },
-            { path: 'keys', component: ProjectKeysPage },
-            { path: 'team', component: ProjectTeamPage },
-            { path: 'api', component: APIAccessPage },
-            { path: 'api/:clientId', component: APIAppPage },
+            { path: '', component: ProjectLocalesPage, canActivate: [CanActivateProject] },
+            { path: 'keys', component: ProjectKeysPage, canActivate: [CanActivateProject] },
+            { path: 'team', component: ProjectTeamPage, canActivate: [CanActivateTeam] },
+            { path: 'api', component: APIAccessPage, canActivate: [CanActivateAPI] },
+            { path: 'api/:clientId', component: APIAppPage, canActivate: [CanActivateAPI] },
             { path: 'locales', redirectTo: '', pathMatch: 'full' },
-            { path: 'locales/:localeIdent', component: LocalePage },
+            { path: 'locales/:localeIdent', component: LocalePage, canActivate: [CanActivateLocale] },
         ]
     },
     { path: '', redirectTo: '/projects', pathMatch: 'full' },
 ];
 @NgModule({
     imports: [RouterModule.forRoot(appRoutes)],
-    exports: [RouterModule]
+    exports: [RouterModule],
+    providers: [CanActivateAPI, CanActivateTeam, CanActivateProject, CanActivateLocale]
 })
 export class AppRoutingModule { }

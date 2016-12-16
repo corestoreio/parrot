@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="level-item">
-                <create-project-key [project]="project" [submit]="addKey" [pending]="addKeyPending"></create-project-key>
+                <create-project-key *ngIf="editable" [project]="project" [submit]="addKey" [pending]="addKeyPending"></create-project-key>
             </div>
         </div>
     </nav>
@@ -24,8 +24,10 @@
             <tr *ngFor="let key of project.keys; let i=index; trackBy: trackIndex">
                 <td>{{key}}</td>
                 <td>
-                    <edit-project-key [key]="key" [submit]="updateKey"></edit-project-key>
-                    <delete-project-key [key]="key" [pending]="deleteKeyPending" [submit]="deleteKey"></delete-project-key>
+                    <div *ngIf="editable">
+                        <edit-project-key [key]="key" [submit]="updateKey"></edit-project-key>
+                        <delete-project-key [key]="key" [pending]="deleteKeyPending" [submit]="deleteKey"></delete-project-key>
+                    </div>
                 </td>
             </tr>
         </tbody>
