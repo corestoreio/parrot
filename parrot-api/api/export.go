@@ -41,6 +41,8 @@ func exportLocale(w http.ResponseWriter, r *http.Request) {
 		exporter = &export.AppleStrings{}
 	case "properties":
 		exporter = &export.JavaProperties{}
+	case "xmlproperties":
+		exporter = &export.JavaXML{}
 	default:
 		handleError(w, ErrBadRequest)
 		return
