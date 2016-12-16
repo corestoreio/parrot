@@ -81,7 +81,7 @@ var permissions = map[Role][]RoleGrant{
 func isRole(r string) bool {
 	v := Role(r)
 	switch v {
-	case OwnerRole, EditorRole, ViewerRole:
+	case OwnerRole, EditorRole, ViewerRole, DeveloperRole:
 		return true
 	}
 	return false
