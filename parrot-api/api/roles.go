@@ -19,26 +19,26 @@ const (
 )
 
 const (
-	CanAssignRoles      = "CanAssignRoles"
-	CanRevokeRoles      = "CanRevokeRoles"
-	CanUpdateRoles      = "CanUpdateRoles"
-	CanViewProjectRoles = "CanViewProjectRoles"
-	CanUpdateProject    = "CanUpdateProject"
-	CanDeleteProject    = "CanDeleteProject"
-	CanViewProject      = "CanViewProject"
-	CanCreateLocales    = "CanCreateLocales"
-	CanUpdateLocales    = "CanUpdateLocales"
-	CanDeleteLocales    = "CanDeleteLocales"
-	CanViewLocales      = "CanViewLocales"
-	CanManageAPIClients = "CanManageAPIClients"
-	CanExportLocales    = "CanExportLocales"
+	CanAssignProjectRoles = "CanAssignProjectRoles"
+	CanRevokeProjectRoles = "CanRevokeProjectRoles"
+	CanUpdateProjectRoles = "CanUpdateProjectRoles"
+	CanViewProjectRoles   = "CanViewProjectRoles"
+	CanUpdateProject      = "CanUpdateProject"
+	CanDeleteProject      = "CanDeleteProject"
+	CanViewProject        = "CanViewProject"
+	CanCreateLocales      = "CanCreateLocales"
+	CanUpdateLocales      = "CanUpdateLocales"
+	CanDeleteLocales      = "CanDeleteLocales"
+	CanViewLocales        = "CanViewLocales"
+	CanManageAPIClients   = "CanManageAPIClients"
+	CanExportLocales      = "CanExportLocales"
 )
 
 var permissions = map[Role][]RoleGrant{
 	OwnerRole: []RoleGrant{
-		CanAssignRoles,
-		CanRevokeRoles,
-		CanUpdateRoles,
+		CanAssignProjectRoles,
+		CanRevokeProjectRoles,
+		CanUpdateProjectRoles,
 		CanViewProjectRoles,
 		CanUpdateProject,
 		CanDeleteProject,

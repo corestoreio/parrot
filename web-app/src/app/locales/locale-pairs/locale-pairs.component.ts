@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { UserService } from './../../users/services/user.service';
 import { RestoreItemService } from './../../shared/restore-item.service';
 import { Locale } from './../model/locale';
 import { LocalesService } from './../services/locales.service';
@@ -15,6 +14,8 @@ import { LocalesService } from './../services/locales.service';
 export class LocalePairsComponent {
     @Input()
     private loading: boolean = false;
+    @Input()
+    private editable: boolean = false;
 
     @Input()
     set locale(value: Locale) {
@@ -47,15 +48,11 @@ export class LocalePairsComponent {
 
     private editing: boolean = false;
     private updatePending: boolean = false;
-    private protectedVisible: boolean = false;
 
     constructor(
         private restoreService: RestoreItemService<Locale>,
         private localesService: LocalesService,
-        private userService: UserService,
     ) {
-        this.userService.isAuthorized('')
-            .subscribe(ok => this.protectedVisible = ok);
     }
 
     ngOnInit() { }

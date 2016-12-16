@@ -22,8 +22,6 @@ export class ProjectLocalesPage implements OnInit {
         private localesService: LocalesService,
         private userService: UserService,
     ) {
-        this.userService.isAuthorized('CanCreateLocale')
-            .subscribe(ok => this.protectedVisible = ok);
     }
 
     ngOnInit() {
@@ -31,6 +29,8 @@ export class ProjectLocalesPage implements OnInit {
             .map(params => params['projectId'])
             .subscribe(projectId => {
                 this.fetchLocales(projectId);
+                this.userService.isAuthorized(projectId, 'CanCreateLocales')
+                    .subscribe(ok => this.protectedVisible = ok);
             });
 
         this.localesService.locales

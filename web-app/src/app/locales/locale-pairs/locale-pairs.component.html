@@ -21,7 +21,7 @@
                     <progress class="progress is-primary is-fullwidth" value="{{percentTranslated}}" max="100"></progress>
                 </div>
             </div>
-            <div *ngIf="protectedVisible" class="level-item">
+            <div *ngIf="editable" class="level-item">
                 <button class="button is-success" (click)="enableEdit()" [class.is-hidden]="editing">Edit</button>
                 <button class="button is-success" (click)="commitPairs()" [class.is-hidden]="!editing">Commit</button>
                 <button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">Cancel Edit</button>
@@ -38,12 +38,12 @@
         </thead>
         <tbody>
 
-            <tr *ngFor="let pair of locale.pairs | objtopairs" [hidden]="!protectedVisible">
+            <tr *ngFor="let pair of locale.pairs | objtopairs" [hidden]="!editable">
                 <td>{{pair.key}}</td>
                 <td><textarea class="textarea" (click)="enableEdit()" [disabled]="!editing" [(ngModel)]="locale.pairs[pair.key]">{{pair.value}}</textarea></td>
             </tr>
 
-            <tr *ngFor="let pair of locale.pairs | objtopairs" [hidden]="protectedVisible">
+            <tr *ngFor="let pair of locale.pairs | objtopairs" [hidden]="editable">
                 <td>{{pair.key}}</td>
                 <td>{{pair.value}}</td>
             </tr>

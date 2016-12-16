@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/switchMap';
 
 import { APIService } from './../../shared/api.service';
 import { ProjectsService } from './../../projects/services/projects.service';
@@ -19,35 +24,27 @@ export class UserService {
     constructor(
         private api: APIService,
         private route: ActivatedRoute,
+        private projects: ProjectsService,
     ) {
         this.getUserSelf().subscribe();
     }
 
-    isAuthorized(grant: string): Observable<boolean> {
-        let sub = new BehaviorSubject<boolean>(false);
-        this.userSelf
-            .withLatestFrom(
-            this.route.params.map(params => params['projectId']),
-            (x, y) => { return { user: x, projectId: y } }
-            )
-            .subscribe(result => {
-                let user = result.user;
-                let projectId = result.projectId;
-                if (!user || !projectId) {
-                    return;
-                }
+    isAuthorized(projectId: string, grant: string): Observable<boolean> {
+        return this.userSelf
+            .filter(user => {
+                return !!user;
+            })
+            .map(user => {
                 let projectGrants: string[] = user.projectGrants[projectId];
                 if (!projectGrants) {
-                    sub.next(false);
-                    return;
+                    return false;
                 }
-                console.log(grant);
-                console.log(projectGrants);
+
                 let allowed: boolean = !!projectGrants.find(current => current === grant);
-                console.log(allowed);
-                sub.next(allowed);
-            });
-        return sub.asObservable();
+
+                return allowed;
+            })
+            .take(1);
     }
 
     getUserSelf(): Observable<User> {

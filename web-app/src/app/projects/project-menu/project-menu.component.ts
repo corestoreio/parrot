@@ -21,14 +21,19 @@ export class ProjectMenuComponent implements OnInit {
     constructor(
         private projectMenuService: ProjectMenuService,
         private userService: UserService,
+        private route: ActivatedRoute,
     ) {
-        this.userService.isAuthorized('')
-            .subscribe(ok => this.adminSectionVisible = ok);
-        this.userService.isAuthorized('')
-            .subscribe(ok => this.developerSectionVisible = ok);
     }
 
     ngOnInit() {
+        this.route.params
+            .map(params => params['projectId'])
+            .subscribe(projectId => {
+                this.userService.isAuthorized(projectId, 'CanViewProjectRoles')
+                    .subscribe(ok => this.adminSectionVisible = ok);
+                this.userService.isAuthorized(projectId, 'CanManageAPIClients')
+                    .subscribe(ok => this.developerSectionVisible = ok);
+            });
         this.projectMenuService.menuActive
             .subscribe(active => this.menuActive = active);
     }

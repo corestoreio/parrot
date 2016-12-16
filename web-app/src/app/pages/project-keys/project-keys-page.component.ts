@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Project } from './../../projects/model/project';
+import { UserService } from './../../users/services/user.service';
 import { ProjectsService } from './../../projects/services/projects.service';
 
 @Component({
@@ -11,10 +12,12 @@ import { ProjectsService } from './../../projects/services/projects.service';
 export class ProjectKeysPage implements OnInit {
     private project: Project;
     private loading: boolean = false;
+    private canEdit: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private projectsService: ProjectsService,
+        private userService: UserService,
     ) {
     }
 
@@ -23,6 +26,8 @@ export class ProjectKeysPage implements OnInit {
             .map(params => params['projectId'])
             .subscribe(projectId => {
                 this.fetchProject(projectId);
+                this.userService.isAuthorized(projectId, 'CanUpdateProject')
+                    .subscribe(ok => this.canEdit = ok);
             });
     }
 
