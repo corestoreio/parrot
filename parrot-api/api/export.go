@@ -43,6 +43,8 @@ func exportLocale(w http.ResponseWriter, r *http.Request) {
 		exporter = &export.JavaProperties{}
 	case "xmlproperties":
 		exporter = &export.JavaXML{}
+	case "android":
+		exporter = &export.Android{}
 	default:
 		handleError(w, ErrBadRequest)
 		return
