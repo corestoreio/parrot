@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -46,6 +46,18 @@ export class APIService {
             })
             .map(res => res.json())
             .catch(err => Observable.throw(this.mapErrors(err.json().meta.error)));
+    }
+
+    requestDownload(options: RequestOptions): Observable<any> {
+        return this.http.request(
+            `${this.apiUrl}${options.uri}`, {
+                method: options.method || 'GET',
+                headers: options.headers || this.getHeaders(options.withAuthorization),
+                body: options.body,
+                responseType: ResponseContentType.Blob,
+            })
+            .map(res => res.blob())
+            .catch(err => { console.log(err); return Observable.throw(err); });
     }
 
     mapErrors(error: any): string[] {

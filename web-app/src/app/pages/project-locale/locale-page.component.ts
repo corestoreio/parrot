@@ -33,7 +33,7 @@ export class LocalePage implements OnInit {
             .subscribe(localeIdent => {
                 this.fetchLocale(this.projectId, localeIdent);
                 this.userService.isAuthorized(this.projectId, 'CanUpdateLocales')
-                    .subscribe(ok => { console.log(ok); this.canEditLocales = ok });
+                    .subscribe(ok => { this.canEditLocales = ok });
             });
     }
 

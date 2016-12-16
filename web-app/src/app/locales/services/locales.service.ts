@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import FileSaver from 'file-saver';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -7,6 +8,7 @@ import 'rxjs/add/operator/share';
 import { APIService } from './../../shared/api.service';
 import { Locale, LocaleInfo } from './../model';
 import { LocalesList } from './../../app.config';
+import { LocaleExportFormats, ExportFormat } from './../../app.config';
 
 @Injectable()
 export class LocalesService {
@@ -18,9 +20,23 @@ export class LocalesService {
         return LocalesList;
     }
 
+    public get availableExportFormats(): ExportFormat[] {
+        return LocaleExportFormats;
+    }
+
     constructor(private api: APIService) { }
 
-    createLocale(projectId: number, locale: Locale): Observable<Locale> {
+    requestExport(projectId: string, localeIdent: string, format: ExportFormat): Observable<any> {
+        return this.api.requestDownload({
+            uri: `/projects/${projectId}/locales/${localeIdent}/export/${format.apiIdent}`,
+            method: 'GET',
+        })
+            .map(blob => {
+                FileSaver.saveAs(blob, `${localeIdent}${format.extension}`)
+            });
+    }
+
+    createLocale(projectId: string, locale: Locale): Observable<Locale> {
         let request = this.api.request({
             uri: `/projects/${projectId}/locales`,
             method: 'POST',

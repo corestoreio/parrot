@@ -10,6 +10,7 @@ import { CreateLocaleComponent } from './create-locale/create-locale.component';
 import { LocalePairsComponent } from './locale-pairs/locale-pairs.component';
 
 import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
+import { ExportLocaleComponent } from './export-locale/export-locale.component';
 
 @NgModule({
     imports: [
@@ -22,12 +23,14 @@ import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
         LocalesListComponent,
         CreateLocaleComponent,
         LocalePairsComponent,
-        ObjectToPairsPipe
+        ObjectToPairsPipe,
+        ExportLocaleComponent
     ],
     exports: [
         LocalesListComponent,
         CreateLocaleComponent,
-        LocalePairsComponent
+        LocalePairsComponent,
+        ExportLocaleComponent
     ],
     providers: [
         LocalesService
