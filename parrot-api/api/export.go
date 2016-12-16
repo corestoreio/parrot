@@ -47,6 +47,10 @@ func exportLocale(w http.ResponseWriter, r *http.Request) {
 		exporter = &export.Android{}
 	case "php":
 		exporter = &export.PHP{}
+	case "xlsx":
+		exporter = &export.XLSX{}
+	case "csv":
+		exporter = &export.CSV{}
 	default:
 		handleError(w, ErrBadRequest)
 		return
