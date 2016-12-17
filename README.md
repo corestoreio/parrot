@@ -5,17 +5,16 @@ Currently in heavy development, breaking changes guaranteed :)
 TODO:
 
 General:
-- Add snapshots feature
-- Add forgotten password feature
+- Add frontend app to build pipeline.
+- Add snapshots feature (current project state backups).
+- Add forgotten password feature.
+- Switch to authentication via Firebase?.
 
 Backend:
-- Add copy web app build to nginx as a static server
-- Add timestamps to DB tables
-- Add tests
+- Add timestamps to DB tables.
+- Add tests.
 
 Frontend:
-- Handle api errors presentation
-- Add API error-message map
-- Add app localization
-- Cleanup CSS and switch to using SASS
-- Add tests
+- Localize parrot itself.
+- Cleanup CSS, switch to SASS?.
+- Add tests.
