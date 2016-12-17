@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/anthonynsimon/parrot/parrot-api/datastore"
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
+	"github.com/anthonynsimon/parrot/parrot-api/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/schema"
 	"golang.org/x/crypto/bcrypt"
@@ -48,7 +50,7 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
 		payload := new(AuthRequestPayload)
@@ -56,7 +58,7 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 
 		err = decoder.Decode(payload, r.Form)
 		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
 
@@ -66,7 +68,7 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 		case "client_credentials":
 			handleClientCredentialsGrant(w, *payload, tp, store)
 		default:
-			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			render.Error(w, apiErrors.ErrBadRequest.Status, apiErrors.ErrBadRequest)
 			return
 		}
 	}
@@ -74,18 +76,18 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 
 func handlePasswordGrant(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
 	if payload.Username == "" || payload.Password == "" {
-		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 		return
 	}
 
 	claimedUser, err := store.GetUserByEmail(payload.Username)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		render.Error(w, apiErrors.ErrUnauthorized.Status, apiErrors.ErrUnauthorized)
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.Password)); err != nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		render.Error(w, apiErrors.ErrUnauthorized.Status, apiErrors.ErrUnauthorized)
 		return
 	}
 
@@ -103,7 +105,7 @@ func handlePasswordGrant(w http.ResponseWriter, payload AuthRequestPayload, tp T
 
 	tokenString, err := tp.CreateToken(claims)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusInternalServerError)
+		render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 		return
 	}
 
@@ -118,19 +120,19 @@ func handlePasswordGrant(w http.ResponseWriter, payload AuthRequestPayload, tp T
 
 func handleClientCredentialsGrant(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
 	if payload.ClientId == "" || payload.ClientSecret == "" {
-		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 		return
 	}
 
 	claimedClient, err := store.FindOneClient(payload.ClientId)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		render.Error(w, apiErrors.ErrUnauthorized.Status, apiErrors.ErrUnauthorized)
 		return
 	}
 
 	// Can't use bcrypt, client secret must be visible in web app. Can be regenerated at any time.
 	if claimedClient.Secret != payload.ClientSecret {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		render.Error(w, apiErrors.ErrUnauthorized.Status, apiErrors.ErrUnauthorized)
 		return
 	}
 
@@ -148,7 +150,7 @@ func handleClientCredentialsGrant(w http.ResponseWriter, payload AuthRequestPayl
 
 	tokenString, err := tp.CreateToken(claims)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusInternalServerError)
+		render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 		return
 	}
 
@@ -165,7 +167,7 @@ func IntrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
 		payload := new(IntrospectRequest)
@@ -173,18 +175,18 @@ func IntrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc {
 
 		err = decoder.Decode(payload, r.Form)
 		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
 
 		if payload.Token == "" {
-			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			render.Error(w, apiErrors.ErrBadRequest.Status, apiErrors.ErrBadRequest)
 			return
 		}
 
 		claims, err := tp.ParseAndExtractClaims(payload.Token)
 		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
 
