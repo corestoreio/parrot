@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { User, UpdateUserPasswordPayload } from './../model';
 import { UserService } from './../services/user.service';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
     selector: 'edit-user-password',
@@ -23,6 +24,7 @@ export class EditUserPasswordComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private service: UserService,
+        private errorsService: ErrorsService,
     ) { }
 
     ngOnInit() {
@@ -70,7 +72,10 @@ export class EditUserPasswordComponent implements OnInit {
         this.service.updatePassword(this.formData)
             .subscribe(
             () => this.closeModal(),
-            err => { this.errors = err; this.loading = false },
+            err => {
+                this.errors = this.errorsService.mapErrors(err, 'Register');
+                this.loading = false;
+            },
         );
     }
 }

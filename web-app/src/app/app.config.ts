@@ -15,6 +15,30 @@ export const UserRoles = [
     'developer'
 ];
 
+export const ErrorMap = {
+    'Register': {
+        'AlreadyExists': 'This email is already taken.',
+        'InvalidPassword': 'The provided password is invalid.',
+        'InvalidName': 'The provided name is invalid.',
+        'InvalidEmail': 'The provided email is invalid.',
+        'Unauthorized': 'Invalid credentials.',
+        'Forbiden': 'Invalid credentials.',
+    },
+    'Login': {
+        'InvalidEmail': 'The provided email is invalid.',
+        'InvalidPassword': 'The provided password is invalid.',
+        'Unauthorized': 'Invalid email and/or password.',
+    },
+    'CreateLocale': {
+    },
+    'AddProjectUser': {
+        'NotFound': 'No user found.',
+    },
+    'UpdateProjectClient': {
+        'AlreadyExists': 'The provided name is already in use for this project.',
+    },
+}
+
 export const LocaleExportFormats = [
     { apiIdent: 'keyvaluejson', name: 'Key Value JSON', extension: '.json' },
     { apiIdent: 'po', name: 'Gettext', extension: '.po' },

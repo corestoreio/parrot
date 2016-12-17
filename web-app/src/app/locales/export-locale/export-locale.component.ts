@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { LocalesService } from './../services/locales.service';
 import { ExportFormat } from './../../app.config';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
     selector: 'export-locale',
@@ -23,6 +24,7 @@ export class ExportLocaleComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private service: LocalesService,
+        private errorsService: ErrorsService,
     ) { }
 
     ngOnInit() { }
@@ -51,7 +53,10 @@ export class ExportLocaleComponent implements OnInit {
             () => {
                 this.closeModal();
             },
-            err => { this.errors = err; this.loading = false },
+            err => {
+                this.errors = this.errorsService.mapErrors(err, 'CreateLocale');
+                this.loading = false;
+            },
         )
     }
 }

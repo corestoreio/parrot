@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from './../services/auth.service';
+import { ErrorsService } from './../../shared/errors.service';
 import { User } from './../model/user';
 
 @Component({
@@ -12,7 +13,11 @@ import { User } from './../model/user';
 export class RegisterComponent implements OnInit {
   private errors: string[];
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private errorService: ErrorsService,
+  ) {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -30,11 +35,9 @@ export class RegisterComponent implements OnInit {
           () => {
             this.router.navigate(['/projects']);
           },
-          err => {
-            err => this.errors = err
-          });
+          err => console.error(err));
       },
-      err => this.errors = err
+      err => this.errors = this.errorService.mapErrors(err, 'Register')
     );
   }
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { User, UpdateUserNamePayload } from './../model';
 import { UserService } from './../services/user.service';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
     selector: 'edit-user-name',
@@ -23,6 +24,7 @@ export class EditUserNameComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private service: UserService,
+        private errorsService: ErrorsService,
     ) { }
 
     ngOnInit() {
@@ -56,7 +58,10 @@ export class EditUserNameComponent implements OnInit {
         this.service.updateName(this.formData)
             .subscribe(
             user => { this.user = user; this.loading = false },
-            err => { this.errors = err; this.loading = false },
+            err => {
+                this.errors = this.errorsService.mapErrors(err, 'Register');
+                this.loading = false;
+            },
         );
     }
 }

@@ -5,6 +5,7 @@ import 'rxjs/add/operator/do';
 
 import { ProjectClient } from './../../api-access/model/app';
 import { APIAccessService } from './../../api-access/services/api-access.service';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
     selector: 'api-app-page',
@@ -15,11 +16,13 @@ export class APIAppPage implements OnInit {
     private projectId: string;
     private clientId: string;
     private loading: boolean = false;
+    private errors;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private apiAccess: APIAccessService,
+        private errorsService: ErrorsService,
     ) {
         this.deleteProjectClient = this.deleteProjectClient.bind(this);
         this.updateProjectClient = this.updateProjectClient.bind(this);
@@ -43,7 +46,7 @@ export class APIAppPage implements OnInit {
         this.apiAccess.fetchProjectClient(this.projectId, this.clientId)
             .subscribe(
             app => this.projectClient = app,
-            err => console.log(err),
+            err => console.error(err),
             () => this.loading = false,
         );
     }
@@ -53,7 +56,7 @@ export class APIAppPage implements OnInit {
         this.apiAccess.deleteProjectClient(this.projectId, this.clientId)
             .subscribe(
             () => this.router.navigate(['/projects', this.projectId, 'api']),
-            err => console.log(err),
+            err => console.error(err),
             () => this.loading = false,
         );
     }
@@ -63,17 +66,19 @@ export class APIAppPage implements OnInit {
         this.apiAccess.resetProjectClientSecret(this.projectId, this.clientId)
             .subscribe(
             app => this.projectClient = app,
-            err => console.log(err),
+            err => console.error(err),
             () => this.loading = false,
         );
     }
 
-    updateProjectClient(app: ProjectClient) {
+    updateProjectClient(projectClient: ProjectClient) {
         this.loading = true;
-        this.apiAccess.updateProjectClientName(this.projectId, app)
+        this.apiAccess.updateProjectClientName(this.projectId, projectClient)
             .subscribe(
-            (app) => this.projectClient = app,
-            err => console.log(err),
+            client => this.projectClient = client,
+            err => {
+                this.errors = this.errorsService.mapErrors(err, 'UpdateProjectClient');
+            },
             () => this.loading = false,
         );
     }

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from './../services/auth.service';
 import { User } from './../model/user';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
   selector: 'login',
@@ -12,7 +13,7 @@ import { User } from './../model/user';
 export class LoginComponent implements OnInit {
   private errors: string[];
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router, private errorsService: ErrorsService) { }
 
   ngOnInit() { }
 
@@ -26,8 +27,6 @@ export class LoginComponent implements OnInit {
       result => {
         this.router.navigate(['/projects']);
       },
-      err => {
-        this.errors = err;
-      });
+      err => this.errors = this.errorsService.mapErrors(err, 'Login'));
   }
 }

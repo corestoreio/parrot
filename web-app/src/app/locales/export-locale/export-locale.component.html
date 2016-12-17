@@ -7,9 +7,11 @@
       <h1 class="title">Export Locale Data</h1>
       <br>
 
-      <div class="message is-danger" *ngIf="errors && errors.length > 0">
-        <div *ngFor="let err of errors">
-          <div class="message-body">{{err}}</div>
+      <div *ngIf="errors && errors.length > 0">
+        <div class="message is-danger" *ngFor="let err of errors">
+          <div class="message-body">
+            {{err}}
+          </div>
         </div>
       </div>
 

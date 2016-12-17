@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../../users/services/user.service';
 import { LocalesService } from './../services/locales.service';
 import { Locale, LocaleInfo } from './../model';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
     selector: 'create-locale',
@@ -22,6 +23,7 @@ export class CreateLocaleComponent {
     constructor(
         private localesService: LocalesService,
         private route: ActivatedRoute,
+        private errorsService: ErrorsService,
     ) {
         this.reset();
         this.localesService.locales
@@ -68,7 +70,10 @@ export class CreateLocaleComponent {
         let projectId = this.route.snapshot.params['projectId'];
         this.localesService.createLocale(projectId, this.selectedLocale).subscribe(
             () => { },
-            err => { this.errors = err; this.loading = false; },
+            err => {
+                this.errors = this.errorsService.mapErrors(err, 'CreateLocale');
+                this.loading = false;
+            },
             () => {
                 this.loading = false;
                 this.closeModal();

@@ -40,7 +40,7 @@ export class EditProjectKeyComponent {
     commitChanges() {
         this.submit(this.restoreService.getOriginal(), this.restoreService.getCurrent())
         this.closeModal();
-        // TODO handle failed case?
+        // TODO handle failed case
     }
 
     openModal() {

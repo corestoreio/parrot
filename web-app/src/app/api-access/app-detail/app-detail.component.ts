@@ -15,6 +15,8 @@ export class AppDetailComponent implements OnInit {
     @Input()
     resetSecret;
     @Input()
+    errors;
+    @Input()
     set projectClient(value: ProjectClient) {
         if (!value) {
             return;

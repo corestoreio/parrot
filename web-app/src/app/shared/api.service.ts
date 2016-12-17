@@ -46,8 +46,8 @@ export class APIService {
             })
             .map(res => res.json())
             .catch(err => {
-                let errs = this.mapErrors(err.json().meta.error);
-                return Observable.throw(errs);
+                // let errs = this.mapErrors(err.json().meta.error);
+                return Observable.throw(err.json().meta.error);
             });
     }
 
@@ -60,7 +60,7 @@ export class APIService {
                 responseType: ResponseContentType.Blob,
             })
             .map(res => res.blob())
-            .catch(err => { console.log(err); return Observable.throw(err); });
+            .catch(err => { console.error(err); return Observable.throw(err); });
     }
 
     mapErrors(error: any): string[] {
@@ -69,8 +69,10 @@ export class APIService {
                 return error.errors.map(err => err.message);
             case "AlreadyExists":
                 return [error.message];
+            case "Unauthorized":
+                return [error.message];
             default:
-                return ['unkown error'];
+                return ['Something went wrong. That\'s all we know\'.'];
         }
     }
 }

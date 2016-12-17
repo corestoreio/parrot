@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ProjectUser } from './../model';
 import { ProjectUsersService } from './../services/project-users.service';
+import { ErrorsService } from './../../shared/errors.service';
 
 @Component({
     selector: 'add-project-user',
@@ -24,6 +25,7 @@ export class AddProjectUserComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private service: ProjectUsersService,
+        private errorsService: ErrorsService,
     ) { }
 
     ngOnInit() { }
@@ -51,7 +53,10 @@ export class AddProjectUserComponent implements OnInit {
         this.service.createProjectUser(user)
             .subscribe(
             res => this.closeModal(),
-            err => { this.errors = err; this.loading = false },
+            err => {
+                this.errors = this.errorsService.mapErrors(err, 'AddProjectUser');
+                this.loading = false;
+            },
         )
     }
 }
