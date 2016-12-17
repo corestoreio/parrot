@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/model"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 	"github.com/pressly/chi"
@@ -12,7 +13,7 @@ import (
 func createLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -44,12 +45,12 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 func showLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	ident := chi.URLParam(r, "localeIdent")
 	if ident == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -73,7 +74,7 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 func findLocales(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 
 	}
@@ -101,18 +102,18 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 	ident := chi.URLParam(r, "localeIdent")
 	if ident == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
 	loc := &model.Locale{}
 	if err := json.NewDecoder(r.Body).Decode(&loc.Pairs); err != nil {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
@@ -136,12 +137,12 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	ident := chi.URLParam(r, "localeIdent")
 	if ident == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 

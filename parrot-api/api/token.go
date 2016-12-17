@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/anthonynsimon/parrot/parrot-api/auth"
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 )
 
 type Subject string
@@ -21,25 +22,25 @@ func tokenMiddleware(tp auth.TokenProvider) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString, err := getTokenString(r)
 			if err != nil {
-				handleError(w, ErrUnauthorized)
+				handleError(w, apiErrors.ErrUnauthorized)
 				return
 			}
 
 			claims, err := tp.ParseAndVerifyToken(tokenString)
 			if err != nil {
-				handleError(w, ErrUnauthorized)
+				handleError(w, apiErrors.ErrUnauthorized)
 				return
 			}
 
 			subID := claims["sub"]
 			if subID == nil || subID == "" {
-				handleError(w, ErrInternal)
+				handleError(w, apiErrors.ErrInternal)
 				return
 			}
 
 			subType := claims["subType"]
 			if subType == nil || subType == "" {
-				handleError(w, ErrInternal)
+				handleError(w, apiErrors.ErrInternal)
 				return
 			}
 
@@ -69,11 +70,11 @@ func getTokenString(r *http.Request) (string, error) {
 func getSubjectID(ctx context.Context) (string, error) {
 	v := ctx.Value("subjectID")
 	if v == nil {
-		return "", ErrBadRequest
+		return "", apiErrors.ErrBadRequest
 	}
 	id, ok := v.(string)
 	if id == "" || !ok {
-		return "", ErrInternal
+		return "", apiErrors.ErrInternal
 	}
 	return id, nil
 }
@@ -81,12 +82,12 @@ func getSubjectID(ctx context.Context) (string, error) {
 func getSubjectType(ctx context.Context) (Subject, error) {
 	subType := ctx.Value("subjectType")
 	if subType == nil {
-		return "", ErrBadRequest
+		return "", apiErrors.ErrBadRequest
 	}
 
 	casted, ok := subType.(string)
 	if !ok || casted == "" {
-		return "", ErrBadRequest
+		return "", apiErrors.ErrBadRequest
 	}
 
 	return Subject(casted), nil

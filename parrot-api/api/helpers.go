@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 )
 
@@ -34,11 +35,11 @@ func ping(w http.ResponseWriter, r *http.Request) {
 func getScopes(ctx context.Context) ([]string, error) {
 	v := ctx.Value("scopes")
 	if v == nil {
-		return nil, ErrBadRequest
+		return nil, apiErrors.ErrBadRequest
 	}
 	scopes, ok := v.([]string)
 	if !ok {
-		return nil, ErrInternal
+		return nil, apiErrors.ErrInternal
 	}
 	return scopes, nil
 }

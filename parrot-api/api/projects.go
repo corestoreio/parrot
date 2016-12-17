@@ -6,6 +6,7 @@ import (
 
 	"strings"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/model"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 	"github.com/pressly/chi"
@@ -29,7 +30,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, err := getSubjectID(r.Context())
 	if err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -52,7 +53,7 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 func addProjectKey(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -63,7 +64,7 @@ func addProjectKey(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if data.Key == "" {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
@@ -81,7 +82,7 @@ func addProjectKey(w http.ResponseWriter, r *http.Request) {
 func updateProjectKey(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -92,7 +93,7 @@ func updateProjectKey(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if data.OldKey == "" || data.NewKey == "" {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
@@ -115,7 +116,7 @@ func updateProjectKey(w http.ResponseWriter, r *http.Request) {
 func deleteProjectKey(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -126,7 +127,7 @@ func deleteProjectKey(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if data.Key == "" {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
@@ -142,7 +143,7 @@ func deleteProjectKey(w http.ResponseWriter, r *http.Request) {
 func updateProjectKeys(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -166,7 +167,7 @@ func updateProjectKeys(w http.ResponseWriter, r *http.Request) {
 func showProject(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -182,7 +183,7 @@ func showProject(w http.ResponseWriter, r *http.Request) {
 func deleteProject(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 

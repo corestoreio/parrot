@@ -45,7 +45,10 @@ export class APIService {
                 body: options.body,
             })
             .map(res => res.json())
-            .catch(err => Observable.throw(this.mapErrors(err.json().meta.error)));
+            .catch(err => {
+                let errs = this.mapErrors(err.json().meta.error);
+                return Observable.throw(errs);
+            });
     }
 
     requestDownload(options: RequestOptions): Observable<any> {

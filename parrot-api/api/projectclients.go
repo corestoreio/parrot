@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"net/http"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/model"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 	"github.com/pressly/chi"
@@ -17,7 +18,7 @@ var (
 func getProjectClients(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -33,12 +34,12 @@ func getProjectClients(w http.ResponseWriter, r *http.Request) {
 func getProjectClient(w http.ResponseWriter, r *http.Request) {
 	clientID := chi.URLParam(r, "clientID")
 	if clientID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -54,12 +55,12 @@ func getProjectClient(w http.ResponseWriter, r *http.Request) {
 func deleteProjectClient(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	clientID := chi.URLParam(r, "clientID")
 	if clientID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -75,7 +76,7 @@ func deleteProjectClient(w http.ResponseWriter, r *http.Request) {
 func createProjectClient(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -87,7 +88,7 @@ func createProjectClient(w http.ResponseWriter, r *http.Request) {
 	}
 	secret, err := generateClientSecret(clientSecretBytes)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, apiErrors.ErrInternal)
 		return
 	}
 	pc.Secret = secret
@@ -105,12 +106,12 @@ func createProjectClient(w http.ResponseWriter, r *http.Request) {
 func updateProjectClientName(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	clientID := chi.URLParam(r, "clientID")
 	if clientID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -135,17 +136,17 @@ func updateProjectClientName(w http.ResponseWriter, r *http.Request) {
 func resetProjectClientSecret(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	clientID := chi.URLParam(r, "clientID")
 	if clientID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	secret, err := generateClientSecret(clientSecretBytes)
 	if err != nil {
-		handleError(w, ErrInternal)
+		handleError(w, apiErrors.ErrInternal)
 		return
 	}
 

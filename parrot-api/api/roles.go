@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/pressly/chi"
 )
 
@@ -120,19 +121,19 @@ func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		projectID := chi.URLParam(r, "projectID")
 		if projectID == "" {
-			handleError(w, ErrBadRequest)
+			handleError(w, apiErrors.ErrBadRequest)
 			return
 		}
 
 		ctx := r.Context()
 		subType, err := getSubjectType(ctx)
 		if err != nil {
-			handleError(w, ErrBadRequest)
+			handleError(w, apiErrors.ErrBadRequest)
 			return
 		}
 		requesterID, err := getSubjectID(ctx)
 		if err != nil {
-			handleError(w, ErrBadRequest)
+			handleError(w, apiErrors.ErrBadRequest)
 			return
 		}
 
@@ -153,12 +154,12 @@ func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 			}
 			requesterRole = ClientRole
 		default:
-			handleError(w, ErrBadRequest)
+			handleError(w, apiErrors.ErrBadRequest)
 			return
 		}
 
 		if !isAllowed(Role(requesterRole), action) {
-			handleError(w, ErrForbiden)
+			handleError(w, apiErrors.ErrForbiden)
 			return
 		}
 

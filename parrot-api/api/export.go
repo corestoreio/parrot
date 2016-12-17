@@ -1,27 +1,30 @@
 package api
 
-import "net/http"
-import "github.com/pressly/chi"
+import (
+	"bytes"
+	"fmt"
+	"net/http"
+	"strings"
 
-import "github.com/anthonynsimon/parrot/parrot-api/export"
-import "bytes"
-import "fmt"
-import "strings"
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
+	"github.com/anthonynsimon/parrot/parrot-api/export"
+	"github.com/pressly/chi"
+)
 
 func exportLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	localeIdent := chi.URLParam(r, "localeIdent")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	i18nType := chi.URLParam(r, "type")
 	if i18nType == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -52,7 +55,7 @@ func exportLocale(w http.ResponseWriter, r *http.Request) {
 	case "csv":
 		exporter = &export.CSV{}
 	default:
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 

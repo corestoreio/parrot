@@ -1,6 +1,10 @@
 package api
 
-import "net/http"
+import (
+	"net/http"
+
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
+)
 
 func enforceContentTypeJSON(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -8,7 +12,7 @@ func enforceContentTypeJSON(next http.Handler) http.Handler {
 		case "POST", "PUT", "PATCH":
 			ct := r.Header.Get("Content-Type")
 			if !isValidContentType(ct) {
-				handleError(w, ErrUnsupportedMediaType)
+				handleError(w, apiErrors.ErrUnsupportedMediaType)
 				return
 			}
 		}
@@ -21,7 +25,7 @@ func mustAllowScope(scope string, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		scopes, err := getScopes(r.Context())
 		if err != nil || len(scopes) <= 0 {
-			handleError(w, ErrForbiden)
+			handleError(w, apiErrors.ErrForbiden)
 			return
 		}
 		allowed := false
@@ -32,7 +36,7 @@ func mustAllowScope(scope string, next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 		if !allowed {
-			handleError(w, ErrForbiden)
+			handleError(w, apiErrors.ErrForbiden)
 			return
 		}
 		next(w, r)
@@ -43,7 +47,7 @@ func onlyUsers(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := getSubjectID(r.Context())
 		if err != nil || id == "" {
-			handleError(w, ErrForbiden)
+			handleError(w, apiErrors.ErrForbiden)
 			return
 		}
 		next(w, r)

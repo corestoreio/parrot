@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/model"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 	"golang.org/x/crypto/bcrypt"
@@ -23,7 +24,7 @@ type projectRoles map[string]string
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -83,7 +84,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	existingUser, err := store.GetUserByEmail(user.Email)
 	if err == nil && existingUser.Email == user.Email {
-		handleError(w, ErrAlreadyExists)
+		handleError(w, apiErrors.ErrAlreadyExists)
 		return
 	}
 
@@ -110,14 +111,14 @@ func updateUserPassword(w http.ResponseWriter, r *http.Request) {
 	payload := updatePasswordPayload{}
 	err := decodePayloadAndValidate(r, &payload)
 	if err != nil {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
 	// Validate requesting user matches requested user to be updated
 	err = mustMatchContextUser(r, payload.UserID)
 	if err != nil {
-		handleError(w, ErrForbiden)
+		handleError(w, apiErrors.ErrForbiden)
 		return
 	}
 
@@ -128,7 +129,7 @@ func updateUserPassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(claimedUser.Password), []byte(payload.OldPassword)); err != nil {
-		handleError(w, ErrForbiden)
+		handleError(w, apiErrors.ErrForbiden)
 		return
 	}
 
@@ -162,13 +163,13 @@ func updateUserName(w http.ResponseWriter, r *http.Request) {
 	payload := updateUserNamePayload{}
 	err := decodePayloadAndValidate(r, &payload)
 	if err != nil {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
 	err = mustMatchContextUser(r, payload.UserID)
 	if err != nil {
-		handleError(w, ErrForbiden)
+		handleError(w, apiErrors.ErrForbiden)
 		return
 	}
 
@@ -200,13 +201,13 @@ func updateUserEmail(w http.ResponseWriter, r *http.Request) {
 	payload := updateUserEmailPayload{}
 	err := decodePayloadAndValidate(r, &payload)
 	if err != nil {
-		handleError(w, ErrUnprocessable)
+		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
 
 	err = mustMatchContextUser(r, payload.UserID)
 	if err != nil {
-		handleError(w, ErrForbiden)
+		handleError(w, apiErrors.ErrForbiden)
 		return
 	}
 
@@ -236,7 +237,7 @@ func updateUserEmail(w http.ResponseWriter, r *http.Request) {
 
 func decodeAndValidate(r io.Reader, m model.Validatable) error {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
-		return ErrBadRequest
+		return apiErrors.ErrBadRequest
 	}
 	return m.Validate()
 }

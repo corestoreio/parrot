@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/model"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 	"github.com/pressly/chi"
@@ -12,7 +13,7 @@ import (
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -28,7 +29,7 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -41,7 +42,7 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	// Remove self user from slice
 	id, err := getSubjectID(r.Context())
 	if err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -59,36 +60,36 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
 	// TODO: decode and validate only required fields. Whitelisting?
 	var pu model.ProjectUser
 	if err := json.NewDecoder(r.Body).Decode(&pu); err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
 	// Don't allow self editing
 	id, err := getSubjectID(r.Context())
 	if err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	if id == pu.UserID {
-		handleError(w, ErrForbiden)
+		handleError(w, apiErrors.ErrForbiden)
 		return
 	}
 
 	// Validate that the url of the request matches the body data
 	if projectID != pu.ProjectID {
-		handleError(w, ErrForbiden)
+		handleError(w, apiErrors.ErrForbiden)
 		return
 	}
 	// If neither email nor user id is provided, there's nothing we can do
 	if pu.Email == "" && pu.UserID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -115,12 +116,12 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	userID := chi.URLParam(r, "userID")
 	if userID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -129,11 +130,11 @@ func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 		Role string `json:"role"`
 	}{}
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	if !isRole(data.Role) {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
@@ -151,12 +152,12 @@ func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	userID := chi.URLParam(r, "userID")
 	if userID == "" {
-		handleError(w, ErrBadRequest)
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 	pu := model.ProjectUser{UserID: userID, ProjectID: projectID}
