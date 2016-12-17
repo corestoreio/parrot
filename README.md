@@ -14,7 +14,6 @@ Backend:
 - Add tests
 
 Frontend:
-- Add locale exports button
 - Handle api errors presentation
 - Add API error-message map
 - Add app localization
