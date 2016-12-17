@@ -56,6 +56,8 @@ a.appbar-link.is-active {
 }
 
 .parrot-title {
-    color: #1b314c;
+    color: #757575;
     font-weight: bold;
+    margin: 0 5px;
+    font-size: 1.3em;
 }
