@@ -1,38 +1,43 @@
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading && _projectClient">
 
-    <div class="box">
-        <form class="control">
+    <div class="media block">
+        <div class="media-content">
+            <div class="content">
 
-            <div *ngIf="errors && errors.length > 0">
-                <div class="message is-danger" *ngFor="let err of errors">
-                    <div class="message-body">
-                        {{err}}
+                <form class="control">
+                    <div *ngIf="errors && errors.length > 0">
+                        <div class="message is-danger" *ngFor="let err of errors">
+                            <div class="message-body">
+                                {{err}}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <label class="label">Client Name</label>
-            <p class="control has-icon has-icon-right">
-                <input class="input" type="text" placeholder="The client's name" [(ngModel)]="_projectClient.name" name="clientName">
-            </p>
-            <p class="control">
-                <button (click)="saveChanges()" class="button is-primary">Save changes</button>
-                <button (click)="cancelChanges()" class="button">Cancel</button>
-            </p>
-        </form>
-        <label class="label">Client ID</label>
-        <p class="control has-icon">
-            {{_projectClient?.client_id}}
-        </p>
-        <label class="label">Client Secret</label>
-        <p class="control has-icon">
-            {{_projectClient?.secret}}
-        </p>
-        <p class="control">
-            <button (click)="resetSecretPrompt()" class="button is-warning">Reset secret</button>
-            <span class="help is-danger">Only reset the secret if you know what you are doing!</span>
-        </p>
+                    <label class="label">Client Name</label>
+                    <p class="control has-icon has-icon-right">
+                        <input class="input" type="text" placeholder="The client's name" [(ngModel)]="_projectClient.name" name="clientName">
+                    </p>
+                    <p class="control">
+                        <button (click)="saveChanges()" class="button is-primary">Save changes</button>
+                        <button (click)="cancelChanges()" class="button">Cancel</button>
+                    </p>
+                </form>
+
+                <label class="label">Client ID</label>
+                <p class="control has-icon">
+                    {{_projectClient?.client_id}}
+                </p>
+                <label class="label">Client Secret</label>
+                <p class="control has-icon">
+                    {{_projectClient?.secret}}
+                </p>
+                <p class="control">
+                    <button (click)="resetSecretPrompt()" class="button is-warning">Reset secret</button>
+                    <span class="help is-danger">Only reset the secret if you know what you are doing!</span>
+                </p>
+            </div>
+        </div>
     </div>
 
 </div>

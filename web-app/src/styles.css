@@ -53,3 +53,10 @@ html, body {
   color: #212121;
   font-weight: bold;
 }
+
+.media.block {
+    background: white;
+    border-radius: 2px;
+    padding: 20px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+}

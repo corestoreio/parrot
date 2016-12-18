@@ -5,8 +5,7 @@ import { UserService } from './../../users/services/user.service';
 
 @Component({
     selector: 'account-page',
-    templateUrl: 'account-page.component.html',
-    styles: ['account-page.component.css']
+    templateUrl: 'account-page.component.html'
 })
 export class AccountPage implements OnInit {
     private user: User;
