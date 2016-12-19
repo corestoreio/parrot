@@ -1,0 +1,914 @@
+---
+swagger: '2.0'
+
+
+info:
+  version: v1
+  title: Parrot API
+  description: |
+  
+    All endpoints are only accessible via https and are located at
+    `host:port/api`. For example:
+    ```
+      https://host:port/api/users/register
+    ```
+    For most routes you will require a valid access token, check out the Auth section
+    for more info.
+
+
+    ## Limits
+    If you're sending too many requests too quickly, we'll send back a
+    `503` error code (server unavailable).
+    You are limited to `5` requests per second per IP.
+
+    ## Structure
+
+    ### The Envelope
+    Every response is contained by an envelope. That is, each response has  a predictable set of keys with which you can expect to interact:
+    ```json
+    {
+        "meta": {
+            "status": 200,
+            "error": {
+              "status": 200
+              "type": "...",
+              "message": "..."
+            }
+        },
+        "payload": {
+            ...
+        }
+    }
+    ```
+
+    #### META
+    The meta key is used to communicate extra information about the response to
+    the developer. If all goes well, you'll only ever see a code key with value `200`.
+    However, sometimes things go wrong, and in that case you might see a response like:
+    ```json
+    {
+        "meta": {
+            "status": 422,
+            "error": {
+              "status": 422
+              "type": "UnprocessableEntity",
+              "message": "Unprocessable entity"
+            }
+        }
+    }
+    ```
+
+    #### Payload
+    The response payload object contains the actual information requested if applicable. For example:
+    ```json
+    {
+        "meta": {
+            ...
+        },
+        "payload": {
+            "id": "0daeb184-bd74-4aa9-b4dd-8a9aa2145ace",
+            "email": "...",
+            "roles": [...]
+        }
+    }
+    ```
+
+
+################################################################################
+#                                  Config                                       #
+################################################################################
+host: localhost
+basePath: /api
+schemes:
+  - https
+produces:
+  - application/json
+  - application/octet-steam
+consumes:
+  - application/json
+  - application/x-www-form-urlencoded
+
+    
+################################################################################
+#                                  Security                                    #
+################################################################################
+securityDefinitions:
+  Bearer:
+    type: oauth2
+    flow: password
+    tokenUrl: /auth/token
+
+################################################################################
+#                                   Parameters                                 #
+################################################################################
+parameters:
+  userId:
+    name: userId
+    in: path
+    description: The user's UUID
+    type: string
+    required: true
+  projectId:
+    name: projectId
+    in: path
+    description: The project's UUID
+    type: string
+    required: true
+  localeIdent:
+    name: localeIdent
+    in: path
+    description: The locale's ident (not UUID)
+    type: string
+    required: true
+  clientId:
+    name: clientId
+    in: path
+    description: The client's UUID
+    type: string
+    required: true
+  exportFormat:
+    name: exportFormat
+    in: path
+    description: The desired export format
+    type: string
+    required: true
+
+
+################################################################################
+#                                  Paths                                       #
+################################################################################
+paths:
+
+  # API
+  /ping:
+    get:
+      description: Ping the API server.
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    
+  # AUTH
+  /auth/token:
+    post:
+      description: |
+        Exchange credentials for a token. Must use `application/x-www-form-urlencoded` content type.  
+        `grant_type` must be of either `password` (username, password) or `client_credentials` (client_id, client_secret).  
+        `client_id` is required if using `client_credentials`.  
+        `client_secret` is required if using `client_credentials`.  
+        `username` is required if using `password`. Use user's email.  
+        `password` is required if using `password`.  
+      parameters:
+        - name: payload
+          in: body
+          schema:
+            type: object
+            properties:
+              grant_type:
+                type: string
+                description: Must be of either `password` (username, password) or `client_credentials` (client_id, client_secret)
+              client_id:
+                description: Required if using `client_credentials`
+                type: string
+              client_secret:
+                description: Required if using `client_credentials`
+                type: string
+              username:
+                description: Required if using `password`. Use user's email.
+                type: string
+              password:
+                description: Required if using `password`
+                type: string
+      responses:
+        200:
+          description: Created
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+              expires_in:
+                type: string
+              token_type:
+                type: string
+                
+  # USERS
+  /users/register:
+    post:
+      description: Register a new user.
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/User'
+  /users/self:
+    get:
+      description: Get information on the user making the request.
+      security:
+        - Bearer: []
+      parameters:
+        - name: include
+          description: |
+            Include more user related information. Available values are
+            'projectRoles' and 'projectGrants'.
+          type: string
+          in: query
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/User'
+  /users/self/name:
+    patch:
+      description: Change the name of the user making the request.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            name:
+              type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/User'
+  /users/self/email:
+    patch:
+      description: Change the email of the user making the request.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            email:
+              type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/User'
+  /users/self/password:
+    patch:
+      description: Change the password of the user making the request.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            oldPassword:
+              type: string
+            newPassword:
+              type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/User'
+                  
+  # PROJECTS
+  /projects:
+    get:
+      description: Get the users to which the requesting user has access to.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                type: array
+                items:
+                  $ref: '#/definitions/Project'
+    post:
+      description: Create a new project and assign the requesting user as project owner.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            keys:
+              type: array
+              items:
+                type: string
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Project'
+  /projects/{projectId}:
+    parameters:
+    - $ref: '#/parameters/projectId'
+    get:
+      description: Get a specific project.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Project'
+    delete:
+      description: Delete a project. Must have owner role.
+      security:
+        - Bearer: []
+      responses:
+        204:
+          description: No Content
+          schema:
+            type: object
+  /projects/{projectId}/keys:
+    parameters:
+    - $ref: '#/parameters/projectId'
+    post:
+      description: Add a project key.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            key:
+              type: string
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Project'
+    patch:
+      description: Update a project key. All project locales will be updated to reflect changes.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            oldKey:
+              type: string
+            newKey:
+              type: string
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Project'
+    delete:
+      description: Delete a project key. All project locales will be updated to reflect changes.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            key:
+              type: string
+      responses:
+        204:
+          description: No Content
+            
+  # PROJECT USERS
+  /projects/{projectId}/users:
+    parameters:
+    - $ref: '#/parameters/projectId'
+    get:
+      description: Get the users with access to this project. User self is not included in the result.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+    post:
+      description: Grant access for this project to an already registered user.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ProjectUser'
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/ProjectUser'
+  /projects/{projectId}/users/{userId}/role:
+    parameters:
+    - $ref: '#/parameters/projectId'
+    - $ref: '#/parameters/userId'
+    patch:
+      description: Update the user's role from a project.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            role:
+              type: string
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/ProjectUser'
+  /projects/{projectId}/users/{userId}:
+    parameters:
+    - $ref: '#/parameters/projectId'
+    - $ref: '#/parameters/userId'
+    delete:
+      description: Revoke access to a project from a user.
+      security:
+        - Bearer: []
+      responses:
+        204:
+          description: No Content
+
+  # PROJECT CLIENTS
+  /projects/{projectId}/clients:
+    parameters:
+      - $ref: '#/parameters/projectId'
+    get:
+      description: Get the API clients with access to this project.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                type: array
+                items:
+                  $ref: '#/definitions/ProjectClient'
+    post:
+      description: Create a new project client.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/ProjectClient'
+  /projects/{projectId}/clients/{clientId}:
+    parameters:
+      - $ref: '#/parameters/projectId'
+      - $ref: '#/parameters/clientId'
+    get:
+      description: Get a project client by id.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/ProjectClient'
+    delete:
+      description: Delete a project client.
+      security:
+        - Bearer: []
+      responses:
+        204:
+          description: No Content
+  /projects/{projectId}/clients/{clientId}/resetSecret:
+    parameters:
+      - $ref: '#/parameters/projectId'
+      - $ref: '#/parameters/clientId'
+    patch:
+      description: Reset the project client's secret.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/ProjectUser'
+  /projects/{projectId}/clients/{clientId}/name:
+    parameters:
+      - $ref: '#/parameters/projectId'
+      - $ref: '#/parameters/clientId'
+    patch:
+      description: Update the project client's name.
+      security:
+        - Bearer: []
+      parameters:
+      - name: payload
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/ProjectUser'
+                
+  # PROJECT LOCALES
+  /projects/{projectId}/locales:
+    parameters:
+      - $ref: '#/parameters/projectId'
+    get:
+      description: Get the project locales.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                type: array
+                items:
+                  $ref: '#/definitions/Locale'
+    post:
+      description: Create a new project locale.
+      security:
+        - Bearer: []
+      parameters:
+        - name: payload
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              ident:
+                type: string
+              country:
+                type: string
+              language:
+                type: string
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Locale'
+  /projects/{projectId}/locales/{localeIdent}:
+    parameters:
+      - $ref: '#/parameters/projectId'
+      - $ref: '#/parameters/localeIdent'
+    get:
+      description: Get a project client by id.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Locale'
+    delete:
+      description: Delete a project client.
+      security:
+        - Bearer: []
+      responses:
+        204:
+          description: No Content
+  /projects/{projectId}/locales/{localeIdent}/pairs:
+    parameters:
+      - $ref: '#/parameters/projectId'
+      - $ref: '#/parameters/localeIdent'
+    patch:
+      description: Reset the project client's secret.
+      security:
+        - Bearer: []
+      parameters:
+        - name: payload
+          description: A map of key value pairs defining the translations
+          in: body
+          required: true
+          schema:
+            type: object
+            additionalProperties:
+              type: array
+              items:
+                type: string
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+              payload:
+                $ref: '#/definitions/Locale'
+  /projects/{projectId}/locales/{localeIdent}/export/{exportFormat}:
+    parameters:
+      - $ref: '#/parameters/projectId'
+      - $ref: '#/parameters/localeIdent'
+      - $ref: '#/parameters/exportFormat'
+    get:
+      description: |
+        Export the locale's pairs in the provided format.
+        Available formats: `keyvaluejson`, `po`, `strings`, `properties`,
+        `xmlproperties`, `android`, `php`, `xlsx`, `csv`.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: file
+
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  Project:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      keys:
+        type: array
+        items:
+          type: string
+  ProjectUser:
+    type: object
+    properties:
+      user_id:
+        type: string
+      project_id:
+        type: string
+      role:
+        type: string
+  ProjectClient:
+    type: object
+    properties:
+      client_id:
+        type: string
+      secret:
+        type: string
+      name:
+        type: string
+      project_id:
+        type: string
+  Locale:
+    type: object
+    properties:
+      id:
+        type: string
+      project_id:
+        type: string
+      ident:
+        type: string
+      language:
+        type: string
+      country:
+        type: string
+      pairs:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: string
+    
+
