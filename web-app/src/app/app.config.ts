@@ -1,5 +1,5 @@
 export const AppConfig = {
-    apiUrl: 'https://localhost/api',
+    apiUrl: 'https://localhost/api/v1',
 };
 
 export interface ExportFormat {

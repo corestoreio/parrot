@@ -115,8 +115,8 @@ func main() {
 	}
 
 	tp := auth.TokenProvider{Name: issuerName, SigningKey: []byte(signingKey)}
-	router.Mount("/api/auth", auth.NewRouter(ds, tp))
-	router.Mount("/api", api.NewRouter(ds, tp))
+	router.Mount("/api/v1/auth", auth.NewRouter(ds, tp))
+	router.Mount("/api/v1", api.NewRouter(ds, tp))
 
 	// config server
 	addr := os.Getenv("PARROT_API_SERVER_PORT")
