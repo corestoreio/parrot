@@ -7,24 +7,46 @@ info:
   title: Parrot API
   description: |
   
-    All endpoints are only accessible via https and are located at
-    `host:port/api`. For example:
+    Parrot is a self-hosted Localization Management Platform, this document describes
+     how to interact with the API layer.
+     
+    If you setup everything properly, all endpoints should only be accessible via `HTTPS` and are located at
+    `host:port/api/v1`. For example:
     ```
-      https://host:port/api/users/register
+      https://host:port/api/v1/users/register
     ```
-    For most routes you will require a valid access token, check out the Auth section
-    for more info.
+     
+    ## Authentication
+    For most routes you will require a valid access token, Parrot supports the `password` and `client_credentials` grant types.
+    
+    To issue a token, make a `POST` request to the `/auth/token` endpoint with the corresponding parameters. For example:
+    ```
+    POST https://localhost/api/auth/token HTTP/1.1
 
-
+    Content-Type: application/x-www-form-urlencoded
+    
+    grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET
+    
+    ```
+    
+    You will receive a token if the server authorized your request. From now own, simply include it as a request header for all subsequent requests. Like so:
+    ```
+      Authorization: Bearer YOUR_TOKEN
+    ```
+    
+    ## Authorization
+    
+    There are 4 roles for any given project: `owner`, `editor`, `viewer` and `developer`.
+    
+    
     ## Limits
-    If you're sending too many requests too quickly, we'll send back a
-    `503` error code (server unavailable).
-    You are limited to `5` requests per second per IP.
+    If you're sending too many requests in a short amount of time, the server will send back a `503` error code (server unavailable).
+    By default you are limited to `5` requests per second per IP.    
 
-    ## Structure
+    ## API Response Structure
 
-    ### The Envelope
-    Every response is contained by an envelope. That is, each response has  a predictable set of keys with which you can expect to interact:
+    ### The Response Envelope
+    Every response is contained by the envelope: 
     ```json
     {
         "meta": {
@@ -41,7 +63,7 @@ info:
     }
     ```
 
-    #### META
+    #### Response Body Meta
     The meta key is used to communicate extra information about the response to
     the developer. If all goes well, you'll only ever see a code key with value `200`.
     However, sometimes things go wrong, and in that case you might see a response like:
@@ -58,8 +80,8 @@ info:
     }
     ```
 
-    #### Payload
-    The response payload object contains the actual information requested if applicable. For example:
+    #### Response Body Payload
+    The response payload object contains the actual information requested (if applicable). For example:
     ```json
     {
         "meta": {
@@ -78,7 +100,7 @@ info:
 #                                  Config                                       #
 ################################################################################
 host: localhost
-basePath: /api
+basePath: /api/v1
 schemes:
   - https
 produces:
@@ -911,4 +933,3 @@ definitions:
           items:
             type: string
     
-
