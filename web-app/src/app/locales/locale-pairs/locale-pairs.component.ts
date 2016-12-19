@@ -35,6 +35,9 @@ export class LocalePairsComponent {
             let filled = 0;
             let pairs = this.locale.pairs;
             let keys = Object.keys(pairs);
+            if (keys.length <= 0) {
+                return 0;
+            }
             keys.forEach(key => {
                 let v = pairs[key];
                 if (v && v.length > 0) {
