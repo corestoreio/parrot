@@ -1,0 +1,1921 @@
+FORMAT: 1A
+
+# Parrot API
+
+All endpoints are only accessible via https and are located at
+`host:port/api`. For example:
+```
+  https://host:port/api/users/register
+```
+For most routes you will require a valid access token, check out the Auth section
+for more info.
+
+## Limits
+If you're sending too many requests too quickly, we'll send back a
+`503` error code (server unavailable).
+You are limited to `5` requests per second per IP.
+
+## Structure
+
+### The Envelope
+Every response is contained by an envelope. That is, each response has  a predictable set of keys with which you can expect to interact:
+```json
+{
+    "meta": {
+        "status": 200,
+        "error": {
+          "status": 200
+          "type": "...",
+          "message": "..."
+        }
+    },
+    "payload": {
+        ...
+    }
+}
+```
+
+#### META
+The meta key is used to communicate extra information about the response to
+the developer. If all goes well, you'll only ever see a code key with value `200`.
+However, sometimes things go wrong, and in that case you might see a response like:
+```json
+{
+    "meta": {
+        "status": 422,
+        "error": {
+          "status": 422
+          "type": "UnprocessableEntity",
+          "message": "Unprocessable entity"
+        }
+    }
+}
+```
+
+#### Payload
+The response payload object contains the actual information requested if applicable. For example:
+```json
+{
+    "meta": {
+        ...
+    },
+    "payload": {
+        "id": "0daeb184-bd74-4aa9-b4dd-8a9aa2145ace",
+        "email": "...",
+        "roles": [...]
+    }
+}
+```
+
+### /api/ping
+
+#### GET
+
+Ping the API server.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/auth/token
+
+#### POST
+
+Exchange credentials for a token. Must use `application/x-www-form-urlencoded` content type.  
+`grant_type` must be of either `password` (username, password) or `client_credentials` (client_id, client_secret).  
+`client_id` is required if using `client_credentials`.  
+`client_secret` is required if using `client_credentials`.  
+`username` is required if using `password`. Use user's email.  
+`password` is required if using `password`.  
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {
+              "client_id": "eiusmod sint minim non",
+              "password": "fugiat dolor do"
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "grant_type": {
+                  "type": "string",
+                  "description": "Must be of either `password` (username, password) or `client_credentials` (client_id, client_secret)"
+                },
+                "client_id": {
+                  "description": "Required if using `client_credentials`",
+                  "type": "string"
+                },
+                "client_secret": {
+                  "description": "Required if using `client_credentials`",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Required if using `password`. Use user's email.",
+                  "type": "string"
+                },
+                "password": {
+                  "description": "Required if using `password`",
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    Created
+
+    + Body
+
+            {
+              "access_token": "mollit irure"
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string"
+                },
+                "expires_in": {
+                  "type": "string"
+                },
+                "token_type": {
+                  "type": "string"
+                }
+              }
+            }
+
+### /api/users/register
+
+#### POST
+
+Register a new user.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 201 (application/json)
+
+    Created
+
+    + Body
+
+            {
+              "payload": {
+                "password": "qui tempor esse"
+              }
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+#### GET /api/users/self
+
+Get information on the user making the request.
+
++ Parameters
+
+    + include
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/users/self/name
+
+#### PATCH
+
+Change the name of the user making the request.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {
+              "name": "do aliqua"
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/users/self/email
+
+#### PATCH
+
+Change the email of the user making the request.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {
+              "userId": "tempor",
+              "email": "proident pariatur tempor sed"
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {
+              "meta": {}
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/users/self/password
+
+#### PATCH
+
+Change the password of the user making the request.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {
+              "oldPassword": "in dolore",
+              "newPassword": "ex"
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "oldPassword": {
+                  "type": "string"
+                },
+                "newPassword": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {
+              "meta": {
+                "status": -84802881
+              }
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects
+
+#### GET
+
+Get the users to which the requesting user has access to.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {
+              "meta": {
+                "status": 49672136
+              }
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "keys": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### POST
+
+Create a new project and assign the requesting user as project owner.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+
++ Response 201 (application/json)
+
+    Created
+
+    + Body
+
+            {
+              "payload": {
+                "id": "nulla culpa"
+              }
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "keys": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}
+
++ Parameters
+
+    + projectId (required)
+
+#### GET
+
+Get a specific project.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    OK
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "keys": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### DELETE
+
+Delete a project. Must have owner role.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 204 (application/json)
+
+    No Content
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object"
+            }
+
+### /api/projects/{projectId}/keys
+
++ Parameters
+
+    + projectId (required)
+
+#### POST
+
+Add a project key.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 201 (application/json)
+
+    Created
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "keys": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### PATCH
+
+Update a project key. All project locales will be updated to reflect changes.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "oldKey": {
+                  "type": "string"
+                },
+                "newKey": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {
+              "payload": {
+                "name": "eu Ut voluptate aliquip fugia"
+              }
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "keys": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### DELETE
+
+Delete a project key. All project locales will be updated to reflect changes.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 204 (application/json)
+
+    No Content
+
+    + Body
+
+### /api/projects/{projectId}/users
+
++ Parameters
+
+    + projectId (required)
+
+#### GET
+
+Get the users with access to this project. User self is not included in the result.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### POST
+
+Grant access for this project to an already registered user.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {
+              "user_id": "reprehenderit fugiat",
+              "project_id": "ea est of",
+              "role": "ex ut adipisicing esse veniam"
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string"
+                },
+                "project_id": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 201 (application/json)
+
+    Created
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/users/{userId}/role
+
++ Parameters
+
+    + projectId (required)
+    
+    + userId (required)
+
+#### PATCH
+
+Update the user's role from a project.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/users/{userId}
+
++ Parameters
+
+    + projectId (required)
+    
+    + userId (required)
+
+#### DELETE
+
+Revoke access to a project from a user.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 204 (application/json)
+
+    No Content
+
+    + Body
+
+### /api/projects/{projectId}/clients
+
++ Parameters
+
+    + projectId (required)
+
+#### GET
+
+Get the API clients with access to this project.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {
+              "payload": [
+                {},
+                {
+                  "secret": "anim nostrud enim qui ut"
+                },
+                {
+                  "client_id": "ipsum amet nisi",
+                  "secret": "anim "
+                }
+              ]
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "client_id": {
+                        "type": "string"
+                      },
+                      "secret": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### POST
+
+Create a new project client.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 201 (application/json)
+
+    Created
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "client_id": {
+                      "type": "string"
+                    },
+                    "secret": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/clients/{clientId}
+
++ Parameters
+
+    + projectId (required)
+    
+    + clientId (required)
+
+#### GET
+
+Get a project client by id.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "client_id": {
+                      "type": "string"
+                    },
+                    "secret": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+#### DELETE
+
+Delete a project client.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 204 (application/json)
+
+    No Content
+
+    + Body
+
+### /api/projects/{projectId}/clients/{clientId}/resetSecret
+
++ Parameters
+
+    + projectId (required)
+    
+    + clientId (required)
+
+#### PATCH
+
+Reset the project client's secret.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/clients/{clientId}/name
+
++ Parameters
+
+    + projectId (required)
+    
+    + clientId (required)
+
+#### PATCH
+
+Update the project client's name.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/locales
+
++ Parameters
+
+    + projectId (required)
+
+#### GET
+
+Get the project locales.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      },
+                      "ident": {
+                        "type": "string"
+                      },
+                      "language": {
+                        "type": "string"
+                      },
+                      "country": {
+                        "type": "string"
+                      },
+                      "pairs": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### POST
+
+Create a new project locale.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "ident": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 201 (application/json)
+
+    Created
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "ident": {
+                      "type": "string"
+                    },
+                    "language": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    },
+                    "pairs": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/locales/{localeIdent}
+
++ Parameters
+
+    + projectId (required)
+    
+    + localeIdent (required)
+
+#### GET
+
+Get a project client by id.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {
+              "payload": {
+                "language": "sint",
+                "country": "aute qui",
+                "id": "Excepteur",
+                "project_id": "officia non"
+              }
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "ident": {
+                      "type": "string"
+                    },
+                    "language": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    },
+                    "pairs": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+#### DELETE
+
+Delete a project client.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 204 (application/json)
+
+    No Content
+
+    + Body
+
+### /api/projects/{projectId}/locales/{localeIdent}/pairs
+
++ Parameters
+
+    + projectId (required)
+    
+    + localeIdent (required)
+
+#### PATCH
+
+Reset the project client's secret.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {}
+
+    + Schema
+
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+            {
+              "meta": {}
+            }
+
+    + Schema
+
+            {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "ident": {
+                      "type": "string"
+                    },
+                    "language": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    },
+                    "pairs": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+### /api/projects/{projectId}/locales/{localeIdent}/export/{exportFormat}
+
++ Parameters
+
+    + projectId (required)
+    
+    + localeIdent (required)
+    
+    + exportFormat (required)
+
+#### GET
+
+Export the locale's pairs in the provided format.
+Available formats: `keyvaluejson`, `po`, `strings`, `properties`,
+`xmlproperties`, `android`, `php`, `xlsx`, `csv`.
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
++ Response 200 (application/json)
+
+    Ok
+
+    + Body
+
+    + Schema
+
+            {
+              "type": "file"
+            }
+
