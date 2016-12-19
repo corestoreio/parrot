@@ -11,7 +11,7 @@ func enforceContentTypeJSON(next http.Handler) http.Handler {
 		switch r.Method {
 		case "POST", "PUT", "PATCH":
 			ct := r.Header.Get("Content-Type")
-			if !isValidContentType(ct) {
+			if !isValidContentType(ct) && r.ContentLength > 0 {
 				handleError(w, apiErrors.ErrUnsupportedMediaType)
 				return
 			}
