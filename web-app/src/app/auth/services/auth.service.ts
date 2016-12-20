@@ -7,7 +7,6 @@ import 'rxjs/add/operator/map';
 import { TokenService } from './token.service';
 import { APIService } from './../../shared/api.service';
 import { User } from './../../users/model/user';
-import { UserService } from './../../users/services/user.service';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +16,6 @@ export class AuthService {
     constructor(
         private api: APIService,
         private token: TokenService,
-        private userService: UserService,
     ) { }
 
     isLoggedIn(): boolean {

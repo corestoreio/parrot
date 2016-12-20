@@ -28,11 +28,14 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(name: string, email: string, password: string) {
-    let user = new User(name, email, password);
+    let user = { name: name, email: email, password: password };
     this.auth.register(user).subscribe(
       () => {
         this.auth.login(user).subscribe(
-          () => {
+          result => {
+            if (!result) {
+              return console.error('something went wrong');
+            }
             this.router.navigate(['/projects']);
           },
           err => console.error(err));

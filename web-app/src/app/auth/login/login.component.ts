@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(email: string, password: string) {
-    let user = new User("", email, password);
+    let user = { email: email, password: password };
     this.auth.login(user).subscribe(
       result => {
         this.router.navigate(['/projects']);
