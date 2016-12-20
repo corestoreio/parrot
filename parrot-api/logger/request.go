@@ -1,3 +1,4 @@
+// Package logger implements middleware loggeing.
 package logger
 
 import (
@@ -27,6 +28,7 @@ func (rw *responseWriter) WriteHeader(s int) {
 	rw.Writer.WriteHeader(s)
 }
 
+// Request returns an http.Handler that can be used as middleware to log requests.
 func Request(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
