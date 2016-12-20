@@ -12,6 +12,7 @@ import { ProjectsService } from './../../projects/services/projects.service';
 export class ProjectSettingsPage implements OnInit {
     private project: Project;
     private loading: boolean = false;
+    private canDeleteProject: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -28,6 +29,8 @@ export class ProjectSettingsPage implements OnInit {
             .map(params => params['projectId'])
             .subscribe(projectId => {
                 this.fetchProject(projectId);
+                this.userService.isAuthorized(projectId, 'CanDeleteProject')
+                    .subscribe(ok => this.canDeleteProject = ok);
             });
     }
 
