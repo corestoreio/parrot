@@ -43,6 +43,10 @@ export class EditableTextFieldComponent {
         this.editing = true;
     }
 
+    defocus() {
+        this.cancelEdit();
+    }
+
     cancelEdit() {
         this.editing = false;
         this._pair = JSON.parse(JSON.stringify(this._original));;

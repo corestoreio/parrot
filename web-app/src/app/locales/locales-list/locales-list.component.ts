@@ -10,19 +10,33 @@ import { Locale } from './../model/locale';
 export class LocalesListComponent {
     @Input()
     private loading: boolean;
+
     @Input()
-    private searchString: string;
-    @Input()
-    private locales: Locale[] = [];
+    set locales(value: Locale[]) {
+        if (!value) {
+            return;
+        }
+        this._locales = value;
+        this.searchString = '';
+    }
+
+    set searchString(value: string) {
+        this._searchString = value;
+        this.filterLocales(value);
+    }
+
+    get searchString(): string {
+        return this._searchString;
+    }
+
+    private _searchString: string;
+    private _locales: Locale[] = [];
+    private _filteredLocales: Locale[]
 
     constructor() { }
 
-    onSearch(event: any) {
-        this.searchString = event.target.value;
-    }
-
-    filterLocales(str: string) {
-        return this.locales.filter(locale => {
+    filterLocales(str: string = '') {
+        this._filteredLocales = this._locales.filter(locale => {
             let v = `${locale.ident} ${locale.country} ${locale.language}`.toLowerCase();
             return v.includes(str.toLowerCase());
         });

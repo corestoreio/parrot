@@ -1,11 +1,11 @@
 <p class="control is-expanded">
-    <input class="input" type="text" placeholder="Search locales" (keyup)="onSearch($event)" autocomplete="off">
+    <input class="input" type="text" placeholder="Search locales" [(ngModel)]="searchString" autocomplete="off">
 </p>
 
 <div class="spinner centered" *ngIf="loading"></div>
 <div *ngIf="!loading">
 
-    <article class="media locale center-align" [routerLink]="['locales', locale.ident]" *ngFor="let locale of filterLocales(searchString || '')">
+    <article class="media locale center-align" [routerLink]="['locales', locale.ident]" *ngFor="let locale of _filteredLocales">
         <figure class="media-left">
             <span class="icon is-medium">
                 <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i>
