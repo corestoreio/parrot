@@ -1,3 +1,4 @@
+// Package errors holds the HTTP errors that the API returns.
 package errors
 
 import (
@@ -40,16 +41,19 @@ var (
 		http.StatusText(http.StatusUnsupportedMediaType))
 )
 
+// Error holds the basic error struct.
 type Error struct {
 	Status  int    `json:"status,omitempty"`
 	Type    string `json:"type"`
 	Message string `json:"message"`
 }
 
+// New creates and returns an error based on the provided status, type and message.
 func New(s int, t, m string) *Error {
 	return &Error{Status: s, Type: t, Message: m}
 }
 
+// MultiError holds nested errors.
 type MultiError struct {
 	Status  int     `json:"status,omitempty"`
 	Type    string  `json:"type"`
@@ -57,14 +61,17 @@ type MultiError struct {
 	Errors  []Error `json:"errors,omitempty"`
 }
 
+// NewMultiError creates and returns an error with multiple nested errors.
 func NewMultiError(s int, t, m string, errs []Error) *MultiError {
 	return &MultiError{Status: s, Type: t, Message: m, Errors: errs}
 }
 
+// Error implements the error interface.
 func (e *Error) Error() string {
 	return fmt.Sprintf("error: status: %d type: %s message: %s", e.Status, e.Type, e.Message)
 }
 
+// Error implements the error interface.
 func (e *MultiError) Error() string {
 	result := ""
 	for _, err := range e.Errors {
