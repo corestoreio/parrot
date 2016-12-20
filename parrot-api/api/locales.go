@@ -10,6 +10,7 @@ import (
 	"github.com/pressly/chi"
 )
 
+// createLocale is an API endpoint for creating a new project locale.
 func createLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -42,6 +43,7 @@ func createLocale(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
+// showLocale is an API endpoint for retrieving a project locale by ident.
 func showLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -71,6 +73,7 @@ func showLocale(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, loc)
 }
 
+// findLocales is an API endpoint for retrieving project locales and filtering by ident.
 func findLocales(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -99,6 +102,7 @@ func findLocales(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, locs)
 }
 
+// updateLocalePairs is an API endpoint for updating a locale's key value pairs.
 func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 	ident := chi.URLParam(r, "localeIdent")
 	if ident == "" {
@@ -134,6 +138,7 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// deleteLocale is an API endpoint for deleting a project's locale.
 func deleteLocale(w http.ResponseWriter, r *http.Request) {
 	ident := chi.URLParam(r, "localeIdent")
 	if ident == "" {

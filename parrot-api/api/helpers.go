@@ -1,10 +1,8 @@
 package api
 
 import (
-	"context"
 	"net/http"
 
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 	"github.com/anthonynsimon/parrot/parrot-api/render"
 )
 
@@ -14,6 +12,8 @@ var (
 		"application/json; charset=utf-8"}
 )
 
+// isValidContentType returns true if the provided content type
+// is an allowed one.
 func isValidContentType(ct string) bool {
 	if ct == "" {
 		return false
@@ -26,20 +26,9 @@ func isValidContentType(ct string) bool {
 	return false
 }
 
+// ping is an API endpoint for checking if the API is up.
 func ping(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, map[string]interface{}{
 		"message": "Parrot says hello.",
 	})
-}
-
-func getScopes(ctx context.Context) ([]string, error) {
-	v := ctx.Value("scopes")
-	if v == nil {
-		return nil, apiErrors.ErrBadRequest
-	}
-	scopes, ok := v.([]string)
-	if !ok {
-		return nil, apiErrors.ErrInternal
-	}
-	return scopes, nil
 }

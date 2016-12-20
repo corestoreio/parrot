@@ -19,8 +19,10 @@ type userSelfPayload struct {
 }
 
 type projectGrants map[string][]RoleGrant
+
 type projectRoles map[string]string
 
+// getUserSelf is an API endpoint for getting the requesting user's details.
 func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
@@ -74,6 +76,7 @@ func getUserSelf(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, payload)
 }
 
+// createUser is an API endpoint for registering new users.
 func createUser(w http.ResponseWriter, r *http.Request) {
 	user := model.User{}
 	errs := decodeAndValidate(r.Body, &user)
@@ -107,6 +110,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
+// updateUserPassword is an API endpoint for changing a user's password.
 func updateUserPassword(w http.ResponseWriter, r *http.Request) {
 	payload := updatePasswordPayload{}
 	err := decodePayloadAndValidate(r, &payload)
@@ -159,6 +163,7 @@ func updateUserPassword(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// updateUserName is an API endpoint for changing a user's name.
 func updateUserName(w http.ResponseWriter, r *http.Request) {
 	payload := updateUserNamePayload{}
 	err := decodePayloadAndValidate(r, &payload)
@@ -197,6 +202,7 @@ func updateUserName(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// updateUserEmail is an API endpoint for changing a user's email.
 func updateUserEmail(w http.ResponseWriter, r *http.Request) {
 	payload := updateUserEmailPayload{}
 	err := decodePayloadAndValidate(r, &payload)
@@ -235,6 +241,8 @@ func updateUserEmail(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// decodeAndValidate decodes a model that implements the Validatable interface
+// and calls the Validate function on it, returning any errros if something went wrong.
 func decodeAndValidate(r io.Reader, m model.Validatable) error {
 	if err := json.NewDecoder(r).Decode(m); err != nil {
 		return apiErrors.ErrBadRequest
@@ -242,13 +250,15 @@ func decodeAndValidate(r io.Reader, m model.Validatable) error {
 	return m.Validate()
 }
 
+// mustMatchContextUser returns an error if the provided userID does not match
+// the userID placed in the request context.
 func mustMatchContextUser(r *http.Request, userID string) error {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
 		return err
 	}
 
-	// Validate requesting user matches requested user to be updated
+	// Validate requesting user is the user being updated
 	if userID != id {
 		return errors.New("context user does not match request user id")
 	}

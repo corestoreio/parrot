@@ -11,6 +11,7 @@ import (
 	"github.com/pressly/chi"
 )
 
+// exportLocale is an API endpoint for exporting locale pairs.
 func exportLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {

@@ -15,6 +15,7 @@ var (
 	clientSecretBytes = 32
 )
 
+// getProjectClients is an API endpoint for retrieving all clients ('applications') for a project.
 func getProjectClients(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -31,6 +32,7 @@ func getProjectClients(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// getProjectClient is an API endpoint for retrieving a project client.
 func getProjectClient(w http.ResponseWriter, r *http.Request) {
 	clientID := chi.URLParam(r, "clientID")
 	if clientID == "" {
@@ -52,6 +54,7 @@ func getProjectClient(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// deleteProjectClient is an API endpoint for deleting a project client.
 func deleteProjectClient(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -73,6 +76,7 @@ func deleteProjectClient(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusNoContent, nil)
 }
 
+// createProjectClient is an API endpoint for registering a new project client.
 func createProjectClient(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -103,6 +107,7 @@ func createProjectClient(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
+// updateProjectClientName is an API endpoint for updating a project client's name.
 func updateProjectClientName(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -133,6 +138,7 @@ func updateProjectClientName(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// resetProjectClientSecret is an API endpoint for regenerating a project client's secret.
 func resetProjectClientSecret(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -164,6 +170,7 @@ func resetProjectClientSecret(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// generateClientSecret generates a cryptographically secure pseudorandom string.
 func generateClientSecret(bytes int) (string, error) {
 	b := make([]byte, bytes)
 	_, err := rand.Read(b)

@@ -10,13 +10,17 @@ import (
 	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 )
 
-type Subject string
+// subjectType is an internal identifier to know if the requesting entity
+// is a project user or an application.
+type subjectType string
 
 const (
-	UserSubject   = "user"
-	ClientSubject = "client"
+	userSubject   = "user"
+	clientSubject = "client"
 )
 
+// tokenMiddleware guards against request without a valid token.
+// Adds subject ID and subject type values to request context.
 func tokenMiddleware(tp auth.TokenProvider) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -54,6 +58,7 @@ func tokenMiddleware(tp auth.TokenProvider) func(http.Handler) http.Handler {
 	}
 }
 
+// getTokenString extracts the encoded token from HTTP Authorization Headers.
 func getTokenString(r *http.Request) (string, error) {
 	token := r.Header.Get("Authorization")
 	if token == "" {
@@ -67,6 +72,7 @@ func getTokenString(r *http.Request) (string, error) {
 	return token, nil
 }
 
+// getSubjectID extract subject ID from context.
 func getSubjectID(ctx context.Context) (string, error) {
 	v := ctx.Value("subjectID")
 	if v == nil {
@@ -79,7 +85,8 @@ func getSubjectID(ctx context.Context) (string, error) {
 	return id, nil
 }
 
-func getSubjectType(ctx context.Context) (Subject, error) {
+// getSubjectType extract user type from context.
+func getSubjectType(ctx context.Context) (subjectType, error) {
 	subType := ctx.Value("subjectType")
 	if subType == nil {
 		return "", apiErrors.ErrBadRequest
@@ -90,5 +97,5 @@ func getSubjectType(ctx context.Context) (Subject, error) {
 		return "", apiErrors.ErrBadRequest
 	}
 
-	return Subject(casted), nil
+	return subjectType(casted), nil
 }

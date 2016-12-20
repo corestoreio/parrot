@@ -7,87 +7,94 @@ import (
 	"github.com/pressly/chi"
 )
 
+// Role is an identifier for a group of assigned grants.
 type Role string
+
+// Role grant is an identifier for the right to perform an action.
 type RoleGrant string
-type Authorizer func(string) bool
 
+// known roles
 const (
-	OwnerRole     = "owner"
-	EditorRole    = "editor"
-	ViewerRole    = "viewer"
-	ClientRole    = "client"
-	DeveloperRole = "developer"
+	ownerRole     = "owner"
+	editorRole    = "editor"
+	viewerRole    = "viewer"
+	clientRole    = "client"
+	developerRole = "developer"
 )
 
+// known grants
 const (
-	CanAssignProjectRoles = "CanAssignProjectRoles"
-	CanRevokeProjectRoles = "CanRevokeProjectRoles"
-	CanUpdateProjectRoles = "CanUpdateProjectRoles"
-	CanViewProjectRoles   = "CanViewProjectRoles"
-	CanUpdateProject      = "CanUpdateProject"
-	CanDeleteProject      = "CanDeleteProject"
-	CanViewProject        = "CanViewProject"
-	CanCreateLocales      = "CanCreateLocales"
-	CanUpdateLocales      = "CanUpdateLocales"
-	CanDeleteLocales      = "CanDeleteLocales"
-	CanViewLocales        = "CanViewLocales"
-	CanManageAPIClients   = "CanManageAPIClients"
-	CanExportLocales      = "CanExportLocales"
+	canAssignProjectRoles = "CanAssignProjectRoles"
+	canRevokeProjectRoles = "CanRevokeProjectRoles"
+	canUpdateProjectRoles = "CanUpdateProjectRoles"
+	canViewProjectRoles   = "CanViewProjectRoles"
+	canUpdateProject      = "CanUpdateProject"
+	canDeleteProject      = "CanDeleteProject"
+	canViewProject        = "CanViewProject"
+	canCreateLocales      = "CanCreateLocales"
+	canUpdateLocales      = "CanUpdateLocales"
+	canDeleteLocales      = "CanDeleteLocales"
+	canViewLocales        = "CanViewLocales"
+	canManageAPIClients   = "CanManageAPIClients"
+	canExportLocales      = "CanExportLocales"
 )
 
+// permissions mapping of Roles to Grants.
 var permissions = map[Role][]RoleGrant{
-	OwnerRole: []RoleGrant{
-		CanAssignProjectRoles,
-		CanRevokeProjectRoles,
-		CanUpdateProjectRoles,
-		CanViewProjectRoles,
-		CanUpdateProject,
-		CanDeleteProject,
-		CanViewProject,
-		CanCreateLocales,
-		CanUpdateLocales,
-		CanDeleteLocales,
-		CanViewLocales,
-		CanManageAPIClients,
-		CanExportLocales,
+	ownerRole: []RoleGrant{
+		canAssignProjectRoles,
+		canRevokeProjectRoles,
+		canUpdateProjectRoles,
+		canViewProjectRoles,
+		canUpdateProject,
+		canDeleteProject,
+		canViewProject,
+		canCreateLocales,
+		canUpdateLocales,
+		canDeleteLocales,
+		canViewLocales,
+		canManageAPIClients,
+		canExportLocales,
 	},
-	EditorRole: []RoleGrant{
-		CanViewProjectRoles,
-		CanUpdateProject,
-		CanViewProject,
-		CanCreateLocales,
-		CanUpdateLocales,
-		CanDeleteLocales,
-		CanViewLocales,
-		CanExportLocales,
+	editorRole: []RoleGrant{
+		canViewProjectRoles,
+		canUpdateProject,
+		canViewProject,
+		canCreateLocales,
+		canUpdateLocales,
+		canDeleteLocales,
+		canViewLocales,
+		canExportLocales,
 	},
-	ViewerRole: []RoleGrant{
-		CanViewProjectRoles,
-		CanViewProject,
-		CanViewLocales,
-		CanExportLocales,
+	viewerRole: []RoleGrant{
+		canViewProjectRoles,
+		canViewProject,
+		canViewLocales,
+		canExportLocales,
 	},
-	ClientRole: []RoleGrant{
-		CanExportLocales,
+	clientRole: []RoleGrant{
+		canExportLocales,
 	},
-	DeveloperRole: []RoleGrant{
-		CanViewProjectRoles,
-		CanViewProject,
-		CanViewLocales,
-		CanExportLocales,
-		CanManageAPIClients,
+	developerRole: []RoleGrant{
+		canViewProjectRoles,
+		canViewProject,
+		canViewLocales,
+		canExportLocales,
+		canManageAPIClients,
 	},
 }
 
+// isRole returns true if the provided string can be casted to a known role.
 func isRole(r string) bool {
 	v := Role(r)
 	switch v {
-	case OwnerRole, EditorRole, ViewerRole, DeveloperRole:
+	case ownerRole, editorRole, viewerRole, developerRole:
 		return true
 	}
 	return false
 }
 
+// isAllowed returns true if the provided role has the provided grant.
 func isAllowed(r Role, a RoleGrant) bool {
 	actions, ok := permissions[r]
 	if !ok {
@@ -101,6 +108,8 @@ func isAllowed(r Role, a RoleGrant) bool {
 	return false
 }
 
+// getProjectUserRole returns the role a user has for a given project
+// or returns an error (for example, the user was not found).
 func getProjectUserRole(projID, userID string) (string, error) {
 	user, err := store.GetProjectUser(projID, userID)
 	if err != nil {
@@ -109,6 +118,8 @@ func getProjectUserRole(projID, userID string) (string, error) {
 	return user.Role, nil
 }
 
+// mustBeProjectClient returns an error if no client with provided clientID
+// exists for a given project.
 func mustBeProjectClient(projID, clientID string) error {
 	client, err := store.GetProjectClient(projID, clientID)
 	if err != nil || client == nil {
@@ -117,6 +128,8 @@ func mustBeProjectClient(projID, clientID string) error {
 	return nil
 }
 
+// mustAuthorize authorizes or denies requests based on required rights for action.
+// Identifies if requesting subject is able to perform action on the particular project.
 func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		projectID := chi.URLParam(r, "projectID")
@@ -140,19 +153,19 @@ func mustAuthorize(action RoleGrant, next http.HandlerFunc) http.HandlerFunc {
 		var requesterRole string
 
 		switch subType {
-		case UserSubject:
+		case userSubject:
 			requesterRole, err = getProjectUserRole(projectID, requesterID)
 			if err != nil {
 				handleError(w, err)
 				return
 			}
-		case ClientSubject:
+		case clientSubject:
 			err := mustBeProjectClient(projectID, requesterID)
 			if err != nil {
 				handleError(w, err)
 				return
 			}
-			requesterRole = ClientRole
+			requesterRole = clientRole
 		default:
 			handleError(w, apiErrors.ErrBadRequest)
 			return

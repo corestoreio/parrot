@@ -10,6 +10,8 @@ import (
 	"github.com/pressly/chi"
 )
 
+// getUserProjects is an API endpoint for retrieving all projects that a user
+// has access to.
 func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	id, err := getSubjectID(r.Context())
 	if err != nil {
@@ -26,6 +28,7 @@ func getUserProjects(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, projects)
 }
 
+// getProjectUsers is an API endpoint for retrieving all users with access to a project.
 func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -57,6 +60,8 @@ func getProjectUsers(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// assignProjectUser is an API endpoint for giving an already registered user
+// rights to access a project.
 func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -113,6 +118,7 @@ func assignProjectUser(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// updateProjectUserRole is an API endpoint for changing a user's role in a project.
 func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {
@@ -149,6 +155,7 @@ func updateProjectUserRole(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusOK, result)
 }
 
+// revokeProjectUser is an API endpoint for removing a user's role from a project.
 func revokeProjectUser(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
 	if projectID == "" {

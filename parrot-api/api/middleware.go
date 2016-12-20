@@ -6,6 +6,9 @@ import (
 	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
 )
 
+// enforceContentTypeJSON only allows requests that have the
+// Content-Type header set to a valid JSON mime type, unless
+// the body is empty (useful for 'verb' or 'action' requests).
 func enforceContentTypeJSON(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
@@ -19,37 +22,4 @@ func enforceContentTypeJSON(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
-}
-
-func mustAllowScope(scope string, next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		scopes, err := getScopes(r.Context())
-		if err != nil || len(scopes) <= 0 {
-			handleError(w, apiErrors.ErrForbiden)
-			return
-		}
-		allowed := false
-		for _, s := range scopes {
-			if s == scope {
-				allowed = true
-				break
-			}
-		}
-		if !allowed {
-			handleError(w, apiErrors.ErrForbiden)
-			return
-		}
-		next(w, r)
-	}
-}
-
-func onlyUsers(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := getSubjectID(r.Context())
-		if err != nil || id == "" {
-			handleError(w, apiErrors.ErrForbiden)
-			return
-		}
-		next(w, r)
-	}
 }
