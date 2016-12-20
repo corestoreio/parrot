@@ -16,6 +16,7 @@ import { CreateProjectKeyComponent } from './create-project-key/create-project-k
 import { EditProjectKeyComponent } from './edit-project-key/edit-project-key.component';
 import { EditProjectNameComponent } from './edit-project-name/edit-project-name.component';
 import { DeleteProjectKeyComponent } from './delete-project-key/delete-project-key.component';
+import { DeleteProjectComponent } from './delete-project/delete-project.component';
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { DeleteProjectKeyComponent } from './delete-project-key/delete-project-k
         CreateProjectKeyComponent,
         EditProjectKeyComponent,
         DeleteProjectKeyComponent,
-        EditProjectNameComponent
+        EditProjectNameComponent,
+        DeleteProjectComponent
     ],
     declarations: [
         ProjectsListComponent,
@@ -45,7 +47,8 @@ import { DeleteProjectKeyComponent } from './delete-project-key/delete-project-k
         CreateProjectKeyComponent,
         EditProjectKeyComponent,
         DeleteProjectKeyComponent,
-        EditProjectNameComponent
+        EditProjectNameComponent,
+        DeleteProjectComponent
     ],
     providers: [
         ProjectsService,

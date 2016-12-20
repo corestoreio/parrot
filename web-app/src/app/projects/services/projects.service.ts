@@ -104,6 +104,23 @@ export class ProjectsService {
     return request;
   }
 
+  deleteProject(projectId: string): Observable<boolean> {
+    let request = this.api.request({
+      uri: `/projects/${projectId}`,
+      method: 'DELETE'
+    })
+      .share();
+
+    request.subscribe(
+      () => {
+        let projects = this._projects.getValue().filter(_project => _project.id !== projectId);
+        this._projects.next(projects);
+        this._activeProject.next(null);
+      });
+
+    return request;
+  }
+
   deleteProjectKey(projectId: string, key: string): Observable<Project> {
     let request = this.api.request({
       uri: `/projects/${projectId}/keys`,

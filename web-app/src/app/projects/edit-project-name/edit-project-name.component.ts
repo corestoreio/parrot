@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { Project, UpdateProjectNamePayload } from './../model/project';
+import { Project } from './../model/project';
 import { ProjectsService } from './../services/projects.service';
 import { ErrorsService } from './../../shared/errors.service';
 
@@ -22,7 +21,6 @@ export class EditProjectNameComponent implements OnInit {
     private errors: string[];
 
     constructor(
-        private route: ActivatedRoute,
         private service: ProjectsService,
         private errorsService: ErrorsService,
     ) { }

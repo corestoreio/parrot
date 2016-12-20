@@ -21,6 +21,9 @@ export class ProjectSettingsPage implements OnInit {
     }
 
     ngOnInit() {
+        this.projectsService.activeProject
+            .subscribe(project => this.project = project);
+
         this.route.parent.params
             .map(params => params['projectId'])
             .subscribe(projectId => {
@@ -32,7 +35,7 @@ export class ProjectSettingsPage implements OnInit {
         this.loading = true;
         this.projectsService.fetchProject(projectId)
             .subscribe(
-            project => this.project = project,
+            project => { },
             err => console.log(err),
             () => this.loading = false,
         );

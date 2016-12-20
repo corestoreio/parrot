@@ -3,8 +3,3 @@ export interface Project {
     name: string;
     keys: string[];
 }
-
-export interface UpdateProjectNamePayload {
-    id: string;
-    name: string;
-}
