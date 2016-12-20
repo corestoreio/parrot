@@ -1,3 +1,8 @@
 <section class="section no-background">
-    <project-keys [project]="project" [loading]="loading" [editable]="canEdit"></project-keys>
+    <div class="spinner centered" *ngIf="loading"></div>
+    <div *ngIf="!loading">
+
+        <project-keys [project]="project" [loading]="loading" [editable]="canEdit"></project-keys>
+
+    </div>
 </section>

@@ -1,36 +1,39 @@
 <section class="section no-background">
+    <div class="spinner centered" *ngIf="loading"></div>
+    <div *ngIf="!loading">
 
-    <nav class="level is-mobile">
-        <div class="level-left">
-            <div class="level-item">
-                <h1 class="title is-5">Project Team</h1>
+        <nav class="level is-mobile">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title is-5">Project Team</h1>
+                </div>
             </div>
-        </div>
-        <div class="level-right">
-            <div class="level-item">
-                <p>
-                    <strong>{{projectUsers ? projectUsers.length : 0}}</strong> members
+            <div class="level-right">
+                <div class="level-item">
+                    <p>
+                        <strong>{{projectUsers ? projectUsers.length : 0}}</strong> members
+                    </p>
+                </div>
+                <p class="level-item">
+                    <add-project-user></add-project-user>
                 </p>
             </div>
-            <p class="level-item">
-                <add-project-user></add-project-user>
-            </p>
-        </div>
-    </nav>
+        </nav>
 
-    <div [ngSwitch]="projectUsers && projectUsers.length > 0">
-        <div *ngSwitchCase="true">
+        <div [ngSwitch]="projectUsers && projectUsers.length > 0">
+            <div *ngSwitchCase="true">
 
-            <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading"></project-users-list>
+                <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading"></project-users-list>
 
-        </div>
-        <div *ngSwitchDefault>
-
-            <div class="notification is-warning">
-                No Team Members yet.
             </div>
+            <div *ngSwitchDefault>
 
+                <div class="notification is-warning">
+                    No Team Members yet.
+                </div>
+
+            </div>
         </div>
-    </div>
 
+    </div>
 </section>

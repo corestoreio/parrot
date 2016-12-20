@@ -1,6 +1,6 @@
 <section class="section no-background">
     <div class="spinner centered" *ngIf="loading"></div>
-    <div *ngIf="!loading && locale">
+    <div *ngIf="!loading">
 
         <nav class="level">
             <div class="level-left">
@@ -35,5 +35,4 @@
         <locale-pairs [locale]="locale" [loading]="loading" [editable]="canEditLocales"></locale-pairs>
 
     </div>
-
 </section>

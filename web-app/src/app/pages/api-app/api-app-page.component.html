@@ -1,17 +1,22 @@
 <section class="section no-background">
 
-    <nav class="level is-mobile">
-        <div class="level-left">
-            <div class="level-item">
-                <h1 class="title">API Access for {{projectClient?.name}}</h1>
-            </div>
-        </div>
-        <div class="level-right">
-            <p class="level-item">
-                <delete-app [clientName]="projectClient?.name" [submit]="deleteProjectClient"></delete-app>
-            </p>
-        </div>
-    </nav>
+    <div class="spinner centered" *ngIf="loading"></div>
+    <div *ngIf="!loading">
 
-    <app-detail [errors]="errors" [projectClient]="projectClient" [updateProjectClient]="updateProjectClient" [resetSecret]='resetSecret'></app-detail>
+        <nav class="level is-mobile">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title">API Access for {{projectClient?.name}}</h1>
+                </div>
+            </div>
+            <div class="level-right">
+                <p class="level-item">
+                    <delete-app [clientName]="projectClient?.name" [submit]="deleteProjectClient"></delete-app>
+                </p>
+            </div>
+        </nav>
+
+        <app-detail [errors]="errors" [projectClient]="projectClient" [updateProjectClient]="updateProjectClient" [resetSecret]='resetSecret'></app-detail>
+
+    </div>
 </section>

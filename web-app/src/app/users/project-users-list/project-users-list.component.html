@@ -1,25 +1,20 @@
-<div class="spinner centered" *ngIf="loading"></div>
-<div *ngIf="!loading">
-
-    <table class="table is-bordered is-striped is-narrow">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users">
-                <td class="center-align">{{user.name}}</td>
-                <td class="center-align">{{user.email}}</td>
-                <td class="center-align"><strong><span class="tag is-info is-small">{{user.role}}</span></strong></td>
-                <td class="center-align">
-                    <edit-project-user [user]="user"></edit-project-user>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
+<table class="table is-bordered is-striped is-narrow">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td class="center-align">{{user.name}}</td>
+            <td class="center-align">{{user.email}}</td>
+            <td class="center-align"><strong><span class="tag is-info is-small">{{user.role}}</span></strong></td>
+            <td class="center-align">
+                <edit-project-user [user]="user"></edit-project-user>
+            </td>
+        </tr>
+    </tbody>
+</table>
