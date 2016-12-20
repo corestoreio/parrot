@@ -104,7 +104,7 @@ export class ProjectsService {
     return request;
   }
 
-  deleteProject(projectId: string): Observable<boolean> {
+  deleteProject(projectId: string): Observable<any> {
     let request = this.api.request({
       uri: `/projects/${projectId}`,
       method: 'DELETE'

@@ -137,4 +137,21 @@ export class LocalesService {
 
         return request;
     }
+
+    deleteLocale(projectId: string, localeIdent: string): Observable<any> {
+        let request = this.api.request({
+            uri: `/projects/${projectId}/locales/${localeIdent}`,
+            method: 'DELETE'
+        })
+            .share();
+
+        request.subscribe(
+            () => {
+                let locales = this._locales.getValue().filter(_locale => _locale.ident !== localeIdent);
+                this._locales.next(locales);
+                this._activeLocale.next(null);
+            });
+
+        return request;
+    }
 }
