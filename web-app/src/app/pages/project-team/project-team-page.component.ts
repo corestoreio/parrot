@@ -5,6 +5,7 @@ import 'rxjs/add/operator/do';
 
 import { ProjectUsersService } from './../../users/services/project-users.service';
 import { ProjectUser } from './../../users/model';
+import { UserService } from './../../users/services/user.service';
 
 @Component({
     providers: [ProjectUsersService],
@@ -13,13 +14,17 @@ import { ProjectUser } from './../../users/model';
     styleUrls: ['project-team-page.component.css']
 })
 export class ProjectTeamPage implements OnInit {
-    private loading = false;
+    private loading: boolean = false;
     private projectUsers: ProjectUser[];
     private projectId: string;
+    private canUpdateRoles: boolean = false;
+    private canAssignRoles: boolean = false;
+    private canRevokeRoles: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private projectUsersService: ProjectUsersService,
+        private userService: UserService,
     ) { }
 
     ngOnInit() {
@@ -28,6 +33,10 @@ export class ProjectTeamPage implements OnInit {
             .subscribe(projectId => {
                 this.projectId = projectId;
                 this.fetchUsers(projectId);
+                this.userService.isAuthorized(this.projectId, 'CanUpdateProjectRoles')
+                    .subscribe(ok => { this.canUpdateRoles = ok });
+                this.userService.isAuthorized(this.projectId, 'CanAssignProjectRoles')
+                    .subscribe(ok => { this.canAssignRoles = ok });
             });
 
         this.projectUsersService.projectUsers

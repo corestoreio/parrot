@@ -27,6 +27,8 @@ export class LocalePage implements OnInit {
     private projectId: string;
     private loading = false;
     private canEditLocales = false;
+    private canExportLocales = false;
+    private canDeleteLocales = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -45,6 +47,10 @@ export class LocalePage implements OnInit {
                 this.fetchLocale(this.projectId, localeIdent);
                 this.userService.isAuthorized(this.projectId, 'CanUpdateLocales')
                     .subscribe(ok => { this.canEditLocales = ok });
+                this.userService.isAuthorized(this.projectId, 'CanExportLocales')
+                    .subscribe(ok => { this.canExportLocales = ok });
+                this.userService.isAuthorized(this.projectId, 'CanDeleteLocales')
+                    .subscribe(ok => { this.canDeleteLocales = ok });
             });
 
         this.localesService.activeLocale

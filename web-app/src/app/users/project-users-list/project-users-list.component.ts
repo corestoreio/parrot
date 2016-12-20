@@ -11,6 +11,8 @@ export class ProjectUsersListComponent implements OnInit {
     @Input()
     private users: ProjectUser[];
     @Input()
+    private canUpdateRoles: boolean;
+    @Input()
     private loading: boolean;
     @Input()
     private projectId: string;

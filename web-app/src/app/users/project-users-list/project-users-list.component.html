@@ -13,8 +13,14 @@
             <td class="center-align">{{user.email}}</td>
             <td class="center-align"><strong><span class="tag is-info is-small">{{user.role}}</span></strong></td>
             <td class="center-align">
-                <edit-project-user [user]="user"></edit-project-user>
+                <edit-project-user [user]="user" [hidden]="!canUpdateRoles"></edit-project-user>
             </td>
         </tr>
     </tbody>
 </table>
+
+<div *ngIf="projectUsers && projectUsers.length <= 0">
+    <div class="notification is-warning">
+        No Team Members yet.
+    </div>
+</div>

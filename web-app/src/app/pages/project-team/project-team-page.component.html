@@ -15,25 +15,13 @@
                     </p>
                 </div>
                 <p class="level-item">
-                    <add-project-user></add-project-user>
+                    <add-project-user [hidden]="!canAssignRoles"></add-project-user>
                 </p>
             </div>
         </nav>
 
-        <div [ngSwitch]="projectUsers && projectUsers.length > 0">
-            <div *ngSwitchCase="true">
-
-                <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading"></project-users-list>
-
-            </div>
-            <div *ngSwitchDefault>
-
-                <div class="notification is-warning">
-                    No Team Members yet.
-                </div>
-
-            </div>
-        </div>
+        <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading" [canUpdateRoles]="canUpdateRoles">
+        </project-users-list>
 
     </div>
 </section>

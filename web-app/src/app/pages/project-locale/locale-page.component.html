@@ -24,10 +24,10 @@
                     </div>
                 </div>
                 <div class="level-item">
-                    <export-locale></export-locale>
+                    <export-locale [hidden]="!canExportLocales"></export-locale>
                 </div>
                 <div class="level-item">
-                    <delete-locale [locale]="locale"></delete-locale>
+                    <delete-locale [locale]="locale" [hidden]="!canDeleteLocales"></delete-locale>
                 </div>
             </div>
         </nav>

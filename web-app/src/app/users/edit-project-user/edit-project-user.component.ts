@@ -10,7 +10,6 @@ import { ProjectUsersService } from './../services/project-users.service';
     styleUrls: ['edit-project-user.component.css']
 })
 export class EditProjectUserComponent implements OnInit {
-
     @Input()
     private user: ProjectUser;
 
