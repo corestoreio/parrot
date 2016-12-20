@@ -1,11 +1,13 @@
 package model
 
+// LocaleInfo holds the data to specify a standard locale.
 type LocaleInfo struct {
 	Ident    string
 	Language string
 	Country  string
 }
 
+// Locales is mapping of standard locale idents to LocaleInfo
 var Locales = map[string]LocaleInfo{
 	"sq_AL":       LocaleInfo{Ident: "sq_AL", Language: "Albanian", Country: "Albania"},
 	"ar_DZ":       LocaleInfo{Ident: "ar_DZ", Language: "Arabic", Country: "Algeria"},

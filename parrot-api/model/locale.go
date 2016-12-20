@@ -1,3 +1,4 @@
+// Package model holds the various types and interfaces for Parrot.
 package model
 
 import "github.com/anthonynsimon/parrot/parrot-api/errors"
@@ -14,6 +15,7 @@ var (
 		Message: "invalid field locale country"}
 )
 
+// LocaleStorer is the interface to store locales.
 type LocaleStorer interface {
 	CreateLocale(loc Locale) (*Locale, error)
 	DeleteLocale(projID string, ident string) error
@@ -28,15 +30,16 @@ type Locale struct {
 	ProjectID string            `db:"project_id" json:"project_id"`
 }
 
-func (l *Locale) Validate() error {
+// Validate returns an error if the locale's data is invalid.
+func (loc *Locale) Validate() error {
 	var errs []errors.Error
-	if !HasMinLength(l.Ident, 2) {
+	if !HasMinLength(loc.Ident, 2) {
 		errs = append(errs, *ErrInvalidLocaleIdent)
 	}
-	if !HasMinLength(l.Language, 1) {
+	if !HasMinLength(loc.Language, 1) {
 		errs = append(errs, *ErrInvalidLocaleLanguage)
 	}
-	if !HasMinLength(l.Country, 1) {
+	if !HasMinLength(loc.Country, 1) {
 		errs = append(errs, *ErrInvalidLocaleCountry)
 	}
 	if errs != nil {
@@ -46,9 +49,9 @@ func (l *Locale) Validate() error {
 }
 
 // SyncKeys will add new keys from string slice t to document pairs.
-func (d *Locale) SyncKeys(t []string) {
-	if d.Pairs == nil {
-		d.Pairs = make(map[string]string)
+func (loc *Locale) SyncKeys(t []string) {
+	if loc.Pairs == nil {
+		loc.Pairs = make(map[string]string)
 	}
 
 	temp := make(map[string]string)
@@ -56,8 +59,8 @@ func (d *Locale) SyncKeys(t []string) {
 	// Assign each key, if it's already there it will simply reassign to there
 	// previous value, otherwise an empty string will be set
 	for _, v := range t {
-		temp[v] = d.Pairs[v]
+		temp[v] = loc.Pairs[v]
 	}
 
-	d.Pairs = temp
+	loc.Pairs = temp
 }

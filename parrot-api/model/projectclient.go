@@ -18,6 +18,7 @@ type ProjectClient struct {
 	ProjectID string `db:"project_id" json:"project_id"`
 }
 
+// ProjectClientStorer is the interface to store project clients.
 type ProjectClientStorer interface {
 	FindOneClient(string) (*ProjectClient, error)
 	GetProjectClients(string) ([]ProjectClient, error)
@@ -28,6 +29,7 @@ type ProjectClientStorer interface {
 	DeleteProjectClient(projectID, clientID string) error
 }
 
+// Validate returns an error if the project client's data is invalid.
 func (p *ProjectClient) Validate() error {
 	var errs []errors.Error
 	if !HasMinLength(p.Name, 1) {

@@ -15,6 +15,7 @@ var (
 		Message: "invalid password"}
 )
 
+// UserStorer is the interface to store users.
 type UserStorer interface {
 	GetUserByID(string) (*User, error)
 	GetUserByEmail(string) (*User, error)
@@ -31,10 +32,7 @@ type User struct {
 	Password string `db:"password" json:"password,omitempty"`
 }
 
-type Validatable interface {
-	Validate() error
-}
-
+// Validate returns an error if the user's data is invalid.
 func (u *User) Validate() error {
 	var errs []errors.Error
 	if !ValidEmail(u.Email) {

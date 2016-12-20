@@ -1,5 +1,6 @@
 package model
 
+// ProjectUserStorer is the interface to store project users.
 type ProjectUserStorer interface {
 	GetProjectUsers(projID string) ([]ProjectUser, error)
 	GetUserProjects(userID string) ([]Project, error)
