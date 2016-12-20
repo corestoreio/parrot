@@ -60,3 +60,7 @@ html, body {
     padding: 20px;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
 }
+
+.message.is-danger {
+  margin-bottom: 20px;
+}
