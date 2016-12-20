@@ -13,6 +13,9 @@ import { LocaleExportFormats, ExportFormat } from './../../app.config';
 @Injectable()
 export class LocalesService {
 
+    private _activeLocale = new BehaviorSubject<Locale>(null);
+    public activeLocale: Observable<Locale> = this._activeLocale.asObservable();
+
     private _locales = new BehaviorSubject<Locale[]>([]);
     public locales: Observable<Locale[]> = this._locales.asObservable();
 
@@ -59,7 +62,7 @@ export class LocalesService {
     }
 
     updateLocalePairs(projectId: string, localeIdent: string, pairs): Observable<Locale> {
-        return this.api.request({
+        let request = this.api.request({
             uri: `/projects/${projectId}/locales/${localeIdent}/pairs`,
             method: 'PATCH',
             body: JSON.stringify(pairs),
@@ -71,6 +74,16 @@ export class LocalesService {
                 }
                 return payload;
             }).share();
+
+        request.subscribe(result => {
+            let next = this._locales.getValue().map(loc => {
+                return loc.id === result.id ? result : loc
+            });
+            this._locales.next(next);
+            this._activeLocale.next(result);
+        }, () => { });
+
+        return request;
     }
 
     fetchLocales(projectId: string): Observable<Locale[]> {
@@ -105,6 +118,22 @@ export class LocalesService {
                 }
                 return locale;
             }).share();
+
+        request.subscribe(result => {
+            let current = this._locales.getValue();
+            let next = [];
+
+            if (current.length <= 0) {
+                next.concat(result);
+            } else {
+                next = current.map(loc => {
+                    return loc.id === result.id ? result : loc
+                });
+            }
+
+            this._locales.next(next);
+            this._activeLocale.next(result);
+        }, () => { });
 
         return request;
     }

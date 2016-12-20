@@ -9,11 +9,22 @@ import { Locale } from './../../locales/model/locale';
 @Component({
     providers: [LocalesService],
     selector: 'locale-page',
-    templateUrl: 'locale-page.component.html'
+    templateUrl: 'locale-page.component.html',
+    styleUrls: ['locale-page.component.css']
 })
 export class LocalePage implements OnInit {
+    private set locale(value: Locale) {
+        this._locale = value;
+        this.percentTranslated = this.calcPercentTranslated(value);
+    }
+
+    private get locale(): Locale {
+        return this._locale;
+    }
+
+    private _locale: Locale;
+    private percentTranslated: number;
     private projectId: string;
-    private locale: Locale;
     private loading = false;
     private canEditLocales = false;
 
@@ -35,15 +46,38 @@ export class LocalePage implements OnInit {
                 this.userService.isAuthorized(this.projectId, 'CanUpdateLocales')
                     .subscribe(ok => { this.canEditLocales = ok });
             });
+
+        this.localesService.activeLocale
+            .subscribe(locale => this.locale = locale);
     }
 
     fetchLocale(projectId, localeIdent) {
         this.loading = true;
         this.localesService.fetchLocale(projectId, localeIdent)
             .subscribe(
-            locale => { this.locale = locale },
+            locale => { },
             err => console.log(err),
             () => this.loading = false,
         );
+    }
+
+    calcPercentTranslated(locale: Locale): number {
+        let percent = 0;
+        if (locale) {
+            let filled = 0;
+            let pairs = locale.pairs;
+            let keys = Object.keys(pairs);
+            if (keys.length <= 0) {
+                return 0;
+            }
+            keys.forEach(key => {
+                let v = pairs[key];
+                if (v && v.length > 0) {
+                    filled++;
+                }
+            });
+            percent = Math.round((filled / keys.length) * 100);
+        }
+        return percent;
     }
 }

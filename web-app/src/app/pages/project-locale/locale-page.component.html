@@ -1,4 +1,36 @@
 <section class="section no-background">
-    <export-locale></export-locale>
-    <locale-pairs [locale]="locale" [loading]="loading" [editable]="canEditLocales"></locale-pairs>
+    <div class="spinner centered" *ngIf="loading"></div>
+    <div *ngIf="!loading">
+
+        <nav class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title is-5">
+                        <span class="icon is-medium title-icon">
+                        <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i></span>                        {{locale?.language}} ({{locale?.country}}) ({{locale?.ident}})
+                    </h1>
+
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <p>
+                        <strong>{{percentTranslated}}%</strong> translated
+                    </p>
+                </div>
+                <div class="level-item">
+                    <div class="progress-container">
+                        <progress class="progress is-primary is-fullwidth" value="{{percentTranslated}}" max="100"></progress>
+                    </div>
+                </div>
+                <div class="level-item">
+                    <export-locale></export-locale>
+                </div>
+            </div>
+        </nav>
+
+        <locale-pairs [locale]="locale" [loading]="loading" [editable]="canEditLocales"></locale-pairs>
+
+    </div>
+
 </section>

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { RestoreItemService } from './../../shared/restore-item.service';
 import { Locale } from './../model/locale';
 import { LocalesService } from './../services/locales.service';
 
@@ -22,7 +21,7 @@ export class EditableTextFieldComponent {
         if (!value) {
             return;
         }
-        // TODO: !!!!!!
+        // TODO: make this nice. Poor man's clone.
         this._original = value;
         this._pair = JSON.parse(JSON.stringify(value));
     }
@@ -36,10 +35,7 @@ export class EditableTextFieldComponent {
     private _original: Pair;
     private editing: boolean = false;
 
-    constructor(
-        private restoreService: RestoreItemService<string>,
-    ) {
-    }
+    constructor() { }
 
     ngOnInit() { }
 
