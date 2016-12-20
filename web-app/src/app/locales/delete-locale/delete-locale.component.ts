@@ -58,6 +58,9 @@ export class DeleteLocaleComponent implements OnInit {
     }
 
     valid(): boolean {
+        if (!this.locale) {
+            return false;
+        }
         if (!this.repeatIdent) {
             return false;
         }
