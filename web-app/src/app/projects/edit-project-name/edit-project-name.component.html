@@ -10,8 +10,7 @@
     </div>
 
     <p class="control">
-        <input class="input" type="text" placeholder="Your name" [(ngModel)]="newName" name="projectName" [class.is-disabled]="loading"
-            required>
+        <input class="input" type="text" placeholder="Your name" [(ngModel)]="newName" name="projectName" [disabled]="loading" required>
     </p>
     <p class="control">
         <button (click)="saveChanges()" class="button is-success" [class.is-loading]="loading" [disabled]="!formValid() || loading">Save changes</button>
