@@ -1,3 +1,4 @@
+// Package render handles the rending of common API results.
 package render
 
 import (
@@ -22,6 +23,7 @@ type responseMeta struct {
 	Error  error `json:"error,omitempty"`
 }
 
+// Error writes an API error to the response.
 func Error(w http.ResponseWriter, status int, err error) {
 	w.Header().Set("Content-Type", jsonContentType)
 	w.WriteHeader(status)
@@ -32,9 +34,10 @@ func Error(w http.ResponseWriter, status int, err error) {
 			Error:  err},
 		Payload: nil}
 
-	handleBody(w, body)
+	writeJSONBody(w, body)
 }
 
+// JSON writes a payload as json to the response.
 func JSON(w http.ResponseWriter, status int, payload interface{}) {
 	w.Header().Set("Content-Type", jsonContentType)
 	w.WriteHeader(status)
@@ -44,9 +47,10 @@ func JSON(w http.ResponseWriter, status int, payload interface{}) {
 			Status: status},
 		Payload: payload}
 
-	handleBody(w, body)
+	writeJSONBody(w, body)
 }
 
+// JSONWithHeaders writes a payload as json to the response and includes the provided headers.
 func JSONWithHeaders(w http.ResponseWriter, status int, headers map[string]string, payload interface{}) {
 	h := w.Header()
 	h.Set("Content-Type", jsonContentType)
@@ -60,10 +64,11 @@ func JSONWithHeaders(w http.ResponseWriter, status int, headers map[string]strin
 			Status: status},
 		Payload: payload}
 
-	handleBody(w, body)
+	writeJSONBody(w, body)
 }
 
-func handleBody(w http.ResponseWriter, body apiResponseBody) {
+// writeJSONBody handles the marshalling and writing of the response body.
+func writeJSONBody(w http.ResponseWriter, body apiResponseBody) {
 	encoded, err := json.MarshalIndent(body, "", "    ")
 	if err != nil {
 		logrus.Error(err)
