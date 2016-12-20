@@ -50,7 +50,10 @@ export class APIService {
             })
             .map(res => res.json())
             .catch(err => {
-                // let errs = this.mapErrors(err.json().meta.error);
+                if (err.status <= 0) {
+                    console.error(err);
+                    return Observable.throw('internal error');
+                }
                 return Observable.throw(err.json().meta.error);
             });
     }
