@@ -151,4 +151,28 @@ export class ProjectsService {
 
     return request;
   }
+
+  updateProjectName(projectId: string, newName: string): Observable<Project> {
+    let request = this.api.request({
+      uri: `/projects/${projectId}/name`,
+      method: 'PATCH',
+      body: JSON.stringify({ projectId: projectId, name: newName }),
+    })
+      .map(res => {
+        let payload = res.payload;
+        if (!payload) {
+          throw new Error("no payload in response");
+        }
+        return payload;
+      }).share();
+
+    request.subscribe(
+      project => {
+        let projects = this._projects.getValue().map(_project => (_project.id === project.id) ? project : _project);
+        this._projects.next(projects);
+        this._activeProject.next(project);
+      });
+
+    return request;
+  }
 }

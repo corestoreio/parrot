@@ -10,6 +10,7 @@ import { UsersModule } from './../users';
 import { APIAccessModule } from './../api-access';
 
 import { HomePage } from './home/home-page.component';
+import { ProjectSettingsPage } from './project-settings/project-settings-page.component';
 import { ProjectLocalesPage } from './project-locales/project-locales-page.component';
 import { ProjectKeysPage } from './project-keys/project-keys-page.component';
 import { LocalePage } from './project-locale/locale-page.component';
@@ -41,6 +42,7 @@ import { AccountPage } from './account/account-page.component';
         APIAccessPage,
         AccountPage,
         ErrorPage,
+        ProjectSettingsPage,
     ],
     declarations: [
         HomePage,
@@ -52,6 +54,7 @@ import { AccountPage } from './account/account-page.component';
         APIAccessPage,
         AccountPage,
         ErrorPage,
+        ProjectSettingsPage,
     ],
     providers: [],
 })

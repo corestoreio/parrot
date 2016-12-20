@@ -51,6 +51,30 @@ func createProject(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, http.StatusCreated, result)
 }
 
+// updateProjectName is an API endpoint for updating the name of a project.
+func updateProjectName(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		handleError(w, apiErrors.ErrBadRequest)
+		return
+	}
+
+	project := model.Project{}
+	errs := decodeAndValidate(r.Body, &project)
+	if errs != nil {
+		render.Error(w, http.StatusUnprocessableEntity, errs)
+		return
+	}
+
+	result, err := store.UpdateProjectName(projectID, project.Name)
+	if err != nil {
+		handleError(w, err)
+		return
+	}
+
+	render.JSON(w, http.StatusOK, result)
+}
+
 // addProjectKey is an API endpoint for adding keys ('strings') to a project.
 func addProjectKey(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")

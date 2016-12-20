@@ -1,0 +1,20 @@
+<form class="control">
+    <label class="label">Name</label>
+
+    <div *ngIf="errors && errors.length > 0">
+        <div class="message is-danger" *ngFor="let err of errors">
+            <div class="message-body">
+                {{err}}
+            </div>
+        </div>
+    </div>
+
+    <p class="control">
+        <input class="input" type="text" placeholder="Your name" [(ngModel)]="newName" name="projectName" [class.is-disabled]="loading"
+            required>
+    </p>
+    <p class="control">
+        <button (click)="saveChanges()" class="button is-success" [class.is-loading]="loading" [disabled]="!formValid() || loading">Save changes</button>
+        <button (click)="reset()" class="button" [disabled]="loading">Cancel</button>
+    </p>
+</form>

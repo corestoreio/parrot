@@ -54,6 +54,23 @@ func (db *PostgresDB) CreateProject(project model.Project) (*model.Project, erro
 	return &result, nil
 }
 
+func (db *PostgresDB) UpdateProjectName(projectID, name string) (*model.Project, error) {
+	row := db.QueryRow("UPDATE projects SET name = $1 WHERE id = $2 RETURNING id, name, keys", name, projectID)
+	keys := pq.StringArray{}
+	result := model.Project{}
+	err := row.Scan(&result.ID, &result.Name, &keys)
+	if err != nil {
+		return nil, parseError(err)
+	}
+
+	result.Keys = make([]string, len(keys))
+	for i, v := range keys {
+		result.Keys[i] = v
+	}
+
+	return &result, nil
+}
+
 func (db *PostgresDB) AddProjectKey(projectID, key string) (*model.Project, error) {
 	// TODO optimize this
 	project, err := db.GetProject(projectID)

@@ -6,6 +6,10 @@
                     routerLinkActive="is-active">Strings</a></li>
             <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id]" [routerLinkActiveOptions]="{ exact: true }"
                     routerLinkActive="is-active">Locales</a></li>
+            <div *ngIf="projectSettingsVisible">
+                <li><a (click)="closeMenu()" [routerLink]="['/projects', project.id, 'settings']" [routerLinkActiveOptions]="{ exact: true }"
+                        routerLinkActive="is-active">Settings</a></li>
+            </div>
         </ul>
         <div *ngIf="adminSectionVisible">
             <p class="menu-label">Administration</p>

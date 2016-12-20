@@ -15,6 +15,7 @@ export class ProjectMenuComponent implements OnInit {
     private project: Project;
 
     private menuActive: boolean;
+    private projectSettingsVisible: boolean;
     private adminSectionVisible: boolean;
     private developerSectionVisible: boolean;
 
@@ -33,6 +34,8 @@ export class ProjectMenuComponent implements OnInit {
                     .subscribe(ok => this.adminSectionVisible = ok);
                 this.userService.isAuthorized(projectId, 'CanManageAPIClients')
                     .subscribe(ok => this.developerSectionVisible = ok);
+                this.userService.isAuthorized(projectId, 'CanUpdateProject')
+                    .subscribe(ok => this.projectSettingsVisible = ok);
             });
         this.projectMenuService.menuActive
             .subscribe(active => this.menuActive = active);
