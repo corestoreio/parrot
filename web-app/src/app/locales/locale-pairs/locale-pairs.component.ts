@@ -16,18 +16,8 @@ export class LocalePairsComponent {
     private loading: boolean = false;
     @Input()
     private editable: boolean = false;
-
     @Input()
-    set locale(value: Locale) {
-        if (!value) {
-            return;
-        }
-        this.restoreService.setOriginal(value);
-    }
-
-    get locale(): Locale {
-        return this.restoreService.getCurrent();
-    }
+    private locale: Locale;
 
     get percentTranslated(): number {
         let percent = 0;
@@ -49,31 +39,21 @@ export class LocalePairsComponent {
         return percent;
     }
 
-    private editing: boolean = false;
     private updatePending: boolean = false;
 
-    constructor(
-        private restoreService: RestoreItemService<Locale>,
-        private localesService: LocalesService,
-    ) {
+    constructor(private localesService: LocalesService) {
+        this.commitPair = this.commitPair.bind(this);
     }
 
     ngOnInit() { }
 
-    enableEdit() {
-        this.editing = true;
-    }
-
-    cancelEdit() {
-        this.editing = false;
-        this.restoreService.restoreOriginal();
-    }
-
-    commitPairs(projectId, localeIdent, pairs) {
+    commitPair(pair) {
         this.updatePending = true;
+        // TODO: fix this
+        this.locale.pairs[pair.key] = pair.value;
         this.localesService.updateLocalePairs(this.locale.project_id, this.locale.ident, this.locale.pairs)
             .subscribe(
-            locale => { this.locale = locale; this.editing = false; },
+            locale => { this.locale = locale; console.log(locale) },
             err => console.log(err),
             () => { this.updatePending = false }
             );

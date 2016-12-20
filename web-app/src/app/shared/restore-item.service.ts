@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
+// TODO: make this actually work as intended!
 export class RestoreItemService<T> {
     original: T;
     current: T;

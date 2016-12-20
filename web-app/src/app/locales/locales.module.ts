@@ -8,6 +8,7 @@ import { LocalesService } from './services/locales.service';
 import { LocalesListComponent } from './locales-list/locales-list.component';
 import { CreateLocaleComponent } from './create-locale/create-locale.component';
 import { LocalePairsComponent } from './locale-pairs/locale-pairs.component';
+import { EditableTextFieldComponent } from './editable-textfield/editable-textfield.component';
 
 import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
 import { ExportLocaleComponent } from './export-locale/export-locale.component';
@@ -24,13 +25,15 @@ import { ExportLocaleComponent } from './export-locale/export-locale.component';
         CreateLocaleComponent,
         LocalePairsComponent,
         ObjectToPairsPipe,
-        ExportLocaleComponent
+        ExportLocaleComponent,
+        EditableTextFieldComponent,
     ],
     exports: [
         LocalesListComponent,
         CreateLocaleComponent,
         LocalePairsComponent,
-        ExportLocaleComponent
+        ExportLocaleComponent,
+        EditableTextFieldComponent,
     ],
     providers: [
         LocalesService
