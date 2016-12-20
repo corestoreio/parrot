@@ -10,7 +10,6 @@ import { CreateLocaleComponent } from './create-locale/create-locale.component';
 import { LocalePairsComponent } from './locale-pairs/locale-pairs.component';
 import { EditableTextFieldComponent } from './editable-textfield/editable-textfield.component';
 
-import { ObjectToPairsPipe } from './pipes/object-to-pairs.pipe';
 import { ExportLocaleComponent } from './export-locale/export-locale.component';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { ExportLocaleComponent } from './export-locale/export-locale.component';
         LocalesListComponent,
         CreateLocaleComponent,
         LocalePairsComponent,
-        ObjectToPairsPipe,
         ExportLocaleComponent,
         EditableTextFieldComponent,
     ],

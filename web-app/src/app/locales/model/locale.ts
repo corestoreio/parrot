@@ -6,3 +6,8 @@ export interface Locale {
     pairs: Object;
     project_id: string;
 }
+
+export interface Pair {
+    key: string;
+    value: string;
+}

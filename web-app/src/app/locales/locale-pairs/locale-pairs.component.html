@@ -1,18 +1,30 @@
-<table class="table is-bordered is-striped is-narrow">
-    <thead>
-        <tr>
-            <th>Key</th>
-            <th>Value</th>
-        </tr>
-    </thead>
-    <tbody>
+<div [ngSwitch]="pairs && pairs.length > 0">
+    <div *ngSwitchCase="true">
 
-        <tr *ngFor="let pair of locale.pairs | objtopairs">
-            <td>{{pair.key}}</td>
-            <td>
-                <p [hidden]="editable">{{pair.value}}</p>
-                <editable-textfield [pair]="pair" [loading]="updatePending" [hidden]="!editable" [commit]="commitPair"></editable-textfield>
-            </td>
-        </tr>
-    </tbody>
-</table>
+        <table class="table is-bordered is-striped is-narrow">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pair of pairs">
+                    <td>{{pair.key}}</td>
+                    <td>
+                        <p [hidden]="editable">{{pair.value}}</p>
+                        <editable-textfield [pair]="pair" [loading]="updatePending" [hidden]="!editable" [commit]="commitPair"></editable-textfield>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div *ngSwitchDefault>
+
+        <div class="notification is-warning">
+            Locale pairs are empty. Have you created any project keys yet?
+        </div>
+
+    </div>
+</div>
