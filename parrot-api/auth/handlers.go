@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthRequestPayload struct {
+type authRequestPayload struct {
 	ClientId     string `json:"client_id" schema:"client_id"`
 	ClientSecret string `json:"client_secret" schema:"client_secret"`
 	GrantType    string `json:"grant_type" schema:"grant_type"`
@@ -21,21 +21,21 @@ type AuthRequestPayload struct {
 	Password     string `json:"password" schema:"password"`
 }
 
-type IntrospectRequest struct {
+type introspectRequest struct {
 	Token         string `json:"token" schema:"token"`
 	TokenTypeHint string `json:"token_type_hint" schema:"token_type_hint"`
 	ClientId      string `json:"client_id" schema:"client_id"`
 	ClientSecret  string `json:"client_secret" schema:"client_secret"`
 }
 
-type TokenResponse struct {
+type tokenResponse struct {
 	AccessToken string `json:"access_token" `
 	TokenType   string `json:"token_type" `
 	ExpiresIn   string `json:"expires_in" `
 }
 
 var (
-	TokenResponseHeaders = map[string]string{
+	tokenResponseHeaders = map[string]string{
 		"Cache-Control": "no-store",
 		"Pragma":        "no-cache",
 	}
@@ -46,6 +46,7 @@ type tokenClaims struct {
 	jwt.StandardClaims
 }
 
+// IssueToken is a HTTP endpoint that handles authentication and issuing of JWT tokens.
 func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
@@ -53,7 +54,7 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
-		payload := new(AuthRequestPayload)
+		payload := new(authRequestPayload)
 		decoder := schema.NewDecoder()
 
 		err = decoder.Decode(payload, r.Form)
@@ -74,7 +75,8 @@ func IssueToken(tp TokenProvider, store AuthStore) http.HandlerFunc {
 	}
 }
 
-func handlePasswordGrant(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
+// handlePasswordGrant handles the 'password' grant type.
+func handlePasswordGrant(w http.ResponseWriter, payload authRequestPayload, tp TokenProvider, store AuthStore) {
 	if payload.Username == "" || payload.Password == "" {
 		render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 		return
@@ -109,16 +111,17 @@ func handlePasswordGrant(w http.ResponseWriter, payload AuthRequestPayload, tp T
 		return
 	}
 
-	data := TokenResponse{
+	data := tokenResponse{
 		AccessToken: tokenString,
 		TokenType:   "Bearer",
 		ExpiresIn:   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 	}
 
-	RenderJSON(w, http.StatusOK, TokenResponseHeaders, data)
+	render.JSONWithHeaders(w, http.StatusOK, tokenResponseHeaders, data)
 }
 
-func handleClientCredentialsGrant(w http.ResponseWriter, payload AuthRequestPayload, tp TokenProvider, store AuthStore) {
+// handleClientCredentialsGrant handles the 'client_credentials' grant type.
+func handleClientCredentialsGrant(w http.ResponseWriter, payload authRequestPayload, tp TokenProvider, store AuthStore) {
 	if payload.ClientId == "" || payload.ClientSecret == "" {
 		render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 		return
@@ -154,15 +157,16 @@ func handleClientCredentialsGrant(w http.ResponseWriter, payload AuthRequestPayl
 		return
 	}
 
-	data := TokenResponse{
+	data := tokenResponse{
 		AccessToken: tokenString,
 		TokenType:   "Bearer",
 		ExpiresIn:   fmt.Sprintf("%d", claims.ExpiresAt-time.Now().Unix()),
 	}
 
-	RenderJSON(w, http.StatusOK, TokenResponseHeaders, data)
+	render.JSONWithHeaders(w, http.StatusOK, tokenResponseHeaders, data)
 }
 
+// IntrospectToken verifies the validity of a token and writes its claims.
 func IntrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
@@ -170,7 +174,7 @@ func IntrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc {
 			render.Error(w, apiErrors.ErrUnprocessable.Status, apiErrors.ErrUnprocessable)
 			return
 		}
-		payload := new(IntrospectRequest)
+		payload := new(introspectRequest)
 		decoder := schema.NewDecoder()
 
 		err = decoder.Decode(payload, r.Form)
@@ -201,6 +205,6 @@ func IntrospectToken(tp TokenProvider, store datastore.Store) http.HandlerFunc {
 			data["active"] = false
 		}
 
-		RenderJSON(w, http.StatusOK, nil, data)
+		render.JSON(w, http.StatusOK, data)
 	}
 }

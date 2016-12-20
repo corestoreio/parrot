@@ -9,6 +9,7 @@ import (
 	"github.com/Sirupsen/logrus"
 )
 
+// getAuthHeaderToken gets the token string from the HTTP Authorization header.
 func getAuthHeaderToken(r *http.Request) (string, error) {
 	token := r.Header.Get("Authorization")
 	if token == "" {
@@ -19,6 +20,8 @@ func getAuthHeaderToken(r *http.Request) (string, error) {
 
 	return token, nil
 }
+
+// getJSONBodyToken gets the token string from the HTTP JSON body.
 func getJSONBodyToken(r *http.Request) (string, error) {
 	var body map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(&body)
@@ -35,6 +38,7 @@ func getJSONBodyToken(r *http.Request) (string, error) {
 	return token, nil
 }
 
+// sanitizeBearerToken extracts the token part from the token string.
 func sanitizeBearerToken(token string) string {
 	if len(token) > 6 && strings.ToUpper(token[0:7]) == "BEARER " {
 		return token[7:]
