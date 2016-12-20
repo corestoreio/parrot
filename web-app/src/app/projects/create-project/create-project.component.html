@@ -1,10 +1,10 @@
-<button class="button is-success" (click)="openModal()">Create project</button>
+<button class="button is-success" (click)="openModal()">Add Project</button>
 <div class="modal" [class.is-active]="modalOpen">
     <div class="modal-background" (click)="closeModal()"></div>
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Create a new project</h1>
+            <h1 class="title">Add a new Project</h1>
 
             <form (ngSubmit)="createProject()" #createProjectForm="ngForm">
                 <div class="control">
