@@ -1,20 +1,21 @@
 # Parrot
-Project localization system built with Go and Angular 2.
+Project is a self-hosted Localization Management Platform built with Go and Angular 2.
 Currently in heavy development, breaking changes guaranteed :)
 
 TODO:
 
 General:
+- Improve documentation.
 - Add frontend app to build pipeline.
-- Add snapshots feature (current project state backups).
+- Add snapshots feature (project state backups).
 - Add forgotten password feature.
-- Switch to authentication via Firebase?.
+- Add auto SSL certificates via let's encrypt.
 
 Backend:
 - Add timestamps to DB tables.
-- Add tests.
+- Add tests when practical.
 
 Frontend:
-- Localize parrot itself.
+- Add localization parrot itself.
 - Cleanup CSS, switch to SASS?.
-- Add tests.
+- Add tests when practical.
