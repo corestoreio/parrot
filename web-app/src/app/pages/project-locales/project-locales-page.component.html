@@ -18,5 +18,19 @@
         </div>
     </nav>
 
-    <locales-list [locales]="locales" [loading]="loading"></locales-list>
+    <div [ngSwitch]="locales && locales.length > 0">
+        <div *ngSwitchCase="true">
+
+            <locales-list [locales]="locales" [loading]="loading"></locales-list>
+
+        </div>
+        <div *ngSwitchDefault>
+
+            <div class="notification is-warning">
+                You haven't created any Locales yet.
+            </div>
+
+        </div>
+    </div>
+
 </section>

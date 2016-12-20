@@ -18,5 +18,19 @@
         </div>
     </nav>
 
-    <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading"></project-users-list>
+    <div [ngSwitch]="projectUsers && projectUsers.length > 0">
+        <div *ngSwitchCase="true">
+
+            <project-users-list [users]="projectUsers" [projectId]="projectId" [loading]="loading"></project-users-list>
+
+        </div>
+        <div *ngSwitchDefault>
+
+            <div class="notification is-warning">
+                No Team Members yet.
+            </div>
+
+        </div>
+    </div>
+
 </section>

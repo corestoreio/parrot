@@ -18,5 +18,19 @@
         </div>
     </nav>
 
-    <app-list [projectClients]="projectClients"></app-list>
+    <div [ngSwitch]="projectClients && projectClients.length > 0">
+        <div *ngSwitchCase="true">
+
+            <app-list [projectClients]="projectClients"></app-list>
+
+        </div>
+        <div *ngSwitchDefault>
+
+            <div class="notification is-warning">
+                No Applications have access to this Project yet.
+            </div>
+
+        </div>
+    </div>
+
 </section>

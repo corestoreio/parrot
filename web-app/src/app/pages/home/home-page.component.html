@@ -16,5 +16,20 @@
             </div>
         </div>
     </nav>
-    <projects-list [projects]="projects" [loading]="loading"></projects-list>
+
+    <div [ngSwitch]="projects && projects.length > 0">
+        <div *ngSwitchCase="true">
+
+            <projects-list [projects]="projects" [loading]="loading"></projects-list>
+
+        </div>
+        <div *ngSwitchDefault>
+
+            <div class="notification is-warning">
+                You don't have any Projects yet. Add one to get started!
+            </div>
+
+        </div>
+    </div>
+
 </section>
