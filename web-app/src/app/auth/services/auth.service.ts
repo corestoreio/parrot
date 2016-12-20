@@ -4,25 +4,25 @@ import { Observable } from 'rxjs/Observable';
 import { tokenNotExpired } from 'angular2-jwt';
 import 'rxjs/add/operator/map';
 
+import { TokenService } from './token.service';
 import { APIService } from './../../shared/api.service';
-import { User } from './../model/user';
+import { User } from './../../users/model/user';
+import { UserService } from './../../users/services/user.service';
 
 @Injectable()
 export class AuthService {
 
-    constructor(private api: APIService) { }
+    private tokenName: string = 'auth.token';
+
+    constructor(
+        private api: APIService,
+        private token: TokenService,
+        private userService: UserService,
+    ) { }
 
     isLoggedIn(): boolean {
-        let token = this.getToken();
+        let token = this.token.getToken();
         return tokenNotExpired(null, token);
-    }
-
-    getToken(): string {
-        return localStorage.getItem('token');
-    }
-
-    removeToken(): void {
-        localStorage.removeItem('token');
     }
 
     login(user: User): Observable<boolean> {
@@ -37,12 +37,15 @@ export class AuthService {
             withAuthorization: false,
         })
             .map(res => {
-                let token = res['access_token'];
-                if (!token) {
-                    console.error("no token in response");
-                    return false;
+                let payload = res.payload;
+                if (!payload) {
+                    throw new Error("no payload in response");
                 }
-                localStorage.setItem('token', token);
+                let token = payload['access_token'];
+                if (!token) {
+                    throw new Error("no token in response");
+                }
+                this.token.storeToken(token);
                 return true;
             });
     }
@@ -55,6 +58,13 @@ export class AuthService {
             withAuthorization: false,
         })
             .map(res => {
+                let meta = res.meta;
+                if (!meta) {
+                    throw new Error("no meta in response");
+                }
+                if (meta.status < 200 || meta.status > 300) {
+                    return false;
+                }
                 return true;
             });
     }

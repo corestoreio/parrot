@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
+import { UserService } from './../../users/services/user.service';
 import { APIService } from './../../shared/api.service';
 import { Project } from './../model/project';
 

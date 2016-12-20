@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from './../../auth';
+import { TokenService } from './../../auth';
 import { ProjectMenuService } from './../services/project-menu.service';
 
 @Component({
@@ -15,7 +16,12 @@ export class AppBarComponent implements OnInit {
 
     private isMenuActive: boolean;
 
-    constructor(private auth: AuthService, private router: Router, private projectMenu: ProjectMenuService) { }
+    constructor(
+        private auth: AuthService,
+        private router: Router,
+        private projectMenu: ProjectMenuService,
+        private token: TokenService,
+    ) { }
 
     ngOnInit() {
         this.projectMenu.menuActive
@@ -40,7 +46,7 @@ export class AppBarComponent implements OnInit {
     }
 
     logout(): void {
-        this.auth.removeToken();
+        this.token.removeToken();
         this.router.navigate(['/login']);
     }
 }

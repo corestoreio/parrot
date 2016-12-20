@@ -4,6 +4,7 @@ export interface User {
     id: string;
     name: string;
     email: string;
+    password?: string;
     role: string;
     projectRoles?: Map<string, string>;
     projectGrants?: Map<string, Array<string>>;

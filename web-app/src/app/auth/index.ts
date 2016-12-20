@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from './services/auth.service';
+import { TokenService } from './services/token.service';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -17,18 +18,19 @@ import { UnauthGuard } from './guards/unauth.guard';
     ],
     exports: [
         RegisterComponent,
-        LoginComponent
+        LoginComponent,
     ],
     declarations: [
         RegisterComponent,
         LoginComponent
     ],
-    providers: [AuthService]
+    providers: [AuthService, TokenService]
 })
 export class AuthModule { }
 
 export {
     AuthService,
+    TokenService,
     RegisterComponent,
     LoginComponent,
     AuthGuard,

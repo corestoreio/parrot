@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from './../services/auth.service';
 import { ErrorsService } from './../../shared/errors.service';
-import { User } from './../model/user';
+import { User } from './../../users/model/user';
 
 @Component({
   selector: 'register',

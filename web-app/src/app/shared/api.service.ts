@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
 import { AppConfig } from './../app.config';
+import { TokenService } from './../auth/services/token.service';
 
 export interface RequestOptions {
     uri: string;
@@ -19,7 +20,10 @@ export interface RequestOptions {
 export class APIService {
     private apiUrl: string;
 
-    constructor(private http: Http) {
+    constructor(
+        private http: Http,
+        private token: TokenService,
+    ) {
         this.apiUrl = AppConfig.apiUrl;
     }
 
@@ -32,7 +36,7 @@ export class APIService {
         headers.append('Content-Type', 'application/json')
         headers.append('Accept', 'application/json');
         if (withAuthorization) {
-            headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`);
+            headers.append('Authorization', `Bearer ${this.token.getToken()}`);
         }
         return headers;
     }

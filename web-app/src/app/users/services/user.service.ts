@@ -9,7 +9,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/switchMap';
 
 import { APIService } from './../../shared/api.service';
 import { ProjectsService } from './../../projects/services/projects.service';
@@ -30,23 +29,28 @@ export class UserService {
     }
 
     isAuthorized(projectId: string, grant: string): Observable<boolean> {
-        return this.userSelf
+        return this.getUserSelf()
             .filter(user => {
                 return !!user;
             })
             .map(user => {
-                let projectGrants: string[] = user.projectGrants[projectId];
+                let projectGrants: Map<string, string[]> = user.projectGrants;
                 if (!projectGrants) {
                     return false;
                 }
+                let grants: string[] = projectGrants[projectId];
+                if (!grants) {
+                    return false;
+                }
 
-                let allowed: boolean = !!projectGrants.find(current => current === grant);
+                let allowed: boolean = !!grants.find(current => current === grant);
 
                 return allowed;
             })
             .take(1);
     }
 
+    // TODO cache API call
     getUserSelf(): Observable<User> {
         let request = this.api.request({
             uri: `/users/self?include=projectGrants`,
