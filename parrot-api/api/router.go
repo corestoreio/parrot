@@ -1,3 +1,4 @@
+// Package api handles the creation and configuration of all API resource routes.
 package api
 
 import (
