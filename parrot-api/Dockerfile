@@ -7,9 +7,9 @@ RUN mkdir -p $GOPATH/src/github.com/anthonynsimon
 
 WORKDIR "$GOPATH/src/github.com/anthonynsimon"
 
-COPY ./docker-start.sh .
+COPY ./scripts/docker-start.sh .
 
-RUN chmod +rwx ./scripts/docker-start.sh
+RUN chmod +rwx ./docker-start.sh
 
 EXPOSE 443
 
