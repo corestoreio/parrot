@@ -7,8 +7,8 @@ RUN go get github.com/anthonynsimon/parrot/parrot-api
 
 WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-api"
 
-RUN go build
+RUN chmod +rwx ./start.sh
 
-EXPOSE 8080
+EXPOSE 443
 
-CMD ./parrot-api
+CMD ["/bin/bash", "./start.sh"]

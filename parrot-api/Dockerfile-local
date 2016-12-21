@@ -4,9 +4,9 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git
 
 WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-api"
+
 COPY . .
-RUN go build
 
-EXPOSE 8080
+EXPOSE 443
 
-CMD ./parrot-api
+CMD ["/bin/bash", "./start.sh"]

@@ -1,7 +1,5 @@
 FROM alpine:3.3
 
-MAINTAINER Anthony Najjar Simon
-
 RUN apk add --update nginx && rm -rf /var/cache/apk/*
 RUN mkdir -p /tmp/nginx/client-body
 

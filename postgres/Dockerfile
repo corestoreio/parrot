@@ -1,7 +1,5 @@
 FROM postgres:9.5
 
-MAINTAINER Anthony Najjar Simon
-
 ENV PGDATA /var/lib/postgresql/data/pgdata
 
 COPY postgres.conf /configs/

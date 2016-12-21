@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"os"
@@ -99,6 +100,12 @@ func main() {
 
 	router := chi.NewRouter()
 	router.Use(
+		func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+				next.ServeHTTP(w, r)
+			})
+		},
 		middleware.Recoverer,
 		middleware.RequestID,
 		middleware.RealIP,
@@ -121,7 +128,19 @@ func main() {
 	router.Mount("/api/v1", api.NewRouter(ds, tp))
 
 	// config and init server
-	addr := ":8080"
+	addr := ":443"
+
+	cfg := &tls.Config{
+		MinVersion:               tls.VersionTLS12,
+		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+		PreferServerCipherSuites: true,
+		CipherSuites: []uint16{
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+		},
+	}
 
 	s := &http.Server{
 		Addr:           addr,
@@ -129,11 +148,13 @@ func main() {
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
+		TLSConfig:      cfg,
+		TLSNextProto:   make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
 	}
 
 	logrus.Info(fmt.Sprintf("server listening on %s", addr))
 
-	logrus.Fatal(s.ListenAndServe())
+	logrus.Fatal(s.ListenAndServeTLS("certs/cert.pem", "certs/key.pem"))
 }
 
 func blockAndRetry(d time.Duration, fn func() bool) {
