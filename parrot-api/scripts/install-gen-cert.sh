@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Installing generate TLS cert tool..."
-cd cmd/generate-cert && go install
+cd $PARROT_REPO_ROOT/parrot-api/cmd/generate-cert && go install
