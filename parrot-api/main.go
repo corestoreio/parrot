@@ -23,6 +23,7 @@ func init() {
 	logrus.SetLevel(logrus.InfoLevel)
 }
 
+// TODO: refactor this into cli to start server
 func main() {
 	// init environment variables
 	err := godotenv.Load()
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	// init and ping datastore
-	dbName := os.Getenv("PARROT_API_DB_NAME")
+	dbName := os.Getenv("PARROT_API_DB")
 	dbURL := os.Getenv("PARROT_API_DB_URL")
 	if dbName == "" || dbURL == "" {
 		logrus.Fatal("no db set in env")
@@ -58,7 +59,8 @@ func main() {
 
 		dirPath := os.Getenv("PARROT_DB_MIGRATIONS_DIR")
 		if dirPath == "" {
-			logrus.Fatal("could not apply migrations, migrations directory not set")
+			dirPath = fmt.Sprintf("./datastore/%s/migrations", dbName)
+			logrus.Infof("migrations directory not set, using default one: '%s'", dirPath)
 		}
 
 		var fn func(string) error
@@ -118,13 +120,9 @@ func main() {
 	router.Mount("/api/v1/auth", auth.NewRouter(ds, tp))
 	router.Mount("/api/v1", api.NewRouter(ds, tp))
 
-	// config server
-	addr := os.Getenv("PARROT_API_SERVER_PORT")
-	if addr == "" {
-		addr = ":8080"
-	}
+	// config and init server
+	addr := ":8080"
 
-	// init server
 	s := &http.Server{
 		Addr:           addr,
 		Handler:        router,
