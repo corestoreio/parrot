@@ -1,8 +1,8 @@
 # Parrot
-Project is a self-hosted Localization Management Platform built with Go and Angular 2.
+Self-hosted Localization Management Platform built with Go and Angular 2.
 Currently in heavy development, breaking changes guaranteed :)
 
-TODO:
+## Todo
 
 General:
 - Improve documentation.
