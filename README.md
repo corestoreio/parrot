@@ -27,11 +27,11 @@ Frontend:
 ## Try it out
 NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
-The easiest way to get started is using Docker. Simply clone this repo, navigate to the root of it and run docker compose:
+The easiest way to get started is using Docker. Simply clone this repo, navigate to the root of it and start the services:
 ```
 $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
-$ docker-compose up
+$ bash start.sh
 ```
 This will launch 3 containers: a Postgres database, the Parrot API server and Nginx as the reverse proxy.
 
