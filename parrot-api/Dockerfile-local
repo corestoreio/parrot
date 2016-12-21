@@ -7,6 +7,8 @@ WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-api"
 
 COPY . .
 
+RUN chmod +rwx ./start.sh
+
 EXPOSE 443
 
 CMD ["/bin/bash", "./start.sh"]
