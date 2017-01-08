@@ -11,6 +11,7 @@ Currently in heavy development, breaking changes guaranteed :)
 General:
 - Improve documentation.
 - Add frontend app to build pipeline.
+- Add import feature.
 - Add snapshots feature (project state backups).
 - Add forgotten password feature.
 - Add auto SSL certificates via let's encrypt.
