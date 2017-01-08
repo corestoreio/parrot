@@ -21,7 +21,7 @@ Backend:
 - Add tests when practical.
 
 Frontend:
-- Add localization parrot itself.
+- Localize the web app.
 - Cleanup CSS, switch to SASS?.
 - Add tests when practical.
 
