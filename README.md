@@ -6,25 +6,6 @@
 Self-hosted Localization Management Service built with Go and Angular 2.  
 Currently in heavy development, breaking changes guaranteed :)
 
-## Todo
-
-General:
-- Improve documentation.
-- Add frontend app to build pipeline.
-- Add import feature.
-- Add snapshots feature (project state backups).
-- Add forgotten password feature.
-- Add auto SSL certificates via let's encrypt.
-
-Backend:
-- Add timestamps to DB tables.
-- Add tests when practical.
-
-Frontend:
-- Localize the web app.
-- Cleanup CSS, switch to SASS?.
-- Add tests when practical.
-
 ## Try it out
 
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
