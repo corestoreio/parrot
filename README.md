@@ -14,7 +14,7 @@ The easiest way to get started is using Docker. Simply clone this repo, navigate
 ```
 $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
-$ bash start.sh
+$ bash scripts/start.sh
 ```
 This will launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
 
