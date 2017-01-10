@@ -16,6 +16,8 @@ COPY certs /etc/nginx/certs
 COPY public /www/data
 
 VOLUME ["/var/log/nginx"]
+VOLUME ["/etc/nginx/certs"]
+VOLUME ["/etc/nginx/vhost.d"]
 
 EXPOSE 443
 
