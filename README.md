@@ -26,7 +26,8 @@ Frontend:
 - Add tests when practical.
 
 ## Try it out
-NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
+
+> NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
 The easiest way to get started is using Docker. Simply clone this repo, navigate to the root of it and start the services:
 ```
@@ -36,7 +37,7 @@ $ bash start.sh
 ```
 This will launch 3 containers: a Postgres database, the Parrot API server and Nginx as the reverse proxy.
 
-Navigate to `https://localhost/api/v1/ping` and you should be able to see if the API is up (your browser might complain about an unkown certificate, this issue will be addressed soon).
+Navigate to https://localhost/api/v1/ping and you should be able to see if the API is up (your browser might complain about an unkown certificate, this issue will be addressed soon).
 
 And to serve the web app:
 ```
@@ -46,7 +47,7 @@ $ cd web-app
 $ npm install
 $ npm start
 ```
-Then simply navigate to `http://localhost:4200` to open the web app.
+Then simply navigate to http://localhost:4200 to open the web app.
 
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
