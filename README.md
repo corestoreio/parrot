@@ -3,7 +3,7 @@
 [![Docker Automated buil](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/anthonynsimon/parrot-api/)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/anthonynsimon/parrot/blob/master/LICENSE)  
 
-Self-hosted Localization Management Software built with Go and Angular 2.  
+Self-hosted Localization Management Service built with Go and Angular 2.  
 Currently in heavy development, breaking changes guaranteed :)
 
 ## Todo
