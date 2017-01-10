@@ -35,19 +35,17 @@ $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
 $ bash start.sh
 ```
-This will launch 3 containers: a Postgres database, the Parrot API server and Nginx as the reverse proxy.
+This will launch 3 containers: a Postgres database, the Parrot API server and Nginx as the reverse proxy and static file server.
 
 Navigate to https://localhost/api/v1/ping and you should be able to see if the API is up (your browser might complain about an unkown certificate, this issue will be addressed soon).
 
-And to serve the web app:
-```
-// ./parrot
+And to view the web app simply navigate to https://localhost, it should open the login page of the web app.
 
-$ cd web-app
-$ npm install
-$ npm start
-```
-Then simply navigate to http://localhost:4200 to open the web app.
+### Important note on HTTPS
+
+For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do NOT use these for production, 
+use your own certificates instead. We recommended automating the generation and renewal of the certificates via Let's Encrypt.
+The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container has been made available for this purpose.  
 
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
