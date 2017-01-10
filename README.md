@@ -35,7 +35,7 @@ $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
 $ bash start.sh
 ```
-This will launch 3 containers: a Postgres database, the Parrot API server and Nginx as the reverse proxy and static file server.
+This will launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
 
 Navigate to https://localhost/api/v1/ping and you should be able to see if the API is up (your browser might complain about an unkown certificate, this issue will be addressed soon).
 
