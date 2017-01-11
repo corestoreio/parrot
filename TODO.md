@@ -2,7 +2,6 @@
 
 General:
 - Improve documentation.
-- Fix URI to web app not being passed by nginx on page refresh.
 - Simplify release and deployment.
 - Add import feature.
 - Add snapshots feature (project state backups).
