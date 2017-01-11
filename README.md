@@ -4,27 +4,31 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/anthonynsimon/parrot/blob/master/LICENSE)  
 
 Self-hosted Localization Management Service built with Go and Angular 2.  
-Currently in heavy development, breaking changes guaranteed :)
-
-## Try it out
 
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
+## Try it out
+
 The easiest way to get started is using Docker. Simply clone this repo, navigate to the root of it and start the services:
+
+> Please note that to build the web app, `npm` is required.
+
 ```
 $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
-$ bash scripts/start.sh
+$ sudo /bin/bash scripts/release.sh
+$ sudo /bin/bash scripts/start.sh
 ```
-This will launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
 
-Navigate to https://localhost/api/v1/ping and you should be able to see if the API is up (your browser might complain about an unkown certificate, this issue will be addressed soon).
+This will build the web app and launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
+
+Navigate to https://localhost/api/v1/ping and you should be able to see if the API is up (your browser will complain about an unknown certificate, see the HTTPS notice below for more info).
 
 And to view the web app simply navigate to https://localhost, it should open the login page of the web app.
 
 ### Important note on HTTPS
 
-For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do NOT use these for production, 
+For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do **NOT** use them for anything other than development, 
 use your own certificates instead. We recommended automating the generation and renewal of the certificates via Let's Encrypt.
 The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container has been made available for this purpose.  
 
