@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { ErrorMap } from './../app.config';
 
+export interface APIError {
+    errors?: Array<APIError>;
+    type: string;
+    message: string;
+}
+
 @Injectable()
 export class ErrorsService {
 
@@ -11,7 +17,7 @@ export class ErrorsService {
         this.errorMap = ErrorMap;
     }
 
-    mapErrors(error: Object, context: string): string[] {
+    mapErrors(error: APIError, context: string): string[] {
         let sub = this.errorMap[context];
         if (!sub) {
             return this.defaultError;

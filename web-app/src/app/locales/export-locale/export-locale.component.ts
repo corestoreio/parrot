@@ -16,7 +16,7 @@ export class ExportLocaleComponent implements OnInit {
         return this.service.availableExportFormats;
     }
 
-    private selectedFormat = '';
+    private selectedFormat: ExportFormat;
     private modalOpen: boolean = false;
     private loading: boolean = false;
     private errors: string[];
@@ -39,7 +39,7 @@ export class ExportLocaleComponent implements OnInit {
     }
 
     reset() {
-        this.selectedFormat = '';
+        this.selectedFormat = null;
         this.loading = false;
         this.errors = [];
     }
