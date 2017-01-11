@@ -3,15 +3,15 @@ FROM golang:1.7.3-alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git
 
-RUN mkdir -p $GOPATH/src/github.com/anthonynsimon
+RUN mkdir -p $GOPATH/src/github.com/anthonynsimon/parrot/parrot-api
 
-WORKDIR "$GOPATH/src/github.com/anthonynsimon"
+WORKDIR "$GOPATH/src/github.com/anthonynsimon/parrot/parrot-api"
 
-COPY ./scripts/docker-start.sh .
+COPY . .
 
-RUN chmod +rwx ./docker-start.sh
+RUN chmod +rwx ./scripts/docker-start.sh
 
 EXPOSE 443
 
-CMD ["/bin/bash", "./docker-start.sh"]
+CMD ["/bin/bash", "./scripts/docker-start.sh"]
     
