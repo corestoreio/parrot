@@ -1,5 +1,8 @@
 #!/bin/bash
 
+script_dir="${0%/*}"
+cd $script_dir/..
+
 echo "Stopping existing containers..."
 docker-compose down
 

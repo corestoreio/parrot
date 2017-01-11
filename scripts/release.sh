@@ -1,5 +1,8 @@
 #!/bin/bash
 
-echo "Building and packaging web app source..."
-cd web-app/scripts && bash deploy.sh
-cd ../../.. && zip -r parrot ./parrot
+script_dir="${0%/*}"
+cd $script_dir
+
+/bin/bash ./../web-app/scripts/deploy.sh && \
+    rm -rf ./../nginx/public && mkdir ./../nginx/public && \
+    cp -rf ./../web-app/dist/* ./../nginx/public
