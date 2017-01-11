@@ -7,6 +7,8 @@ Self-hosted Localization Management Service built with Go and Angular 2.
 
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
+<img src="https://raw.githubusercontent.com/anthonynsimon/parrot.github.io/master/images/parrot-screenshot-001.png" style="width: 720px;"/>
+
 ## Try it out
 
 The easiest way to get started is using Docker. Simply clone this repo, navigate to the root of it and start the services:
