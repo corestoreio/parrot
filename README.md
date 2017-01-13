@@ -11,9 +11,7 @@ Self-hosted Localization Management Service built with Go and Angular 2.
 
 ## Try it out
 
-The easiest way to get started is using Docker. Simply clone this repo, navigate to the root of it and start the services:
-
-> Please note that to build the web app, `npm` is required.
+The easiest way to get started is using `docker` and `docker-compose`. Simply clone this repo, navigate to the root of it and start the services:
 
 ```
 $ git clone https://github.com/anthonynsimon/parrot.git
@@ -21,6 +19,9 @@ $ cd parrot
 $ sudo /bin/bash scripts/release.sh
 $ sudo /bin/bash scripts/start.sh
 ```
+
+> Please note that to build the web app, `npm` is required.
+
 
 This will build the web app and launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
 
@@ -30,9 +31,9 @@ And to view the web app simply navigate to https://localhost, it should open the
 
 ### Important note on HTTPS
 
-For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do **NOT** use them for anything other than development, 
+For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do **NOT** use them for anything other than development,
 use your own certificates instead. We recommended automating the generation and renewal of the certificates via Let's Encrypt.
-The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container has been made available for this purpose.  
+The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container has been made available for this purpose.
 
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
