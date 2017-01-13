@@ -10,7 +10,17 @@ Self-hosted Localization Management software built with Go and Angular 2.
 
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
-<img src="https://raw.githubusercontent.com/anthonynsimon/parrot.github.io/master/images/parrot-screenshot-001.png" style="width: 720px;"/>
+<img src="http://anthonynsimon.com/parrot.github.io/images/parrot-screenshot-001.png" style="width: 720px;"/>
+
+## Features
+
+- Built-in UI (web app) ready to deploy.
+- REST API to easily extend or integrate Parrot into your pipeline.
+- Export to various formats: keyvaluejson, `po`, `strings`, `properties`, `xmlproperties`, `android`, `php`, `xlsx` and `csv`.
+- Easily rename project strings, Parrot takes care of keeping locales in sync.
+- Manage your project's team, assign collaborators and their roles.
+- Control API Client access for your projects.
+- Easy install/deploy using Docker.
 
 ## Try it out
 
