@@ -22,7 +22,7 @@
                     <div class="column" *ngIf="!!selectedLocale">
                         <p class="notification is-info title is-5">
                             <span class="icon is-small media-left">
-                            <i class="flag-icon flag-icon-{{selectedLocale.ident.slice(-2).toLowerCase()}}"></i>
+                            <i class="flag-icon flag-icon-{{selectedLocale.ident.slice(3,5).toLowerCase()}}"></i>
                             </span> {{selectedLocale.language}} ({{selectedLocale.country}})
                             ({{selectedLocale.ident}})
                             <button class="delete" (click)="deselect()"></button></p>
@@ -44,7 +44,7 @@
                         <article class="media locale center-align" (click)="select(locale)" *ngFor="let locale of filteredLocales()">
                             <figure class="media-left">
                                 <span class="icon is-small">
-                                        <i class="flag-icon flag-icon-{{locale.ident.slice(-2).toLowerCase()}}"></i>
+                                        <i class="flag-icon flag-icon-{{locale.ident.slice(3,5).toLowerCase()}}"></i>
                                     </span>
                             </figure>
                             <div class="media-content">
