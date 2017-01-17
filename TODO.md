@@ -7,6 +7,7 @@ General:
 - Add snapshots feature (project state backups).
 - Add forgotten password feature.
 - Add auto SSL certificates via let's encrypt.
+- Add export to XLIFF format.
 
 Backend:
 - Add timestamps to DB tables.
