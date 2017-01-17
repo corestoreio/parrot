@@ -49,6 +49,7 @@ export const LocaleExportFormats = [
     { apiIdent: 'php', name: 'PHP Array', extension: '.php' },
     { apiIdent: 'xlsx', name: 'Excel', extension: '.xlsx' },
     { apiIdent: 'csv', name: 'CSV', extension: '.csv' },
+    { apiIdent: 'yaml', name: 'YAML', extension: '.yaml' },
 ];
 
 export const LocalesList = [

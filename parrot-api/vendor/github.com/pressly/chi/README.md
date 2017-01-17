@@ -10,7 +10,7 @@ handle signaling, cancelation and request-scoped values across a handler chain.
 
 The focus of the project has been to seek out an elegant and comfortable design for writing
 REST API servers, written during the development of the Pressly API service that powers our
-public API service, which in turn powers all of our client-side applications.
+public API service and all of our client-side applications.
 
 The key considerations of chi's design are: project structure, maintainability, standard http
 handlers (stdlib-only), developer productivity, and deconstructing a large system into many small
@@ -22,7 +22,6 @@ included some useful/optional subpackages: `middleware`, `render` and `docgen`. 
 
 * **Lightweight** - cloc'd in <1000 LOC for the chi router
 * **Fast** - yes, see [benchmarks](#benchmarks)
-* **100% compatible with net/http** - use any http or middleware pkg in the ecosystem that is also compat with `net/http`
 * **Designed for modular/composable APIs** - middlewares, inline middlewares, route groups and subrouter mounting
 * **Context control** - built on new `context` package, providing value chaining, cancelations and timeouts
 * **Robust** - tested / used in production at Pressly.com, and many others
@@ -32,41 +31,18 @@ included some useful/optional subpackages: `middleware`, `render` and `docgen`. 
 
 ## Examples
 
+Examples:
 * [rest](https://github.com/pressly/chi/blob/master/_examples/rest/main.go) - REST APIs made easy, productive and maintainable
 * [limits](https://github.com/pressly/chi/blob/master/_examples/limits/main.go) - Timeouts and Throttling
 * [todos-resource](https://github.com/pressly/chi/blob/master/_examples/todos-resource/main.go) - Struct routers/handlers, an example of another code layout style
 * [versions](https://github.com/pressly/chi/blob/master/_examples/versions/main.go) - Demo of `chi/render` subpkg
 * [fileserver](https://github.com/pressly/chi/blob/master/_examples/fileserver/main.go) - Easily serve static files
-* [graceful](https://github.com/pressly/chi/blob/master/_examples/graceful/main.go) - Graceful context signaling and server shutdown
 
-
-**As easy as:**
-
-```go
-package main
-
-import (
-	"net/http"
-	"github.com/pressly/chi"
-)
-
-func main() {
-	r := chi.NewRouter()
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome"))
-	})
-	http.ListenAndServe(":3000", r)
-}
-```
-
-**REST Preview:**
+Preview:
 
 Here is a little preview of how routing looks like with chi. Also take a look at the generated routing docs
 in JSON ([routes.json](https://github.com/pressly/chi/blob/master/_examples/rest/routes.json)) and in
 Markdown ([routes.md](https://github.com/pressly/chi/blob/master/_examples/rest/routes.md)).
-
-I highly recommend reading the source of the [examples](#examples) listed above, they will show you all the features
-of chi and serve as a good form of documentation.
 
 ```go
 import (
@@ -166,9 +142,7 @@ func AdminOnly(next http.Handler) http.Handler {
 
 ## Router design
 
-chi's router is based on a kind of [Patricia Radix trie](https://en.wikipedia.org/wiki/Radix_tree).
-The router is fully compatible with `net/http`.
-
+Chi's router is based on a kind of [Patricia Radix trie](https://en.wikipedia.org/wiki/Radix_tree).
 Built on top of the tree is the `Router` interface:
 
 ```go
@@ -232,18 +206,9 @@ supports named params (ie. `/users/:userID`) and wildcards (ie. `/admin/*`).
 
 ### Middleware handlers
 
-chi's middlewares are just stdlib net/http middleware handlers. There is nothing special
-about them, which means the router and all the tooling is designed to be compatible and
-friendly with any middleware in the community. This offers much better extensibility and reuse
-of packages and is at the heart of chi's purpose.
-
-Here is an example of a standard net/http middleware handler using the new request context
-available in Go 1.7+. This middleware sets a hypothetical user identifier on the request
-context and calls the next handler in the chain.
-
 ```go
 // HTTP middleware setting a value on the request context
-func MyMiddleware(next http.Handler) http.Handler {
+func Middleware(next http.Handler) http.Handler {
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     ctx := context.WithValue(r.Context(), "user", "123")
     next.ServeHTTP(w, r.WithContext(ctx))
@@ -254,28 +219,17 @@ func MyMiddleware(next http.Handler) http.Handler {
 
 ### Request handlers
 
-chi uses standard net/http request handlers. This little snippet is an example of a http.Handler
-func that reads a user identifier from the request context - hypothetically, identifying
-the user sending an authenticated request, validated+set by a previous middleware handler.
-
 ```go
 // HTTP handler accessing data from the request context.
-func MyRequestHandler(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
   user := r.Context().Value("user").(string)
   w.Write([]byte(fmt.Sprintf("hi %s", user)))
 }
 ```
 
-
-### URL parameters
-
-chi's router parses and stores URL parameters right onto the request context. Here is
-an example of how to access URL params in your net/http handlers. And of course, middlewares
-are able to access the same information.
-
 ```go
 // HTTP handler accessing the url routing parameters.
-func MyRequestHandler(w http.ResponseWriter, r *http.Request) {
+func CtxHandler(w http.ResponseWriter, r *http.Request) {
   userID := chi.URLParam(r, "userID") // from a route like /users/:userID
 
   ctx := r.Context()
@@ -288,9 +242,7 @@ func MyRequestHandler(w http.ResponseWriter, r *http.Request) {
 
 ## Middlewares
 
-chi comes equipped with an optional `middleware` package, providing a suite of standard
-`net/http` middlewares. Please note, any middleware in the ecosystem that is also compatible
-with `net/http` can be used with chi's mux.
+Chi comes equipped with an optional `middleware` package, providing:
 
 --------------------------------------------------------------------------------------------------
 | Middleware   | Description                                                                     |
@@ -307,10 +259,9 @@ with `net/http` can be used with chi's mux.
 | Profiler     | Easily attach net/http/pprof to your routers.                                   |
 | Slashes      | Strip and redirect slashes on routing paths.                                    |
 | WithValue    | Short-hand middleware to set a key/value on the request context.                |
-| Heartbeat    | Monitoring endpoint to check the servers pulse.                                 |
 --------------------------------------------------------------------------------------------------
 
-Other cool net/http middlewares:
+Other middlewares:
 
 * [jwtauth](https://github.com/goware/jwtauth) - JWT authenticator
 * [cors](https://github.com/goware/cors) - CORS middleware
@@ -366,7 +317,7 @@ how setting context on a request in Go 1.7 works.
 ## Credits
 
 * Carl Jackson for https://github.com/zenazn/goji
-  * Parts of chi's thinking comes from goji, and chi's middleware package
+  * Parts of Chi's thinking comes from goji, and Chi's middleware package
     sources from goji.
 * Armon Dadgar for https://github.com/armon/go-radix
 * Contributions: [@VojtechVitek](https://github.com/VojtechVitek)
