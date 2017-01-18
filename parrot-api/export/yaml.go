@@ -10,7 +10,7 @@ import (
 type Yaml struct{}
 
 func (e *Yaml) FileExtension() string {
-	return "po"
+	return "yaml"
 }
 
 // TODO: allow for non-nested style export.
@@ -25,20 +25,6 @@ func (e *Yaml) Export(locale *model.Locale) ([]byte, error) {
 	}
 	return result, nil
 }
-
-// func (e *Yaml) Export(locale *model.Locale) ([]byte, error) {
-// 	data := make(map[string]map[string]interface{})
-// 	data[locale.Ident] = make(map[string]interface{})
-// 	for k, v := range locale.Pairs {
-// 		data[locale.Ident][k] = v
-// 	}
-
-// 	result, err := yaml.Marshal(data)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return result, nil
-// }
 
 func getNestedKVPairs(pairs map[string]string, separator string) interface{} {
 	data := make(map[string]interface{})
