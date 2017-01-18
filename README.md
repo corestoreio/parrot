@@ -1,5 +1,5 @@
 # Parrot
-[![Docs](https://readthedocs.org/projects/docs/badge/?version=latest)](https://anthonynsimon.gitbooks.io/parrot/content/)
+[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://anthonynsimon.gitbooks.io/parrot/content/)
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/anthonynsimon/parrot/blob/master/LICENSE)
 
 Self-hosted Localization Management Platform built with Go and Angular 2.  
