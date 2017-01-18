@@ -15,7 +15,7 @@ Self-hosted Localization Management Platform built with Go and Angular 2.
 
 - Built-in UI (web app) ready to deploy.
 - REST API to easily extend or integrate Parrot into your pipeline.
-- Export to various formats: keyvaluejson, `po`, `strings`, `properties`, `xmlproperties`, `android`, `php`, `xlsx` and `csv`.
+- Export to various formats: keyvaluejson, `po`, `strings`, `properties`, `xmlproperties`, `android`, `php`, `xlsx`, `yaml` and `csv`.
 - Easily rename project strings, Parrot takes care of keeping locales in sync.
 - Manage your project's team, assign collaborators and their roles.
 - Control API Client access for your projects.
@@ -28,7 +28,7 @@ The easiest way to get started is using `docker` and `docker-compose`. Simply cl
 ```
 $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
-$ sudo /bin/bash scripts/release.sh
+$ sudo /bin/bash scripts/buildweb.sh
 $ sudo /bin/bash scripts/start.sh
 ```
 
