@@ -25,15 +25,18 @@ Self-hosted Localization Management Platform built with Go and Angular 2.
 
 The easiest way to get started is using `docker` and `docker-compose`. Simply clone this repo, navigate to the root of it and start the services:
 
-```
+```bash
 $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
-$ sudo /bin/bash scripts/buildweb.sh
-$ sudo /bin/bash scripts/start.sh
+$ ./scripts/buildweb.sh
+$ sudo ./scripts/start.sh
 ```
 
-> Please note that to build the web app, `npm` is required.
+> Please note that to build the web app, `npm` and `angular-cli` is required:
 
+```bash
+npm install -g angular-cli@1.0.0-beta.26
+```
 
 This will build the web app and launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
 
