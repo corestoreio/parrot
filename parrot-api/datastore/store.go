@@ -42,7 +42,7 @@ func NewDatastore(name string, url string) (*Datastore, error) {
 		}
 
 		p := &postgres.PostgresDB{DB: conn}
-		// TODO(anthonynsimon): debug refused connections when db connections > 1
+		// TODO: debug refused connections when db connections > 1
 		p.SetMaxIdleConns(1)
 		p.SetMaxOpenConns(1)
 
