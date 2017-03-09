@@ -48,7 +48,7 @@ And to view the web app simply navigate to https://localhost, it should open the
 
 For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do **NOT** use them for anything other than development,
 use your own certificates instead. We recommended automating the generation and renewal of the certificates via Let's Encrypt.
-The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container has been made available for this purpose.
+The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container have been made available for this purpose.
 
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
