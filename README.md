@@ -32,10 +32,10 @@ $ ./scripts/buildweb.sh
 $ sudo ./scripts/start.sh
 ```
 
-> Please note that to build the web app, `npm` and `angular-cli` is required:
+> Please note that to build the web app, `npm` and `angular-cli`are required:
 
 ```bash
-npm install -g angular-cli@1.0.0-beta.26
+npm install -g @angular/cli
 ```
 
 This will build the web app and launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
