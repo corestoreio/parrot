@@ -11,7 +11,7 @@ display_usage() {
 	echo -e "\t./buildweb.sh [flag] [value]\n"
 	echo -e "The flags are:"
 	echo -e "\n\t-api | --api-address\tthe address where the Parrot API is localed."
-	echo -e "\tExample: ./buildweb.sh -api http://localhost:8080"
+	echo -e "\tExample: ./buildweb.sh -api http://localhost:8080/api/v1"
 	echo -e "\n"
 } 
 
