@@ -50,6 +50,7 @@ export const LocaleExportFormats = [
     { apiIdent: 'xlsx', name: 'Excel', extension: '.xlsx' },
     { apiIdent: 'csv', name: 'CSV', extension: '.csv' },
     { apiIdent: 'yaml', name: 'YAML', extension: '.yaml' },
+    { apiIdent: 'ini', name: 'INI', extension: '.ini' },
 ];
 
 export const LocalesList = [

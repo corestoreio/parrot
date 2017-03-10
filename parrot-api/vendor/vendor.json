@@ -21,6 +21,12 @@
 			"revisionTime": "2016-08-31T18:35:34Z"
 		},
 		{
+			"checksumSHA1": "8HsEiPVu/Qsrhvvf/W3EwbfABI4=",
+			"path": "github.com/go-ini/ini",
+			"revision": "c437d20015c2ab6454b7a66a13109ff0fb99e17a",
+			"revisionTime": "2017-02-23T22:22:15Z"
+		},
+		{
 			"checksumSHA1": "Iil/hyeKgR57mEvChfpWk1u9Avo=",
 			"path": "github.com/gorilla/schema",
 			"revision": "0164a00ab4cd01d814d8cd5bf63fd9fcea30e23b",

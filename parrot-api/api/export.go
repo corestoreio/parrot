@@ -57,6 +57,8 @@ func exportLocale(w http.ResponseWriter, r *http.Request) {
 		exporter = &export.CSV{}
 	case "yaml":
 		exporter = &export.Yaml{}
+	case "ini":
+		exporter = &export.INI{}
 	default:
 		handleError(w, apiErrors.ErrBadRequest)
 		return
