@@ -12,9 +12,9 @@ import { ProjectMenuService } from './../../core/services/project-menu.service';
 })
 export class ProjectMenuComponent implements OnInit {
     @Input()
-    private project: Project;
+    public project: Project;
 
-    private menuActive: boolean;
+    public menuActive: boolean;
     private projectSettingsVisible: boolean;
     private adminSectionVisible: boolean;
     private developerSectionVisible: boolean;

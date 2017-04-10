@@ -14,7 +14,7 @@ export class AppBarComponent implements OnInit {
     @Input()
     title: string;
 
-    private isMenuActive: boolean;
+    public isMenuActive: boolean;
 
     constructor(
         private auth: AuthService,

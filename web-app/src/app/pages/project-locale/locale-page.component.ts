@@ -25,7 +25,7 @@ export class LocalePage implements OnInit {
     private _locale: Locale;
     private percentTranslated: number;
     private projectId: string;
-    private loading = false;
+    public loading = false;
     private canEditLocales = false;
     private canExportLocales = false;
     private canDeleteLocales = false;

@@ -11,9 +11,9 @@ export class RegisterAppComponent implements OnInit {
     @Input()
     private projectId: string;
 
-    private clientName: string;
-    private modalOpen: boolean;
-    private loading: boolean;
+    public clientName: string;
+    public modalOpen: boolean;
+    public loading: boolean;
 
     constructor(private service: APIAccessService) { }
 

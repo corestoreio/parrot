@@ -9,7 +9,7 @@ import { Project } from './../model/project';
 })
 export class ProjectsListComponent {
   @Input()
-  private projects: Project[];
+  public projects: Project[];
   @Input()
   private loading: boolean;
 }

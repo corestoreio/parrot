@@ -8,8 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ErrorPage implements OnInit {
 
-    private title: string;
-    private message: string;
+    public title: string;
+    public message: string;
 
     constructor(private route: ActivatedRoute) { }
 

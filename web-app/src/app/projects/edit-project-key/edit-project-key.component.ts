@@ -29,15 +29,19 @@ export class EditProjectKeyComponent {
         return this.restoreService.getCurrent();
     }
 
-    private modalOpen: boolean;
+    public modalOpen: boolean;
+
+    public loading: boolean;
 
     constructor(
         private restoreService: RestoreItemService<string>,
     ) {
         this.commitChanges = this.commitChanges.bind(this);
+        this.loading = false;
     }
 
     commitChanges() {
+        this.loading = true;
         this.submit(this.restoreService.getOriginal(), this.restoreService.getCurrent())
         this.closeModal();
         // TODO handle failed case
@@ -49,6 +53,7 @@ export class EditProjectKeyComponent {
 
     closeModal() {
         this.modalOpen = false;
+        this.loading = false;
         this.restoreService.restoreOriginal();
     }
 }

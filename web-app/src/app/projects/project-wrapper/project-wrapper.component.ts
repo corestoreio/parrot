@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProjectWrapperComponent implements OnInit {
     private loading: boolean;
-    private project: Project;
+    public project: Project;
     private menuActive: boolean;
 
     constructor(private projectsService: ProjectsService, private route: ActivatedRoute) { }

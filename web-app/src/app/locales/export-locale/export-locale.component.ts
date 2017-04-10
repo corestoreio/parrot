@@ -16,10 +16,10 @@ export class ExportLocaleComponent implements OnInit {
         return this.service.availableExportFormats;
     }
 
-    private selectedFormat: ExportFormat;
-    private modalOpen: boolean = false;
-    private loading: boolean = false;
-    private errors: string[];
+    public selectedFormat: ExportFormat;
+    public modalOpen: boolean = false;
+    public loading: boolean = false;
+    public errors: string[];
 
     constructor(
         private route: ActivatedRoute,

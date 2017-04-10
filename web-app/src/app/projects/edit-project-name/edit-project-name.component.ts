@@ -14,11 +14,11 @@ export class EditProjectNameComponent implements OnInit {
     @Input()
     private project: Project;
 
-    private newName: string;
+    public newName: string;
 
-    private loading: boolean = false;
+    public loading: boolean = false;
     private modalOpen: boolean = false;
-    private errors: string[];
+    public errors: string[];
 
     constructor(
         private service: ProjectsService,

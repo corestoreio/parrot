@@ -10,8 +10,8 @@ import { ProjectsService } from './../../projects/services/projects.service';
     templateUrl: 'project-settings-page.component.html'
 })
 export class ProjectSettingsPage implements OnInit {
-    private project: Project;
-    private loading: boolean = false;
+    public project: Project;
+    public loading: boolean = false;
     private canDeleteProject: boolean = false;
 
     constructor(

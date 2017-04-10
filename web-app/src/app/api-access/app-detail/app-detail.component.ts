@@ -26,6 +26,8 @@ export class AppDetailComponent implements OnInit {
         this._projectClient = this.restoreService.getCurrent();
     }
 
+    public loading: boolean = false;
+
     set _projectClient(value: ProjectClient) {
         this.restoreService.setCurrent(value);
     }

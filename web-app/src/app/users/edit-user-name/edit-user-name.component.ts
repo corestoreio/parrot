@@ -15,11 +15,11 @@ export class EditUserNameComponent implements OnInit {
     @Input()
     private user: User;
 
-    private formData: UpdateUserNamePayload;
+    public formData: UpdateUserNamePayload;
 
-    private loading: boolean = false;
+    public loading: boolean = false;
     private modalOpen: boolean = false;
-    private errors: string[];
+    public errors: string[];
 
     constructor(
         private route: ActivatedRoute,

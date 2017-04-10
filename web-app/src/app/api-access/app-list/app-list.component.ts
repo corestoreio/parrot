@@ -11,7 +11,7 @@ export class AppListComponent implements OnInit {
     @Input()
     private loading: boolean = false;
     @Input()
-    private projectClients: ProjectClient[] = [];
+    public projectClients: ProjectClient[] = [];
 
     constructor() { }
 

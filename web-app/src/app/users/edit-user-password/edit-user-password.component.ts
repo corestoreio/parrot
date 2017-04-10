@@ -15,11 +15,11 @@ export class EditUserPasswordComponent implements OnInit {
     @Input()
     private user: User;
 
-    private formData: UpdateUserPasswordPayload;
+    public formData: UpdateUserPasswordPayload;
 
-    private modalOpen: boolean = false;
-    private loading: boolean = false;
-    private errors: string[];
+    public modalOpen: boolean = false;
+    public loading: boolean = false;
+    public errors: string[];
 
     constructor(
         private route: ActivatedRoute,

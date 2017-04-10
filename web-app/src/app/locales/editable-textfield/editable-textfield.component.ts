@@ -31,9 +31,9 @@ export class EditableTextFieldComponent {
     @Input()
     private commit;
 
-    private _pair: Pair;
+    public _pair: Pair;
     private _original: Pair;
-    private editing: boolean = false;
+    public editing: boolean = false;
 
     constructor() { }
 

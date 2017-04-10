@@ -26,7 +26,7 @@ export class LocalePairsComponent {
     @Input()
     private editable: boolean = false;
 
-    private pairs: Pair[];
+    public pairs: Pair[];
     private updatePending: boolean = false;
 
     constructor(private localesService: LocalesService) {

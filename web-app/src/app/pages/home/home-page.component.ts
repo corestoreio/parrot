@@ -10,7 +10,7 @@ import { ProjectsService } from './../../projects/services/projects.service';
 })
 export class HomePage implements OnInit {
     private projects;
-    private loading = false;
+    public loading = false;
 
     constructor(private projectsService: ProjectsService) { }
 

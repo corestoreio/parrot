@@ -15,7 +15,7 @@ export class APIAppPage implements OnInit {
     private projectClient: ProjectClient;
     private projectId: string;
     private clientId: string;
-    private loading: boolean = false;
+    public loading: boolean = false;
     private errors;
 
     constructor(

@@ -16,11 +16,11 @@ export class AddProjectUserComponent implements OnInit {
         return this.service.availableRoles;
     }
 
-    private email: string = '';
-    private selectedRole: string = '';
-    private modalOpen: boolean = false;
-    private loading: boolean = false;
-    private errors: string[];
+    public email: string = '';
+    public selectedRole: string = '';
+    public modalOpen: boolean = false;
+    public loading: boolean = false;
+    public errors: string[];
 
     constructor(
         private route: ActivatedRoute,

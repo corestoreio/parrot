@@ -27,7 +27,7 @@ export class CreateProjectKeyComponent {
 
     private _pending: boolean;
     private error: string;
-    private newKey: string;
+    public newKey: string;
 
     keyValid() {
         let key = this.newKey;

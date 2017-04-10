@@ -11,7 +11,7 @@ import { ProjectsService } from './../../projects/services/projects.service';
 })
 export class ProjectKeysPage implements OnInit {
     private project: Project;
-    private loading: boolean = false;
+    public loading: boolean = false;
     private canEdit: boolean = false;
 
     constructor(

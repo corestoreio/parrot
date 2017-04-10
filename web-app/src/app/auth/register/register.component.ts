@@ -11,7 +11,7 @@ import { User } from './../../users/model/user';
   styleUrls: ['register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  private errors: string[];
+  public errors: string[];
 
   constructor(
     private auth: AuthService,

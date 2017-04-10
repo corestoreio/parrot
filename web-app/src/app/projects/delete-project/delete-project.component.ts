@@ -11,16 +11,16 @@ import { ErrorsService } from './../../shared/errors.service';
 })
 export class DeleteProjectComponent implements OnInit {
     @Input()
-    private pending: boolean = false;
+    public pending: boolean = false;
     @Input()
-    private project: Project;
+    public project: Project;
     @Input()
     private submit;
 
-    private repeatName: string;
-    private modalOpen: boolean;
+    public repeatName: string;
+    public modalOpen: boolean;
     private loading: boolean;
-    private errors: string[];
+    public errors: string[];
 
     constructor(
         private service: ProjectsService,

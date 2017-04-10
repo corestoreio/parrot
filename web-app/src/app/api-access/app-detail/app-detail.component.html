@@ -1,5 +1,5 @@
 <div class="spinner centered" *ngIf="loading"></div>
-<div *ngIf="!loading && _projectClient">
+<div *ngIf="!loading && _projectClient?.client_id">
 
     <div class="media block">
         <div class="media-content">

@@ -31,7 +31,7 @@ export class LocalesListComponent {
 
     private _searchString: string;
     private _locales: Locale[] = [];
-    private _filteredLocales: Locale[]
+    public _filteredLocales: Locale[]
 
     constructor() { }
 

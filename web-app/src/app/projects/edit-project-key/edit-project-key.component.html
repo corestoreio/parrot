@@ -13,7 +13,7 @@
             <form (ngSubmit)="commitChanges()" #updateKeyForm="ngForm">
                 <div class="control">
                     <label class="label" for="key">String</label>
-                    <input type="text" class="input" name="key" placeholder="Project String" [disabled]="loading" [(ngModel)]="_key" autofocus
+                    <input type="text" class="input" id="key" placeholder="Project String" [disabled]="loading" [(ngModel)]="_key" autofocus
                         required autocomplete="off">
                 </div>
                 <div class="control">

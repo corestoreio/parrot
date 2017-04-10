@@ -12,7 +12,7 @@ import { APIAccessService } from './../../api-access/services/api-access.service
 })
 export class APIAccessPage implements OnInit {
     private projectClients: ProjectClient[];
-    private loading: boolean = false;
+    public loading: boolean = false;
     private projectId: string;
 
     constructor(

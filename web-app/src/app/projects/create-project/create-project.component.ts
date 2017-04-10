@@ -9,9 +9,9 @@ import { ProjectsService } from './../services/projects.service';
     templateUrl: './create-project.component.html'
 })
 export class CreateProjectComponent {
-    private project: Project;
-    private modalOpen: boolean;
-    private loading: boolean;
+    public project: Project;
+    public modalOpen: boolean;
+    public loading: boolean;
 
     constructor(private projectsService: ProjectsService) {
         this.resetProject();

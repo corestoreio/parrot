@@ -11,7 +11,7 @@ export class ProjectKeysComponent implements OnInit {
     @Input()
     project: Project;
     @Input()
-    private loading: boolean;
+    public loading: boolean;
     @Input()
     private editable: boolean;
 

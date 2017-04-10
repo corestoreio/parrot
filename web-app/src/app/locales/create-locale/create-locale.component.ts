@@ -12,13 +12,13 @@ import { ErrorsService } from './../../shared/errors.service';
     styleUrls: ['create-locale.component.css']
 })
 export class CreateLocaleComponent {
-    private selectedLocale: Locale;
+    public selectedLocale: Locale;
     private availableLocales: LocaleInfo[] = [];
 
-    private searchString: string;
-    private modalOpen: boolean;
-    private loading: boolean;
-    private errors: string[];
+    public searchString: string;
+    public modalOpen: boolean;
+    public loading: boolean;
+    public errors: string[];
 
     constructor(
         private localesService: LocalesService,

@@ -14,7 +14,7 @@ import { Locale } from './../../locales/model/locale';
 })
 export class ProjectLocalesPage implements OnInit {
     private locales: Locale[];
-    private loading: boolean;
+    public loading: boolean;
     private protectedVisible: boolean;
 
     constructor(

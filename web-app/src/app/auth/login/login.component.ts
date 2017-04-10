@@ -11,7 +11,7 @@ import { ErrorsService } from './../../shared/errors.service';
   styleUrls: ['login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private errors: string[];
+  public errors: string[];
 
   constructor(private auth: AuthService, private router: Router, private errorsService: ErrorsService) { }
 

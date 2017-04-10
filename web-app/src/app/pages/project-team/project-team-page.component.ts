@@ -14,7 +14,7 @@ import { UserService } from './../../users/services/user.service';
     styleUrls: ['project-team-page.component.css']
 })
 export class ProjectTeamPage implements OnInit {
-    private loading: boolean = false;
+    public loading: boolean = false;
     private projectUsers: ProjectUser[];
     private projectId: string;
     private canUpdateRoles: boolean = false;

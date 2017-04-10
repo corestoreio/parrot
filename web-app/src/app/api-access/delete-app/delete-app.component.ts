@@ -6,14 +6,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DeleteAppComponent implements OnInit {
     @Input()
-    private pending: boolean = false;
+    public pending: boolean = false;
     @Input()
-    private clientName: string;
+    public clientName: string;
     @Input()
     private submit;
 
-    private repeatName: string;
-    private modalOpen: boolean;
+    public repeatName: string;
+    public modalOpen: boolean;
 
     constructor() { }
 

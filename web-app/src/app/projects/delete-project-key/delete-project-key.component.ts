@@ -6,14 +6,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DeleteProjectKeyComponent implements OnInit {
     @Input()
-    private pending: boolean = false;
+    public pending: boolean = false;
     @Input()
-    private key: string;
+    public key: string;
     @Input()
     private submit;
 
-    private repeatKey: string;
-    private modalOpen: boolean;
+    public repeatKey: string;
+    public modalOpen: boolean;
 
     constructor() { }
 

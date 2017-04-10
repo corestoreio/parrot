@@ -8,8 +8,8 @@ import { UserService } from './../../users/services/user.service';
     templateUrl: 'account-page.component.html'
 })
 export class AccountPage implements OnInit {
-    private user: User;
-    private loading: boolean = false;
+    public user: User;
+    public loading: boolean = false;
 
     constructor(private service: UserService) { }
 

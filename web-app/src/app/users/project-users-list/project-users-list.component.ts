@@ -9,7 +9,7 @@ import { ProjectUser } from './../model';
 })
 export class ProjectUsersListComponent implements OnInit {
     @Input()
-    private users: ProjectUser[];
+    public users: ProjectUser[];
     @Input()
     private canUpdateRoles: boolean;
     @Input()

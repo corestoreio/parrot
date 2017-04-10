@@ -11,16 +11,16 @@ import { ErrorsService } from './../../shared/errors.service';
 })
 export class DeleteLocaleComponent implements OnInit {
     @Input()
-    private pending: boolean = false;
+    public pending: boolean = false;
     @Input()
-    private locale: Locale;
+    public locale: Locale;
     @Input()
     private submit;
 
-    private repeatIdent: string;
-    private modalOpen: boolean;
+    public repeatIdent: string;
+    public modalOpen: boolean;
     private loading: boolean;
-    private errors: string[];
+    public errors: string[];
 
     constructor(
         private service: LocalesService,

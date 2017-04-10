@@ -11,16 +11,16 @@ import { ProjectUsersService } from './../services/project-users.service';
 })
 export class EditProjectUserComponent implements OnInit {
     @Input()
-    private user: ProjectUser;
+    public user: ProjectUser;
 
     get roles(): string[] {
         return this.service.availableRoles;
     }
 
-    private selectedRole: string = '';
-    private modalOpen: boolean = false;
-    private loading: boolean = false;
-    private errors: string[];
+    public selectedRole: string = '';
+    public modalOpen: boolean = false;
+    public loading: boolean = false;
+    public errors: string[];
 
     constructor(
         private route: ActivatedRoute,
