@@ -50,6 +50,8 @@ For convinience, self-signed SSL certificates are provided for the reverse-proxy
 use your own certificates instead. We recommended automating the generation and renewal of the certificates via Let's Encrypt.
 The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container have been made available for this purpose.
 
+If you deploy the API server on your own, be sure to serve it behind a secure reverse-proxy or another secure method.
+
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
 

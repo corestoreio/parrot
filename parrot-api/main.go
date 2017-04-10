@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
 	"net/http"
 	"os"
@@ -54,49 +53,7 @@ func main() {
 		return true
 	})
 
-	migrationStrategy := os.Getenv("PARROT_DB_MIGRATION_STRATEGY")
-	if migrationStrategy != "" {
-		logrus.Infof("migration strategy is set to '%s'", migrationStrategy)
-
-		dirPath := os.Getenv("PARROT_DB_MIGRATIONS_DIR")
-		if dirPath == "" {
-			dirPath = fmt.Sprintf("./datastore/%s/migrations", dbName)
-			logrus.Infof("migrations directory not set, using default one: '%s'", dirPath)
-		}
-
-		var fn func(string) error
-
-		switch migrationStrategy {
-		// Case when we want to start clean each time
-		case "down,up":
-			fn = func(path string) error {
-				err := ds.MigrateDown(path)
-				if err != nil {
-					return err
-				}
-				err = ds.MigrateUp(path)
-				if err != nil {
-					return err
-				}
-				return nil
-			}
-		// Case when we want to apply migrations if needed
-		case "up":
-			fn = ds.MigrateUp
-		// Case when we want to simply drop everything
-		case "down":
-			fn = ds.MigrateDown
-		default:
-			logrus.Fatalf("could not recognize migration strategy '%s'", migrationStrategy)
-		}
-
-		logrus.Info("migrating...")
-		err := fn(dirPath)
-		if err != nil {
-			logrus.Fatal(err)
-		}
-		logrus.Info("migration completed successfully")
-	}
+	migrate(dbName, ds)
 
 	router := chi.NewRouter()
 	router.Use(
@@ -128,18 +85,9 @@ func main() {
 	router.Mount("/api/v1", api.NewRouter(ds, tp))
 
 	// config and init server
-	addr := ":443"
-
-	cfg := &tls.Config{
-		MinVersion:               tls.VersionTLS12,
-		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
-		PreferServerCipherSuites: true,
-		CipherSuites: []uint16{
-			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
-		},
+	addr := ":8080"
+	if os.Getenv("PARROT_API_HOST_PORT") != "" {
+		addr = os.Getenv("PARROT_API_HOST_PORT")
 	}
 
 	s := &http.Server{
@@ -148,13 +96,57 @@ func main() {
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
-		TLSConfig:      cfg,
-		TLSNextProto:   make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
 	}
 
 	logrus.Info(fmt.Sprintf("server listening on %s", addr))
 
-	logrus.Fatal(s.ListenAndServeTLS("certs/cert.pem", "certs/key.pem"))
+	logrus.Fatal(s.ListenAndServe())
+}
+
+func migrate(dbName string, ds datastore.Store) {
+	migrationStrategy := os.Getenv("PARROT_DB_MIGRATION_STRATEGY")
+	if migrationStrategy != "" {
+		logrus.Infof("migration strategy is set to '%s'", migrationStrategy)
+	}
+
+	dirPath := os.Getenv("PARROT_DB_MIGRATIONS_DIR")
+	if dirPath == "" {
+		dirPath = fmt.Sprintf("./datastore/%s/migrations", dbName)
+		logrus.Infof("migrations directory not set, using default one: '%s'", dirPath)
+	}
+
+	var fn func(string) error
+
+	switch migrationStrategy {
+	// Case when we want to start clean each time
+	case "down,up":
+		fn = func(path string) error {
+			err := ds.MigrateDown(path)
+			if err != nil {
+				return err
+			}
+			err = ds.MigrateUp(path)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+	// Case when we want to apply migrations if needed
+	case "up":
+		fn = ds.MigrateUp
+	// Case when we want to simply drop everything
+	case "down":
+		fn = ds.MigrateDown
+	default:
+		logrus.Fatalf("could not recognize migration strategy '%s'", migrationStrategy)
+	}
+
+	logrus.Info("migrating...")
+	err := fn(dirPath)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	logrus.Info("migration completed successfully")
 }
 
 func blockAndRetry(d time.Duration, fn func() bool) {
