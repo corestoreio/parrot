@@ -32,8 +32,15 @@ type User struct {
 	Password string `db:"password" json:"password,omitempty"`
 }
 
+func (u *User) Normalize() {
+	u.Email = strings.ToLower(u.Email)
+}
+
 // Validate returns an error if the user's data is invalid.
+// It will normalize the user data before validating
 func (u *User) Validate() error {
+	u.Normalize()
+
 	var errs []errors.Error
 	if !ValidEmail(u.Email) {
 		errs = append(errs, *ErrInvalidEmail)
