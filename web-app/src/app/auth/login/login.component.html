@@ -5,7 +5,7 @@
         <div class="media-content">
           <div class="content">
 
-            <h1 class="title is-5">Login</h1>
+            <h1 class="title is-5">{{'Login'| translate}}</h1>
 
             <div *ngIf="errors && errors.length > 0">
               <div class="message is-danger" *ngFor="let err of errors">
@@ -17,20 +17,28 @@
 
             <form (ngSubmit)="onSubmit(f.value.email, f.value.password)" #f="ngForm">
               <div class="control">
-                <label class="label">Email</label>
+                <label class="label">{{'Email'|translate}}</label>
                 <input class="input" type="email" name="email" placeholder="Your email address" required ngModel autocomplete="off">
               </div>
               <div class="control">
-                <label class="label">Password</label>
+                <label class="label">{{'Password'|translate}}</label>
                 <input class="input" type="password" name="password" placeholder="Your password" required ngModel autocomplete="off">
               </div>
               <div class="control">
-                <button class="button is-primary is-fullwidth" type="submit">Submit</button>
+                <label class="label">{{'Language'|translate}}</label>
+                 <span class="select" style="width:100%;">
+                    <select name="language"  (change)="onChangeLanguage(f.value.language)" [(ngModel)]="language" style="width:100%;">
+                      <option *ngFor="let language of languages" [ngValue]="language.value">{{language.name}}</option>
+                    </select>
+                </span>
+              </div>
+              <div class="control">
+                <button class="button is-primary is-fullwidth" type="submit">{{'Submit'|translate}}</button>
               </div>
             </form>
 
             <div class="container">
-              <button class="button is-fullwidth is-link is-unselectable" (click)="navigateToRegister()">Not registered yet? Signup here</button>
+              <button class="button is-fullwidth is-link is-unselectable" (click)="navigateToRegister()">{{'Not registered yet? Signup here'|translate}}</button>
             </div>
 
           </div>

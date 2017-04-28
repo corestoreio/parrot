@@ -4,7 +4,7 @@
   <div class="modal-content">
     <div class="box">
 
-      <h1 class="title">Export Locale Data</h1>
+      <h1 class="title">{{'Export Locale Data'|translate}}</h1>
       <br>
 
       <div *ngIf="errors && errors.length > 0">
@@ -19,14 +19,14 @@
         <div class="control">
           <span class="select">
               <select name="format" [(ngModel)]="selectedFormat" required>
-                  <option value="" disabled selected>Select an export format</option>
+                  <option value="" disabled selected>{{'Select an export format'|translate}}</option>
                   <option *ngFor="let format of formats" [ngValue]="format">{{format.name}}</option>
               </select>
           </span>
         </div>
         <div class="control">
-          <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-          <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!exportLocaleForm.form.valid || loading">Export</button>
+          <button type="button" class="button" (click)="closeModal()" [disabled]="loading">{{'Cancel'|translate}}</button>
+          <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!exportLocaleForm.form.valid || loading">{{'Export'|translate}}</button>
         </div>
       </form>
 

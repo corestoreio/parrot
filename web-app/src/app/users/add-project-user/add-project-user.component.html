@@ -4,7 +4,7 @@
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Add a new team member</h1>
+            <h1 class="title">{{'Add a new team member'|translate}}</h1>
             <br>
 
             <div *ngIf="errors && errors.length > 0">
@@ -26,15 +26,15 @@
                         </p>
                         <span class="select">
                             <select name="role" [(ngModel)]="selectedRole" required>
-                                <option value="" disabled selected>Select a role</option>
+                                <option value="" disabled selected>{{'Select a role'|translate}}</option>
                                 <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
                             </select>
                         </span>
                     </div>
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!addUserForm.form.valid || loading">Add</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">{{'Cancel'|translate}}</button>
+                    <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!addUserForm.form.valid || loading">{{'Add'|translate}}</button>
                 </div>
             </form>
 

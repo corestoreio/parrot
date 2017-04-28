@@ -1,24 +1,24 @@
-<button class="button " (click)="openModal()">Rename</button>
+<button class="button " (click)="openModal()">{{'Rename'|translate}}</button>
 <div class="modal" [class.is-active]="modalOpen">
     <div class="modal-background" (click)="closeModal()"></div>
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Renaming Project String</h1>
+            <h1 class="title">{{'Renaming Project String'|translate}}</h1>
             <br>
             <div class="notification is-warning">
-                Changes will be reflected on all project locales.
+                {{'Changes will be reflected on all project locales.'|translate}}
             </div>
 
             <form (ngSubmit)="commitChanges()" #updateKeyForm="ngForm">
                 <div class="control">
-                    <label class="label" for="key">String</label>
-                    <input type="text" class="input" id="key" placeholder="Project String" [disabled]="loading" [(ngModel)]="_key" autofocus
+                    <label class="label" for="key">{{'String'|translate}}</label>
+                    <input type="text" class="input" name="key" placeholder="Project String" [disabled]="loading" [(ngModel)]="_key" autofocus
                         required autocomplete="off">
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!updateKeyForm.form.valid || loading">Save changes</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">{{'Cancel'|translate}}</button>
+                    <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!updateKeyForm.form.valid || loading">{{'Save changes'|translate}}</button>
                 </div>
             </form>
 

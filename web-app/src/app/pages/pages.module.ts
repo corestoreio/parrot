@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
+import {TranslateModule} from '@ngx-translate/core';
+
 import { ProjectsModule } from './../projects';
 import { LocalesModule } from './../locales/locales.module';
 import { UsersModule } from './../users';
@@ -26,6 +28,7 @@ import { AccountPage } from './account/account-page.component';
         CommonModule,
         RouterModule.forChild([]),
         HttpModule,
+        TranslateModule,
 
         ProjectsModule,
         LocalesModule,

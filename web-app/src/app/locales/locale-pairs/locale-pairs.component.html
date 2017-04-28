@@ -1,8 +1,8 @@
 <table class="table is-bordered is-narrow">
     <thead>
         <tr>
-            <th>String</th>
-            <th>Translation</th>
+            <th>{{'String'|translate}}</th>
+            <th>{{'Translation'|translate}}</th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +18,6 @@
 
 <div *ngIf="pairs && pairs.length <= 0">
     <div class="notification is-warning">
-        Locale translations are empty. Have you created any Project Strings?
+        {{'Locale translations are empty. Have you created any Project Strings?'|translate}}
     </div>
 </div>

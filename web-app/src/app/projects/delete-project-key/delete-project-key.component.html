@@ -1,24 +1,24 @@
-<button class="button is-danger" (click)="openModal()">Delete</button>
+<button class="button is-danger" (click)="openModal()">{{'Delete'|translate}}</button>
 <div class="modal" [class.is-active]="modalOpen">
     <div class="modal-background" (click)="closeModal()"></div>
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Delete Project String?</h1>
+            <h1 class="title">{{'Delete Project String?'|translate}}</h1>
             <br>
             <div class="notification is-warning">
-                This action cannot be undone. All of the project locales will be affected.
+                {{'This action cannot be undone. All of the project locales will be affected.'|translate}}
             </div>
 
             <form>
                 <div class="control">
-                    <label class="label" for="name">Type the String to confirm this action:</label>
+                    <label class="label" for="name">{{'Type the String to confirm this action:'|translate}}</label>
                     <input type="text" class="input" name="name" placeholder="{{key}}" [disabled]="pending" [(ngModel)]="repeatKey" autofocus
                         required autocomplete="off">
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">Cancel</button>
-                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">Delete</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">{{'Cancel'|translate}}</button>
+                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">{{'Delete'|translate}}</button>
                 </div>
             </form>
 

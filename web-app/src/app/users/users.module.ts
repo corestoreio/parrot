@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
+import {TranslateModule} from '@ngx-translate/core';
+
 import { AddProjectUserComponent } from './add-project-user/add-project-user.component';
 import { EditProjectUserComponent } from './edit-project-user/edit-project-user.component';
 import { ProjectUsersListComponent } from './project-users-list/project-users-list.component';
@@ -18,6 +20,7 @@ import { UserService } from './services/user.service';
     imports: [
         FormsModule,
         CommonModule,
+        TranslateModule,
         RouterModule.forChild([]),
         HttpModule,
     ],

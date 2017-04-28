@@ -1,3 +1,3 @@
 <textarea class="textarea" (click)="enableEdit()" [(ngModel)]="_pair.value">{{_pair.value}}</textarea>
-<button class="button is-success" (click)="commitChanges()" [class.is-hidden]="!editing">Save</button>
-<button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">Cancel</button>
+<button class="button is-success" (click)="commitChanges()" [class.is-hidden]="!editing">{{'Save'|translate}}</button>
+<button class="button is-danger" (click)="cancelEdit()" [class.is-hidden]="!editing">{{'Cancel'|translate}}</button>

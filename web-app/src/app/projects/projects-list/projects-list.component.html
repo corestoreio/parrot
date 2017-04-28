@@ -2,13 +2,13 @@
 	<div class="media-content">
 		<div class="content">
 			<p class="title is-5">{{project.name}}</p>
-			<p><strong>{{project.keys?.length}}</strong> Strings</p>
+			<p><strong>{{project.keys?.length}}</strong> {{"Strings"|translate}}</p>
 		</div>
 	</div>
 </article>
 
 <div *ngIf="projects && projects.length <= 0">
 	<div class="notification is-warning">
-		You don't have any Projects yet. Add one to get started!
+		{{"You don't have any Projects yet. Add one to get started!"|translate}}
 	</div>
 </div>

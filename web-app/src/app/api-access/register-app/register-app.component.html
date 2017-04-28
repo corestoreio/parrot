@@ -4,17 +4,17 @@
   <div class="modal-content">
     <div class="box">
 
-      <h1 class="title">Register a new client</h1>
+      <h1 class="title">{{'Register a new client'|translate}}</h1>
 
       <form (ngSubmit)="registerApp()" #registerAppForm="ngForm">
         <div class="control">
-          <label class="label" for="name">Name</label>
+          <label class="label" for="name">{{'Name'|translate}}</label>
           <input type="text" class="input" name="name" placeholder="The client's name" [disabled]="loading" [(ngModel)]="clientName"
             autofocus required autocomplete="off">
         </div>
         <div class="control">
-          <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-          <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!registerAppForm.form.valid || loading">Register</button>
+          <button type="button" class="button" (click)="closeModal()" [disabled]="loading">{{'Cancel'|translate}}</button>
+          <button type="submit" class="button is-primary" [class.is-loading]="loading" [disabled]="!registerAppForm.form.valid || loading">{{'Register'|translate}}</button>
         </div>
       </form>
 

@@ -7,12 +7,12 @@
             <div class="level is-mobile">
                 <div class="level-left">
                     <div class="level-item">
-                        <h1 class="title">Edit project user</h1>
+                        <h1 class="title">{{'Edit project user'|translate}}</h1>
                     </div>
                 </div>
                 <div class="level-right">
                     <div class="level-item">
-                        <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [disabled]="loading">Revoke all rights</button>
+                        <button class="button is-danger" (click)="revokeUser()" [class.is-loading]="loading" [disabled]="loading">{{'Revoke all rights'|translate}}</button>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                             <div class="level-item">
                                 <span class="select">
                                     <select name="role" [(ngModel)]="selectedRole" required>
-                                        <option value="" disabled selected>Select a new role</option>
+                                        <option value="" disabled selected>{{'Select a new role'|translate}}</option>
                                         <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
                                     </select>
                                 </span>
@@ -46,8 +46,8 @@
                     </div>
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!editUserForm.form.valid || loading">Save changes</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="loading">{{'Cancel'|translate}}</button>
+                    <button type="submit" class="button is-success" [class.is-loading]="loading" [disabled]="!editUserForm.form.valid || loading">{{'Save changes'|translate}}</button>
                 </div>
             </form>
 

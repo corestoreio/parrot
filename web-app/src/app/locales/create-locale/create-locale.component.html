@@ -4,7 +4,7 @@
     <div class="modal-content fix-overlay">
         <div class="box">
 
-            <h1 class="title">Add a new Locale</h1>
+            <h1 class="title">{{'Add a new Locale'|translate}}</h1>
 
             <br>
 
@@ -29,7 +29,7 @@
                     </div>
                     <div class="column" *ngIf="!selectedLocale">
                         <p class="notification is-danger">
-                            No locale selected
+                            {{'No locale selected'|translate}}
                         </p>
                     </div>
                 </div>
@@ -58,8 +58,8 @@
                 </div>
 
                 <div class="control">
-                    <button class="button" (click)="closeModal()" [disabled]="loading">Cancel</button>
-                    <button class="button is-success" (click)="submit()" [class.is-loading]="loading" [disabled]="loading || !selectedLocale">Create</button>
+                    <button class="button" (click)="closeModal()" [disabled]="loading">{{'Cancel'|translate}}</button>
+                    <button class="button is-success" (click)="submit()" [class.is-loading]="loading" [disabled]="loading || !selectedLocale">{{'Create'|translate}}</button>
                 </div>
             </div>
 

@@ -4,10 +4,10 @@
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Delete Project?</h1>
+            <h1 class="title">{{'Delete Project?'|translate}}</h1>
             <br>
             <div class="notification is-warning">
-                This action cannot be undone. All of the project locales and related data will be deleted.
+                {{'This action cannot be undone. All of the project locales and related data will be deleted.'|translate}}
             </div>
 
             <form>
@@ -19,13 +19,13 @@
                     </div>
                 </div>
                 <div class="control">
-                    <label class="label" for="name">Type the Project's name to confirm this action:</label>
+                    <label class="label" for="name">{{"Type the Project's name to confirm this action:"|translate}}</label>
                     <input type="text" class="input" name="name" placeholder="{{project?.name}}" [disabled]="pending" [(ngModel)]="repeatName"
                         autofocus required autocomplete="off">
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">Cancel</button>
-                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">Delete</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">{{"Cancel"|translate}}</button>
+                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">{{"Delete"|translate}}</button>
                 </div>
             </form>
 

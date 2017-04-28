@@ -14,7 +14,7 @@
             required>
     </p>
     <p class="control">
-        <button (click)="saveChanges()" class="button is-success" [class.is-loading]="loading" [disabled]="!formValid() || loading">Save changes</button>
-        <button (click)="reset()" class="button" [disabled]="loading">Cancel</button>
+        <button (click)="saveChanges()" class="button is-success" [class.is-loading]="loading" [disabled]="!formValid() || loading">{{'Save changes'|translate}}</button>
+        <button (click)="reset()" class="button" [disabled]="loading">{{'Cancel'|translate}}</button>
     </p>
 </form>

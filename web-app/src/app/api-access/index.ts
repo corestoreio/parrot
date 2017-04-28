@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
+import {TranslateModule} from '@ngx-translate/core';
+
 import { AppDetailComponent } from './app-detail/app-detail.component';
 import { AppListComponent } from './app-list/app-list.component';
 import { APIAccessService } from './services/api-access.service';
@@ -14,6 +16,7 @@ import { DeleteAppComponent } from './delete-app/delete-app.component';
     imports: [
         FormsModule,
         CommonModule,
+        TranslateModule,
         RouterModule.forChild([]),
         HttpModule,
     ],

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
+import {TranslateModule} from '@ngx-translate/core';
+
 import { CoreModule } from './../core/core.module';
 import { ProjectsService } from './services/projects.service';
 
@@ -22,6 +24,7 @@ import { DeleteProjectComponent } from './delete-project/delete-project.componen
     imports: [
         FormsModule,
         CommonModule,
+        TranslateModule,
         RouterModule.forChild([]),
         HttpModule,
         CoreModule

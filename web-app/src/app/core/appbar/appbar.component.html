@@ -18,10 +18,10 @@
 
     <div class="appbar-items-right">
         <a class="appbar-item appbar-link" [routerLink]="['/projects']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
-            [class.is-hidden]="!isAuth">Projects</a>
+            [class.is-hidden]="!isAuth">{{'Projects'|translate}}</a>
         <a class="appbar-item appbar-link" [routerLink]="['/me']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active"
-            [class.is-hidden]="!isAuth">Account</a>
-        <a class="appbar-item appbar-link" (click)="logout()" [class.is-hidden]="!isAuth">Logout</a>
+            [class.is-hidden]="!isAuth">{{'Account'|translate}}</a>
+        <a class="appbar-item appbar-link" (click)="logout()" [class.is-hidden]="!isAuth">{{'Logout'|translate}}</a>
     </div>
 
 </nav>

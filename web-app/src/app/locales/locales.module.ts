@@ -4,6 +4,8 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import {TranslateModule} from '@ngx-translate/core'
+
 import { LocalesService } from './services/locales.service';
 import { LocalesListComponent } from './locales-list/locales-list.component';
 import { CreateLocaleComponent } from './create-locale/create-locale.component';
@@ -17,6 +19,7 @@ import { ExportLocaleComponent } from './export-locale/export-locale.component';
     imports: [
         CommonModule,
         FormsModule,
+        TranslateModule,
         RouterModule.forChild([]),
         HttpModule,
     ],

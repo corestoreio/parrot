@@ -2,13 +2,13 @@ package export
 
 import (
 	"bytes"
+	"strconv"
 
 	"fmt"
 
 	"strings"
 
 	"github.com/anthonynsimon/parrot/parrot-api/model"
-	"github.com/bjarneh/latinx"
 )
 
 type JavaProperties struct{}
@@ -21,17 +21,23 @@ func (e *JavaProperties) Export(locale *model.Locale) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 
 	for k, v := range locale.Pairs {
-		_, err := buf.WriteString(fmt.Sprintf("%s = %s\n", strings.Replace(k, " ", "\\ ", -1), v))
+		var newKey []string
+		for _, chart := range []rune(k) {
+			quoted := strconv.QuoteRuneToASCII(chart)        // quoted = "'\u554a'"
+			newKey = append(newKey, quoted[1:len(quoted)-1]) // unquoted = "\u554a"
+		}
+
+		var newValue []string
+		for _, chart := range []rune(v) {
+			quoted := strconv.QuoteRuneToASCII(chart)            // quoted = "'\u554a'"
+			newValue = append(newValue, quoted[1:len(quoted)-1]) // unquoted = "\u554a"
+		}
+
+		_, err := buf.WriteString(fmt.Sprintf("%s = %s\n", strings.Replace(strings.Join(newKey[:], ""), " ", "\\ ", -1), strings.Join(newValue[:], "")))
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	conv := latinx.Get(latinx.ISO_8859_1)
-	latin, _, err := conv.Encode(buf.Bytes())
-	if err != nil {
-		return nil, err
-	}
-
-	return latin, nil
+	return buf.Bytes(), nil
 }

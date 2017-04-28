@@ -14,17 +14,17 @@
                         </div>
                     </div>
 
-                    <label class="label">Client Name</label>
+                    <label class="label">{{'Client Name'|translate}}</label>
                     <p class="control has-icon has-icon-right">
                         <input class="input" type="text" placeholder="The client's name" [(ngModel)]="_projectClient.name" name="clientName">
                     </p>
                     <p class="control">
-                        <button (click)="saveChanges()" class="button is-primary">Save changes</button>
-                        <button (click)="cancelChanges()" class="button">Cancel</button>
+                        <button (click)="saveChanges()" class="button is-primary">{{'Save changes'|translate}}</button>
+                        <button (click)="cancelChanges()" class="button">{{'Cancel'|translate}}</button>
                     </p>
                 </form>
 
-                <label class="label">Client ID</label>
+                <label class="label">{{'Client ID'|translate}}</label>
                 <p class="control has-icon">
                     {{_projectClient?.client_id}}
                 </p>
@@ -33,8 +33,8 @@
                     {{_projectClient?.secret}}
                 </p>
                 <p class="control">
-                    <button (click)="resetSecretPrompt()" class="button is-warning">Reset secret</button>
-                    <span class="help is-danger">Only reset the secret if you know what you are doing!</span>
+                    <button (click)="resetSecretPrompt()" class="button is-warning">{{'Reset secret'|translate}}</button>
+                    <span class="help is-danger">{{'Only reset the secret if you know what you are doing!'|translate}}</span>
                 </p>
             </div>
         </div>

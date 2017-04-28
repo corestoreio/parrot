@@ -1,5 +1,5 @@
-<form class="control has-addons has-addons-right">
+<form class="control has-addons has-addons-right" style="display:flex;">
     <input class="input" type="text" placeholder="Add a new String" name="newKey" [(ngModel)]="newKey" [disabled]="pending" [class.is-danger]="!keyValid() && newKey?.length > 0"
         autocomplete="off">
-    <button class="button is-success" type="submit" (click)="commit()" [disabled]="!keyValid()" [class.is-loading]="pending">Add</button>
+    <button class="button is-success" type="submit" (click)="commit()" [disabled]="!keyValid()" [class.is-loading]="pending">{{'Add'|translate}}</button>
 </form>

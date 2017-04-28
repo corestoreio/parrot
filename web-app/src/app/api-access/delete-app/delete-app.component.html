@@ -1,22 +1,22 @@
-<button class="button is-danger" (click)="openModal()">Delete this client</button>
+<button class="button is-danger" (click)="openModal()">{{'Delete this client'|translate}}</button>
 <div class="modal" [class.is-active]="modalOpen">
     <div class="modal-background" (click)="closeModal()"></div>
     <div class="modal-content">
         <div class="box">
 
-            <h1 class="title">Delete client and revoke all of its rights?</h1>
+            <h1 class="title">{{'Delete client and revoke all of its rights?'|translate}}</h1>
 
-            <p>This action cannot be undone.</p>
+            <p>{{'This action cannot be undone.'|translate}}</p>
 
             <form>
                 <div class="control">
-                    <label class="label" for="name">Type the name of the app to confirm this action:</label>
+                    <label class="label" for="name">{{'Type the name of the app to confirm this action:'|translate}}</label>
                     <input type="text" class="input" name="name" placeholder="{{clientName}}" [disabled]="pending" [(ngModel)]="repeatName" autofocus
                         required autocomplete="off">
                 </div>
                 <div class="control">
-                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">Cancel</button>
-                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">Delete</button>
+                    <button type="button" class="button" (click)="closeModal()" [disabled]="pending">{{'Cancel'|translate}}</button>
+                    <button type="submit" (click)="confirm()" class="button is-danger" [class.is-loading]="pending" [disabled]="!valid() || pending">{{'Delete'|translate}}</button>
                 </div>
             </form>
 

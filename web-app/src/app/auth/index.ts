@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
+import {TranslateModule} from '@ngx-translate/core';
+
 import { AuthService } from './services/auth.service';
 import { TokenService } from './services/token.service';
 import { RegisterComponent } from './register/register.component';
@@ -14,7 +16,8 @@ import { UnauthGuard } from './guards/unauth.guard';
     imports: [
         FormsModule,
         CommonModule,
-        HttpModule
+        HttpModule,
+        TranslateModule,
     ],
     exports: [
         RegisterComponent,
