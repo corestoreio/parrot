@@ -7,7 +7,7 @@
     "build": "ng build -prod",
     "ng": "ng",
     "start": "ng serve",
-    "test": "ng test",
+    "test": "ng test -sm=false",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -34,7 +34,7 @@
     "zone.js": "^0.8.5"
   },
   "devDependencies": {
-    "@angular/cli": "^1.0.0",
+    "@angular/cli": "^1.4.3",
     "@angular/compiler-cli": "^4.0.1",
     "@types/jasmine": "2.5.47",
     "@types/node": "^7.0.12",

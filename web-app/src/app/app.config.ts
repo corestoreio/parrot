@@ -1,5 +1,5 @@
 export const AppConfig = {
-  apiUrl: 'https://localhost/api/v1',
+    apiUrl: 'https://localhost/api/v1',
 };
 
 export interface ExportFormat {
@@ -37,7 +37,7 @@ export const ErrorMap = {
     'UpdateProjectClient': {
         'AlreadyExists': 'The provided name is already in use for this project.',
     },
-};
+}
 
 export const LocaleExportFormats = [
     { apiIdent: 'keyvaluejson', name: 'Key Value JSON', extension: '.json' },
