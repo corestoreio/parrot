@@ -82,9 +82,23 @@ $ dev-tools/serve-web-app.sh
 And to view the web app simply navigate to http://localhost:8080, it should open the login page of the web app.
 
 ## Configuration
+### API
+At the moment, configuring the API app is only possible via environment variables. Here's the available options with their default values:
 
-TODO: explain API AppConfig object
-explain web app config via `parrot/web-app/src/environments/environment.ts`
+```
+PARROT_API_PORT, default value: "9990"
+PARROT_DB_NAME, default value: "postgres"
+PARROT_DB_CONN, default value: "postgres://postgres@localhost:5432/parrot?sslmode=disable"
+PARROT_AUTH_ISSUER, default value: "parrot@localhost"
+PARROT_AUTH_SIGNING_KEY, default value: "secret"
+```
+
+### Web App
+You can also configure the Web App's backend endpoint by editing the file `parrot/web-app/src/environments/environment.prod.ts` accordingly before building the Web app. Available options:
+
+```
+apiEndpoint, default value: "http://localhost:9990/api/v1"
+```
 
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
