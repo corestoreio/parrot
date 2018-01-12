@@ -29,4 +29,4 @@ After reviewing the features requested during the past year, as well as consider
 4. Support for in-memory databases to simplify 'test run' and developer setup.
 5. Adding tests when practical to both backend and frontend code. Will be handled as part of the rewrite.
 
-Bugs will be included as part of the v1.0 effort on a case by case basis, depending on it's severity and implications.
+Bug fixes will be included as part of the v1.0 effort on a case by case basis, depending on it's severity and implications.
