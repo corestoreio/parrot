@@ -10,7 +10,6 @@ type AppConfig struct {
 	DBConn            string
 	AuthIssuer        string
 	AuthSigningKey    string
-	MigrationStrategy string
 }
 
 // TODO: add config from conf file function
@@ -35,16 +34,11 @@ func FromEnv() (*AppConfig, error) {
 	if !ok {
 		authSigningKey = "secret"
 	}
-	migrationStrategy, ok := os.LookupEnv("PARROT_MIGRATION_STRATEGY")
-	if !ok {
-		migrationStrategy = "up"
-	}
 	return &AppConfig{
 		Port:              port,
 		DBName:            dbName,
 		DBConn:            dbConn,
 		AuthIssuer:        authIssuer,
 		AuthSigningKey:    authSigningKey,
-		MigrationStrategy: migrationStrategy,
 	}, nil
 }
