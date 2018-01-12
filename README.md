@@ -8,6 +8,8 @@ Self-hosted Localization Management Platform built with Go and Angular 2.
 [Website](http://anthonynsimon.com/parrot.github.io)  
 [Gitter Chat Room](https://gitter.im/parrot-translate)   
 
+Check out the [Roadmap](https://github.com/anthonynsimon/parrot/blob/master/ROADMAP.md) for v1.0, it's open for discussion. Everyone is welcome to contribute.
+
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
 <img src="http://anthonynsimon.com/parrot.github.io/images/parrot-screenshot-001.png" style="width: 720px;"/>
