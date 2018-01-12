@@ -20,9 +20,7 @@ func NewRouter(ds datastore.Store, tp auth.TokenProvider) http.Handler {
 
 	router := chi.NewRouter()
 
-	router.Use(
-		enforceContentTypeJSON,
-	)
+	router.Use(enforceContentTypeJSON)
 
 	router.Get("/ping", ping)
 	router.Post("/users/register", createUser)

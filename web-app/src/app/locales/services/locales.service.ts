@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import FileSaver from 'file-saver';
+import * as FileSaver from 'file-saver';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
-import { Locale, LocaleInfo } from './../model';
-import { LocalesList } from './../../app.config';
-import { LocaleExportFormats, ExportFormat } from './../../app.config';
+import { Locale, LocaleInfo, ExportFormat } from './../model';
+import { LocalesList, LocaleExportFormats } from './../../app.constants';
 
 @Injectable()
 export class LocalesService {

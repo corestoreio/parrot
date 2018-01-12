@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ErrorMap } from './../app.config';
+import { ErrorMap } from './../app.constants';
 
 export interface APIError {
     errors?: Array<APIError>;

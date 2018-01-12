@@ -22,38 +22,69 @@ Check out the [Roadmap](https://github.com/anthonynsimon/parrot/blob/master/ROAD
 - Easily rename project strings, Parrot takes care of keeping locales in sync.
 - Manage your project's team, assign collaborators and their roles.
 - Control API Client access for your projects.
-- Easy install/deploy using Docker.
 
-## Try it out
+# TODO: 
+- Web app routing is broken, use the hashbang approach?
+- Handle CORS
 
-The easiest way to get started is using `docker` and `docker-compose`. Simply clone this repo, navigate to the root of it and start the services:
+## Building from source and try it out
+
+Start out by cloning this repo:
 
 ```bash
 $ git clone https://github.com/anthonynsimon/parrot.git
 $ cd parrot
-$ ./scripts/buildweb.sh
-$ sudo ./scripts/start.sh
 ```
 
-> Please note that to build the web app, `npm` and `angular-cli`are required:
+Make sure you have Postgres running, by default Parrot's API server will look for it on `postgres://localhost:5432` and will try to connect to a database named `parrot`. You can configure this using the AppConfig, see the configuration section below for more info.
+
+To start a pre-configured Postgres instance on docker, simply run:
 
 ```bash
-npm install -g @angular/cli
+$ dev-tools/start-postgres.sh
 ```
 
-This will build the web app and launch 3 containers: a Postgres **database**, the Parrot **API server** and Nginx as the **reverse proxy and static file server**.
+Now apply the database migrations. Using Alembic it's really simple:
 
-Navigate to https://localhost/api/v1/ping and you should be able to see if the API is up (your browser will complain about an unknown certificate, see the HTTPS notice below for more info).
+```bash
+$ cd migrations
+$ alembic upgrade head
+```
 
-And to view the web app simply navigate to https://localhost, it should open the login page of the web app.
+Once again, if you wish to configure the DB parameters, you need to override the default values. For Alembic you just need to go to the `migrations/alembic.ini` file and modify the `sqlalchemy.url` accordingly.
 
-### Important note on HTTPS
+Finally you can build Parrot from source:
 
-For convinience, self-signed SSL certificates are provided for the reverse-proxy (nginx). Do **NOT** use them for anything other than development,
-use your own certificates instead. We recommended automating the generation and renewal of the certificates via Let's Encrypt.
-The `/etc/nginx/certs` and `/etc/nginx/vhost.d` volumes on the nginx container have been made available for this purpose.
+```bash
+# From the root dir 'parrot'
+$ ./build/build-all.sh
+```
 
-If you deploy the API server on your own, be sure to serve it behind a secure reverse-proxy or another secure method.
+> Please note that to build the web app, `npm` and `angular-cli` are required:
+
+```bash
+$ npm install -g @angular/cli
+```
+
+Now we simply need start the API and serve the web app files.
+
+```bash
+$ dist/parrot_api
+```
+Navigate to http://localhost:9990/api/v1/ping and you should be able to see if the API is up.
+
+And on a separate terminal session, let's start a convinient Python HTTP server to serve the static web app files locally:
+
+```bash
+$ dev-tools/serve-web-app.sh
+```
+
+And to view the web app simply navigate to http://localhost:8080, it should open the login page of the web app.
+
+## Configuration
+
+TODO: explain API AppConfig object
+explain web app config via `parrot/web-app/src/environments/environment.ts`
 
 ## License
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.

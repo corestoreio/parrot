@@ -1,13 +1,3 @@
-export const AppConfig = {
-    apiUrl: '{{API_ADDRESS}}',
-};
-
-export interface ExportFormat {
-    name: string;
-    extension: string;
-    apiIdent: string;
-}
-
 export const UserRoles = [
     'owner',
     'editor',

@@ -17,6 +17,9 @@ _cgo_defun.c
 _cgo_gotypes.go
 _cgo_export.*
 
+# python
+*.pyc
+
 _testmain.go
 
 *.exe
@@ -37,6 +40,5 @@ npm-debug.log
 # testing
 coverage
 
-# production
-build
-nginx/public/**/*
+# Build & dist
+dist/

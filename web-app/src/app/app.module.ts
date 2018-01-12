@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import {Http} from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
@@ -15,6 +15,7 @@ import { AuthModule, AuthGuard, UnauthGuard, AuthService } from './auth';
 import { AuthorizedGuard } from './users/guards/authorized.guard';
 import { UserService } from './users/services/user.service';
 import { PagesModule } from './pages';
+import { APP_INITIALIZER } from '@angular/core/src/application_init';
 
 
 // AoT requires an exported function for factories
@@ -31,6 +32,8 @@ export function HttpLoaderFactory(http: Http) {
 
         // Routing
         AppRoutingModule,
+
+        HttpModule,
 
         // App level modules
         AuthModule,
@@ -53,7 +56,7 @@ export function HttpLoaderFactory(http: Http) {
         UnauthGuard,
         AuthorizedGuard,
         UserService,
-        ErrorsService,
+        ErrorsService
     ],
     bootstrap: [AppComponent]
 })

@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
-import { AppConfig } from './../app.config';
+import { environment } from './../../environments/environment';
 import { TokenService } from './../auth/services/token.service';
 
 export interface RequestOptions {
@@ -22,9 +22,9 @@ export class APIService {
 
     constructor(
         private http: Http,
-        private token: TokenService,
+        private token: TokenService
     ) {
-        this.apiUrl = AppConfig.apiUrl;
+        this.apiUrl = environment.apiEndpoint;
     }
 
     getHeaders(withAuthorization: boolean) {

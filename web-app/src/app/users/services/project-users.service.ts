@@ -6,7 +6,7 @@ import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
 import { ProjectUser } from './../model';
-import { UserRoles } from './../../app.config';
+import { UserRoles } from './../../app.constants';
 
 @Injectable()
 export class ProjectUsersService {
