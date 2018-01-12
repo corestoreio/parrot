@@ -5,7 +5,8 @@
 Self-hosted Localization Management Platform built with Go and Angular 2.  
 
 [Documentation](https://anthonynsimon.gitbooks.io/parrot/content/)  
-[Website](http://anthonynsimon.com/parrot.github.io)
+[Website](http://anthonynsimon.com/parrot.github.io)  
+[Gitter Chat Room](https://gitter.im/parrot-translate)   
 
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
