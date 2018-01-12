@@ -12,7 +12,7 @@ Check out the [Roadmap](https://github.com/anthonynsimon/parrot/blob/master/ROAD
 
 > NOTICE: the project is still in heavy development and it is NOT recommended for use in production until a version 1.0 is reached.
 
-<img src="http://anthonynsimon.com/parrot.github.io/images/parrot-screenshot-001.png" style="width: 720px;"/>
+<img src="https://parrot-translate.github.io/parrot.github.io/images/parrot-screenshot-001.png" style="width: 720px;"/>
 
 ## Features
 
