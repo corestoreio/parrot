@@ -104,7 +104,7 @@ apiEndpoint, default value: "http://localhost:9990/api/v1"
 This project is licensed under the [MIT](https://github.com/anthonynsimon/parrot/blob/master/LICENSE) license.
 
 ## Issues
-The recommended medium to report and track issues is by opening one on [Github](https://github.com/anthonynsimon/parrot).
+The recommended medium to report and track issues is by opening one on [Github](https://github.com/parrot-translate/parrot).
 
 ## Contributing
 Want to hack on the project? Any kind of contribution is welcome!
