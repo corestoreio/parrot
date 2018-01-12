@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+	emailRegex = regexp.MustCompile(`^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$`)
 }
 
 // ValidEmail returns true if the string is of the valid email format.
