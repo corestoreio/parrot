@@ -60,12 +60,6 @@ Finally you can build Parrot from source:
 $ ./build/build-all.sh
 ```
 
-> Please note that to build the web app, `npm` and `angular-cli` are required:
-
-```bash
-$ npm install -g @angular/cli
-```
-
 Now we simply need start the API and serve the web app files.
 
 ```bash
