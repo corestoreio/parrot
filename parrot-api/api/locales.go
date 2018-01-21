@@ -10,6 +10,10 @@ import (
 	"github.com/pressly/chi"
 )
 
+type updateLocalePairsPayload struct {
+	Pairs map[string]string `json:pairs`
+}
+
 // createLocale is an API endpoint for creating a new project locale.
 func createLocale(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "projectID")
@@ -115,8 +119,8 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	loc := &model.Locale{}
-	if err := json.NewDecoder(r.Body).Decode(&loc.Pairs); err != nil {
+	payload := &updateLocalePairsPayload{}
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		handleError(w, apiErrors.ErrUnprocessable)
 		return
 	}
@@ -127,6 +131,7 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	loc := &model.Locale{Pairs: payload.Pairs}
 	loc.SyncKeys(project.Keys)
 
 	result, err := store.UpdateLocalePairs(projectID, ident, loc.Pairs)
@@ -134,6 +139,8 @@ func updateLocalePairs(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err)
 		return
 	}
+
+	result.SyncKeys(project.Keys)
 
 	render.JSON(w, http.StatusOK, result)
 }

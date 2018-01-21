@@ -3,7 +3,7 @@ export interface Locale {
     ident: string;
     language: string;
     country: string;
-    pairs: Object;
+    pairs: Pair[];
     project_id: string;
 }
 

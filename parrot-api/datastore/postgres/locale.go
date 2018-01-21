@@ -36,7 +36,7 @@ func (db *PostgresDB) UpdateLocalePairs(projID string, localeIdent string, pairs
 		return nil, err
 	}
 
-	row := db.QueryRow("UPDATE locales SET pairs = $1 WHERE project_id = $2 AND ident = $3 RETURNING *", values, projID, localeIdent)
+	row := db.QueryRow("UPDATE locales SET pairs = pairs || $1 WHERE project_id = $2 AND ident = $3 RETURNING *", values, projID, localeIdent)
 	loc := model.Locale{}
 	err = row.Scan(&loc.ID, &loc.Ident, &loc.Language, &loc.Country, &h, &loc.ProjectID)
 	if err != nil {
@@ -49,6 +49,7 @@ func (db *PostgresDB) UpdateLocalePairs(projID string, localeIdent string, pairs
 			loc.Pairs[k] = v.String
 		}
 	}
+
 	return &loc, nil
 }
 

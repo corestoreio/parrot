@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { APIService } from './../../shared/api.service';
-import { Locale, LocaleInfo, ExportFormat } from './../model';
+import { Pair, Locale, LocaleInfo, ExportFormat } from './../model';
 import { LocalesList, LocaleExportFormats } from './../../app.constants';
 
 @Injectable()
@@ -60,11 +60,11 @@ export class LocalesService {
         return request;
     }
 
-    updateLocalePairs(projectId: string, localeIdent: string, pairs): Observable<Locale> {
+    updateLocalePairs(projectId: string, localeIdent: string, pairs: Pair[]): Observable<Locale> {
         let request = this.api.request({
             uri: `/projects/${projectId}/locales/${localeIdent}/pairs`,
             method: 'PATCH',
-            body: JSON.stringify(pairs),
+            body: JSON.stringify({'pairs': pairs}),
         })
             .map(res => {
                 let payload = res.payload;
