@@ -28,7 +28,7 @@ Check out the [Roadmap](https://github.com/anthonynsimon/parrot/blob/master/ROAD
 Start out by cloning this repo:
 
 ```bash
-$ git clone https://github.com/anthonynsimon/parrot.git
+$ git clone https://github.com/parrot-translate/parrot.git
 $ cd parrot
 ```
 
