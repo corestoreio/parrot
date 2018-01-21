@@ -23,10 +23,6 @@ Check out the [Roadmap](https://github.com/anthonynsimon/parrot/blob/master/ROAD
 - Manage your project's team, assign collaborators and their roles.
 - Control API Client access for your projects.
 
-# TODO: 
-- Web app routing is broken, use the hashbang approach?
-- Handle CORS
-
 ## Building from source and try it out
 
 Start out by cloning this repo:
