@@ -123,9 +123,8 @@ export class ProjectsService {
 
   deleteProjectKey(projectId: string, key: string): Observable<Project> {
     let request = this.api.request({
-      uri: `/projects/${projectId}/keys`,
-      method: 'DELETE',
-      body: JSON.stringify({ key: key }),
+      uri: `/projects/${projectId}/keys/${key}`,
+      method: 'DELETE'
     })
       .map(res => {
         let payload = res.payload;

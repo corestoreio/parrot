@@ -148,18 +148,13 @@ func deleteProjectKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var data = projectKeyPayload{}
-	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		handleError(w, err)
+	keyName := chi.URLParam(r, "keyName")
+	if keyName == "" {
+		handleError(w, apiErrors.ErrBadRequest)
 		return
 	}
 
-	if data.Key == "" {
-		handleError(w, apiErrors.ErrUnprocessable)
-		return
-	}
-
-	result, err := store.DeleteProjectKey(projectID, data.Key)
+	result, err := store.DeleteProjectKey(projectID, keyName)
 	if err != nil {
 		handleError(w, err)
 		return

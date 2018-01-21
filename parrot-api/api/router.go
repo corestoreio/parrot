@@ -52,7 +52,7 @@ func NewRouter(ds datastore.Store, tp auth.TokenProvider) http.Handler {
 
 			r2.Post("/keys", mustAuthorize(canUpdateProject, addProjectKey))
 			r2.Patch("/keys", mustAuthorize(canUpdateProject, updateProjectKey))
-			r2.Delete("/keys", mustAuthorize(canUpdateProject, deleteProjectKey))
+			r2.Delete("/keys/:keyName", mustAuthorize(canUpdateProject, deleteProjectKey))
 
 			r2.Route("/users", func(r3 chi.Router) {
 				r3.Get("/", mustAuthorize(canViewProjectRoles, getProjectUsers))
