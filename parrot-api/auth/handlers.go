@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/anthonynsimon/parrot/parrot-api/datastore"
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
-	"github.com/anthonynsimon/parrot/parrot-api/render"
+	"github.com/parrot-translate/parrot/parrot-api/datastore"
+	apiErrors "github.com/parrot-translate/parrot/parrot-api/errors"
+	"github.com/parrot-translate/parrot/parrot-api/render"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/schema"
 	"golang.org/x/crypto/bcrypt"

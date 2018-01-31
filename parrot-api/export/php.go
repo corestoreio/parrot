@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 
-	"github.com/anthonynsimon/parrot/parrot-api/model"
+	"github.com/parrot-translate/parrot/parrot-api/model"
 )
 
 type PHP struct{}

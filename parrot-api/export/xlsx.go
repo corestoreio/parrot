@@ -3,7 +3,7 @@ package export
 import (
 	"bytes"
 
-	"github.com/anthonynsimon/parrot/parrot-api/model"
+	"github.com/parrot-translate/parrot/parrot-api/model"
 	"github.com/tealeg/xlsx"
 )
 

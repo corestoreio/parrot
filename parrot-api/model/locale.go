@@ -1,7 +1,7 @@
 // Package model holds the various types and interfaces for Parrot.
 package model
 
-import "github.com/anthonynsimon/parrot/parrot-api/errors"
+import "github.com/parrot-translate/parrot/parrot-api/errors"
 
 var (
 	ErrInvalidLocaleIdent = &errors.Error{

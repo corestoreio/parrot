@@ -4,8 +4,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/parrot-api/auth"
-	"github.com/anthonynsimon/parrot/parrot-api/datastore"
+	"github.com/parrot-translate/parrot/parrot-api/auth"
+	"github.com/parrot-translate/parrot/parrot-api/datastore"
 	"github.com/pressly/chi"
 )
 

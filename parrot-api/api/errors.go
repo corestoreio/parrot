@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/Sirupsen/logrus"
-	datastoreErrors "github.com/anthonynsimon/parrot/parrot-api/datastore/errors"
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
-	"github.com/anthonynsimon/parrot/parrot-api/render"
+	datastoreErrors "github.com/parrot-translate/parrot/parrot-api/datastore/errors"
+	apiErrors "github.com/parrot-translate/parrot/parrot-api/errors"
+	"github.com/parrot-translate/parrot/parrot-api/render"
 )
 
 // handleError writes an error response.

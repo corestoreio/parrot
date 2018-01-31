@@ -3,7 +3,7 @@ package export
 import (
 	"strings"
 
-	"github.com/anthonynsimon/parrot/parrot-api/model"
+	"github.com/parrot-translate/parrot/parrot-api/model"
 	"gopkg.in/yaml.v2"
 )
 

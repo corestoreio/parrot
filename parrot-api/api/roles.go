@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
+	apiErrors "github.com/parrot-translate/parrot/parrot-api/errors"
 	"github.com/pressly/chi"
 )
 

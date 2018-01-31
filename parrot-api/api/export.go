@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
-	"github.com/anthonynsimon/parrot/parrot-api/export"
+	apiErrors "github.com/parrot-translate/parrot/parrot-api/errors"
+	"github.com/parrot-translate/parrot/parrot-api/export"
 	"github.com/pressly/chi"
 )
 

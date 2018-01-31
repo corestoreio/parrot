@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/anthonynsimon/parrot/parrot-api/auth"
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
+	"github.com/parrot-translate/parrot/parrot-api/auth"
+	apiErrors "github.com/parrot-translate/parrot/parrot-api/errors"
 )
 
 // subjectType is an internal identifier to know if the requesting entity

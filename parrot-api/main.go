@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/anthonynsimon/parrot/parrot-api/api"
-	"github.com/anthonynsimon/parrot/parrot-api/auth"
-	"github.com/anthonynsimon/parrot/parrot-api/config"
-	"github.com/anthonynsimon/parrot/parrot-api/datastore"
-	"github.com/anthonynsimon/parrot/parrot-api/logger"
+	"github.com/parrot-translate/parrot/parrot-api/api"
+	"github.com/parrot-translate/parrot/parrot-api/auth"
+	"github.com/parrot-translate/parrot/parrot-api/config"
+	"github.com/parrot-translate/parrot/parrot-api/datastore"
+	"github.com/parrot-translate/parrot/parrot-api/logger"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
 )

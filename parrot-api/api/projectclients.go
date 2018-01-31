@@ -5,9 +5,9 @@ import (
 	"encoding/base64"
 	"net/http"
 
-	apiErrors "github.com/anthonynsimon/parrot/parrot-api/errors"
-	"github.com/anthonynsimon/parrot/parrot-api/model"
-	"github.com/anthonynsimon/parrot/parrot-api/render"
+	apiErrors "github.com/parrot-translate/parrot/parrot-api/errors"
+	"github.com/parrot-translate/parrot/parrot-api/model"
+	"github.com/parrot-translate/parrot/parrot-api/render"
 	"github.com/pressly/chi"
 )
 

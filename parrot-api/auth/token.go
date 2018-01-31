@@ -3,7 +3,7 @@ package auth
 import (
 	"fmt"
 
-	"github.com/anthonynsimon/parrot/parrot-api/model"
+	"github.com/parrot-translate/parrot/parrot-api/model"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 

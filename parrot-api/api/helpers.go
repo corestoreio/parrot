@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/anthonynsimon/parrot/parrot-api/render"
+	"github.com/parrot-translate/parrot/parrot-api/render"
 )
 
 var (

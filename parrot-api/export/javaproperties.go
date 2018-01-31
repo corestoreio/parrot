@@ -8,7 +8,7 @@ import (
 
 	"strings"
 
-	"github.com/anthonynsimon/parrot/parrot-api/model"
+	"github.com/parrot-translate/parrot/parrot-api/model"
 )
 
 type JavaProperties struct{}

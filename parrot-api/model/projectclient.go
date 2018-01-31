@@ -1,6 +1,6 @@
 package model
 
-import "github.com/anthonynsimon/parrot/parrot-api/errors"
+import "github.com/parrot-translate/parrot/parrot-api/errors"
 
 var (
 	ErrInvalidClientName = &errors.Error{
