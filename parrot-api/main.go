@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -16,6 +17,8 @@ import (
 	"github.com/pressly/chi/middleware"
 )
 
+const ConfigFileLocation = "./parrot_api.yaml"
+
 func init() {
 	// Config log
 	logrus.SetOutput(os.Stdout)
@@ -25,15 +28,7 @@ func init() {
 
 // TODO: refactor this into cli to start server
 func main() {
-	conf, err := config.FromEnv()
-	if err != nil {
-		logrus.Fatal(err)
-	}
-
-	// init and ping datastore
-	if conf.DBName == "" || conf.DBConn == "" {
-		logrus.Fatal("Database not properly configured.")
-	}
+	conf := mustLoadConf()
 
 	ds, err := datastore.NewDatastore(conf.DBName, conf.DBConn)
 	if err != nil {
@@ -84,4 +79,34 @@ func blockAndRetry(d time.Duration, fn func() bool) {
 		logrus.Infof("retrying in %s...\n", d.String())
 		time.Sleep(d)
 	}
+}
+
+func mustLoadConf() *config.AppConfig {
+	var conf *config.AppConfig
+
+	// Check if config file exists
+	_, err := os.Stat(ConfigFileLocation)
+	// If not exists, load from environment
+	if os.IsNotExist(err) {
+		conf, err = config.FromEnv()
+		if err != nil {
+			logrus.Fatal(err)
+		}
+	} else {
+		// If exists, load from file
+		data, err := ioutil.ReadFile(ConfigFileLocation)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		conf, err = config.FromYaml(data)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+	}
+
+	// Set defaults if no value set
+	config.SetOrDefault(conf)
+
+	return conf
 }

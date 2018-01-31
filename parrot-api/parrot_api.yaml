@@ -1,0 +1,5 @@
+port: 9990
+dbName: "postgres"
+dbConn: "postgres://postgres@localhost:5432/parrot?sslmode=disable"
+authIssuer: "parrot@localhost"
+authSigningKey: "secret"
