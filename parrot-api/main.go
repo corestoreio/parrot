@@ -36,14 +36,9 @@ func main() {
 	}
 	defer ds.Close()
 
-	// Ping DB until service is up, block meanwhile
-	blockAndRetry(5*time.Second, func() bool {
-		if err = ds.Ping(); err != nil {
-			logrus.Error(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
-			return false
-		}
-		return true
-	})
+	if err = ds.Ping(); err != nil {
+		logrus.Fatal(fmt.Sprintf("failed to ping datastore.\nerr: %s", err))
+	}
 
 	router := chi.NewRouter()
 	router.Use(
@@ -72,13 +67,6 @@ func main() {
 	logrus.Info(fmt.Sprintf("server listening on %s", bindInterface))
 
 	logrus.Fatal(s.ListenAndServe())
-}
-
-func blockAndRetry(d time.Duration, fn func() bool) {
-	for !fn() {
-		logrus.Infof("retrying in %s...\n", d.String())
-		time.Sleep(d)
-	}
 }
 
 func mustLoadConf() *config.AppConfig {
