@@ -6,7 +6,7 @@ After reviewing the features requested during the past year, as well as consider
 
 ## Code and Structure Changes
 
-1. 'Undockerization' of the project. The project structure makes a lot of assumptions about its build and deployment environment.
+1. 'Undockerization' of the project. The project structure makes a lot of assumptions about its build and deployment environment. The project will still support Docker based deployments via provided Docker base images (and corresponding Dockerfiles).
 
 2. Simplification of the web app. Our current setup can be overwhelming for new contributors as there is plenty of added complexity as the project evolved.
 
