@@ -1,4 +1,5 @@
 # Parrot
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ada80e50064e4d6a858c1e2e2164436a)](https://app.codacy.com/app/anthonynajjars/parrot?utm_source=github.com&utm_medium=referral&utm_content=parrot-translate/parrot&utm_campaign=badger)
 [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://anthonynsimon.gitbooks.io/parrot/content/)
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/anthonynsimon/parrot/blob/master/LICENSE)
 
