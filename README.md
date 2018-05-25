@@ -26,10 +26,12 @@ Check out the [Roadmap](https://github.com/anthonynsimon/parrot/blob/master/ROAD
 
 ## Building from source and try it out
 
-Start out by cloning this repo:
+Start out by cloning this repo into your GOPATH:
 
 ```bash
-$ git clone https://github.com/parrot-translate/parrot.git
+$ mkdir -p $GOPATH/src/github.com/parrot-translate/parrot
+$ cd $GOPATH/src/github.com/parrot-translate/parrot
+$ git clone https://github.com/parrot-translate/parrot.git .
 $ cd parrot
 ```
 
