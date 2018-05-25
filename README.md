@@ -32,7 +32,6 @@ Start out by cloning this repo into your GOPATH:
 $ mkdir -p $GOPATH/src/github.com/parrot-translate/parrot
 $ cd $GOPATH/src/github.com/parrot-translate/parrot
 $ git clone https://github.com/parrot-translate/parrot.git .
-$ cd parrot
 ```
 
 Make sure you have Postgres running, by default Parrot's API server will look for it on `postgres://localhost:5432` and will try to connect to a database named `parrot`. You can configure this using the AppConfig, see the configuration section below for more info.
